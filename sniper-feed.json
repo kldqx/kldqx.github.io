@@ -1,0 +1,145 @@
+{
+  "schema": "live-sniper-web/v1",
+  "signal_boundary": "not_a_trading_signal",
+  "mode": "live",
+  "status": "observing",
+  "phase": "PHASE_1_VIRTUAL",
+  "generated_at": "2026-10-25T09:16:30+08:00",
+  "source_label": "离线演练行情",
+  "seed_date": null,
+  "run_id": "web-demo-5ac49d28bc3a43a288764763e2eac4d1",
+  "stocks": [
+    {
+      "code": "SZ.002241",
+      "name": "歌尔股份",
+      "price": 23.65,
+      "change_pct": 2.34,
+      "turnover_yi": 0.82,
+      "vwap": null,
+      "vwap_deviation_pct": null,
+      "source_data_at": "2026-10-25T09:16:30+08:00",
+      "observed_at": "2026-10-25T09:16:30+08:00",
+      "phase": "PHASE_1_VIRTUAL",
+      "benchmark": {
+        "target_open_pct": [
+          2.0,
+          4.5
+        ],
+        "min_turnover_yi": 0.45,
+        "wash_pct": [
+          -1.5,
+          0.5
+        ],
+        "desc": "果链/声学大市值核心龙头，竞价要求温和放量高开"
+      },
+      "gaps": [],
+      "events": [],
+      "points": [
+        {
+          "at": "2026-10-25T09:16:30+08:00",
+          "price": 23.65,
+          "vwap": null
+        }
+      ]
+    },
+    {
+      "code": "SH.688686",
+      "name": "奥普特",
+      "price": 159.5,
+      "change_pct": 4.11,
+      "turnover_yi": 0.22,
+      "vwap": null,
+      "vwap_deviation_pct": null,
+      "source_data_at": "2026-10-25T09:16:30+08:00",
+      "observed_at": "2026-10-25T09:16:30+08:00",
+      "phase": "PHASE_1_VIRTUAL",
+      "benchmark": {
+        "target_open_pct": [
+          3.0,
+          6.5
+        ],
+        "min_turnover_yi": 0.15,
+        "wash_pct": [
+          -2.0,
+          1.0
+        ],
+        "desc": "机器视觉高控盘连板种子，科创20CM高弹性"
+      },
+      "gaps": [],
+      "events": [],
+      "points": [
+        {
+          "at": "2026-10-25T09:16:30+08:00",
+          "price": 159.5,
+          "vwap": null
+        }
+      ]
+    },
+    {
+      "code": "SZ.000559",
+      "name": "万向钱潮",
+      "price": 11.42,
+      "change_pct": -1.13,
+      "turnover_yi": 0.35,
+      "vwap": null,
+      "vwap_deviation_pct": null,
+      "source_data_at": "2026-10-25T09:16:30+08:00",
+      "observed_at": "2026-10-25T09:16:30+08:00",
+      "phase": "PHASE_1_VIRTUAL",
+      "benchmark": {
+        "target_open_pct": [
+          1.5,
+          4.0
+        ],
+        "min_turnover_yi": 0.3,
+        "wash_pct": [
+          -2.0,
+          0.5
+        ],
+        "desc": "汽配/低空协同大资金运作标的，重点关注压绿洗盘弱转强"
+      },
+      "gaps": [],
+      "events": [],
+      "points": [
+        {
+          "at": "2026-10-25T09:16:30+08:00",
+          "price": 11.42,
+          "vwap": null
+        }
+      ]
+    },
+    {
+      "code": "SZ.002009",
+      "name": "天奇股份",
+      "price": 15.6,
+      "change_pct": -1.26,
+      "turnover_yi": 0.12,
+      "vwap": null,
+      "vwap_deviation_pct": null,
+      "source_data_at": "2026-10-25T09:16:30+08:00",
+      "observed_at": "2026-10-25T09:16:30+08:00",
+      "phase": "PHASE_1_VIRTUAL",
+      "benchmark": {
+        "target_open_pct": [
+          2.0,
+          5.0
+        ],
+        "min_turnover_yi": 0.2,
+        "wash_pct": [
+          -1.5,
+          0.5
+        ],
+        "desc": "人形机器人/汽车装备次席金种"
+      },
+      "gaps": [],
+      "events": [],
+      "points": [
+        {
+          "at": "2026-10-25T09:16:30+08:00",
+          "price": 15.6,
+          "vwap": null
+        }
+      ]
+    }
+  ]
+}
