@@ -20,6 +20,21 @@
   const timeValue = value => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value) && Number.isFinite(Date.parse(value)) ? Date.parse(value) : null;
   const clock = value => timeValue(value) === null ? "—" : new Intl.DateTimeFormat("zh-CN", {timeZone:"Asia/Shanghai",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date(value));
   const eventLabel = event => EVENT_LABELS[event?.type] || (typeof event?.label === "string" ? event.label : "观察记录");
+  const deadlineText = value => timeValue(value) === null ? "见原条件" : new Intl.DateTimeFormat("zh-CN", {timeZone:"Asia/Shanghai",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).format(new Date(value));
+  const HANDOFF_LABELS = {
+    pending: ["等待 QA 交接", "QA 完成后，观察名单会自动显示在这里。"],
+    rejected: ["本批次 QA 未放行", "本批次审核结果暂未进入监控，等待后续研究更新。"],
+    error: ["QA 交接读取异常", "正在重试读取本批次交接，研究结果未按零只处理。"],
+    stopped: ["本批次监控已停止", "已有研究条件继续保留供查看。"]
+  };
+  const CONDITION_LABELS = {
+    support_conditions:"支持条件", invalidation_conditions:"失效条件", deadline_at:"复核截止",
+    trade_date:"计划观察日", status:"原计划状态", phase_semantics:"各时段含义",
+    stage_observations:"分阶段观察", reference_prices:"原价格参照", decision_at_deadline:"截止时处理",
+    on_support_absent:"支持未出现时", on_reliable_invalidation:"可靠反证出现时",
+    on_unobserved_by_deadline:"截止仍未观测时", observable:"可观察条件", comparison_basis:"比较依据",
+    condition_id:"条件编号", Friday_close_CNY:"周五收盘价 / 元", previous_session_close_CNY:"前次收盘价 / 元"
+  };
 
   function validFeed(feed, mode) {
     return feed && feed.schema === "live-sniper-web/v1" && feed.signal_boundary === BOUNDARY
@@ -145,13 +160,13 @@
     byId("footer-status").textContent = message;
   }
 
-  function drawChart(container, points) {
+  function drawChart(container, points, emptyText = "等待首个行情采样") {
     const model = chartModel(points);
     if (!model) {
       const placeholder = el("div", "chart-placeholder");
       const icon = svgEl("svg", {viewBox:"0 0 56 25", "aria-hidden":"true"});
       icon.append(svgEl("path", {d:"M1 20h54M6 15l10-7 10 6 12-10 12 5"}));
-      placeholder.append(icon, el("span", "", "等待首个行情采样")); container.replaceChildren(placeholder); return;
+      placeholder.append(icon, el("span", "", emptyText)); container.replaceChildren(placeholder); return;
     }
     const svg = svgEl("svg", {viewBox:"0 0 480 130", class:"stock-chart", role:"img", "aria-label":`${model.count} 个行情采样点，实线为价格，虚线为 VWAP`});
     for (const y of [18,60,102]) svg.append(svgEl("line", {x1:8,x2:472,y1:y,y2:y,class:"chart-grid"}));
@@ -181,11 +196,29 @@
     for (const [label,cls] of [["价格",""],["VWAP","vwap-key"]]) {const key = el("span");key.append(el("i",cls),document.createTextNode(label));keys.append(key);}
     const quoteAt = el("span"); legend.append(keys,quoteAt);
     const conditions = el("section", "conditions"), chips = el("div", "condition-list");conditions.append(el("h3","","观察条件"),chips);
-    const latest = el("div", "latest-event");
+    const hypothesis = el("p", "hypothesis-preview"), latest = el("div", "latest-event");
     const details = el("details", "card-details"), summary = el("summary", "", "观察要点与记录"), content = el("div", "detail-content");
-    const description = el("p"), eventList = el("ol", "event-list"); content.append(description,eventList);details.append(summary,content);
-    card.append(heading,priceRow,metrics,chart,legend,conditions,latest,details);
-    return {card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,latest,details,description,eventList,chartSignature:null,eventSignature:null};
+    const description = el("p"), original = el("div", "source-conditions"), eventList = el("ol", "event-list"); content.append(description,original,eventList);details.append(summary,content);
+    card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,latest,details);
+    return {card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,latest,details,summary,description,original,eventList,chartSignature:null,eventSignature:null,conditionSignature:null};
+  }
+
+  function originalConditionNodes(value) {
+    if (Array.isArray(value)) {
+      const list=el("ul", "original-condition-list");
+      for(const entry of value){const item=el("li");item.append(originalConditionNodes(entry));list.append(item);}
+      return list;
+    }
+    if (value && typeof value === "object") {
+      const group=el("dl", "original-condition-fields");
+      for(const [key,item] of Object.entries(value)){
+        if(key === "calendar_ref") continue;
+        const row=el("div");const content=el("dd");content.append(originalConditionNodes(item));
+        row.append(el("dt","",CONDITION_LABELS[key] || key),content);group.append(row);
+      }
+      return group;
+    }
+    return el("span","",value === null ? "未提供" : String(value));
   }
 
   function updateCard(ref, stock, feed) {
@@ -193,9 +226,12 @@
     const latest = events[events.length - 1];
     const gaps = Array.isArray(stock.gaps) ? stock.gaps.filter(gap => typeof gap === "string") : [];
     const benchmark = stock.benchmark && typeof stock.benchmark === "object" ? stock.benchmark : {};
-    const statusText = latest ? eventLabel(latest) : gaps.length ? "数据待补" : !numeric(stock.price) ? "等待行情" : feed.status === "finished" ? "观察结束" : "动态观察";
+    const original = feed.mode === "live" && stock.original_conditions && typeof stock.original_conditions === "object" ? stock.original_conditions : null;
+    const monitoringStatus = feed.handoff?.status === "stopped" ? "stopped" : stock.monitoring_status;
+    const monitorLabel = {waiting:"等待观察",eligible:"等待观察",active:"行情观察中",expired:"期限已到 · 已停采",expired_unverified:"期限已到 · 已停采",stopped:"监控已停止",withdrawn:"原判断已撤回",unverifiable:"暂停观察",invalidated:"原条件已失效",withdrawn_due_to_data_or_method_error:"原判断已撤回"}[monitoringStatus];
+    const statusText = original ? monitorLabel || (stock.monitoring_eligible === false ? "当前未采样" : "等待行情") : latest ? eventLabel(latest) : gaps.length ? "数据待补" : !numeric(stock.price) ? "等待行情" : feed.status === "finished" ? "观察结束" : "动态观察";
     const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
-    ref.card.className = `stock-card ${tone(stock.change_pct)}`;
+    ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
     ref.status.textContent = statusText;ref.status.className = `stock-status ${statusTone}`;
     ref.price.textContent = numberText(stock.price);ref.price.className = `stock-price ${numeric(stock.price) ? tone(stock.change_pct) : "missing"}`;
@@ -203,15 +239,30 @@
     ref.metricRefs[0].replaceChildren(document.createTextNode(numberText(stock.turnover_yi)),el("small","","亿"));
     ref.metricRefs[1].textContent = numberText(stock.vwap);ref.metricRefs[2].textContent = percent(stock.vwap_deviation_pct);
     ref.quoteAt.textContent = timeValue(stock.source_data_at) === null ? "行情时点 —" : `行情 ${clock(stock.source_data_at)}`;
-    const signature = JSON.stringify(stock.points || []);
-    if (signature !== ref.chartSignature) {drawChart(ref.chart,stock.points);ref.chartSignature = signature;}
+    const signature = JSON.stringify([stock.points || [],original && stock.monitoring_eligible]);
+    if (signature !== ref.chartSignature) {drawChart(ref.chart,stock.points,original && stock.monitoring_eligible === false ? "本次观察暂无行情采样" : "等待首个行情采样");ref.chartSignature = signature;}
     const target = Array.isArray(benchmark.target_open_pct) && benchmark.target_open_pct.length === 2 && benchmark.target_open_pct.every(numeric)
       ? `${benchmark.target_open_pct[0] > 0 ? "+" : ""}${benchmark.target_open_pct[0]}% ~ ${benchmark.target_open_pct[1] > 0 ? "+" : ""}${benchmark.target_open_pct[1]}%` : "—";
-    const chipData = [["高开",target],["成交",numeric(benchmark.min_turnover_yi) ? `≥ ${numberText(benchmark.min_turnover_yi)} 亿` : "—"],["防守",numeric(benchmark.max_vwap_pullback_pct) ? `${benchmark.max_vwap_pullback_pct}%` : "未配置"]];
+    const reviewed = ["accepted", "approved", "corrected", "accepted_bounded_research_only", "supported_as_conditional_research_hypothesis"].includes(stock.qa_verdict);
+    const chipData = original ? [["审核",reviewed ? "QA 已审" : "QA · " + (stock.qa_verdict || "待确认")],["结果级别","条件研究"],["复核截止",deadlineText(original.deadline_at)]]
+      : [["高开",target],["成交",numeric(benchmark.min_turnover_yi) ? `≥ ${numberText(benchmark.min_turnover_yi)} 亿` : "—"],["防守",numeric(benchmark.max_vwap_pullback_pct) ? `${benchmark.max_vwap_pullback_pct}%` : "未配置"]];
+    ref.chips.className = `condition-list ${original ? "reviewed-conditions" : ""}`;
     ref.chips.replaceChildren(...chipData.map(([label,value]) => {const chip=el("div","condition-chip");chip.append(el("span","",label),el("strong","",value));return chip;}));
+    ref.hypothesis.hidden = !original;
+    ref.hypothesis.textContent = original && typeof stock.hypothesis === "string" ? stock.hypothesis : "";
+    ref.summary.textContent = original ? "原始支持 / 失效条件与记录" : "观察要点与记录";
     ref.latest.className = `latest-event ${gaps.length ? "warning" : ""}`;
-    ref.latest.textContent = gaps.length ? "部分数据待补，查看观察记录了解详情。" : latest ? `${clock(latest.at)}  ${eventLabel(latest)}` : !numeric(stock.price) ? "观察条件已就位，等待竞价行情。" : "持续观察价格、成交额与 VWAP 变化。";
-    ref.description.textContent = typeof benchmark.desc === "string" && benchmark.desc.trim() ? benchmark.desc : "按卡片中的竞价与 VWAP 条件跟踪。";
+    ref.latest.textContent = original && stock.monitoring_eligible === false ? "本股已停采，原条件与已有记录保留。" : gaps.length ? "部分数据待补，查看观察记录了解详情。" : latest ? `${clock(latest.at)}  ${eventLabel(latest)}` : !numeric(stock.price) ? "观察条件已就位，等待竞价行情。" : "持续观察价格、成交额与 VWAP 变化。";
+    ref.description.textContent = original ? stock.hypothesis || "" : typeof benchmark.desc === "string" && benchmark.desc.trim() ? benchmark.desc : "按卡片中的竞价与 VWAP 条件跟踪。";
+    const conditionSignature = JSON.stringify([original,stock.risk_reason]);
+    if(conditionSignature !== ref.conditionSignature){
+      const nodes=[];
+      if(original){
+        if(typeof stock.risk_reason === "string" && stock.risk_reason.trim())nodes.push(el("h4","","原研究风险"),el("p","",stock.risk_reason));
+        nodes.push(originalConditionNodes(original));
+      }
+      ref.original.replaceChildren(...nodes);ref.conditionSignature=conditionSignature;
+    }
     const eventSignature = JSON.stringify([events,gaps]);
     if (eventSignature !== ref.eventSignature) {
       const items = [...events].reverse().map(event => {const item=el("li");const time=el("time","",clock(event.at));if(timeValue(event.at)!==null)time.dateTime=event.at;item.append(time,el("span","",eventLabel(event)));return item;});
@@ -241,27 +292,34 @@
     }
     if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;}
     const stocks = feed.stocks;
-    byId("stock-count").textContent=String(stocks.length);
+    const handoff = mode === "live" ? feed.handoff : null;
+    const handoffMessage = HANDOFF_LABELS[handoff?.status];
+    byId("stock-count").textContent=!stocks.length && handoffMessage ? "—" : String(stocks.length);
     byId("event-count").textContent=String(stocks.reduce((count,stock)=>count+(Array.isArray(stock.events)?stock.events.length:0),0));
     const latest = stocks.map(stock=>stock.source_data_at).filter(value=>timeValue(value)!==null).sort((a,b)=>timeValue(a)-timeValue(b)).pop();
     byId("quote-time").textContent=clock(latest);
     byId("source-label").textContent=feed.source_label || (mode === "demo" ? "生成的演练行情" : "腾讯一级行情");
-    byId("seed-date").textContent=feed.seed_date ? `观察名单 · ${feed.seed_date}` : "";
+    byId("seed-date").textContent=handoff ? `研究 ${handoff.research_date || "—"} · 观察 ${handoff.target_trade_date || "—"}` : feed.seed_date ? `观察名单 · ${feed.seed_date}` : "";
     byId("session-description").textContent=mode === "demo" ? `演练预览 · ${PHASE_LABELS[feed.phase] || "按顺序回放观察时点"}`
       : feed.status === "waiting" ? "观察条件已就位，等待下个竞价与开盘窗口。" : PHASE_LABELS[feed.phase] || "跟踪价格、成交额与 VWAP 的变化。";
-    byId("list-caption").textContent=mode === "demo" ? "生成行情 · 有限时点演练" : "一股一卡 · 独立跟踪";
+    if(handoff)byId("session-description").textContent=handoffMessage ? handoffMessage[0] : stocks.length && stocks.every(stock=>stock.monitoring_eligible === false) ? "本批次已停采，原条件与记录保留。" : "QA 已审条件研究 · 按原条件持续观察";
+    byId("list-caption").textContent=mode === "demo" ? "生成行情 · 有限时点演练" : handoff?.qa_completed_at ? `QA 完成 · ${deadlineText(handoff.qa_completed_at)}` : "一股一卡 · 独立跟踪";
     const phaseIndex = feed.phase === "PHASE_4_OPENING_REVERSAL" || feed.phase === "FINISHED" ? 3 : feed.phase === "PHASE_3_FINAL_VERDICT" ? 2 : feed.phase === "PHASE_2_REAL_AUCTION" ? 1 : String(feed.phase).startsWith("PHASE_1") ? 0 : -1;
     for (const step of document.querySelectorAll(".phase-track li")) {const index=Number(step.dataset.step);step.className=index === phaseIndex ? "active" : index < phaseIndex ? "complete" : "";}
-    byId("feed-notice").hidden=!feed.error;byId("feed-notice").textContent=feed.error ? "当前数据暂时不可用，页面会自动重试。" : "";
+    byId("feed-notice").hidden=!feed.error && !handoffMessage;byId("feed-notice").textContent=handoffMessage ? handoffMessage.join(" · ") : feed.error ? "当前数据暂时不可用，页面会自动重试。" : "";
     byId("empty-state").hidden=stocks.length>0;
-    if (!stocks.length) byId("empty-state").querySelector("h3").textContent="暂无观察标的";
-    byId("stock-grid").className=`stock-grid ${stocks.length === 2 ? "two-cards" : ""}`;
+    if (!stocks.length) {
+      byId("empty-state").querySelector("h3").textContent=handoffMessage ? handoffMessage[0] : "本批次暂无观察标的";
+      byId("empty-state").querySelector("p").textContent=handoffMessage ? handoffMessage[1] : "新的 QA 交接到达后，卡片会自动更新。";
+    }
+    byId("stock-grid").className=`stock-grid ${stocks.length === 2 ? "two-cards" : stocks.length === 3 || stocks.length === 6 ? "three-columns" : ""}`;
     const currentCodes=new Set(stocks.map(stock=>stock.code));
     for (const [code,ref] of cards) if(!currentCodes.has(code)){ref.card.remove();cards.delete(code);}
     for (const stock of stocks) {
       let ref=cards.get(stock.code);
-      if(!ref){ref=createCard();cards.set(stock.code,ref);byId("stock-grid").append(ref.card);}
+      if(!ref){ref=createCard();cards.set(stock.code,ref);}
       updateCard(ref,stock,feed);
+      byId("stock-grid").append(ref.card);
     }
   }
 
