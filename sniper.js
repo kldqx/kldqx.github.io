@@ -101,11 +101,7 @@
       if (expectedGeneration !== generation) return;
       lastFeed = frames[index]; draw(lastFeed);
       connection("demo", index === frames.length - 1 ? "演练完成 · 可重新播放" : `演练预览 · ${index + 1} / ${frames.length}`);
-      if (index + 1 < frames.length) {
-        timer = schedule(() => play(frames, index + 1, expectedGeneration), 1200);
-      } else {
-        timer = schedule(() => play(frames, 0, expectedGeneration), 3500);
-      }
+      if (index + 1 < frames.length) timer = schedule(() => play(frames, index + 1, expectedGeneration), 1000);
     }
     async function select(nextMode) {
       stop(); mode = nextMode; lastFeed = null;
@@ -274,5 +270,5 @@
   byId("demo-mode").addEventListener("click",()=>controller.select("demo"));
   byId("refresh-button").addEventListener("click",()=>controller.refresh());
   window.addEventListener("pagehide",()=>controller.stop());
-  controller.select("demo");
+  controller.select("live");
 })();
