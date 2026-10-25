@@ -316,3 +316,120 @@ footer{padding:14px 0;margin-top:2px;font-size:10px}
   align-self: center;
 }
 .export-btn:hover { background: rgba(101,214,222,0.12); border-color: rgba(101,214,222,0.4); }
+
+/* 缝合断链4: L2 微观信号展示 */
+.l2-card-container {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(101, 214, 222, 0.04);
+  border: 1px solid rgba(101, 214, 222, 0.15);
+}
+.l2-signal-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.l2-signal-badge.bullish { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+.l2-signal-badge.bearish { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+.l2-signal-badge.neutral { background: rgba(156, 163, 175, 0.15); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.3); }
+.l2-alert-list { display: flex; flex-direction: column; gap: 3px; }
+.l2-alert-item {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.l2-alert-item:last-child { border-bottom: none; }
+.l2-alert-item.critical .l2-alert-type { color: #ef4444; }
+.l2-alert-item.warning .l2-alert-type { color: #ecc777; }
+.l2-alert-item.info .l2-alert-type { color: #65d6de; }
+.l2-alert-type { flex-shrink: 0; font-weight: 600; min-width: 80px; }
+.l2-alert-msg { color: var(--text-dim, #8b9bb4); }
+
+
+/* ========================================================
+   拉风资金性质徽章 (Money Nature Badges - Cyber Flash)
+   ======================================================== */
+.stock-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.money-nature-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  user-select: none;
+  cursor: default;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+.money-nature-badge:hover {
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* 🔥 游资先锋 · 高控盘 (烈焰橙红渐变 + 脉冲呼吸感) */
+.badge-hot-money {
+  background: linear-gradient(135deg, rgba(255, 87, 34, 0.28) 0%, rgba(245, 158, 11, 0.18) 50%, rgba(225, 29, 72, 0.2) 100%);
+  color: #ff9e80;
+  border: 1px solid rgba(255, 112, 67, 0.65);
+  box-shadow: 0 0 12px rgba(255, 87, 34, 0.35), inset 0 0 8px rgba(255, 87, 34, 0.15);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  animation: badge-glow-hot 3.5s ease-in-out infinite alternate;
+}
+@keyframes badge-glow-hot {
+  0% { box-shadow: 0 0 8px rgba(255, 87, 34, 0.25), inset 0 0 5px rgba(255, 87, 34, 0.12); border-color: rgba(255, 112, 67, 0.5); }
+  100% { box-shadow: 0 0 16px rgba(255, 87, 34, 0.5), inset 0 0 10px rgba(255, 87, 34, 0.25); border-color: rgba(255, 138, 101, 0.85); }
+}
+
+/* 🏦 机构中军 · 核心趋势 (尊贵科技蓝紫渐变 + 稳健科技感) */
+.badge-institution {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.28) 0%, rgba(59, 130, 246, 0.18) 50%, rgba(124, 58, 237, 0.2) 100%);
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.65);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.35), inset 0 0 8px rgba(59, 130, 246, 0.15);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  animation: badge-glow-inst 4s ease-in-out infinite alternate;
+}
+@keyframes badge-glow-inst {
+  0% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.25), inset 0 0 5px rgba(59, 130, 246, 0.12); border-color: rgba(96, 165, 250, 0.5); }
+  100% { box-shadow: 0 0 16px rgba(59, 130, 246, 0.5), inset 0 0 10px rgba(59, 130, 246, 0.25); border-color: rgba(147, 197, 253, 0.85); }
+}
+
+/* 🌊 主力波段 · 核心 */
+.badge-trend {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(6, 182, 212, 0.18) 50%, rgba(99, 102, 241, 0.18) 100%);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
+}
+
+/* ⚡ L2多头突击 */
+.badge-l2-bullish {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.3) 0%, rgba(16, 185, 129, 0.2) 50%, rgba(6, 182, 212, 0.2) 100%);
+  color: #6ee7b7;
+  border: 1px solid rgba(52, 211, 153, 0.7);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.4), inset 0 0 8px rgba(16, 185, 129, 0.2);
+}
+
+/* 🎯 默认重点监控 */
+.badge-default {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
