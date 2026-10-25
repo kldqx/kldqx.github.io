@@ -2,16 +2,27 @@
 // Display only. signal_boundary=not_a_trading_signal.
 (() => {
   const BOUNDARY = "not_a_trading_signal";
+  // L2 监控状态
+  let l2Monitor = null;
+  let l2AlertsPanel = null;
+  const l2Containers = new Map(); // code -> container element for L2 orderbook
   const EVENT_LABELS = {
     AUCTION_ENTRY_CONFIRMED: "竞价条件满足", WASH_STANDBY: "等待开盘观察",
     AUCTION_VETOED: "竞价条件未满足", BOOK_BID1_VOLUME_DROP: "买一量回落",
     REVERSAL_TRIGGERED: "VWAP 上穿", VWAP_DEFENSE_TRIGGERED: "触及 VWAP 防守线"
   };
   const PHASE_LABELS = {
-    WAITING: "等待 09:15 竞价观察窗口", PHASE_1_VIRTUAL: "竞价申报观察中",
+    WAITING: "盘前等待 · 09:15 开始观察", PHASE_1_VIRTUAL: "竞价申报观察中",
     PHASE_1_DROP_CHECK: "观察盘口买一量变化", PHASE_2_REAL_AUCTION: "竞价锁定期",
     PHASE_3_FINAL_VERDICT: "观察集合竞价结果", PHASE_4_OPENING_REVERSAL: "开盘 VWAP 观察中",
-    INTRADAY: "本次开盘观察已结束", FINISHED: "本次开盘观察已结束"
+    INTRADAY: "盘中观察", INTRADAY_AM: "上午盘中观察", LUNCH_BREAK: "午休 · 暂停行情采样",
+    INTRADAY_PM: "下午盘中观察", CLOSING_AUCTION: "收盘竞价观察", POSTMARKET_REVIEW: "已收盘 · 盘后复核",
+    CLOSED: "本次观察已结束 · 保留当日记录", FINISHED: "本次监控任务已结束"
+  };
+  const PHASE_STEPS = {
+    PHASE_1_VIRTUAL:0, PHASE_1_DROP_CHECK:0, PHASE_2_REAL_AUCTION:1,
+    PHASE_3_FINAL_VERDICT:2, PHASE_4_OPENING_REVERSAL:3, INTRADAY_AM:4,
+    LUNCH_BREAK:5, INTRADAY_PM:6, CLOSING_AUCTION:7, POSTMARKET_REVIEW:8, CLOSED:9
   };
   const numeric = value => typeof value === "number" && Number.isFinite(value);
   const numberText = (value, digits = 2) => numeric(value) ? value.toFixed(digits) : "—";
@@ -27,14 +38,24 @@
     error: ["QA 交接读取异常", "正在重试读取本批次交接，研究结果未按零只处理。"],
     stopped: ["本批次监控已停止", "已有研究条件继续保留供查看。"]
   };
+  const REVIEW_LABELS = {
+    pending:"等待盘中复核", running:"盘中 AI 复核中", qa_pending:"等待独立 QA",
+    accepted:"盘中复核已审", rejected:"盘中复核未放行", error:"盘中复核异常", uncertain:"盘中复核结果未确认",
+    budget_exhausted:"盘中复核额度已用尽", waiting:"等待盘中复核", paused:"盘中复核暂停",
+    stopped:"盘中复核已停止", withdrawn:"该股已撤回监控", closed:"本次复核已结束", unsupported:"盘中复核暂不可用"
+  };
   const CONDITION_LABELS = {
     support_conditions:"支持条件", invalidation_conditions:"失效条件", deadline_at:"复核截止",
     trade_date:"计划观察日", status:"原计划状态", phase_semantics:"各时段含义",
     stage_observations:"分阶段观察", reference_prices:"原价格参照", decision_at_deadline:"截止时处理",
     on_support_absent:"支持未出现时", on_reliable_invalidation:"可靠反证出现时",
     on_unobserved_by_deadline:"截止仍未观测时", observable:"可观察条件", comparison_basis:"比较依据",
-    condition_id:"条件编号", Friday_close_CNY:"周五收盘价 / 元", previous_session_close_CNY:"前次收盘价 / 元"
+    condition_id:"条件编号", Friday_close_CNY:"周五收盘价 / 元", previous_session_close_CNY:"前次收盘价 / 元",
+    summary:"盘中复核结论", reviewed_at:"盘中复核时点", qa_completed_at:"独立 QA 完成",
+    original_outcome:"原竞价判断结果", hypothesis_id:"盘中判断编号", relation_to_original:"与原判断的关系",
+    risks:"盘中风险", gaps:"未核实范围"
   };
+  const observationEligible = stock => typeof stock.observation_eligible === "boolean" ? stock.observation_eligible : stock.monitoring_eligible;
 
   function validFeed(feed, mode) {
     return feed && feed.schema === "live-sniper-web/v1" && feed.signal_boundary === BOUNDARY
@@ -78,39 +99,113 @@
   }
 
   function createController({fetcher, draw, connection, schedule = setTimeout, cancel = clearTimeout}) {
-    let mode = "live", generation = 0, timer = null, controller = null, demo = null, lastFeed = null;
+    let mode = "live", generation = 0, timer = null, reviewTimer = null, demo = null, lastFeed = null;
+    let expiryTimer = null;
+    let lastQuotes = null, reviewCandidate = null, matchedReview = null, currentScope = null, manualState = null;
+    let quoteError = false, reviewError = null;
+    const requests = new Set();
     function stop() {
       generation += 1;
       if (timer !== null) cancel(timer);
+      if (reviewTimer !== null) cancel(reviewTimer);
+      if (expiryTimer !== null) cancel(expiryTimer);
       timer = null;
-      if (controller) controller.abort();
-      controller = null;
+      reviewTimer = null;
+      expiryTimer = null;
+      for (const requestController of requests) requestController.abort();
     }
     async function request(path, expectedGeneration) {
       const requestController = new AbortController();
-      controller = requestController;
+      requests.add(requestController);
       const timeout = schedule(() => requestController.abort(), 8000);
       try {
         const response = await fetcher(path, {cache:"no-store", signal:requestController.signal});
         if (!response.ok) throw Error("feed_unavailable");
         const data = await response.json();
         return expectedGeneration === generation ? data : null;
-      } finally { cancel(timeout); }
+      } finally { cancel(timeout); requests.delete(requestController); }
+    }
+    function scope(value, review = false) {
+      const batch = review ? value?.batch_id : value?.handoff?.batch_id;
+      const date = review ? value?.trade_date : value?.handoff?.target_trade_date;
+      return typeof value?.workspace_id === "string" && value.workspace_id && typeof batch === "string" && batch
+        && typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) ? JSON.stringify([value.workspace_id,batch,date]) : null;
+    }
+    function acceptReview(fresh = false) {
+      if (!currentScope || !reviewCandidate) return;
+      if (scope(reviewCandidate,true) !== currentScope) {reviewError="identity_mismatch";return;}
+      if (matchedReview && timeValue(reviewCandidate.generated_at) < timeValue(matchedReview.generated_at)) {reviewError="older_result";return;}
+      matchedReview=reviewCandidate;if(fresh)reviewError=null;
+    }
+    function publish() {
+      if (!lastQuotes) return;
+      if(expiryTimer !== null)cancel(expiryTimer);
+      expiryTimer=null;
+      const now=Date.now();let nextDeadline=null;
+      if(manualState && lastQuotes.manual_watch_revision >= manualState.revision)manualState=null;
+      const manualRows = new Map((manualState?.stocks || []).map(row=>[row.code,row]));
+      const reviews = new Map((matchedReview?.stocks || []).map(row=>[row.code,row]));
+      const stocks = lastQuotes.stocks.filter(stock=>(manualRows.get(stock.code)?.manual_label || stock.manual_label) !== "sold").map(stock=>{
+        const quote={...stock};delete quote.review_status;delete quote.intraday_review;
+        const manual=manualRows.get(stock.code);
+        if(manual){quote.manual_label=manual.manual_label;quote.manual_revision=manual.manual_revision;}
+        const currentStatus=lastQuotes.handoff?.status === "stopped" ? "stopped"
+          : lastQuotes.handoff?.status === "withdrawn" ? "withdrawn"
+          : (stock.observation_status ?? stock.monitoring_status);
+        if(["stopped","withdrawn","invalidated","withdrawn_due_to_data_or_method_error"].includes(currentStatus))
+          return {...quote,review_status:currentStatus === "stopped" ? "stopped" : "withdrawn"};
+        const review=reviews.get(stock.code);
+        const deadline=timeValue(review?.intraday_review?.deadline_at);
+        if(review?.review_status === "accepted" && review.intraday_review?.status === "accepted" && deadline !== null){
+          if(now >= deadline)return {...quote,review_status:"expired",intraday_review:{...review.intraday_review,
+            status:"expired",qa_status:"accepted",reviewed_alert_direction:review.intraday_review.alert_direction,alert_direction:"none"}};
+          nextDeadline=nextDeadline === null ? deadline : Math.min(nextDeadline,deadline);
+        }
+        return review ? {...quote,review_status:review.review_status,intraday_review:review.intraday_review} : quote;
+      });
+      lastFeed={...lastQuotes,stocks,manual_watch_revision:manualState?.revision ?? lastQuotes.manual_watch_revision,review_feed_error:currentScope ? reviewError : null};
+      draw(lastFeed);
+      if(nextDeadline !== null)expiryTimer=schedule(publish,nextDeadline-now);
+      if(quoteError)connection("error","行情连接中断 · 保留上次画面");
+      else if(currentScope && reviewError)connection("error","行情正常更新 · 盘中复核连接异常（保留上次匹配结果）");
+      else connection("connected","每 2 秒自动更新");
     }
     async function live(expectedGeneration) {
       try {
         const feed = await request("./sniper-feed.json", expectedGeneration);
         if (expectedGeneration !== generation) return;
         if (!validFeed(feed, "live")) throw Error("feed_invalid");
-        if (lastFeed?.mode === "live" && lastFeed.run_id === feed.run_id
-          && timeValue(feed.generated_at) !== null && timeValue(lastFeed.generated_at) !== null
-          && timeValue(feed.generated_at) < timeValue(lastFeed.generated_at)) throw Error("feed_older");
-        lastFeed = feed; draw(feed); connection("connected", "每 2 秒自动更新");
+        if (lastQuotes?.run_id === feed.run_id
+          && timeValue(feed.generated_at) !== null && timeValue(lastQuotes.generated_at) !== null
+          && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) throw Error("feed_older");
+        if(Number.isInteger(lastQuotes?.manual_watch_revision) && Number.isInteger(feed.manual_watch_revision)
+          && feed.manual_watch_revision < lastQuotes.manual_watch_revision)throw Error("manual_revision_older");
+        const nextScope=scope(feed);
+        if(nextScope !== currentScope){matchedReview=null;reviewError=null;currentScope=nextScope;}
+        lastQuotes=feed;quoteError=false;acceptReview();publish();
       } catch (error) {
         if (expectedGeneration !== generation) return;
-        connection("error", lastFeed ? "连接中断 · 保留上次画面" : "暂时无法连接 · 正在重试");
+        quoteError=true;
+        if(lastQuotes)publish();
+        else connection("error","暂时无法连接 · 正在重试");
       }
       if (expectedGeneration === generation) timer = schedule(() => live(expectedGeneration), 2000);
+    }
+    async function reviews(expectedGeneration) {
+      try {
+        const data=await request("./intraday-review-feed.json",expectedGeneration);
+        if(expectedGeneration !== generation)return;
+        if(!data || data.schema !== "intraday-review-web/v1" || data.signal_boundary !== BOUNDARY
+          || data.mode !== "live" || !scope(data,true) || timeValue(data.generated_at) === null
+          || typeof data.status !== "string" || data.status === "error"
+          || !Array.isArray(data.stocks) || !data.stocks.every(row=>row && typeof row.code === "string" && typeof row.review_status === "string")
+          || new Set(data.stocks.map(row=>row.code)).size !== data.stocks.length)throw Error("review_feed_invalid");
+        reviewCandidate=data;acceptReview(true);publish();
+      } catch(error) {
+        if(expectedGeneration !== generation)return;
+        reviewError="unavailable";publish();
+      }
+      if(expectedGeneration === generation)reviewTimer=schedule(()=>reviews(expectedGeneration),2000);
     }
     function play(frames, index, expectedGeneration) {
       if (expectedGeneration !== generation) return;
@@ -119,11 +214,12 @@
       if (index + 1 < frames.length) timer = schedule(() => play(frames, index + 1, expectedGeneration), 1000);
     }
     async function select(nextMode) {
-      stop(); mode = nextMode; lastFeed = null;
+      stop(); mode = nextMode; lastFeed = null; lastQuotes=null;reviewCandidate=null;matchedReview=null;currentScope=null;
+      quoteError=false;reviewError=null;
       const expectedGeneration = generation;
       connection(mode === "demo" ? "demo" : "loading", mode === "demo" ? "正在准备演练" : "正在连接");
       draw(null, mode);
-      if (mode === "live") return live(expectedGeneration);
+      if (mode === "live") return Promise.all([live(expectedGeneration),reviews(expectedGeneration)]);
       try {
         if (!demo) {
           const data = await request("./sniper-demo.json", expectedGeneration);
@@ -139,9 +235,17 @@
     }
     function refresh() {
       if (mode === "demo") return select(mode);
-      stop(); connection("loading", "正在刷新"); return live(generation);
+      stop(); connection("loading", "正在刷新"); return Promise.all([live(generation),reviews(generation)]);
     }
-    return {select, refresh, stop, getMode:() => mode};
+    function applyManualState(state) {
+      if(!state || state.schema !== "manual-watch-state/v1" || state.signal_boundary !== BOUNDARY
+        || !Number.isInteger(state.revision) || state.revision < 0 || !Array.isArray(state.stocks)
+        || !state.stocks.every(row=>row && typeof row.code === "string" && ["bought","sold"].includes(row.manual_label))
+        || new Set(state.stocks.map(row=>row.code)).size !== state.stocks.length
+        || state.revision < (manualState?.revision ?? lastQuotes?.manual_watch_revision ?? 0))return false;
+      manualState=state;if(mode === "live")publish();return true;
+    }
+    return {select, refresh, stop, applyManualState, getMode:() => mode};
   }
 
   const api = {validFeed, chartModel, createController, numberText, percent, clock};
@@ -197,10 +301,50 @@
     const quoteAt = el("span"); legend.append(keys,quoteAt);
     const conditions = el("section", "conditions"), chips = el("div", "condition-list");conditions.append(el("h3","","观察条件"),chips);
     const hypothesis = el("p", "hypothesis-preview"), latest = el("div", "latest-event");
+    const reviewState = el("div", "review-state"), reviewStatus = el("span", "review-status"), reviewSummary = el("p", "review-summary"), reviewAlert = el("span", "review-alert");
+    reviewState.append(reviewStatus,reviewAlert,reviewSummary);
+    const manualControls=el("div","manual-controls"), manualLabel=el("span","manual-label","进出场标记");
+    manualControls.setAttribute("aria-label","进出场标记");
+    const entryButton=el("button","mark-entry entry-button","进场"), exitButton=el("button","mark-exit exit-button","出场"), manualMessage=el("p","manual-message");
+    entryButton.type=exitButton.type="button";manualMessage.hidden=true;manualMessage.setAttribute("role","status");
+    manualControls.append(manualLabel,entryButton,exitButton,manualMessage);
     const details = el("details", "card-details"), summary = el("summary", "", "观察要点与记录"), content = el("div", "detail-content");
-    const description = el("p"), original = el("div", "source-conditions"), eventList = el("ol", "event-list"); content.append(description,original,eventList);details.append(summary,content);
-    card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,latest,details);
-    return {card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,latest,details,summary,description,original,eventList,chartSignature:null,eventSignature:null,conditionSignature:null};
+    const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
+    const l2Container = el("div", "l2-card-container");
+    l2Container.hidden = true;
+    card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false};
+    entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
+    exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
+    return ref;
+  }
+
+  function manualButtons(ref) {
+    const unavailable=ref.manualBusy || ref.manualMode !== "live" || !Number.isInteger(ref.manualRevision);
+    ref.entryButton.disabled=unavailable || ref.manualValue === "bought";
+    ref.exitButton.disabled=unavailable || ref.manualValue !== "bought";
+  }
+
+  async function markManual(ref,action) {
+    if(ref.manualBusy || ref.manualMode !== "live" || controller.getMode() !== "live")return;
+    if(!Number.isInteger(ref.manualRevision)){
+      ref.manualMessage.hidden=false;ref.manualMessage.textContent="本地标记尚未就绪，请刷新后重试。";return;
+    }
+    ref.manualBusy=true;manualButtons(ref);ref.manualMessage.hidden=false;ref.manualMessage.textContent="正在保存本地观察标签…";
+    const requestController=new AbortController(), timeout=setTimeout(()=>requestController.abort(),8000);
+    try {
+      const response=await fetch("./manual-watch.json",{method:"POST",cache:"no-store",signal:requestController.signal,
+        headers:{"Content-Type":"application/json"},body:JSON.stringify({code:ref.manualCode,action,request_id:crypto.randomUUID(),expected_revision:ref.manualRevision})});
+      if(response.status === 409)throw Error("conflict");
+      if(!response.ok)throw Error("unconfirmed");
+      const state=await response.json(), expected=action === "mark_bought" ? "bought" : "sold";
+      if(!Array.isArray(state?.stocks) || !state.stocks.some(row=>row.code === ref.manualCode && row.manual_label === expected)
+        || !controller.applyManualState(state))throw Error("unconfirmed");
+      ref.manualMessage.textContent=expected === "bought" ? "已标记进场，持续监控至出场。" : "已标记出场，停止监控，记录已保留。";
+      if(controller.getMode() === "live")void controller.refresh();
+    } catch(error) {
+      ref.manualMessage.textContent=error.message === "conflict" ? "记录已更新，请刷新核对后再操作。" : "标记结果未确认，请刷新核对后再操作。";
+    } finally {clearTimeout(timeout);ref.manualBusy=false;manualButtons(ref);}
   }
 
   function originalConditionNodes(value) {
@@ -227,9 +371,10 @@
     const gaps = Array.isArray(stock.gaps) ? stock.gaps.filter(gap => typeof gap === "string") : [];
     const benchmark = stock.benchmark && typeof stock.benchmark === "object" ? stock.benchmark : {};
     const original = feed.mode === "live" && stock.original_conditions && typeof stock.original_conditions === "object" ? stock.original_conditions : null;
-    const monitoringStatus = feed.handoff?.status === "stopped" ? "stopped" : stock.monitoring_status;
-    const monitorLabel = {waiting:"等待观察",eligible:"等待观察",active:"行情观察中",expired:"期限已到 · 已停采",expired_unverified:"期限已到 · 已停采",stopped:"监控已停止",withdrawn:"原判断已撤回",unverifiable:"暂停观察",invalidated:"原条件已失效",withdrawn_due_to_data_or_method_error:"原判断已撤回"}[monitoringStatus];
-    const statusText = original ? monitorLabel || (stock.monitoring_eligible === false ? "当前未采样" : "等待行情") : latest ? eventLabel(latest) : gaps.length ? "数据待补" : !numeric(stock.price) ? "等待行情" : feed.status === "finished" ? "观察结束" : "动态观察";
+    const eligible = observationEligible(stock);
+    const monitoringStatus = feed.handoff?.status === "stopped" ? "stopped" : stock.observation_status || stock.monitoring_status;
+    const monitorLabel = {waiting:"等待观察",eligible:"等待观察",active:"行情观察中",paused:"午休 · 暂停采样",closed:"已收盘",expired:"期限已到 · 已停采",expired_unverified:"期限已到 · 已停采",stopped:"监控已停止",withdrawn:"原判断已撤回",unverifiable:"暂停观察",invalidated:"原条件已失效",withdrawn_due_to_data_or_method_error:"原判断已撤回"}[monitoringStatus];
+    const statusText = original ? monitorLabel || (eligible === false ? "当前未采样" : "等待行情") : latest ? eventLabel(latest) : gaps.length ? "数据待补" : !numeric(stock.price) ? "等待行情" : feed.status === "finished" ? "观察结束" : "动态观察";
     const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
@@ -239,20 +384,52 @@
     ref.metricRefs[0].replaceChildren(document.createTextNode(numberText(stock.turnover_yi)),el("small","","亿"));
     ref.metricRefs[1].textContent = numberText(stock.vwap);ref.metricRefs[2].textContent = percent(stock.vwap_deviation_pct);
     ref.quoteAt.textContent = timeValue(stock.source_data_at) === null ? "行情时点 —" : `行情 ${clock(stock.source_data_at)}`;
-    const signature = JSON.stringify([stock.points || [],original && stock.monitoring_eligible]);
-    if (signature !== ref.chartSignature) {drawChart(ref.chart,stock.points,original && stock.monitoring_eligible === false ? "本次观察暂无行情采样" : "等待首个行情采样");ref.chartSignature = signature;}
+    const signature = JSON.stringify([stock.points || [],original && eligible]);
+    if (signature !== ref.chartSignature) {drawChart(ref.chart,stock.points,original && eligible === false ? "本次观察暂无行情采样" : "等待首个行情采样");ref.chartSignature = signature;}
     const target = Array.isArray(benchmark.target_open_pct) && benchmark.target_open_pct.length === 2 && benchmark.target_open_pct.every(numeric)
       ? `${benchmark.target_open_pct[0] > 0 ? "+" : ""}${benchmark.target_open_pct[0]}% ~ ${benchmark.target_open_pct[1] > 0 ? "+" : ""}${benchmark.target_open_pct[1]}%` : "—";
     const reviewed = ["accepted", "approved", "corrected", "accepted_bounded_research_only", "supported_as_conditional_research_hypothesis"].includes(stock.qa_verdict);
-    const chipData = original ? [["审核",reviewed ? "QA 已审" : "QA · " + (stock.qa_verdict || "待确认")],["结果级别","条件研究"],["复核截止",deadlineText(original.deadline_at)]]
+    const chipData = original ? [["原研究审核",reviewed ? "QA 已审" : "QA · " + (stock.qa_verdict || "待确认")],["原结果级别","条件研究"],["原复核截止",deadlineText(original.deadline_at)]]
       : [["高开",target],["成交",numeric(benchmark.min_turnover_yi) ? `≥ ${numberText(benchmark.min_turnover_yi)} 亿` : "—"],["防守",numeric(benchmark.max_vwap_pullback_pct) ? `${benchmark.max_vwap_pullback_pct}%` : "未配置"]];
     ref.chips.className = `condition-list ${original ? "reviewed-conditions" : ""}`;
     ref.chips.replaceChildren(...chipData.map(([label,value]) => {const chip=el("div","condition-chip");chip.append(el("span","",label),el("strong","",value));return chip;}));
     ref.hypothesis.hidden = !original;
     ref.hypothesis.textContent = original && typeof stock.hypothesis === "string" ? stock.hypothesis : "";
-    ref.summary.textContent = original ? "原始支持 / 失效条件与记录" : "观察要点与记录";
+    const intraday = feed.mode === "live" && ["accepted","expired"].includes(stock.review_status) && stock.intraday_review?.status === stock.review_status ? stock.intraday_review : null;
+    const originalStatus = {expired_unverified:"原竞价已到期 · 未核实",expired:"原竞价已到期",invalidated:"原竞价条件已失效",withdrawn:"原竞价判断已撤回"}[stock.original_condition_status];
+    const reviewLabel = feed.mode === "live" ? (stock.review_status === "expired" ? "盘中复核已到期 · QA 已审历史" : stock.review_status === "accepted" && !intraday ? "盘中复核结果待同步" : REVIEW_LABELS[stock.review_status]) : null;
+    ref.reviewState.hidden = !originalStatus && !reviewLabel;
+    ref.reviewState.className = `review-state ${["error","uncertain","budget_exhausted"].includes(stock.review_status) ? "warning" : ""}`;
+    ref.reviewStatus.textContent = [originalStatus,reviewLabel].filter(Boolean).join(" · ");
+    ref.reviewSummary.textContent = intraday && typeof intraday.summary === "string" ? intraday.summary : "";
+    ref.reviewSummary.hidden = !ref.reviewSummary.textContent;
+    const alertLabel = intraday?.status === "accepted" && {buy:"买入预警",sell:"卖出预警",none:"无方向预警"}[intraday.alert_direction];
+    ref.reviewAlert.hidden=!alertLabel;ref.reviewAlert.textContent=alertLabel || "";
+    ref.reviewAlert.className=`review-alert ${alertLabel ? intraday.alert_direction : ""}`;
+    ref.manualMode=feed.mode;ref.manualCode=stock.code;ref.manualRevision=feed.manual_watch_revision;ref.manualValue=stock.manual_label;
+    ref.manualControls.hidden=feed.mode !== "live";
+    const entryTime=stock.manual_recorded_at || (stock.manual_buy_event_ref && stock.manual_buy_event_ref.recorded_at);
+    const entryPrice=stock.entry_price;
+    const priceText=numeric(entryPrice) ? `¥${entryPrice.toFixed(2)}` : "--";
+    ref.manualLabel.textContent=stock.manual_label === "bought" ? `持仓中 · 进场 ${priceText} ${entryTime ? clock(entryTime) : "--:--"}` : stock.manual_label === "sold" ? "已出场 · 停止监控" : "进出场标记";
+    ref.manualLabel.className=`manual-label ${stock.manual_label === "bought" ? "holding" : stock.manual_label === "sold" ? "exited" : ""}`;
+    // L2 监控同步：进场订阅，出场退订
+    syncL2Subscription(ref, stock);
+    ref.entryButton.setAttribute("aria-label",`${stock.name || stock.code}：标记进场（本地观察标签）`);
+    ref.exitButton.setAttribute("aria-label",`${stock.name || stock.code}：标记出场并停止监控（本地观察标签）`);
+    manualButtons(ref);
+    const reviewSignature = JSON.stringify(intraday);
+    if(reviewSignature !== ref.reviewSignature){
+      const fields = {};
+      if(intraday)for(const key of ["summary","reviewed_at","qa_completed_at","original_outcome","hypothesis_id","relation_to_original","support_conditions","invalidation_conditions","deadline_at","risks","gaps"]){
+        if(intraday[key] !== undefined)fields[key] = ["reviewed_at","qa_completed_at","deadline_at"].includes(key) ? deadlineText(intraday[key]) : intraday[key];
+      }
+      ref.intraday.replaceChildren(...(intraday ? [el("h4","","盘中复核 · QA 已审"),originalConditionNodes(fields)] : []));
+      ref.reviewSignature=reviewSignature;
+    }
+    ref.summary.textContent = original ? "原始条件、盘中复核与记录" : "观察要点与记录";
     ref.latest.className = `latest-event ${gaps.length ? "warning" : ""}`;
-    ref.latest.textContent = original && stock.monitoring_eligible === false ? "本股已停采，原条件与已有记录保留。" : gaps.length ? "部分数据待补，查看观察记录了解详情。" : latest ? `${clock(latest.at)}  ${eventLabel(latest)}` : !numeric(stock.price) ? "观察条件已就位，等待竞价行情。" : "持续观察价格、成交额与 VWAP 变化。";
+    ref.latest.textContent = original && eligible === false ? "本股已停采，原条件与已有记录保留。" : gaps.length ? "部分数据待补，查看观察记录了解详情。" : latest ? `${clock(latest.at)}  ${eventLabel(latest)}` : !numeric(stock.price) ? "等待有效行情采样。" : "持续观察价格、成交额与 VWAP 变化。";
     ref.description.textContent = original ? stock.hypothesis || "" : typeof benchmark.desc === "string" && benchmark.desc.trim() ? benchmark.desc : "按卡片中的竞价与 VWAP 条件跟踪。";
     const conditionSignature = JSON.stringify([original,stock.risk_reason]);
     if(conditionSignature !== ref.conditionSignature){
@@ -272,6 +449,60 @@
     }
   }
 
+  // ---------------------------------------------------------------------------
+  // L2 监控集成
+  // ---------------------------------------------------------------------------
+  function initL2Monitor() {
+    if (typeof window.L2Monitor === "undefined") return;
+    if (l2Monitor) return;
+    const alertsContainer = byId("l2-alerts-container");
+    const statusLabel = byId("l2-status-label");
+    l2AlertsPanel = new window.L2AlertsPanel(alertsContainer);
+    l2Monitor = new window.L2Monitor({
+      onStatusChange: (status) => {
+        if (statusLabel) {
+          statusLabel.textContent = status.connected
+            ? (status.mode === "sse" ? "L2 实时推送中" : "L2 轮询中")
+            : "L2 未连接";
+          statusLabel.className = status.connected ? "connected" : "error";
+        }
+      },
+      onAlert: (alert) => {
+        if (l2AlertsPanel) l2AlertsPanel.addAlert(alert);
+      },
+    });
+    l2Monitor.start();
+  }
+
+  function syncL2Subscription(ref, stock) {
+    if (!l2Monitor) return;
+    const code = stock.code;
+    if (stock.manual_label === "bought") {
+      // 进场：显示 L2 容器并订阅
+      ref.l2Container.hidden = false;
+      l2Containers.set(code, ref.l2Container);
+      l2Monitor.register(code, ref.l2Container);
+    } else {
+      // 出场或未进场：隐藏并退订
+      ref.l2Container.hidden = true;
+      l2Containers.delete(code);
+      l2Monitor.unregister(code);
+    }
+    // 更新 L2 区块可见性
+    updateL2SectionVisibility();
+  }
+
+  function updateL2SectionVisibility() {
+    const section = byId("l2-section");
+    if (!section) return;
+    const hasHeld = l2Containers.size > 0;
+    section.hidden = !hasHeld;
+  }
+
+  function stopL2Monitor() {
+    if (l2Monitor) { l2Monitor.stop(); l2Monitor = null; }
+  }
+
   function draw(feed, requestedMode) {
     const mode = feed?.mode || requestedMode || displayedMode;
     displayedMode = mode;
@@ -284,27 +515,35 @@
       cards.clear();byId("stock-grid").replaceChildren();lastRun=null;
       byId("empty-state").hidden=false;byId("empty-state").querySelector("h3").textContent=mode === "demo" ? "正在准备演练卡片" : "正在载入观察名单";
       byId("stock-count").textContent="—";byId("event-count").textContent="—";byId("quote-time").textContent="—";
-      byId("session-description").textContent=mode === "demo" ? "使用生成行情，依次预览竞价与开盘的变化。" : "正在读取观察名单与最新行情。";
+      byId("session-description").textContent=mode === "demo" ? "使用生成行情，依次预览竞价、盘中、午休与收盘。" : "正在读取观察名单与最新行情。";
       byId("source-label").textContent=mode === "demo" ? "生成的演练行情" : "行情来源待确认";
       byId("seed-date").textContent="";byId("feed-notice").hidden=true;
       for (const step of document.querySelectorAll(".phase-track li")) step.className="";
       return;
     }
-    if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;}
+    if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;
+      // 清理 L2 订阅
+      if (l2Monitor) { for (const code of l2Monitor.getAllCodes()) l2Monitor.unregister(code); }
+      l2Containers.clear(); updateL2SectionVisibility();
+    }
     const stocks = feed.stocks;
     const handoff = mode === "live" ? feed.handoff : null;
     const handoffMessage = HANDOFF_LABELS[handoff?.status];
     byId("stock-count").textContent=!stocks.length && handoffMessage ? "—" : String(stocks.length);
+    const holdingCount=feed.holding_summary?.holding_count ?? stocks.filter(s=>s.manual_label === "bought").length;
+    const holdingEl=byId("holding-count");
+    if(holdingEl)holdingEl.textContent=String(holdingCount);
     byId("event-count").textContent=String(stocks.reduce((count,stock)=>count+(Array.isArray(stock.events)?stock.events.length:0),0));
     const latest = stocks.map(stock=>stock.source_data_at).filter(value=>timeValue(value)!==null).sort((a,b)=>timeValue(a)-timeValue(b)).pop();
     byId("quote-time").textContent=clock(latest);
     byId("source-label").textContent=feed.source_label || (mode === "demo" ? "生成的演练行情" : "腾讯一级行情");
     byId("seed-date").textContent=handoff ? `研究 ${handoff.research_date || "—"} · 观察 ${handoff.target_trade_date || "—"}` : feed.seed_date ? `观察名单 · ${feed.seed_date}` : "";
-    byId("session-description").textContent=mode === "demo" ? `演练预览 · ${PHASE_LABELS[feed.phase] || "按顺序回放观察时点"}`
-      : feed.status === "waiting" ? "观察条件已就位，等待下个竞价与开盘窗口。" : PHASE_LABELS[feed.phase] || "跟踪价格、成交额与 VWAP 的变化。";
-    if(handoff)byId("session-description").textContent=handoffMessage ? handoffMessage[0] : stocks.length && stocks.every(stock=>stock.monitoring_eligible === false) ? "本批次已停采，原条件与记录保留。" : "QA 已审条件研究 · 按原条件持续观察";
+    const phaseDescription = PHASE_LABELS[feed.phase] || (feed.status === "waiting" ? "等待观察窗口" : "跟踪价格、成交额与 VWAP 的变化。");
+    const batchDescription = handoffMessage ? handoffMessage[0] : stocks.length && stocks.every(stock=>observationEligible(stock) === false) ? "本批次已停采，原条件与记录保留。" : "QA 已审条件研究";
+    byId("session-description").textContent=mode === "demo" ? `演练预览 · ${phaseDescription}` : handoff ? `${phaseDescription} · ${batchDescription}` : phaseDescription;
     byId("list-caption").textContent=mode === "demo" ? "生成行情 · 有限时点演练" : handoff?.qa_completed_at ? `QA 完成 · ${deadlineText(handoff.qa_completed_at)}` : "一股一卡 · 独立跟踪";
-    const phaseIndex = feed.phase === "PHASE_4_OPENING_REVERSAL" || feed.phase === "FINISHED" ? 3 : feed.phase === "PHASE_3_FINAL_VERDICT" ? 2 : feed.phase === "PHASE_2_REAL_AUCTION" ? 1 : String(feed.phase).startsWith("PHASE_1") ? 0 : -1;
+    const phaseIndex = feed.phase === "INTRADAY" && timeValue(feed.generated_at) !== null
+      ? (clock(feed.generated_at) >= "13:00:00" ? 6 : 4) : PHASE_STEPS[feed.phase] ?? -1;
     for (const step of document.querySelectorAll(".phase-track li")) {const index=Number(step.dataset.step);step.className=index === phaseIndex ? "active" : index < phaseIndex ? "complete" : "";}
     byId("feed-notice").hidden=!feed.error && !handoffMessage;byId("feed-notice").textContent=handoffMessage ? handoffMessage.join(" · ") : feed.error ? "当前数据暂时不可用，页面会自动重试。" : "";
     byId("empty-state").hidden=stocks.length>0;
@@ -314,7 +553,8 @@
     }
     byId("stock-grid").className=`stock-grid ${stocks.length === 2 ? "two-cards" : stocks.length === 3 || stocks.length === 6 ? "three-columns" : ""}`;
     const currentCodes=new Set(stocks.map(stock=>stock.code));
-    for (const [code,ref] of cards) if(!currentCodes.has(code)){ref.card.remove();cards.delete(code);}
+    for (const [code,ref] of cards) if(!currentCodes.has(code)){ref.card.remove();cards.delete(code);
+      if(l2Monitor) l2Monitor.unregister(code); l2Containers.delete(code);}
     for (const stock of stocks) {
       let ref=cards.get(stock.code);
       if(!ref){ref=createCard();cards.set(stock.code,ref);}
@@ -327,6 +567,7 @@
   byId("live-mode").addEventListener("click",()=>controller.select("live"));
   byId("demo-mode").addEventListener("click",()=>controller.select("demo"));
   byId("refresh-button").addEventListener("click",()=>controller.refresh());
-  window.addEventListener("pagehide",()=>controller.stop());
+  window.addEventListener("pagehide",()=>{controller.stop();stopL2Monitor();});
+  initL2Monitor();
   controller.select("live");
 })();

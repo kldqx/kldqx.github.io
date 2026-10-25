@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>A股资金监控台</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./sniper.css">
+  <link rel="stylesheet" href="./l2_orderbook.css">
+  <script src="./l2_orderbook.js" defer></script>
+  <script src="./sniper.js" defer></script>
+</head>
+<body data-signal-boundary="not_a_trading_signal">
+  <div class="page-shell">
+    <header class="page-header">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">⌁</span><span>FUND FLOW<small>A股资金流向观察</small></span></div>
+      <div class="header-actions">
+        <a href="./performance.html" class="mode-button" style="text-decoration:none;display:inline-flex;align-items:center">📊 信号表现</a>
+        <div class="mode-switch" role="group" aria-label="查看模式">
+          <button id="live-mode" class="mode-button selected" type="button" aria-pressed="true">当前监控</button>
+          <button id="demo-mode" class="mode-button" type="button" aria-pressed="false">演练预览</button>
+        </div>
+        <button id="refresh-button" class="icon-button" type="button" aria-label="刷新当前监控" title="刷新当前监控"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19 11a7 7 0 0 0-12-4L4 10m16 4-3 3A7 7 0 0 1 5 13"/></svg></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="overview" aria-labelledby="page-title">
+        <div class="overview-heading">
+          <div><h1 id="page-title">A股资金监控台<span id="mode-label" class="mode-label">当前监控</span></h1><p id="session-description" class="session-description">正在载入观察名单与最新行情。</p></div>
+          <div class="connection"><span id="connection-dot" class="connection-dot"></span><span id="connection-text" role="status" aria-live="polite">正在连接</span></div>
+        </div>
+        <div class="session-strip">
+          <div class="session-stat"><span>观察标的</span><strong id="stock-count">—</strong><small>只</small></div>
+          <div class="session-stat"><span>持仓中</span><strong id="holding-count">—</strong><small>只</small></div>
+          <div class="session-stat"><span>条件触发</span><strong id="event-count">—</strong><small>条</small></div>
+          <div class="session-stat time-stat"><span>最新行情时点</span><strong id="quote-time">—</strong></div>
+          <div class="session-source"><span id="source-label">行情来源待确认</span><span id="seed-date"></span></div>
+        </div>
+        <ol class="phase-track" aria-label="观察时段">
+          <li data-step="0"><span class="step-dot"></span><span>竞价申报<small>09:15</small></span></li>
+          <li data-step="1"><span class="step-dot"></span><span>竞价锁定<small>09:20</small></span></li>
+          <li data-step="2"><span class="step-dot"></span><span>竞价结果<small>09:25</small></span></li>
+          <li data-step="3"><span class="step-dot"></span><span>开盘观察<small>09:30—09:33</small></span></li>
+          <li data-step="4"><span class="step-dot"></span><span>上午盘中<small>至 11:30</small></span></li>
+          <li data-step="5"><span class="step-dot"></span><span>午休<small>11:30—13:00</small></span></li>
+          <li data-step="6"><span class="step-dot"></span><span>下午盘中<small>13:00—14:57</small></span></li>
+          <li data-step="7"><span class="step-dot"></span><span>收盘竞价<small>14:57—15:00</small></span></li>
+          <li data-step="8"><span class="step-dot"></span><span>盘后复核<small>15:00—15:30</small></span></li>
+          <li data-step="9"><span class="step-dot"></span><span>观察结束<small>15:30</small></span></li>
+        </ol>
+      </section>
+
+      <section class="watchlist" aria-labelledby="watchlist-title">
+        <div class="section-heading"><h2 id="watchlist-title">股票观察卡</h2><span id="list-caption">一股一卡 · 独立跟踪</span></div>
+        <p id="feed-notice" class="feed-notice" role="status" hidden></p>
+        <div id="stock-grid" class="stock-grid" aria-label="股票观察卡片"></div>
+        <div id="empty-state" class="empty-state"><span class="empty-orbit" aria-hidden="true">◎</span><h3>正在载入观察名单</h3><p>QA 交接到达后，行情与原始观察条件会显示在每只股票的卡片里。</p></div>
+      </section>
+      <section class="l2-section" aria-labelledby="l2-section-title" id="l2-section" hidden>
+        <div class="section-heading"><h2 id="l2-section-title">L2 盘口监控</h2><span id="l2-status-label">未连接</span></div>
+        <div class="l2-layout">
+          <div id="l2-alerts-container" class="l2-alerts-container"></div>
+          <div id="l2-orderbooks-container" class="l2-orderbooks-container"></div>
+        </div>
+      </section>
+    </main>
+    <footer><span>FUND FLOW</span><span id="footer-status">A股资金流向观察</span><span class="footer-hint">窗口缩放时，卡片自动排列</span></footer>
+  </div>
+</body>
+</html>

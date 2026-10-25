@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>信号表现追踪 — A股资金流向</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --bg: #0b0f14; --panel: #131a24; --panel-2: #1a2332; --border: #253040;
+      --text: #e6edf3; --muted: #8b98a9; --accent: #4da3ff;
+      --win: #34d399; --loss: #f87171; --open: #fbbf24; --neutral: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", "PingFang SC", sans-serif; font-size: 14px; line-height: 1.5; }
+    .page-shell { max-width: 1200px; margin: 0 auto; padding: 16px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .brand { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .brand small { color: var(--muted); font-weight: 400; margin-left: 4px; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .nav-link { color: var(--accent); text-decoration: none; font-size: 13px; }
+    .nav-link:hover { text-decoration: underline; }
+    button { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 13px; }
+    button:hover { border-color: var(--accent); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .stat-card .label { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .stat-card .value { font-size: 24px; font-weight: 700; }
+    .stat-card .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .value.win { color: var(--win); } .value.loss { color: var(--loss); }
+    .value.neutral { color: var(--neutral); } .value.open { color: var(--open); }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .panel h2 { font-size: 15px; margin-bottom: 12px; color: var(--text); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; color: var(--muted); font-weight: 500; padding: 8px; border-bottom: 1px solid var(--border); }
+    td { padding: 8px; border-bottom: 1px solid var(--border); }
+    tr:hover td { background: var(--panel-2); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .badge.closed-win { background: rgba(52,211,153,.15); color: var(--win); }
+    .badge.closed-loss { background: rgba(248,113,113,.15); color: var(--loss); }
+    .badge.open { background: rgba(251,191,36,.15); color: var(--open); }
+    .badge.no-price { background: rgba(148,163,184,.15); color: var(--neutral); }
+    .return-win { color: var(--win); } .return-loss { color: var(--loss); }
+    .empty { text-align: center; color: var(--muted); padding: 40px; }
+    .boundary-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; }
+    .loading { text-align: center; color: var(--muted); padding: 40px; }
+    .error-box { background: rgba(248,113,113,.1); border: 1px solid var(--loss); border-radius: 8px; padding: 12px; color: var(--loss); margin-bottom: 16px; }
+    @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body data-signal-boundary="not_a_trading_signal">
+  <div class="page-shell">
+    <header>
+      <div class="brand"><span aria-hidden="true">📊</span><span>信号表现追踪<small>进出场统计</small></span></div>
+      <div class="header-actions">
+        <a class="nav-link" href="./sniper.html">← 返回监控台</a>
+        <button id="refresh-btn" type="button">刷新</button>
+      </div>
+    </header>
+
+    <div id="error-box" class="error-box" style="display:none"></div>
+
+    <div id="loading" class="loading">正在加载信号表现数据…</div>
+
+    <div id="content" style="display:none">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="label">总交易次数</div><div class="value neutral" id="total-trades">—</div><div class="sub">进场+出场</div></div>
+        <div class="stat-card"><div class="label">已完成交易</div><div class="value" id="closed-trades">—</div><div class="sub">已出场</div></div>
+        <div class="stat-card"><div class="label">持仓中</div><div class="value open" id="open-positions">—</div><div class="sub">未出场</div></div>
+        <div class="stat-card"><div class="label">胜率</div><div class="value" id="win-rate">—</div><div class="sub">已完成交易</div></div>
+        <div class="stat-card"><div class="label">盈亏比</div><div class="value" id="pl-ratio">—</div><div class="sub">平均盈利/平均亏损</div></div>
+        <div class="stat-card"><div class="label">平均收益</div><div class="value" id="avg-return">—</div><div class="sub">含持仓浮盈</div></div>
+        <div class="stat-card"><div class="label">最大收益</div><div class="value" id="max-return">—</div><div class="sub">单笔最佳</div></div>
+        <div class="stat-card"><div class="label">最大亏损</div><div class="value" id="min-return">—</div><div class="sub">单笔最差</div></div>
+        <div class="stat-card"><div class="label">平均持仓天数</div><div class="value" id="avg-holding">—</div><div class="sub">天</div></div>
+      </div>
+
+      <div class="panel">
+        <h2>交易明细</h2>
+        <div style="overflow-x:auto">
+          <table id="outcomes-table">
+            <thead>
+              <tr><th>股票</th><th>状态</th><th>进场价</th><th>进场时间</th><th>出场价</th><th>出场时间</th><th>当前价</th><th>收益率</th><th>持仓天数</th></tr>
+            </thead>
+            <tbody id="outcomes-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="boundary-note">signal_boundary=not_a_trading_signal · 观察统计，不构成交易建议</div>
+  </div>
+
+  <script>
+    (function() {
+      const loading = document.getElementById('loading');
+      const content = document.getElementById('content');
+      const errorBox = document.getElementById('error-box');
+      const refreshBtn = document.getElementById('refresh-btn');
+
+      function fmt(v, suffix) {
+        if (v === null || v === undefined) return '—';
+        return v + (suffix || '');
+      }
+      function fmtReturn(v) {
+        if (v === null || v === undefined) return '—';
+        const cls = v > 0 ? 'return-win' : (v < 0 ? 'return-loss' : '');
+        return '<span class="' + cls + '">' + (v > 0 ? '+' : '') + v + '%</span>';
+      }
+      function fmtPrice(v) {
+        if (v === null || v === undefined) return '—';
+        return Number(v).toFixed(2);
+      }
+      function fmtTime(v) {
+        if (!v) return '—';
+        try { return new Date(v).toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+        catch(e) { return v; }
+      }
+      function statusBadge(o) {
+        if (o.status === 'closed') {
+          const cls = o.is_win ? 'closed-win' : 'closed-loss';
+          const text = o.is_win ? '盈利' : '亏损';
+          return '<span class="badge ' + cls + '">' + text + '</span>';
+        }
+        if (o.status === 'open') return '<span class="badge open">持仓中</span>';
+        return '<span class="badge no-price">无价格</span>';
+      }
+      function outcomeReturn(o) {
+        if (o.status === 'closed' && o.realized_return !== null) return fmtReturn(o.realized_return);
+        if (o.status === 'open' && o.unrealized_return !== null) return fmtReturn(o.unrealized_return) + ' <small style="color:var(--muted)">(浮)</small>';
+        return '—';
+      }
+
+      async function load() {
+        loading.style.display = 'block';
+        content.style.display = 'none';
+        errorBox.style.display = 'none';
+        try {
+          const res = await fetch('./performance.json', {cache: 'no-store'});
+          const data = await res.json();
+          if (!res.ok || data.status === 'error') {
+            throw new Error(data.error || ('HTTP ' + res.status));
+          }
+          render(data);
+          loading.style.display = 'none';
+          content.style.display = 'block';
+        } catch (e) {
+          loading.style.display = 'none';
+          errorBox.textContent = '加载失败: ' + e.message;
+          errorBox.style.display = 'block';
+        }
+      }
+
+      function render(data) {
+        document.getElementById('total-trades').textContent = fmt(data.total_trades);
+        document.getElementById('closed-trades').textContent = fmt(data.closed_trades);
+        document.getElementById('open-positions').textContent = fmt(data.open_positions);
+        document.getElementById('win-rate').textContent = data.win_rate !== null ? data.win_rate + '%' : '—';
+        document.getElementById('pl-ratio').textContent = data.profit_loss_ratio !== null ? data.profit_loss_ratio : '—';
+
+        const avgEl = document.getElementById('avg-return');
+        avgEl.innerHTML = data.avg_return !== null ? fmtReturn(data.avg_return) : '—';
+
+        const maxEl = document.getElementById('max-return');
+        maxEl.innerHTML = data.max_return !== null ? fmtReturn(data.max_return) : '—';
+        if (data.max_return !== null) maxEl.className = 'value ' + (data.max_return > 0 ? 'win' : (data.max_return < 0 ? 'loss' : 'neutral'));
+
+        const minEl = document.getElementById('min-return');
+        minEl.innerHTML = data.min_return !== null ? fmtReturn(data.min_return) : '—';
+        if (data.min_return !== null) minEl.className = 'value ' + (data.min_return > 0 ? 'win' : (data.min_return < 0 ? 'loss' : 'neutral'));
+
+        document.getElementById('avg-holding').textContent = data.avg_holding_days !== null ? data.avg_holding_days : '—';
+
+        const tbody = document.getElementById('outcomes-body');
+        if (!data.outcomes || data.outcomes.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" class="empty">暂无进出场记录</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.outcomes.map(function(o) {
+          return '<tr>'
+            + '<td><strong>' + o.code + '</strong></td>'
+            + '<td>' + statusBadge(o) + '</td>'
+            + '<td>' + fmtPrice(o.entry_price) + '</td>'
+            + '<td>' + fmtTime(o.entry_at) + '</td>'
+            + '<td>' + fmtPrice(o.exit_price) + '</td>'
+            + '<td>' + fmtTime(o.exit_at) + '</td>'
+            + '<td>' + fmtPrice(o.current_price) + '</td>'
+            + '<td>' + outcomeReturn(o) + '</td>'
+            + '<td>' + fmt(o.holding_days, o.holding_days !== null ? '天' : '') + '</td>'
+            + '</tr>';
+        }).join('');
+      }
+
+      refreshBtn.addEventListener('click', load);
+      load();
+      setInterval(load, 30000);
+    })();
+  </script>
+</body>
+</html>
