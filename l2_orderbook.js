@@ -24,6 +24,7 @@
       }, options || {});
       this._snapshot = null;
       this._prevSnapshot = null;
+      this._seenTrades = new Set();
       this._el = null;
       this._refs = {};
       this._build();
@@ -370,6 +371,7 @@
 
     // M1: 盘口异动检测 — 委托量突增/突减超过阈值时闪烁并回调
     _detectSpike(rowEl, change, side, level, data, snapshot) {
+      if (snapshot.source !== "TDX_L2") return;
       const threshold = this.options.spikeThreshold || 0.3;
       rowEl.classList.remove("vol-spike-up", "vol-spike-down");
       if (Math.abs(change) >= threshold) {
@@ -494,29 +496,33 @@
       // Summary
       r.bidTotalEl.textContent = "买盘 " + this._fmtVol(metrics.bid_total || 0);
       r.askTotalEl.textContent = "卖盘 " + this._fmtVol(metrics.ask_total || 0);
-      r.largeBuyEl.textContent = "大买 " + (metrics.large_buy_count || 0);
-      r.largeSellEl.textContent = "大卖 " + (metrics.large_sell_count || 0);
-      r.superBuyEl.textContent = "超买 " + (metrics.super_buy_count || 0);
-      r.superSellEl.textContent = "超卖 " + (metrics.super_sell_count || 0);
+      const countText = value => typeof value === "number" ? String(value) + (metrics.trade_volume_status === "partial" ? "（已核部分）" : "") : "—";
+      r.largeBuyEl.textContent = "大买 " + countText(metrics.large_buy_count);
+      r.largeSellEl.textContent = "大卖 " + countText(metrics.large_sell_count);
+      r.superBuyEl.textContent = "超买 " + countText(metrics.super_buy_count);
+      r.superSellEl.textContent = "超卖 " + countText(metrics.super_sell_count);
+      if (r.tradesList) r.tradesList.title = (snapshot.trade_evidence_gaps || []).join("; ");
 
       // Trade tape
       if (r.tradesList) {
         const trades = (snapshot.last_trades || []).slice(-this.options.maxTrades).reverse();
-        // I2: Track previous trade count for flash on new large trades
-        const prevTradeCount = this._prevSnapshot && this._prevSnapshot.last_trades ? this._prevSnapshot.last_trades.length : 0;
-        const currentTradeCount = (snapshot.last_trades || []).length;
-        const hasNewTrades = currentTradeCount > prevTradeCount;
+        // Snapshot length cannot establish whether any trade is new.
         r.tradesList.innerHTML = "";
         for (let ti = 0; ti < trades.length; ti++) {
           const t = trades[ti];
           const item = document.createElement("div");
           item.className = "l2-ob-trade " + (t.side === "B" ? "trade-buy" : t.side === "S" ? "trade-sell" : "");
-          const isLarge = (t.volume || 0) >= 500;
-          const isSuper = (t.volume || 0) >= 1000;
+          const normalized = ["lot", "share"].includes(t.volume_unit)
+            && typeof t.volume_lots === "number" && Number.isFinite(t.volume_lots) && t.volume_lots >= 0
+            && typeof t.amount_cny === "number" && Number.isFinite(t.amount_cny) && t.amount_cny >= 0;
+          const isLarge = normalized && t.volume_lots >= 500;
+          const isSuper = normalized && t.volume_lots >= 1000;
           if (isSuper) item.classList.add("trade-super");
           else if (isLarge) item.classList.add("trade-large");
           // I2: Flash on new large/super trade (first item = newest)
-          if (hasNewTrades && ti === 0 && (isLarge || isSuper)) {
+          const hasNewTrade = t.trade_identity_status === "verified" && typeof t.trade_key === "string" && t.trade_key.length > 0 && !this._seenTrades.has(t.trade_key);
+          if (hasNewTrade) this._seenTrades.add(t.trade_key);
+          if (snapshot.source === "TDX_L2" && hasNewTrade && ti === 0 && (isLarge || isSuper)) {
             item.classList.add("trade-flash");
           }
           const time = document.createElement("span");
@@ -527,7 +533,8 @@
           price.textContent = this._fmtPrice(t.price);
           const vol = document.createElement("span");
           vol.className = "trade-vol";
-          vol.textContent = this._fmtVol(t.volume);
+          vol.textContent = normalized ? this._fmtVol(t.volume_lots) + "手"
+            : this._fmtVol(t.volume) + (t.volume_unit === "lot" ? "手" : t.volume_unit === "share" ? "股" : "（单位待核）");
           // I2: Badge for large/super trades
           if (isSuper || isLarge) {
             const badge = document.createElement("span");
@@ -543,10 +550,10 @@
           side.textContent = t.side === "B" ? "▲买" : t.side === "S" ? "▼卖" : "—";
           item.appendChild(side);
           // I2: Trade amount for large trades
-          if (isLarge && typeof t.price === "number" && typeof t.volume === "number") {
+          if (isLarge) {
             const amt = document.createElement("span");
             amt.className = "trade-amt";
-            const amount = t.price * t.volume;
+            const amount = t.amount_cny;
             amt.textContent = amount >= 10000 ? (amount / 10000).toFixed(1) + "万" : String(Math.round(amount));
             amt.title = "成交金额: ¥" + amount.toFixed(0);
             item.appendChild(amt);
@@ -599,7 +606,8 @@
 
       // Footer
       r.tsEl.textContent = snapshot.timestamp ? this._fmtTime(snapshot.timestamp) : "—";
-      r.srcEl.textContent = snapshot.source || "";
+      r.srcEl.textContent = String(snapshot.source || "").includes("SIMULATED")
+        ? "工程模拟 · " + snapshot.source : snapshot.source || "";
     }
 
     _renderDepthChart(svg, bids, asks, maxVol) {
@@ -667,10 +675,40 @@
     }
 
     showError(msg) {
+      this._snapshot = null;
+      this._prevSnapshot = null;
       if (this._el) {
+        const r = this._refs;
+        r.spreadEl.textContent = "价差 —";
+        r.imbalanceEl.textContent = "不平衡度 —";
+        r.imbalanceEl.className = "l2-ob-imbalance neutral";
+        r.seqEl.textContent = "";
+        r.midPrice.textContent = "—";
+        for (const row of [...r.askRows, ...r.bidRows]) {
+          row.priceEl.textContent = row.volEl.textContent = row.ordersEl.textContent = "—";
+          row.barInner.style.width = "0%";
+          row.row.classList.remove("has-data", "vol-up", "vol-down", "vol-spike-up", "vol-spike-down");
+        }
+        for (const [key, label] of [["bidTotalEl", "买盘"], ["askTotalEl", "卖盘"], ["largeBuyEl", "大买"], ["largeSellEl", "大卖"], ["superBuyEl", "超买"], ["superSellEl", "超卖"]]) {
+          r[key].textContent = label + " —";
+        }
+        for (const key of ["tradesList", "capGrid", "depthSvg"]) {
+          if (r[key]) r[key].textContent = "";
+        }
         this._el.classList.add("l2-error");
-        if (this._refs.tsEl) this._refs.tsEl.textContent = msg || "数据不可用";
+        r.tsEl.textContent = msg || "数据不可用";
       }
+    }
+
+    setSourceStatus(status, error, label) {
+      const changed = this._sourceStatus !== status;
+      this._sourceStatus = status;
+      if (changed || status === "unavailable") {
+        this.showError(status === "available" ? "等待真实十档数据…" : status === "simulated" ? "工程模拟" : "真实十档未接通");
+      }
+      this._el.classList.toggle("l2-error", status === "unavailable");
+      this._refs.srcEl.textContent = (status === "simulated" ? "工程模拟 · " : "") + (label || "");
+      this._refs.srcEl.title = error || "";
     }
 
     showLoading() {
@@ -715,7 +753,11 @@
       this._containers = new Map();
       this._eventSource = null;
       this._pollTimer = null;
+      this._pollGeneration = 0;
       this._connected = false;
+      this._sourceStatus = "unavailable";
+      this._sourceError = null;
+      this._sourceLabel = "TDX_L2_UNAVAILABLE";
       this._onStatusChange = (options && options.onStatusChange) || null;
       this._onAlert = (options && options.onAlert) || null;
       this._alertsPanel = null;    // M3: 告警面板联动
@@ -735,6 +777,7 @@
       if (!panel || typeof panel.addAlert !== "function") return;
       const origOnSpike = ob.options.onSpike;
       ob.options.onSpike = (spike) => {
+        if (!this._connected || !ob.snapshot || ob.snapshot.source !== "TDX_L2") return;
         if (typeof origOnSpike === "function") origOnSpike(spike);
         const isBid = spike.side === "bid";
         const absChange = Math.abs(spike.change);
@@ -750,10 +793,17 @@
       };
     }
 
-    _setStatus(connected, mode) {
-      this._connected = connected;
+    _setStatus(data, mode) {
+      this._sourceStatus = ["available", "simulated"].includes(data.source_status) ? data.source_status : "unavailable";
+      this._sourceError = data.source_error || null;
+      this._sourceLabel = data.source_label || "TDX_L2_UNAVAILABLE";
+      this._connected = this._sourceStatus === "available";
+      for (const ob of this._orderbooks.values()) {
+        ob.setSourceStatus(this._sourceStatus, this._sourceError, this._sourceLabel);
+      }
       if (this._onStatusChange) {
-        this._onStatusChange({ connected: connected, mode: mode });
+        this._onStatusChange({ connected: this._connected, mode: mode,
+          source_status: this._sourceStatus, source_error: this._sourceError, source_label: this._sourceLabel });
       }
     }
 
@@ -762,6 +812,7 @@
       if (!this._orderbooks.has(code)) {
         const ob = new L2Orderbook(container, code, obOptions);
         this._orderbooks.set(code, ob);
+        ob.setSourceStatus(this._sourceStatus, this._sourceError, this._sourceLabel);
         // M3: 若已绑定告警面板，自动挂接异动告警联动
         if (this._alertsPanel) {
           this._wireSpikeToAlerts(code, ob);
@@ -794,25 +845,33 @@
       if (typeof EventSource !== "undefined") {
         try {
           const self = this;
-          this._eventSource = new EventSource(this.options.ssePath);
-          this._eventSource.onopen = function() {
-            self._setStatus(true, "sse");
+          const source = new EventSource(this.options.ssePath);
+          this._eventSource = source;
+          source.onopen = function() {
+            if (self._eventSource !== source) return;
+            self._setStatus({}, "sse");
             self._stopPolling();
           };
-          this._eventSource.onmessage = function(e) {
+          source.onmessage = function(e) {
+            if (self._eventSource !== source) return;
             try {
               const data = JSON.parse(e.data);
-              if (data.type === "snapshot" || data.type === "update") {
+              if (data.type === "source_status") {
+                self._setStatus(data, "sse");
+              } else if (data.type === "snapshot" || data.type === "update") {
                 const snap = data.snapshot || data;
                 self._dispatchSnapshot(snap);
+              } else if (!data.type && data.code && Array.isArray(data.bids) && Array.isArray(data.asks)) {
+                self._dispatchSnapshot(data);
               } else if (data.type === "alert") {
-                if (self._onAlert) self._onAlert(data.alert);
+                if (self._connected && self._onAlert) self._onAlert(data.alert);
               }
             } catch (err) { /* ignore malformed */ }
           };
-          this._eventSource.onerror = function() {
-            self._setStatus(false, "sse-error");
-            self._eventSource.close();
+          source.onerror = function() {
+            if (self._eventSource !== source) return;
+            self._setStatus({}, "sse-error");
+            source.close();
             self._eventSource = null;
             self._startPolling();
           };
@@ -826,25 +885,36 @@
 
     _startPolling() {
       if (this._pollTimer) return;
-      this._setStatus(true, "polling");
+      this._setStatus({}, "polling");
+      const generation = ++this._pollGeneration;
+      let latestRequest = 0;
       const self = this;
       const tick = async function() {
+        const request = ++latestRequest;
         try {
           const resp = await fetch(self.options.pollPath, { cache: "no-store" });
+          if (generation !== self._pollGeneration || request !== latestRequest) return;
           if (resp.ok) {
             const data = await resp.json();
-            const snapshots = data.snapshots || data.stocks || [];
-            for (const snap of snapshots) {
+            if (generation !== self._pollGeneration || request !== latestRequest) return;
+            self._setStatus(data, "polling");
+            const snapshots = data.snapshots || {};
+            for (const snap of Object.values(snapshots)) {
               self._dispatchSnapshot(snap);
             }
+          } else {
+            self._setStatus({}, "polling-error");
           }
-        } catch (e) { /* retry next tick */ }
+        } catch (e) {
+          if (generation === self._pollGeneration && request === latestRequest) self._setStatus({}, "polling-error");
+        }
       };
       tick();
       this._pollTimer = setInterval(tick, this.options.pollInterval);
     }
 
     _stopPolling() {
+      this._pollGeneration++;
       if (this._pollTimer) {
         clearInterval(this._pollTimer);
         this._pollTimer = null;
@@ -853,6 +923,9 @@
 
     _dispatchSnapshot(snapshot) {
       if (!snapshot || !snapshot.code) return;
+      const expectedSource = this._sourceStatus === "available" ? "TDX_L2"
+        : this._sourceStatus === "simulated" ? "TDX_L2_SIMULATED" : null;
+      if (!expectedSource || snapshot.source !== expectedSource) return;
       const ob = this._orderbooks.get(snapshot.code);
       if (ob) {
         ob.update(snapshot);
@@ -869,7 +942,7 @@
         this._eventSource = null;
       }
       this._stopPolling();
-      this._setStatus(false, "stopped");
+      this._setStatus({}, "stopped");
     }
 
     isConnected() { return this._connected; }
@@ -1169,7 +1242,10 @@
       this._el = null;
       this._tableBody = null;
       this._pollTimer = null;
+      this._pollGeneration = 0;
+      this._sourceStatus = "unavailable";
       this._build();
+      this._render();
     }
 
     _build() {
@@ -1187,6 +1263,7 @@
       root.append(header, table);
       this.container.appendChild(root);
       this._el = root;
+      this._header = header;
       this._tableBody = tbody;
     }
 
@@ -1202,13 +1279,14 @@
 
     _render() {
       if (!this._tableBody) return;
+      this._header.textContent = this._sourceStatus === "simulated" ? "持仓 L2 概览 · 工程模拟" : "持仓 L2 概览";
       this._tableBody.innerHTML = "";
       if (this._snapshots.size === 0) {
         const row = document.createElement("tr");
         row.className = "l2-overview-empty";
         const cell = document.createElement("td");
         cell.colSpan = 9;
-        cell.textContent = "暂无持仓股票";
+        cell.textContent = this._sourceStatus === "unavailable" ? "真实十档未接通" : "暂无持仓股票";
         row.appendChild(cell);
         this._tableBody.appendChild(row);
         return;
@@ -1240,7 +1318,7 @@
           { text: typeof m.order_book_imbalance === "number" ? ((m.order_book_imbalance > 0 ? "+" : "") + (m.order_book_imbalance * 100).toFixed(1) + "%") : "—", cls: "ov-imb " + tone(m.order_book_imbalance) },
           { text: fmtVol(m.bid_total || 0), cls: "ov-bidvol" },
           { text: fmtVol(m.ask_total || 0), cls: "ov-askvol" },
-          { text: (m.large_buy_count || 0) - (m.large_sell_count || 0) !== 0 ? String((m.large_buy_count || 0) - (m.large_sell_count || 0)) : "0", cls: "ov-large " + tone((m.large_buy_count || 0) - (m.large_sell_count || 0)) },
+          { text: m.trade_volume_status === "unknown" ? "—" : String((m.large_buy_count || 0) - (m.large_sell_count || 0)) + (m.trade_volume_status === "partial" ? "（部分）" : ""), cls: "ov-large " + tone((m.large_buy_count || 0) - (m.large_sell_count || 0)) },
           { text: fmtYuan(cf.main_net), cls: "ov-mainflow " + tone(cf.main_net) },
         ];
         for (const c of cells) {
@@ -1255,28 +1333,49 @@
 
     start() {
       if (this._pollTimer) return;
+      const generation = ++this._pollGeneration;
+      let latestRequest = 0;
       const self = this;
       const tick = async function() {
+        const request = ++latestRequest;
         try {
           const resp = await fetch("./l2-all.json", { cache: "no-store" });
+          if (generation !== self._pollGeneration || request !== latestRequest) return;
           if (resp.ok) {
             const data = await resp.json();
+            if (generation !== self._pollGeneration || request !== latestRequest) return;
+            self._sourceStatus = ["available", "simulated"].includes(data.source_status) ? data.source_status : "unavailable";
             const snapshots = data.snapshots || {};
             // Clear and update all
             self._snapshots.clear();
+            const expectedSource = self._sourceStatus === "available" ? "TDX_L2"
+              : self._sourceStatus === "simulated" ? "TDX_L2_SIMULATED" : null;
             for (const code in snapshots) {
-              self._snapshots.set(code, snapshots[code]);
+              if (expectedSource && snapshots[code].source === expectedSource) self._snapshots.set(code, snapshots[code]);
             }
             self._render();
+          } else {
+            self._sourceStatus = "unavailable";
+            self._snapshots.clear();
+            self._render();
           }
-        } catch (e) { /* retry */ }
+        } catch (e) {
+          if (generation !== self._pollGeneration || request !== latestRequest) return;
+          self._sourceStatus = "unavailable";
+          self._snapshots.clear();
+          self._render();
+        }
       };
       tick();
       this._pollTimer = setInterval(tick, this.options.pollInterval);
     }
 
     stop() {
+      this._pollGeneration++;
       if (this._pollTimer) { clearInterval(this._pollTimer); this._pollTimer = null; }
+      this._sourceStatus = "unavailable";
+      this._snapshots.clear();
+      this._render();
     }
   }
 

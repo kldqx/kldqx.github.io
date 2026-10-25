@@ -569,11 +569,17 @@
     l2AlertsPanel = new window.L2AlertsPanel(alertsContainer);
     l2Monitor = new window.L2Monitor({
       onStatusChange: (status) => {
+        const available = status.source_status === "available" && status.connected;
         if (statusLabel) {
-          statusLabel.textContent = status.connected
+          statusLabel.textContent = available
             ? (status.mode === "sse" ? "L2 实时推送中" : "L2 轮询中")
-            : "L2 未连接";
-          statusLabel.className = status.connected ? "connected" : "error";
+            : status.source_status === "simulated" ? "工程模拟 · 非实时 L2" : "真实十档未接通";
+          statusLabel.className = available ? "connected" : "error";
+          statusLabel.title = status.source_error || "";
+        }
+        for (const stock of lastStocksData) {
+          const ref = cards.get(stock.code);
+          if (ref) updatePnlAndExitSignal(ref, stock);
         }
       },
       onAlert: (alert) => {
@@ -637,14 +643,14 @@
     if (numeric(stock.change_pct) && stock.change_pct <= -5) signals.push("日跌超5%");
     if (pnlPct >= 10) signals.push("浮盈超10%");
     // L2 主力净流入判断（从 L2 快照获取）
-    if (l2Monitor) {
+    if (l2Monitor && l2Monitor.isConnected()) {
       const ob = l2Monitor.getOrderbook(stock.code);
-      if (ob && ob._snapshot) {
-        const cf = ob._snapshot.capital_flow || {};
+      if (ob && ob.snapshot && ob.snapshot.source === "TDX_L2") {
+        const cf = ob.snapshot.capital_flow || {};
         if (typeof cf.main_net === "number" && cf.main_net < 0) {
           signals.push("主力净流出");
         }
-        const m = ob._snapshot.metrics || {};
+        const m = ob.snapshot.metrics || {};
         if (typeof m.order_book_imbalance === "number" && m.order_book_imbalance < -0.3) {
           signals.push("卖盘压力大");
         }
