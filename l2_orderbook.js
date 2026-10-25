@@ -1,13 +1,14 @@
 "use strict";
-// L2 Orderbook component — 五档盘口 + 委托量 + 盘口不平衡度
+// L2 Orderbook component — 十档盘口(L2) + 委托量 + 盘口不平衡度
 // Display only. signal_boundary=not_a_trading_signal.
 // Connects to /l2-sse for real-time push, falls back to polling /l2-all.json.
 
 (() => {
   const BOUNDARY = "not_a_trading_signal";
+  const LEVELS = 10; // L2 双十档
 
   // ---------------------------------------------------------------------------
-  // L2Orderbook — renders a 5-level orderbook panel for a single stock
+  // L2Orderbook — renders a 10-level (双十档) orderbook panel for a single stock
   // ---------------------------------------------------------------------------
   class L2Orderbook {
     constructor(container, code, options) {
@@ -16,7 +17,10 @@
       this.options = Object.assign({
         showTrades: true,
         showCapitalFlow: true,
+        showDepthChart: false,
         maxTrades: 20,
+        spikeThreshold: 0.3,    // M1: 盘口异动阈值 (30%)
+        onSpike: null,           // M1: 异动回调 (code, side, level, change, snapshot)
       }, options || {});
       this._snapshot = null;
       this._prevSnapshot = null;
@@ -36,7 +40,7 @@
       header.className = "l2-ob-header";
       const title = document.createElement("span");
       title.className = "l2-ob-title";
-      title.textContent = "L2 盘口";
+      title.textContent = "L2 十档盘口";
       const meta = document.createElement("div");
       meta.className = "l2-ob-meta";
       const spreadEl = document.createElement("span");
@@ -47,25 +51,33 @@
       imbalanceEl.textContent = "不平衡度 —";
       const seqEl = document.createElement("span");
       seqEl.className = "l2-ob-seq";
-      meta.append(spreadEl, imbalanceEl, seqEl);
+      const histBtn = document.createElement("button");
+      histBtn.className = "l2-ob-hist-btn";
+      histBtn.type = "button";
+      histBtn.textContent = "历史";
+      histBtn.title = "查看历史L2快照";
+      meta.append(spreadEl, imbalanceEl, seqEl, histBtn);
       header.append(title, meta);
 
       // Orderbook
       const book = document.createElement("div");
       book.className = "l2-ob-book";
 
-      // Asks column (卖五~卖一)
+      // Asks column (卖十~卖一)
       const asksCol = document.createElement("div");
       asksCol.className = "l2-ob-col l2-ob-asks";
       const asksHeader = document.createElement("div");
       asksHeader.className = "l2-ob-col-header";
-      asksHeader.innerHTML = "<span>卖价</span><span>委托量</span><span>委托笔数</span>";
+      asksHeader.innerHTML = "<span>档位</span><span>卖价</span><span>委托量</span><span>委托笔数</span>";
       asksCol.appendChild(asksHeader);
       const askRows = [];
-      for (let i = 4; i >= 0; i--) {
+      for (let i = LEVELS - 1; i >= 0; i--) {
         const row = document.createElement("div");
         row.className = "l2-ob-row l2-ob-ask-row";
         row.dataset.level = String(i);
+        const levelEl = document.createElement("span");
+        levelEl.className = "l2-ob-level";
+        levelEl.textContent = "卖" + (i + 1);
         const priceEl = document.createElement("span");
         priceEl.className = "l2-ob-price";
         const volEl = document.createElement("span");
@@ -76,7 +88,7 @@
         barEl.appendChild(barInner);
         const ordersEl = document.createElement("span");
         ordersEl.className = "l2-ob-orders";
-        row.append(priceEl, volEl, barEl, ordersEl);
+        row.append(levelEl, priceEl, volEl, barEl, ordersEl);
         asksCol.appendChild(row);
         askRows.push({ row: row, priceEl: priceEl, volEl: volEl, barInner: barInner, ordersEl: ordersEl, level: i });
       }
@@ -89,18 +101,21 @@
       midPrice.textContent = "—";
       divider.appendChild(midPrice);
 
-      // Bids column (买一~买五)
+      // Bids column (买一~买十)
       const bidsCol = document.createElement("div");
       bidsCol.className = "l2-ob-col l2-ob-bids";
       const bidsHeader = document.createElement("div");
       bidsHeader.className = "l2-ob-col-header";
-      bidsHeader.innerHTML = "<span>买价</span><span>委托量</span><span>委托笔数</span>";
+      bidsHeader.innerHTML = "<span>档位</span><span>买价</span><span>委托量</span><span>委托笔数</span>";
       bidsCol.appendChild(bidsHeader);
       const bidRows = [];
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < LEVELS; i++) {
         const row = document.createElement("div");
         row.className = "l2-ob-row l2-ob-bid-row";
         row.dataset.level = String(i);
+        const levelEl = document.createElement("span");
+        levelEl.className = "l2-ob-level";
+        levelEl.textContent = "买" + (i + 1);
         const priceEl = document.createElement("span");
         priceEl.className = "l2-ob-price";
         const volEl = document.createElement("span");
@@ -111,7 +126,7 @@
         barEl.appendChild(barInner);
         const ordersEl = document.createElement("span");
         ordersEl.className = "l2-ob-orders";
-        row.append(priceEl, volEl, barEl, ordersEl);
+        row.append(levelEl, priceEl, volEl, barEl, ordersEl);
         bidsCol.appendChild(row);
         bidRows.push({ row: row, priceEl: priceEl, volEl: volEl, barInner: barInner, ordersEl: ordersEl, level: i });
       }
@@ -177,9 +192,44 @@
       srcEl.className = "l2-ob-source";
       footer.append(tsEl, srcEl);
 
+      // History panel (hidden by default)
+      const histPanel = document.createElement("div");
+      histPanel.className = "l2-ob-history";
+      histPanel.hidden = true;
+      const histHeader = document.createElement("div");
+      histHeader.className = "l2-ob-history-header";
+      const histTitle = document.createElement("span");
+      histTitle.textContent = "历史快照";
+      const histClose = document.createElement("button");
+      histClose.className = "l2-ob-history-close";
+      histClose.type = "button";
+      histClose.textContent = "×";
+      histClose.title = "关闭";
+      histHeader.append(histTitle, histClose);
+      const histList = document.createElement("div");
+      histList.className = "l2-ob-history-list";
+      histPanel.append(histHeader, histList);
+
+      // Depth chart (cumulative bid/ask volume, SVG)
+      let depthSection = null;
+      if (this.options.showDepthChart) {
+        depthSection = document.createElement("div");
+        depthSection.className = "l2-ob-depth";
+        const depthHeader = document.createElement("div");
+        depthHeader.className = "l2-ob-depth-header";
+        depthHeader.textContent = "盘口深度";
+        const depthSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        depthSvg.setAttribute("class", "l2-ob-depth-svg");
+        depthSvg.setAttribute("viewBox", "0 0 200 60");
+        depthSvg.setAttribute("preserveAspectRatio", "none");
+        depthSection.append(depthHeader, depthSvg);
+      }
+
       root.append(header, book, summary);
+      if (depthSection) root.appendChild(depthSection);
       if (tradesSection) root.appendChild(tradesSection);
       if (capSection) root.appendChild(capSection);
+      root.appendChild(histPanel);
       root.appendChild(footer);
 
       this._el = root;
@@ -192,8 +242,87 @@
         tradesList: tradesSection ? tradesSection.querySelector(".l2-ob-trades-list") : null,
         capGrid: capSection ? capSection.querySelector(".l2-ob-capflow-grid") : null,
         tsEl: tsEl, srcEl: srcEl,
+        histBtn: histBtn, histPanel: histPanel, histList: histList, histClose: histClose,
+        depthSvg: depthSection ? depthSection.querySelector(".l2-ob-depth-svg") : null,
       };
       this.container.appendChild(root);
+
+      // History button toggle
+      histBtn.addEventListener("click", () => this._toggleHistory());
+      histClose.addEventListener("click", () => { histPanel.hidden = true; });
+    }
+
+    async _toggleHistory() {
+      const r = this._refs;
+      if (r.histPanel.hidden) {
+        r.histPanel.hidden = false;
+        r.histList.innerHTML = "";
+        const loading = document.createElement("div");
+        loading.className = "l2-ob-history-loading";
+        loading.textContent = "加载中…";
+        r.histList.appendChild(loading);
+        try {
+          const resp = await fetch("./l2-history.json?code=" + encodeURIComponent(this.code) + "&limit=30", { cache: "no-store" });
+          if (resp.ok) {
+            const data = await resp.json();
+            this._renderHistory(data.snapshots || []);
+          } else {
+            r.histList.innerHTML = "";
+            const err = document.createElement("div");
+            err.className = "l2-ob-history-empty";
+            err.textContent = "暂无历史数据";
+            r.histList.appendChild(err);
+          }
+        } catch (e) {
+          r.histList.innerHTML = "";
+          const err = document.createElement("div");
+          err.className = "l2-ob-history-empty";
+          err.textContent = "加载失败";
+          r.histList.appendChild(err);
+        }
+      } else {
+        r.histPanel.hidden = true;
+      }
+    }
+
+    _renderHistory(snapshots) {
+      const r = this._refs;
+      r.histList.innerHTML = "";
+      if (!snapshots.length) {
+        const empty = document.createElement("div");
+        empty.className = "l2-ob-history-empty";
+        empty.textContent = "暂无历史数据";
+        r.histList.appendChild(empty);
+        return;
+      }
+      for (const snap of snapshots) {
+        const row = document.createElement("div");
+        row.className = "l2-ob-history-row";
+        const m = snap.metrics || {};
+        const time = document.createElement("span");
+        time.className = "hist-time";
+        time.textContent = this._fmtTime(snap.timestamp);
+        const bidPrice = document.createElement("span");
+        bidPrice.className = "hist-bid";
+        bidPrice.textContent = snap.bids && snap.bids[0] ? snap.bids[0].price.toFixed(2) : "—";
+        const askPrice = document.createElement("span");
+        askPrice.className = "hist-ask";
+        askPrice.textContent = snap.asks && snap.asks[0] ? snap.asks[0].price.toFixed(2) : "—";
+        const imb = document.createElement("span");
+        imb.className = "hist-imb " + (typeof m.order_book_imbalance === "number" ? (m.order_book_imbalance > 0 ? "positive" : m.order_book_imbalance < 0 ? "negative" : "") : "");
+        imb.textContent = typeof m.order_book_imbalance === "number" ? ((m.order_book_imbalance > 0 ? "+" : "") + (m.order_book_imbalance * 100).toFixed(1) + "%") : "—";
+        const bidVol = document.createElement("span");
+        bidVol.className = "hist-bidvol";
+        bidVol.textContent = this._fmtVol(m.bid_total || 0);
+        const askVol = document.createElement("span");
+        askVol.className = "hist-askvol";
+        askVol.textContent = this._fmtVol(m.ask_total || 0);
+        const alerts = document.createElement("span");
+        alerts.className = "hist-alerts";
+        alerts.textContent = (snap.alerts && snap.alerts.length) ? "⚡" + snap.alerts.length : "";
+        row.append(time, bidPrice, askPrice, imb, bidVol, askVol, alerts);
+        r.histList.appendChild(row);
+      }
     }
 
     _fmtPrice(v) {
@@ -217,6 +346,53 @@
           hour12: false,
         }).format(d);
       } catch (e) { return ts; }
+    }
+
+    // I1: 价格闪烁 — 价格上涨闪红，下跌闪绿
+    _flashPrice(el, currentPrice, prevPrice) {
+      el.textContent = this._fmtPrice(currentPrice);
+      if (typeof currentPrice !== "number" || typeof prevPrice !== "number") return;
+      if (currentPrice === prevPrice) return;
+      // Remove existing flash classes and force reflow
+      el.classList.remove("price-flash-up", "price-flash-down");
+      void el.offsetWidth;
+      if (currentPrice > prevPrice) {
+        el.classList.add("price-flash-up");
+      } else {
+        el.classList.add("price-flash-down");
+      }
+      // Clean up after animation
+      const self = this;
+      setTimeout(function() {
+        el.classList.remove("price-flash-up", "price-flash-down");
+      }, 600);
+    }
+
+    // M1: 盘口异动检测 — 委托量突增/突减超过阈值时闪烁并回调
+    _detectSpike(rowEl, change, side, level, data, snapshot) {
+      const threshold = this.options.spikeThreshold || 0.3;
+      rowEl.classList.remove("vol-spike-up", "vol-spike-down");
+      if (Math.abs(change) >= threshold) {
+        const cls = change > 0 ? "vol-spike-up" : "vol-spike-down";
+        void rowEl.offsetWidth; // force reflow
+        rowEl.classList.add(cls);
+        setTimeout(function() { rowEl.classList.remove(cls); }, 1000);
+        // Trigger callback
+        if (typeof this.options.onSpike === "function") {
+          try {
+            this.options.onSpike({
+              code: this.code,
+              side: side,           // "bid" or "ask"
+              level: level + 1,     // 1-based
+              change: change,
+              changePct: Math.round(change * 100),
+              volume: data.volume,
+              price: data.price,
+              timestamp: snapshot.timestamp,
+            });
+          } catch (e) { /* ignore */ }
+        }
+      }
     }
 
     update(snapshot) {
@@ -243,25 +419,28 @@
       (snapshot.asks || []).forEach(function(a) { allVols.push(a.volume || 0); });
       const maxVol = Math.max.apply(null, allVols.concat([1]));
 
-      // Render asks (卖五~卖一, index 4 down to 0)
+      // Render asks (卖十~卖一, index 9 down to 0)
       const asks = snapshot.asks || [];
-      for (let i = 0; i < 5; i++) {
-        const level = 4 - i;
+      for (let i = 0; i < LEVELS; i++) {
+        const level = LEVELS - 1 - i;
         const data = asks[level];
         const rowRef = r.askRows[i];
         if (data) {
-          rowRef.priceEl.textContent = this._fmtPrice(data.price);
+          // I1: 价格闪烁 — compare with previous snapshot
+          const prevAsk = this._prevSnapshot && this._prevSnapshot.asks ? this._prevSnapshot.asks[level] : null;
+          this._flashPrice(rowRef.priceEl, data.price, prevAsk ? prevAsk.price : null);
           rowRef.volEl.textContent = this._fmtVol(data.volume);
           rowRef.ordersEl.textContent = data.orders != null ? String(data.orders) : "—";
           const pct = Math.round((data.volume || 0) / maxVol * 100);
           rowRef.barInner.style.width = pct + "%";
-          const prevAsk = this._prevSnapshot && this._prevSnapshot.asks ? this._prevSnapshot.asks[level] : null;
           if (prevAsk && prevAsk.volume > 0) {
             const change = (data.volume - prevAsk.volume) / prevAsk.volume;
             rowRef.row.classList.toggle("vol-up", change > 0.5);
             rowRef.row.classList.toggle("vol-down", change < -0.5);
+            // M1: 盘口异动检测 — 委托量突增/突减超过阈值
+            this._detectSpike(rowRef.row, change, "ask", level, data, snapshot);
           } else {
-            rowRef.row.classList.remove("vol-up", "vol-down");
+            rowRef.row.classList.remove("vol-up", "vol-down", "vol-spike-up", "vol-spike-down");
           }
           rowRef.row.classList.add("has-data");
         } else {
@@ -269,28 +448,31 @@
           rowRef.volEl.textContent = "—";
           rowRef.ordersEl.textContent = "—";
           rowRef.barInner.style.width = "0%";
-          rowRef.row.classList.remove("has-data", "vol-up", "vol-down");
+          rowRef.row.classList.remove("has-data", "vol-up", "vol-down", "vol-spike-up", "vol-spike-down");
         }
       }
 
-      // Render bids (买一~买五, index 0 to 4)
+      // Render bids (买一~买十, index 0 to 9)
       const bids = snapshot.bids || [];
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < LEVELS; i++) {
         const data = bids[i];
         const rowRef = r.bidRows[i];
         if (data) {
-          rowRef.priceEl.textContent = this._fmtPrice(data.price);
+          // I1: 价格闪烁 — compare with previous snapshot
+          const prevBid = this._prevSnapshot && this._prevSnapshot.bids ? this._prevSnapshot.bids[i] : null;
+          this._flashPrice(rowRef.priceEl, data.price, prevBid ? prevBid.price : null);
           rowRef.volEl.textContent = this._fmtVol(data.volume);
           rowRef.ordersEl.textContent = data.orders != null ? String(data.orders) : "—";
           const pct = Math.round((data.volume || 0) / maxVol * 100);
           rowRef.barInner.style.width = pct + "%";
-          const prevBid = this._prevSnapshot && this._prevSnapshot.bids ? this._prevSnapshot.bids[i] : null;
           if (prevBid && prevBid.volume > 0) {
             const change = (data.volume - prevBid.volume) / prevBid.volume;
             rowRef.row.classList.toggle("vol-up", change > 0.5);
             rowRef.row.classList.toggle("vol-down", change < -0.5);
+            // M1: 盘口异动检测 — 委托量突增/突减超过阈值
+            this._detectSpike(rowRef.row, change, "bid", i, data, snapshot);
           } else {
-            rowRef.row.classList.remove("vol-up", "vol-down");
+            rowRef.row.classList.remove("vol-up", "vol-down", "vol-spike-up", "vol-spike-down");
           }
           rowRef.row.classList.add("has-data");
         } else {
@@ -298,7 +480,7 @@
           rowRef.volEl.textContent = "—";
           rowRef.ordersEl.textContent = "—";
           rowRef.barInner.style.width = "0%";
-          rowRef.row.classList.remove("has-data", "vol-up", "vol-down");
+          rowRef.row.classList.remove("has-data", "vol-up", "vol-down", "vol-spike-up", "vol-spike-down");
         }
       }
 
@@ -320,14 +502,23 @@
       // Trade tape
       if (r.tradesList) {
         const trades = (snapshot.last_trades || []).slice(-this.options.maxTrades).reverse();
+        // I2: Track previous trade count for flash on new large trades
+        const prevTradeCount = this._prevSnapshot && this._prevSnapshot.last_trades ? this._prevSnapshot.last_trades.length : 0;
+        const currentTradeCount = (snapshot.last_trades || []).length;
+        const hasNewTrades = currentTradeCount > prevTradeCount;
         r.tradesList.innerHTML = "";
-        for (const t of trades) {
+        for (let ti = 0; ti < trades.length; ti++) {
+          const t = trades[ti];
           const item = document.createElement("div");
           item.className = "l2-ob-trade " + (t.side === "B" ? "trade-buy" : t.side === "S" ? "trade-sell" : "");
           const isLarge = (t.volume || 0) >= 500;
           const isSuper = (t.volume || 0) >= 1000;
           if (isSuper) item.classList.add("trade-super");
           else if (isLarge) item.classList.add("trade-large");
+          // I2: Flash on new large/super trade (first item = newest)
+          if (hasNewTrades && ti === 0 && (isLarge || isSuper)) {
+            item.classList.add("trade-flash");
+          }
           const time = document.createElement("span");
           time.className = "trade-time";
           time.textContent = this._fmtTime(t.at);
@@ -337,10 +528,29 @@
           const vol = document.createElement("span");
           vol.className = "trade-vol";
           vol.textContent = this._fmtVol(t.volume);
+          // I2: Badge for large/super trades
+          if (isSuper || isLarge) {
+            const badge = document.createElement("span");
+            badge.className = "trade-badge " + (isSuper ? "badge-super" : "badge-large");
+            badge.textContent = isSuper ? "超" : "大";
+            item.append(time, price, vol, badge);
+          } else {
+            item.append(time, price, vol);
+          }
           const side = document.createElement("span");
-          side.className = "trade-side";
-          side.textContent = t.side === "B" ? "买" : t.side === "S" ? "卖" : "—";
-          item.append(time, price, vol, side);
+          side.className = "trade-side " + (t.side === "B" ? "side-buy" : t.side === "S" ? "side-sell" : "");
+          // M2: 方向图标 ▲买 ▼卖
+          side.textContent = t.side === "B" ? "▲买" : t.side === "S" ? "▼卖" : "—";
+          item.appendChild(side);
+          // I2: Trade amount for large trades
+          if (isLarge && typeof t.price === "number" && typeof t.volume === "number") {
+            const amt = document.createElement("span");
+            amt.className = "trade-amt";
+            const amount = t.price * t.volume;
+            amt.textContent = amount >= 10000 ? (amount / 10000).toFixed(1) + "万" : String(Math.round(amount));
+            amt.title = "成交金额: ¥" + amount.toFixed(0);
+            item.appendChild(amt);
+          }
           r.tradesList.appendChild(item);
         }
       }
@@ -384,9 +594,76 @@
         }
       }
 
+      // Depth chart (cumulative volume)
+      if (r.depthSvg) this._renderDepthChart(r.depthSvg, bids, asks, maxVol);
+
       // Footer
       r.tsEl.textContent = snapshot.timestamp ? this._fmtTime(snapshot.timestamp) : "—";
       r.srcEl.textContent = snapshot.source || "";
+    }
+
+    _renderDepthChart(svg, bids, asks, maxVol) {
+      const NS = "http://www.w3.org/2000/svg";
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      const W = 200, H = 60, PAD = 2;
+      if (!bids.length && !asks.length) return;
+
+      // Cumulative bid volume (from 买十 to 买一, left to right)
+      const bidLevels = bids.slice().reverse(); // 买十 first
+      let cumBid = 0;
+      const bidPoints = [];
+      for (let i = 0; i < bidLevels.length; i++) {
+        cumBid += bidLevels[i].volume || 0;
+        const x = PAD + (i / Math.max(bidLevels.length - 1, 1)) * (W / 2 - PAD * 2);
+        const y = H - PAD - (cumBid / Math.max(maxVol * LEVELS, 1)) * (H - PAD * 2);
+        bidPoints.push({ x: x, y: Math.max(PAD, Math.min(H - PAD, y)) });
+      }
+      // Cumulative ask volume (from 卖一 to 卖十, left to right in right half)
+      let cumAsk = 0;
+      const askPoints = [];
+      for (let i = 0; i < asks.length; i++) {
+        cumAsk += asks[i].volume || 0;
+        const x = W / 2 + PAD + (i / Math.max(asks.length - 1, 1)) * (W / 2 - PAD * 2);
+        const y = H - PAD - (cumAsk / Math.max(maxVol * LEVELS, 1)) * (H - PAD * 2);
+        askPoints.push({ x: x, y: Math.max(PAD, Math.min(H - PAD, y)) });
+      }
+
+      // Draw bid area (left half, red/A股买盘)
+      if (bidPoints.length >= 2) {
+        const bidPath = document.createElementNS(NS, "path");
+        let d = "M " + bidPoints[0].x + " " + H + " ";
+        for (const p of bidPoints) d += "L " + p.x + " " + p.y + " ";
+        d += "L " + bidPoints[bidPoints.length - 1].x + " " + H + " Z";
+        bidPath.setAttribute("d", d);
+        bidPath.setAttribute("fill", "rgba(255,135,149,0.25)");
+        bidPath.setAttribute("stroke", "rgba(255,135,149,0.6)");
+        bidPath.setAttribute("stroke-width", "1");
+        svg.appendChild(bidPath);
+      }
+
+      // Draw ask area (right half, green/A股卖盘)
+      if (askPoints.length >= 2) {
+        const askPath = document.createElementNS(NS, "path");
+        let d = "M " + askPoints[0].x + " " + H + " ";
+        for (const p of askPoints) d += "L " + p.x + " " + p.y + " ";
+        d += "L " + askPoints[askPoints.length - 1].x + " " + H + " Z";
+        askPath.setAttribute("d", d);
+        askPath.setAttribute("fill", "rgba(115,213,172,0.25)");
+        askPath.setAttribute("stroke", "rgba(115,213,172,0.6)");
+        askPath.setAttribute("stroke-width", "1");
+        svg.appendChild(askPath);
+      }
+
+      // Center line
+      const centerLine = document.createElementNS(NS, "line");
+      centerLine.setAttribute("x1", W / 2);
+      centerLine.setAttribute("y1", 0);
+      centerLine.setAttribute("x2", W / 2);
+      centerLine.setAttribute("y2", H);
+      centerLine.setAttribute("stroke", "rgba(255,255,255,0.15)");
+      centerLine.setAttribute("stroke-width", "0.5");
+      centerLine.setAttribute("stroke-dasharray", "2,2");
+      svg.appendChild(centerLine);
     }
 
     showError(msg) {
@@ -409,6 +686,16 @@
 
     get element() { return this._el; }
     get snapshot() { return this._snapshot; }
+
+    // M6: 异动阈值设置 — 调整盘口异动检测阈值 (0~1, 默认 0.3 = 30%)
+    setSpikeThreshold(value) {
+      const v = Number(value);
+      if (!isNaN(v) && v > 0 && v <= 1) {
+        this.options.spikeThreshold = v;
+      }
+    }
+
+    get spikeThreshold() { return this.options.spikeThreshold; }
   }
 
   // ---------------------------------------------------------------------------
@@ -431,6 +718,36 @@
       this._connected = false;
       this._onStatusChange = (options && options.onStatusChange) || null;
       this._onAlert = (options && options.onAlert) || null;
+      this._alertsPanel = null;    // M3: 告警面板联动
+    }
+
+    // M3: 异动告警联动 — 绑定告警面板，前端异动检测自动触发告警
+    linkAlertsPanel(panel) {
+      this._alertsPanel = panel;
+      for (const [code, ob] of this._orderbooks) {
+        this._wireSpikeToAlerts(code, ob);
+      }
+    }
+
+    // M3: 为单个 orderbook 挂接 onSpike 回调，将异动事件转换为告警
+    _wireSpikeToAlerts(code, ob) {
+      const panel = this._alertsPanel;
+      if (!panel || typeof panel.addAlert !== "function") return;
+      const origOnSpike = ob.options.onSpike;
+      ob.options.onSpike = (spike) => {
+        if (typeof origOnSpike === "function") origOnSpike(spike);
+        const isBid = spike.side === "bid";
+        const absChange = Math.abs(spike.change);
+        const severity = absChange >= 0.5 ? "high" : "medium";
+        panel.addAlert({
+          type: isBid ? "volume_spike_bid" : "volume_spike_ask",
+          code: spike.code,
+          message: (isBid ? "买" : "卖") + "盘第" + spike.level + "档 委托量" + (spike.changePct >= 0 ? "+" : "") + spike.changePct + "%",
+          detail: "委托量 " + spike.volume + " @ " + spike.price,
+          timestamp: spike.timestamp,
+          severity: severity,
+        });
+      };
     }
 
     _setStatus(connected, mode) {
@@ -445,6 +762,10 @@
       if (!this._orderbooks.has(code)) {
         const ob = new L2Orderbook(container, code, obOptions);
         this._orderbooks.set(code, ob);
+        // M3: 若已绑定告警面板，自动挂接异动告警联动
+        if (this._alertsPanel) {
+          this._wireSpikeToAlerts(code, ob);
+        }
       }
     }
 
@@ -460,6 +781,13 @@
 
     getAllCodes() {
       return Array.from(this._orderbooks.keys());
+    }
+
+    // M6: 批量设置所有已注册 orderbook 的异动阈值
+    setSpikeThreshold(value) {
+      for (const ob of this._orderbooks.values()) {
+        ob.setSpikeThreshold(value);
+      }
     }
 
     start() {
@@ -553,11 +881,91 @@
   class L2AlertsPanel {
     constructor(container, options) {
       this.container = container;
-      this.options = Object.assign({ maxAlerts: 50 }, options || {});
+      this.options = Object.assign({
+        maxAlerts: 50,
+        enableSound: true,
+        enableNotification: true,
+        flashOnNew: true,
+      }, options || {});
       this._alerts = [];
       this._el = null;
       this._listEl = null;
+      this._audioCtx = null;
       this._build();
+      if (this.options.enableNotification && typeof Notification !== "undefined" && Notification.permission === "default") {
+        try { Notification.requestPermission(); } catch (e) { /* ignore */ }
+      }
+    }
+
+    _severity(type) {
+      // high: 超大单, 盘口转向, 资金强流
+      // medium: 大单, 委托突增
+      // low: 其他
+      if (!type) return "low";
+      if (type === "super_large_order" || type.indexOf("flip") >= 0 || type.indexOf("strong") >= 0) return "high";
+      if (type === "large_order" || type.indexOf("spike") >= 0) return "medium";
+      return "low";
+    }
+
+    _playAlertSound(severity) {
+      if (!this.options.enableSound) return;
+      try {
+        if (!this._audioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return;
+          this._audioCtx = new AC();
+        }
+        const ctx = this._audioCtx;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        // Different pitch for different severity
+        osc.frequency.value = severity === "high" ? 880 : severity === "medium" ? 660 : 440;
+        osc.type = "sine";
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.3);
+      } catch (e) { /* audio not available */ }
+    }
+
+    // M4: 异动告警音效 — 买盘高音(1200Hz), 卖盘低音(400Hz), 与现有告警音效区分
+    _playSpikeSound(side, severity) {
+      if (!this.options.enableSound) return;
+      try {
+        if (!this._audioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return;
+          this._audioCtx = new AC();
+        }
+        const ctx = this._audioCtx;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        // 买盘异动=高音, 卖盘异动=低音
+        osc.frequency.value = side === "bid" ? 1200 : 400;
+        osc.type = "triangle";
+        const vol = severity === "high" ? 0.25 : 0.15;
+        gain.gain.setValueAtTime(vol, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+      } catch (e) { /* audio not available */ }
+    }
+
+    _showNotification(alert) {
+      if (!this.options.enableNotification) return;
+      if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
+      try {
+        const label = this._alertLabel(alert.type || alert.alert_type);
+        new Notification("L2盘口异动 — " + (alert.code || ""), {
+          body: label + (alert.message || alert.detail || ""),
+          tag: "l2-alert-" + (alert.code || ""),
+          silent: false,
+        });
+      } catch (e) { /* notification not available */ }
     }
 
     _build() {
@@ -610,11 +1018,28 @@
 
     addAlert(alert) {
       if (!alert) return;
+      const type = alert.type || alert.alert_type || "";
+      const severity = this._severity(type);
       this._alerts.unshift(alert);
       if (this._alerts.length > this.options.maxAlerts) {
         this._alerts.length = this.options.maxAlerts;
       }
       this._render();
+      // Trigger effects for new alert
+      // M4: 异动告警使用专属音效 (买盘高音/卖盘低音)
+      if (type.indexOf("spike") >= 0) {
+        const side = type.indexOf("bid") >= 0 ? "bid" : "ask";
+        this._playSpikeSound(side, severity);
+      } else {
+        this._playAlertSound(severity);
+      }
+      if (severity === "high") this._showNotification(alert);
+      if (this.options.flashOnNew && this._el) {
+        this._el.classList.remove("l2-alerts-flash");
+        // Force reflow to restart animation
+        void this._el.offsetWidth;
+        this._el.classList.add("l2-alerts-flash");
+      }
     }
 
     _render() {
@@ -628,7 +1053,9 @@
       this._countEl.textContent = String(this._alerts.length);
       for (const alert of this._alerts) {
         const item = document.createElement("div");
-        item.className = "l2-alert-item " + this._alertTone(alert.type || "");
+        const sev = this._severity(alert.type || alert.alert_type || "");
+        item.className = "l2-alert-item " + this._alertTone(alert.type || alert.alert_type || "") + " sev-" + sev;
+        if (sev === "high") item.classList.add("l2-alert-new");
         const time = document.createElement("span");
         time.className = "alert-time";
         try {
@@ -656,6 +1083,201 @@
     }
 
     get alerts() { return this._alerts.slice(); }
+
+    // M5: 异动历史记录 — 过滤 type 包含 "spike" 的异动告警
+    getSpikeAlerts() {
+      return this._alerts.filter(function(a) {
+        const t = a.type || a.alert_type || "";
+        return t.indexOf("spike") >= 0;
+      });
+    }
+
+    // M7: 异动数据导出 — 导出告警记录为 CSV 字符串
+    exportAlerts(format) {
+      const rows = [["时间", "股票代码", "告警类型", "消息", "详情", "严重等级"]];
+      for (const a of this._alerts) {
+        const t = a.at ? new Date(a.at).toISOString() : "";
+        rows.push([
+          t,
+          a.code || "",
+          a.type || a.alert_type || "",
+          a.message || "",
+          a.detail || "",
+          a.severity || this._severity(a.type || a.alert_type || ""),
+        ]);
+      }
+      return this._toCsv(rows);
+    }
+
+    // M7: 仅导出异动告警
+    exportSpikeAlerts() {
+      const rows = [["时间", "股票代码", "方向", "档位", "变化幅度", "委托量", "价格", "严重等级"]];
+      for (const a of this.getSpikeAlerts()) {
+        const t = a.at ? new Date(a.at).toISOString() : "";
+        const isBid = (a.type || "").indexOf("bid") >= 0;
+        rows.push([
+          t,
+          a.code || "",
+          isBid ? "买盘" : "卖盘",
+          a.message || "",
+          "",
+          a.detail || "",
+          "",
+          a.severity || "",
+        ]);
+      }
+      return this._toCsv(rows);
+    }
+
+    // M7: CSV 转换私有方法
+    _toCsv(rows) {
+      return rows.map(function(row) {
+        return row.map(function(cell) {
+          const s = String(cell == null ? "" : cell);
+          if (s.indexOf(",") >= 0 || s.indexOf("\"") >= 0 || s.indexOf("\n") >= 0) {
+            return "\"" + s.replace(/"/g, "\"\"") + "\"";
+          }
+          return s;
+        }).join(",");
+      }).join("\n");
+    }
+
+    // M7: 触发浏览器下载 CSV 文件
+    downloadCsv(filename, csvContent) {
+      try {
+        const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename || "l2-alerts.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (e) { /* download not available */ }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // L2OverviewPanel — 持仓股票L2概览对比面板
+  // ---------------------------------------------------------------------------
+  class L2OverviewPanel {
+    constructor(container, options) {
+      this.container = container;
+      this.options = Object.assign({ pollInterval: 3000 }, options || {});
+      this._snapshots = new Map(); // code -> latest snapshot
+      this._el = null;
+      this._tableBody = null;
+      this._pollTimer = null;
+      this._build();
+    }
+
+    _build() {
+      const root = document.createElement("div");
+      root.className = "l2-overview-panel";
+      const header = document.createElement("div");
+      header.className = "l2-overview-header";
+      header.textContent = "持仓 L2 概览";
+      const table = document.createElement("table");
+      table.className = "l2-overview-table";
+      const thead = document.createElement("thead");
+      thead.innerHTML = "<tr><th>股票</th><th>买一</th><th>卖一</th><th>价差</th><th>不平衡度</th><th>买盘</th><th>卖盘</th><th>大单净</th><th>主力净流入</th></tr>";
+      const tbody = document.createElement("tbody");
+      table.append(thead, tbody);
+      root.append(header, table);
+      this.container.appendChild(root);
+      this._el = root;
+      this._tableBody = tbody;
+    }
+
+    update(code, snapshot) {
+      this._snapshots.set(code, snapshot);
+      this._render();
+    }
+
+    remove(code) {
+      this._snapshots.delete(code);
+      this._render();
+    }
+
+    _render() {
+      if (!this._tableBody) return;
+      this._tableBody.innerHTML = "";
+      if (this._snapshots.size === 0) {
+        const row = document.createElement("tr");
+        row.className = "l2-overview-empty";
+        const cell = document.createElement("td");
+        cell.colSpan = 9;
+        cell.textContent = "暂无持仓股票";
+        row.appendChild(cell);
+        this._tableBody.appendChild(row);
+        return;
+      }
+      const fmtPrice = function(v) { return typeof v === "number" ? v.toFixed(2) : "—"; };
+      const fmtVol = function(v) {
+        if (typeof v !== "number") return "—";
+        if (v >= 10000) return (v / 10000).toFixed(1) + "万";
+        return String(v);
+      };
+      const fmtYuan = function(v) {
+        if (typeof v !== "number") return "—";
+        if (v >= 10000 || v <= -10000) return (v / 10000).toFixed(1) + "万";
+        return String(v.toFixed(0));
+      };
+      const tone = function(v) { return typeof v === "number" ? v > 0 ? "positive" : v < 0 ? "negative" : "" : ""; };
+
+      for (const [code, snap] of this._snapshots) {
+        const m = snap.metrics || {};
+        const cf = snap.capital_flow || {};
+        const row = document.createElement("tr");
+        row.dataset.code = code;
+
+        const cells = [
+          { text: code, cls: "ov-code" },
+          { text: snap.bids && snap.bids[0] ? fmtPrice(snap.bids[0].price) : "—", cls: "ov-bid " + (snap.bids && snap.bids[0] ? "price-up" : "") },
+          { text: snap.asks && snap.asks[0] ? fmtPrice(snap.asks[0].price) : "—", cls: "ov-ask " + (snap.asks && snap.asks[0] ? "price-down" : "") },
+          { text: m.spread != null ? fmtPrice(m.spread) : "—", cls: "ov-spread" },
+          { text: typeof m.order_book_imbalance === "number" ? ((m.order_book_imbalance > 0 ? "+" : "") + (m.order_book_imbalance * 100).toFixed(1) + "%") : "—", cls: "ov-imb " + tone(m.order_book_imbalance) },
+          { text: fmtVol(m.bid_total || 0), cls: "ov-bidvol" },
+          { text: fmtVol(m.ask_total || 0), cls: "ov-askvol" },
+          { text: (m.large_buy_count || 0) - (m.large_sell_count || 0) !== 0 ? String((m.large_buy_count || 0) - (m.large_sell_count || 0)) : "0", cls: "ov-large " + tone((m.large_buy_count || 0) - (m.large_sell_count || 0)) },
+          { text: fmtYuan(cf.main_net), cls: "ov-mainflow " + tone(cf.main_net) },
+        ];
+        for (const c of cells) {
+          const td = document.createElement("td");
+          td.className = c.cls;
+          td.textContent = c.text;
+          row.appendChild(td);
+        }
+        this._tableBody.appendChild(row);
+      }
+    }
+
+    start() {
+      if (this._pollTimer) return;
+      const self = this;
+      const tick = async function() {
+        try {
+          const resp = await fetch("./l2-all.json", { cache: "no-store" });
+          if (resp.ok) {
+            const data = await resp.json();
+            const snapshots = data.snapshots || {};
+            // Clear and update all
+            self._snapshots.clear();
+            for (const code in snapshots) {
+              self._snapshots.set(code, snapshots[code]);
+            }
+            self._render();
+          }
+        } catch (e) { /* retry */ }
+      };
+      tick();
+      this._pollTimer = setInterval(tick, this.options.pollInterval);
+    }
+
+    stop() {
+      if (this._pollTimer) { clearInterval(this._pollTimer); this._pollTimer = null; }
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -664,4 +1286,5 @@
   window.L2Orderbook = L2Orderbook;
   window.L2Monitor = L2Monitor;
   window.L2AlertsPanel = L2AlertsPanel;
+  window.L2OverviewPanel = L2OverviewPanel;
 })();

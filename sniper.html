@@ -34,7 +34,9 @@
         <div class="session-strip">
           <div class="session-stat"><span>观察标的</span><strong id="stock-count">—</strong><small>只</small></div>
           <div class="session-stat"><span>持仓中</span><strong id="holding-count">—</strong><small>只</small></div>
+          <div class="session-stat"><span>持仓浮盈亏</span><strong id="pnl-summary">—</strong></div>
           <div class="session-stat"><span>条件触发</span><strong id="event-count">—</strong><small>条</small></div>
+          <div class="session-stat"><button id="export-holdings-btn" class="export-btn" type="button" title="导出持仓报告 (JSON)">📥 导出持仓</button></div>
           <div class="session-stat time-stat"><span>最新行情时点</span><strong id="quote-time">—</strong></div>
           <div class="session-source"><span id="source-label">行情来源待确认</span><span id="seed-date"></span></div>
         </div>
@@ -53,20 +55,21 @@
       </section>
 
       <section class="watchlist" aria-labelledby="watchlist-title">
-        <div class="section-heading"><h2 id="watchlist-title">股票观察卡</h2><span id="list-caption">一股一卡 · 独立跟踪</span></div>
+        <div class="section-heading"><h2 id="watchlist-title">股票观察卡</h2><span style="display:flex;gap:10px;align-items:center"><button id="toggle-all-details" class="toggle-all-btn" type="button" title="展开/折叠全部详情">展开全部</button><span id="list-caption">一股一卡 · 独立跟踪</span></span></div>
         <p id="feed-notice" class="feed-notice" role="status" hidden></p>
         <div id="stock-grid" class="stock-grid" aria-label="股票观察卡片"></div>
         <div id="empty-state" class="empty-state"><span class="empty-orbit" aria-hidden="true">◎</span><h3>正在载入观察名单</h3><p>QA 交接到达后，行情与原始观察条件会显示在每只股票的卡片里。</p></div>
       </section>
       <section class="l2-section" aria-labelledby="l2-section-title" id="l2-section" hidden>
-        <div class="section-heading"><h2 id="l2-section-title">L2 盘口监控</h2><span id="l2-status-label">未连接</span></div>
+        <div class="section-heading"><h2 id="l2-section-title">L2 盘口监控</h2><span style="display:flex;gap:8px;align-items:center"><button id="l2-mute-btn" class="l2-mute-btn" type="button" title="开启/关闭告警音效">🔊</button><span id="l2-status-label">未连接</span></span></div>
+        <div id="l2-overview-container"></div>
         <div class="l2-layout">
           <div id="l2-alerts-container" class="l2-alerts-container"></div>
           <div id="l2-orderbooks-container" class="l2-orderbooks-container"></div>
         </div>
       </section>
     </main>
-    <footer><span>FUND FLOW</span><span id="footer-status">A股资金流向观察</span><span class="footer-hint">窗口缩放时，卡片自动排列</span></footer>
+    <footer><span>FUND FLOW</span><span id="footer-status">A股资金流向观察</span><span class="footer-hint">窗口缩放时，卡片自动排列</span><span class="kbd-hint"><kbd>R</kbd>刷新 <kbd>M</kbd>静音 <kbd>B</kbd>进场 <kbd>S</kbd>出场 <kbd>↑↓</kbd>切换 <kbd>Esc</kbd>取消</span></footer>
   </div>
 </body>
 </html>

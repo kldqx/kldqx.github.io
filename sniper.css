@@ -97,6 +97,17 @@ h1{font-size:25px;gap:11px;letter-spacing:-.4px}
 .manual-controls .exit-button:hover:not(:disabled){background:#ff87951a;border-color:#ff879588}
 .manual-controls .exit-button:disabled{border-color:var(--line);color:var(--subtle);background:#122032}
 .manual-message{flex-basis:100%;margin:2px 0 0;font-size:10px;color:var(--yellow)}
+
+/* H1: 浮动盈亏指示器 */
+.pnl-indicator{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.pnl-indicator.pnl-profit{color:var(--red);background:rgba(255,135,149,0.1);border:1px solid rgba(255,135,149,0.25)}
+.pnl-indicator.pnl-loss{color:var(--green);background:rgba(115,213,172,0.1);border:1px solid rgba(115,213,172,0.25)}
+.pnl-indicator.pnl-flat{color:var(--muted);background:rgba(147,165,188,0.08);border:1px solid rgba(147,165,188,0.2)}
+
+/* H2: 出场信号建议（观察提示） */
+.exit-signal{flex-basis:100%;font-size:10px;padding:3px 6px;border-radius:4px;margin-top:2px;line-height:1.4}
+.exit-signal.exit-warning{color:var(--yellow);background:rgba(236,199,119,0.08);border:1px solid rgba(236,199,119,0.2)}
+.exit-signal.exit-info{color:var(--cyan);background:rgba(101,214,222,0.06);border:1px solid rgba(101,214,222,0.15)}
 .reviewed-conditions .condition-chip:first-child strong{color:var(--cyan)}
 .reviewed-conditions .condition-chip:last-child strong{font-size:10px}
 .source-conditions h4,.original-condition-fields dt{font-size:12px;font-weight:550;color:#c3d4e7;margin:10px 0 5px}
@@ -197,3 +208,111 @@ footer{padding:14px 0;margin-top:2px;font-size:10px}
 .l2-orderbooks-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;min-width:0}
 @media(max-width:900px){.l2-layout{grid-template-columns:1fr}}
 @media(max-width:600px){.l2-orderbooks-container{grid-template-columns:1fr}}
+
+/* L2 mute button */
+.l2-mute-btn {
+  border: 1px solid var(--line, #263448);
+  background: transparent;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+}
+.l2-mute-btn:hover { background: rgba(255,255,255,0.05); }
+
+/* G4: L2 overview container */
+#l2-overview-container { margin-bottom: 12px; }
+#l2-overview-container:empty { display: none; }
+
+/* H3: 持仓浮盈亏汇总 */
+#pnl-summary.pnl-up { color: var(--red, #ff8795); }
+#pnl-summary.pnl-down { color: var(--green, #73d5ac); }
+
+/* J5: 卡片价格闪烁 */
+.stock-price.price-tick-up { animation: tick-red 0.5s ease-out; }
+.stock-price.price-tick-down { animation: tick-green 0.5s ease-out; }
+@keyframes tick-red {
+  0% { color: var(--red, #ff8795); text-shadow: 0 0 10px rgba(255,135,149,0.4); }
+  100% { text-shadow: none; }
+}
+@keyframes tick-green {
+  0% { color: var(--green, #73d5ac); text-shadow: 0 0 10px rgba(115,213,172,0.4); }
+  100% { text-shadow: none; }
+}
+
+/* J2: 键盘快捷键 */
+.kbd-hint { margin-left: 12px; font-size: 10px; color: var(--subtle, #6d819b); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.kbd-hint kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px solid var(--line, #263448);
+  border-radius: 3px;
+  background: var(--panel, #131d2b);
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  color: var(--muted, #93a5bc);
+  margin-right: 2px;
+}
+.stock-card.kbd-focus { outline: 2px solid var(--cyan, #65d6de); outline-offset: 2px; }
+
+/* K2: 展开/折叠全部按钮 */
+.toggle-all-btn {
+  border: 1px solid var(--line, #263448);
+  background: transparent;
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: var(--muted, #93a5bc);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.toggle-all-btn:hover { background: rgba(255,255,255,0.05); color: var(--text, #edf3fb); border-color: #4a6586; }
+
+/* L3: 价格提醒徽章 */
+.price-alert-badge {
+  border: 1px solid var(--line, #263448);
+  background: transparent;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  cursor: pointer;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.price-alert-badge.alert-armed {
+  color: var(--cyan, #65d6de);
+  border-color: rgba(101,214,222,0.3);
+  background: rgba(101,214,222,0.06);
+}
+.price-alert-badge.alert-triggered {
+  color: var(--yellow, #ecc777);
+  border-color: rgba(236,199,119,0.4);
+  background: rgba(236,199,119,0.12);
+  animation: alert-pulse 1s ease-in-out infinite;
+}
+@keyframes alert-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(236,199,119,0.3); }
+  50% { box-shadow: 0 0 8px 2px rgba(236,199,119,0.4); }
+}
+.stock-card.price-alert-flash { animation: card-alert-flash 2s ease-out; }
+@keyframes card-alert-flash {
+  0% { box-shadow: 0 0 0 3px var(--yellow, #ecc777), 0 8px 35px #00000010; }
+  100% { box-shadow: 0 8px 35px #00000010; }
+}
+
+/* L4: 导出持仓按钮 */
+.export-btn {
+  border: 1px solid var(--line, #263448);
+  background: rgba(101,214,222,0.06);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--cyan, #65d6de);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  align-self: center;
+}
+.export-btn:hover { background: rgba(101,214,222,0.12); border-color: rgba(101,214,222,0.4); }

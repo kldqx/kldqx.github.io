@@ -1,4 +1,4 @@
-/* L2 Orderbook component styles — 五档盘口 + 逐笔成交 + 资金流微结构 */
+/* L2 Orderbook component styles — 十档盘口(L2) + 逐笔成交 + 资金流微结构 */
 /* Matches sniper.css dark theme: --bg:#0b111b, --panel:#131d2b, --red:#ff8795, --green:#73d5ac, --cyan:#65d6de */
 
 .l2-orderbook {
@@ -52,27 +52,55 @@
 }
 .l2-ob-col-header {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  font-size: 10px;
+  grid-template-columns: 0.5fr 1fr 1fr 0.8fr;
+  font-size: 9px;
   color: var(--subtle, #6d819b);
-  padding: 2px 0 4px;
+  padding: 1px 0 3px;
   text-align: center;
 }
-.l2-ob-col-header span:first-child { text-align: left; }
+.l2-ob-col-header span:first-child { text-align: center; }
+.l2-ob-col-header span:nth-child(2) { text-align: left; }
 
 .l2-ob-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 0.8fr;
+  grid-template-columns: 0.5fr 1fr 1fr 0.8fr;
   align-items: center;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 11px;
+  padding: 1px 3px;
+  border-radius: 2px;
+  font-size: 10px;
   position: relative;
   transition: background 0.15s;
+  line-height: 1.3;
+}
+.l2-ob-level {
+  color: var(--subtle, #6d819b);
+  font-size: 9px;
+  text-align: center;
+  font-family: Consolas, monospace;
 }
 .l2-ob-row.has-data { background: rgba(255,255,255,0.02); }
 .l2-ob-row.vol-up { background: rgba(115,213,172,0.12); }
 .l2-ob-row.vol-down { background: rgba(255,135,149,0.12); }
+
+/* M1: 盘口异动闪烁 — 委托量突增/突减超过阈值 */
+.l2-ob-row.vol-spike-up {
+  animation: ob-spike-red 1s ease-out;
+  background: rgba(255,135,149,0.35);
+}
+.l2-ob-row.vol-spike-down {
+  animation: ob-spike-green 1s ease-out;
+  background: rgba(115,213,172,0.35);
+}
+@keyframes ob-spike-red {
+  0% { background: rgba(255,135,149,0.6); }
+  50% { background: rgba(255,135,149,0.2); }
+  100% { background: rgba(255,135,149,0.35); }
+}
+@keyframes ob-spike-green {
+  0% { background: rgba(115,213,172,0.6); }
+  50% { background: rgba(115,213,172,0.2); }
+  100% { background: rgba(115,213,172,0.35); }
+}
 
 .l2-ob-ask-row .l2-ob-price { color: var(--green, #73d5ac); text-align: left; }
 .l2-ob-bid-row .l2-ob-price { color: var(--red, #ff8795); text-align: left; }
@@ -166,6 +194,9 @@
 .trade-price { text-align: right; }
 .trade-vol { text-align: right; color: var(--muted, #93a5bc); }
 .trade-side { text-align: center; }
+/* M2: 逐笔方向图标颜色 — 买=红, 卖=绿 (A股红涨绿跌) */
+.trade-side.side-buy { color: var(--red, #ff8795); font-weight: 600; }
+.trade-side.side-sell { color: var(--green, #73d5ac); font-weight: 600; }
 
 /* Capital flow */
 .l2-ob-capflow {
@@ -277,4 +308,232 @@
   .l2-ob-divider { width: 100%; padding: 4px 0; }
   .l2-alert-item { grid-template-columns: 50px 1fr auto; }
   .alert-code { display: none; }
+}
+
+/* History button */
+.l2-ob-hist-btn {
+  border: 1px solid var(--line, #263448);
+  background: transparent;
+  color: var(--cyan, #65d6de);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 10px;
+  cursor: pointer;
+}
+.l2-ob-hist-btn:hover { background: rgba(101,214,222,0.1); }
+
+/* History panel */
+.l2-ob-history {
+  margin-top: 6px;
+  border-top: 1px solid var(--line, #263448);
+  padding-top: 6px;
+}
+.l2-ob-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--subtle, #6d819b);
+  margin-bottom: 4px;
+}
+.l2-ob-history-close {
+  border: 0;
+  background: transparent;
+  color: var(--subtle, #6d819b);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.l2-ob-history-close:hover { color: var(--text, #edf3fb); }
+.l2-ob-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.l2-ob-history-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 55px 1fr 1fr 30px;
+  gap: 4px;
+  padding: 2px 4px;
+  font-size: 10px;
+  border-radius: 2px;
+  font-variant-numeric: tabular-nums;
+  align-items: center;
+}
+.l2-ob-history-row:nth-child(odd) { background: rgba(255,255,255,0.02); }
+.hist-time { color: var(--subtle, #6d819b); }
+.hist-bid { color: var(--red, #ff8795); text-align: right; }
+.hist-ask { color: var(--green, #73d5ac); text-align: right; }
+.hist-imb.positive { color: var(--red, #ff8795); }
+.hist-imb.negative { color: var(--green, #73d5ac); }
+.hist-bidvol, .hist-askvol { color: var(--muted, #93a5bc); text-align: right; }
+.hist-alerts { color: var(--yellow, #ecc777); text-align: center; }
+.l2-ob-history-empty, .l2-ob-history-loading {
+  color: var(--subtle, #6d819b);
+  font-size: 11px;
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* Alert severity levels */
+.l2-alert-item.sev-high { border-left-width: 3px; font-weight: 600; }
+.l2-alert-item.sev-medium { border-left-width: 2px; }
+.l2-alert-item.sev-low { opacity: 0.8; }
+
+/* New high-severity alert animation */
+.l2-alert-item.l2-alert-new {
+  animation: l2-alert-pop 0.5s ease-out;
+}
+@keyframes l2-alert-pop {
+  0% { transform: scale(1.05); box-shadow: 0 0 12px rgba(255,135,149,0.4); }
+  100% { transform: scale(1); box-shadow: none; }
+}
+
+/* Panel flash on new alert */
+.l2-alerts-panel.l2-alerts-flash {
+  animation: l2-panel-flash 0.6s ease-out;
+}
+@keyframes l2-panel-flash {
+  0% { box-shadow: 0 0 0 2px var(--yellow, #ecc777); }
+  100% { box-shadow: none; }
+}
+
+/* Sound toggle indicator */
+.l2-alerts-header::after {
+  content: "🔊";
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+/* ── G3: 盘口深度图 (SVG cumulative depth chart) ── */
+.l2-ob-depth {
+  margin-top: 8px;
+  border-top: 1px solid var(--line, #263448);
+  padding-top: 6px;
+}
+.l2-ob-depth-header {
+  font-size: 10px;
+  color: var(--subtle, #6d819b);
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+}
+.l2-ob-depth-svg {
+  width: 100%;
+  height: 60px;
+  display: block;
+  background: var(--bg, #0b111b);
+  border-radius: 4px;
+}
+
+/* ── G4: 持仓L2概览面板 (L2OverviewPanel) ── */
+.l2-overview-panel {
+  background: var(--panel, #131d2b);
+  border: 1px solid var(--line, #263448);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text, #edf3fb);
+  margin-bottom: 12px;
+}
+.l2-overview-header {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--cyan, #65d6de);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.l2-overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.l2-overview-table th {
+  color: var(--subtle, #6d819b);
+  font-weight: 500;
+  text-align: right;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--line, #263448);
+  white-space: nowrap;
+}
+.l2-overview-table th:first-child { text-align: left; }
+.l2-overview-table td {
+  padding: 5px 6px;
+  text-align: right;
+  border-bottom: 1px solid rgba(38, 52, 72, 0.4);
+  white-space: nowrap;
+}
+.l2-overview-table td:first-child { text-align: left; font-weight: 600; }
+.l2-overview-table tr:last-child td { border-bottom: none; }
+.l2-overview-table tr:hover td { background: rgba(255, 255, 255, 0.03); }
+.l2-overview-table .ov-code { color: var(--cyan, #65d6de); }
+.l2-overview-table .ov-bid.price-up { color: var(--red, #ff8795); }
+.l2-overview-table .ov-ask.price-down { color: var(--green, #73d5ac); }
+.l2-overview-table .ov-imb.positive,
+.l2-overview-table .ov-large.positive,
+.l2-overview-table .ov-mainflow.positive { color: var(--red, #ff8795); }
+.l2-overview-table .ov-imb.negative,
+.l2-overview-table .ov-large.negative,
+.l2-overview-table .ov-mainflow.negative { color: var(--green, #73d5ac); }
+.l2-overview-table .ov-spread { color: var(--muted, #93a5bc); }
+.l2-overview-table .ov-bidvol,
+.l2-overview-table .ov-askvol { color: var(--muted, #93a5bc); }
+.l2-overview-empty td {
+  text-align: center !important;
+  color: var(--subtle, #6d819b);
+  padding: 16px 0;
+}
+
+/* ── I1: 盘口价格闪烁 ── */
+.l2-ob-price { transition: color 0.1s; }
+.l2-ob-price.price-flash-up {
+  animation: price-flash-red 0.6s ease-out;
+}
+.l2-ob-price.price-flash-down {
+  animation: price-flash-green 0.6s ease-out;
+}
+@keyframes price-flash-red {
+  0% { color: var(--red, #ff8795); text-shadow: 0 0 8px rgba(255,135,149,0.5); }
+  100% { color: inherit; text-shadow: none; }
+}
+@keyframes price-flash-green {
+  0% { color: var(--green, #73d5ac); text-shadow: 0 0 8px rgba(115,213,172,0.5); }
+  100% { color: inherit; text-shadow: none; }
+}
+
+/* ── I2: 大单成交高亮 ── */
+.l2-ob-trade { display: flex; align-items: center; gap: 6px; padding: 2px 0; font-size: 11px; }
+.l2-ob-trade.trade-large { font-weight: 500; }
+.l2-ob-trade.trade-super { font-weight: 600; }
+.trade-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 0 3px;
+  border-radius: 2px;
+  line-height: 1.4;
+}
+.trade-badge.badge-large {
+  color: var(--yellow, #ecc777);
+  background: rgba(236,199,119,0.15);
+  border: 1px solid rgba(236,199,119,0.3);
+}
+.trade-badge.badge-super {
+  color: var(--red, #ff8795);
+  background: rgba(255,135,149,0.15);
+  border: 1px solid rgba(255,135,149,0.35);
+}
+.trade-amt {
+  color: var(--subtle, #6d819b);
+  font-size: 10px;
+  margin-left: auto;
+}
+.l2-ob-trade.trade-flash {
+  animation: trade-flash 0.8s ease-out;
+}
+@keyframes trade-flash {
+  0% { background: rgba(255,215,0,0.2); }
+  100% { background: transparent; }
 }

@@ -5,6 +5,8 @@
   // L2 监控状态
   let l2Monitor = null;
   let l2AlertsPanel = null;
+  let l2OverviewPanel = null;
+  let lastStocksData = []; // L4: latest stocks for export
   const l2Containers = new Map(); // code -> container element for L2 orderbook
   const EVENT_LABELS = {
     AUCTION_ENTRY_CONFIRMED: "竞价条件满足", WASH_STANDBY: "等待开盘观察",
@@ -305,17 +307,43 @@
     reviewState.append(reviewStatus,reviewAlert,reviewSummary);
     const manualControls=el("div","manual-controls"), manualLabel=el("span","manual-label","进出场标记");
     manualControls.setAttribute("aria-label","进出场标记");
+    const pnlEl=el("span","pnl-indicator"), exitSignalEl=el("span","exit-signal");
+    pnlEl.hidden=true; exitSignalEl.hidden=true;
+    // L3: 价格提醒徽章
+    const alertBadge=el("button","price-alert-badge");
+    alertBadge.type="button"; alertBadge.hidden=true;
+    alertBadge.title="点击设置价格提醒阈值（相对进场价）";
     const entryButton=el("button","mark-entry entry-button","进场"), exitButton=el("button","mark-exit exit-button","出场"), manualMessage=el("p","manual-message");
     entryButton.type=exitButton.type="button";manualMessage.hidden=true;manualMessage.setAttribute("role","status");
-    manualControls.append(manualLabel,entryButton,exitButton,manualMessage);
+    manualControls.append(manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage);
     const details = el("details", "card-details"), summary = el("summary", "", "观察要点与记录"), content = el("div", "detail-content");
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
     card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false};
+    const ref={card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
+    // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
+    alertBadge.addEventListener("click",()=>{
+      const thresholds=[null,3,5,10,-3,-5];
+      const cur=ref.priceAlertPct;
+      const idx=thresholds.indexOf(cur);
+      ref.priceAlertPct=thresholds[(idx+1)%thresholds.length];
+      ref.priceAlertTriggered=false;
+      // Persist to localStorage
+      try{
+        const key="priceAlert_"+ref.code.textContent;
+        if(ref.priceAlertPct===null) localStorage.removeItem(key);
+        else localStorage.setItem(key,String(ref.priceAlertPct));
+      }catch(e){}
+      updatePriceAlertBadge(ref);
+    });
+    // Load persisted alert on card creation
+    try{
+      const saved=localStorage.getItem("priceAlert_"+ref.code.textContent);
+      if(saved!==null){const v=parseFloat(saved);if(!isNaN(v))ref.priceAlertPct=v;}
+    }catch(e){}
     return ref;
   }
 
@@ -379,7 +407,15 @@
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
     ref.status.textContent = statusText;ref.status.className = `stock-status ${statusTone}`;
+    // J5: 价格闪烁 — 价格上涨闪红，下跌闪绿
+    const curPrice = numeric(stock.price) ? stock.price : null;
     ref.price.textContent = numberText(stock.price);ref.price.className = `stock-price ${numeric(stock.price) ? tone(stock.change_pct) : "missing"}`;
+    if (curPrice !== null && ref.prevPrice !== null && curPrice !== ref.prevPrice) {
+      void ref.price.offsetWidth;
+      ref.price.classList.add(curPrice > ref.prevPrice ? "price-tick-up" : "price-tick-down");
+      setTimeout(()=>ref.price.classList.remove("price-tick-up","price-tick-down"),500);
+    }
+    ref.prevPrice = curPrice;
     ref.change.textContent = percent(stock.change_pct);ref.change.className = `stock-change ${tone(stock.change_pct)}`;
     ref.metricRefs[0].replaceChildren(document.createTextNode(numberText(stock.turnover_yi)),el("small","","亿"));
     ref.metricRefs[1].textContent = numberText(stock.vwap);ref.metricRefs[2].textContent = percent(stock.vwap_deviation_pct);
@@ -413,6 +449,10 @@
     const priceText=numeric(entryPrice) ? `¥${entryPrice.toFixed(2)}` : "--";
     ref.manualLabel.textContent=stock.manual_label === "bought" ? `持仓中 · 进场 ${priceText} ${entryTime ? clock(entryTime) : "--:--"}` : stock.manual_label === "sold" ? "已出场 · 停止监控" : "进出场标记";
     ref.manualLabel.className=`manual-label ${stock.manual_label === "bought" ? "holding" : stock.manual_label === "sold" ? "exited" : ""}`;
+
+    // H1: 浮动盈亏显示 + H2: 出场信号建议
+    updatePnlAndExitSignal(ref, stock);
+
     // L2 监控同步：进场订阅，出场退订
     syncL2Subscription(ref, stock);
     ref.entryButton.setAttribute("aria-label",`${stock.name || stock.code}：标记进场（本地观察标签）`);
@@ -468,10 +508,144 @@
         }
       },
       onAlert: (alert) => {
-        if (l2AlertsPanel) l2AlertsPanel.addAlert(alert);
+        if (l2AlertsPanel) {
+          // Normalize backend alert_type to frontend type
+          if (alert && alert.alert_type && !alert.type) alert.type = alert.alert_type;
+          l2AlertsPanel.addAlert(alert);
+        }
       },
     });
     l2Monitor.start();
+
+    // G4: 持仓L2概览面板
+    if (typeof window.L2OverviewPanel !== "undefined") {
+      const overviewContainer = byId("l2-overview-container");
+      if (overviewContainer) {
+        l2OverviewPanel = new window.L2OverviewPanel(overviewContainer, { pollInterval: 3000 });
+        l2OverviewPanel.start();
+      }
+    }
+
+    // Mute/unmute toggle
+    const muteBtn = byId("l2-mute-btn");
+    if (muteBtn && l2AlertsPanel) {
+      muteBtn.addEventListener("click", () => {
+        l2AlertsPanel.options.enableSound = !l2AlertsPanel.options.enableSound;
+        muteBtn.textContent = l2AlertsPanel.options.enableSound ? "🔊" : "🔇";
+        muteBtn.title = l2AlertsPanel.options.enableSound ? "关闭告警音效" : "开启告警音效";
+      });
+    }
+  }
+
+  // H1+H2: 浮动盈亏与出场信号建议（观察提示，非交易信号）
+  function updatePnlAndExitSignal(ref, stock) {
+    const pnlEl = ref.pnlEl, exitEl = ref.exitSignalEl;
+    if (!pnlEl || !exitEl) return;
+
+    const isHolding = stock.manual_label === "bought";
+    const entryPrice = numeric(stock.entry_price) ? stock.entry_price : null;
+    const currentPrice = numeric(stock.price) ? stock.price : null;
+
+    if (!isHolding || entryPrice === null || currentPrice === null || entryPrice <= 0) {
+      pnlEl.hidden = true;
+      exitEl.hidden = true;
+      return;
+    }
+
+    // H1: 浮动盈亏
+    const pnlPct = ((currentPrice - entryPrice) / entryPrice) * 100;
+    const pnlAmt = currentPrice - entryPrice;
+    const pnlCls = pnlPct > 0 ? "pnl-profit" : pnlPct < 0 ? "pnl-loss" : "pnl-flat";
+    pnlEl.hidden = false;
+    pnlEl.className = "pnl-indicator " + pnlCls;
+    pnlEl.textContent = `浮盈亏 ${pnlPct > 0 ? "+" : ""}${pnlPct.toFixed(2)}% (${pnlAmt > 0 ? "+" : ""}¥${pnlAmt.toFixed(2)})`;
+    pnlEl.title = `进场价 ¥${entryPrice.toFixed(2)} → 现价 ¥${currentPrice.toFixed(2)}`;
+
+    // H2: 出场信号建议（观察提示，非交易信号）
+    const signals = [];
+    if (pnlPct <= -3) signals.push("浮亏超3%");
+    if (pnlPct <= -5) signals.push("浮亏超5%");
+    if (numeric(stock.change_pct) && stock.change_pct <= -5) signals.push("日跌超5%");
+    if (pnlPct >= 10) signals.push("浮盈超10%");
+    // L2 主力净流入判断（从 L2 快照获取）
+    if (l2Monitor) {
+      const ob = l2Monitor.getOrderbook(stock.code);
+      if (ob && ob._snapshot) {
+        const cf = ob._snapshot.capital_flow || {};
+        if (typeof cf.main_net === "number" && cf.main_net < 0) {
+          signals.push("主力净流出");
+        }
+        const m = ob._snapshot.metrics || {};
+        if (typeof m.order_book_imbalance === "number" && m.order_book_imbalance < -0.3) {
+          signals.push("卖盘压力大");
+        }
+      }
+    }
+
+    if (signals.length > 0) {
+      exitEl.hidden = false;
+      const isWarning = signals.some(s => s.includes("亏") || s.includes("跌") || s.includes("流出") || s.includes("压力"));
+      exitEl.className = "exit-signal " + (isWarning ? "exit-warning" : "exit-info");
+      exitEl.textContent = "⚠ " + signals.join(" · ");
+      exitEl.title = "观察提示：以上为数据观察信号，非交易建议。signal_boundary=not_a_trading_signal";
+    } else {
+      exitEl.hidden = true;
+    }
+
+    // L3: 价格提醒检查
+    updatePriceAlertBadge(ref);
+    checkPriceAlert(ref, stock);
+  }
+
+  // L3: 更新价格提醒徽章显示
+  function updatePriceAlertBadge(ref) {
+    const badge = ref.alertBadge;
+    if (!badge) return;
+    if (ref.priceAlertPct === null || ref.priceAlertPct === undefined) {
+      badge.hidden = true;
+      return;
+    }
+    badge.hidden = false;
+    const pct = ref.priceAlertPct;
+    badge.textContent = "🔔" + (pct > 0 ? "+" : "") + pct + "%";
+    badge.className = "price-alert-badge " + (ref.priceAlertTriggered ? "alert-triggered" : "alert-armed");
+    badge.title = "价格提醒: 相对进场价 " + (pct > 0 ? "+" : "") + pct + "%" + (ref.priceAlertTriggered ? " (已触发)" : " (点击切换/取消)");
+  }
+
+  // L3: 检查价格是否触发提醒
+  function checkPriceAlert(ref, stock) {
+    if (ref.priceAlertPct === null || ref.priceAlertPct === undefined) return;
+    if (ref.priceAlertTriggered) return; // 已触发过，不再重复
+    const entry = numeric(stock.entry_price) ? stock.entry_price : null;
+    const cur = numeric(stock.price) ? stock.price : null;
+    if (!entry || !cur || entry <= 0) return;
+    const pnlPct = (cur - entry) / entry * 100;
+    const target = ref.priceAlertPct;
+    const triggered = target > 0 ? pnlPct >= target : pnlPct <= target;
+    if (triggered) {
+      ref.priceAlertTriggered = true;
+      updatePriceAlertBadge(ref);
+      // Flash card border
+      ref.card.classList.add("price-alert-flash");
+      setTimeout(() => ref.card.classList.remove("price-alert-flash"), 2000);
+      // Play sound
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator(), gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 880; osc.type = "sine";
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5);
+      } catch (e) {}
+      // Browser notification
+      if (window.Notification && Notification.permission === "granted") {
+        new Notification("价格提醒触发", {
+          body: (stock.name || stock.code) + " 相对进场价 " + (target > 0 ? "+" : "") + target + "%",
+          tag: "price-alert-" + stock.code,
+        });
+      }
+    }
   }
 
   function syncL2Subscription(ref, stock) {
@@ -481,7 +655,7 @@
       // 进场：显示 L2 容器并订阅
       ref.l2Container.hidden = false;
       l2Containers.set(code, ref.l2Container);
-      l2Monitor.register(code, ref.l2Container);
+      l2Monitor.register(code, ref.l2Container, { showDepthChart: true });
     } else {
       // 出场或未进场：隐藏并退订
       ref.l2Container.hidden = true;
@@ -501,6 +675,7 @@
 
   function stopL2Monitor() {
     if (l2Monitor) { l2Monitor.stop(); l2Monitor = null; }
+    if (l2OverviewPanel) { l2OverviewPanel.stop(); l2OverviewPanel = null; }
   }
 
   function draw(feed, requestedMode) {
@@ -527,12 +702,29 @@
       l2Containers.clear(); updateL2SectionVisibility();
     }
     const stocks = feed.stocks;
+    lastStocksData = stocks; // L4: store for export
     const handoff = mode === "live" ? feed.handoff : null;
     const handoffMessage = HANDOFF_LABELS[handoff?.status];
     byId("stock-count").textContent=!stocks.length && handoffMessage ? "—" : String(stocks.length);
     const holdingCount=feed.holding_summary?.holding_count ?? stocks.filter(s=>s.manual_label === "bought").length;
     const holdingEl=byId("holding-count");
     if(holdingEl)holdingEl.textContent=String(holdingCount);
+
+    // H3: 持仓浮盈亏汇总
+    const pnlSummaryEl=byId("pnl-summary");
+    if(pnlSummaryEl){
+      const holdingStocks=stocks.filter(s=>s.manual_label === "bought" && numeric(s.entry_price) && numeric(s.price) && s.entry_price > 0);
+      if(holdingStocks.length === 0){
+        pnlSummaryEl.textContent="—";
+        pnlSummaryEl.className="";
+      } else {
+        const totalPnlPct=holdingStocks.reduce((sum,s)=>sum+((s.price - s.entry_price) / s.entry_price) * 100,0) / holdingStocks.length;
+        const cls=totalPnlPct > 0 ? "pnl-up" : totalPnlPct < 0 ? "pnl-down" : "";
+        pnlSummaryEl.textContent=(totalPnlPct > 0 ? "+" : "") + totalPnlPct.toFixed(2) + "%";
+        pnlSummaryEl.className=cls;
+        pnlSummaryEl.title=holdingStocks.map(s=>`${s.code || s.name}: ${(((s.price - s.entry_price) / s.entry_price) * 100).toFixed(2)}%`).join("\n");
+      }
+    }
     byId("event-count").textContent=String(stocks.reduce((count,stock)=>count+(Array.isArray(stock.events)?stock.events.length:0),0));
     const latest = stocks.map(stock=>stock.source_data_at).filter(value=>timeValue(value)!==null).sort((a,b)=>timeValue(a)-timeValue(b)).pop();
     byId("quote-time").textContent=clock(latest);
@@ -555,7 +747,21 @@
     const currentCodes=new Set(stocks.map(stock=>stock.code));
     for (const [code,ref] of cards) if(!currentCodes.has(code)){ref.card.remove();cards.delete(code);
       if(l2Monitor) l2Monitor.unregister(code); l2Containers.delete(code);}
-    for (const stock of stocks) {
+    // K1: 持仓优先排序 — 持仓中的股票排在前面，按浮动盈亏降序
+    const sortedStocks = stocks.slice().sort((a, b) => {
+      const aHolding = a.manual_label === "bought" ? 1 : 0;
+      const bHolding = b.manual_label === "bought" ? 1 : 0;
+      if (aHolding !== bHolding) return bHolding - aHolding;
+      if (aHolding === 1) {
+        const aPnl = numeric(a.entry_price) && numeric(a.price) && a.entry_price > 0
+          ? (a.price - a.entry_price) / a.entry_price : -Infinity;
+        const bPnl = numeric(b.entry_price) && numeric(b.price) && b.entry_price > 0
+          ? (b.price - b.entry_price) / b.entry_price : -Infinity;
+        return bPnl - aPnl;
+      }
+      return 0;
+    });
+    for (const stock of sortedStocks) {
       let ref=cards.get(stock.code);
       if(!ref){ref=createCard();cards.set(stock.code,ref);}
       updateCard(ref,stock,feed);
@@ -567,7 +773,97 @@
   byId("live-mode").addEventListener("click",()=>controller.select("live"));
   byId("demo-mode").addEventListener("click",()=>controller.select("demo"));
   byId("refresh-button").addEventListener("click",()=>controller.refresh());
+
+  // K2: 一键展开/折叠全部详情
+  const toggleAllBtn = byId("toggle-all-details");
+  if (toggleAllBtn) {
+    toggleAllBtn.addEventListener("click", () => {
+      const details = document.querySelectorAll(".card-details");
+      const anyClosed = Array.from(details).some(d => !d.open);
+      details.forEach(d => { d.open = anyClosed; });
+      toggleAllBtn.textContent = anyClosed ? "折叠全部" : "展开全部";
+    });
+  }
+
+  // L4: 导出持仓报告 (JSON)
+  const exportBtn = byId("export-holdings-btn");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      const holdings = lastStocksData
+        .filter(s => s.manual_label === "bought")
+        .map(s => {
+          const entry = numeric(s.entry_price) ? s.entry_price : null;
+          const cur = numeric(s.price) ? s.price : null;
+          const pnlPct = entry && cur && entry > 0 ? ((cur - entry) / entry * 100) : null;
+          return {
+            code: s.code, name: s.name,
+            entry_price: entry, current_price: cur,
+            pnl_pct: pnlPct !== null ? Math.round(pnlPct * 100) / 100 : null,
+            entry_at: s.entry_at || null,
+            change_pct: numeric(s.change_pct) ? s.change_pct : null,
+            turnover_yi: numeric(s.turnover_yi) ? s.turnover_yi : null,
+            vwap: numeric(s.vwap) ? s.vwap : null,
+          };
+        });
+      const report = {
+        signal_boundary: "not_a_trading_signal",
+        exported_at: new Date().toISOString(),
+        holding_count: holdings.length,
+        holdings: holdings,
+      };
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "holdings-report-" + new Date().toISOString().slice(0, 10) + ".json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
   window.addEventListener("pagehide",()=>{controller.stop();stopL2Monitor();});
   initL2Monitor();
+
+  // J2: 键盘快捷键
+  // R = 刷新, M = 静音切换, B = 进场(第一条可进场), S = 出场(第一条持仓中)
+  // ↑/↓ = 卡片间导航, Esc = 取消焦点
+  document.addEventListener("keydown",(e)=>{
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable)) return;
+    const key = e.key.toLowerCase();
+    if (key === "r") { e.preventDefault(); controller.refresh(); return; }
+    if (key === "m") { e.preventDefault(); const mb=byId("l2-mute-btn"); if(mb) mb.click(); return; }
+    if (key === "b") {
+      e.preventDefault();
+      const firstEntry = document.querySelector(".stock-card:not(.exited) .entry-button:not(:disabled)");
+      if (firstEntry) firstEntry.click();
+      return;
+    }
+    if (key === "s") {
+      e.preventDefault();
+      const firstExit = document.querySelector(".stock-card .exit-button:not(:disabled)");
+      if (firstExit) firstExit.click();
+      return;
+    }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const cards = Array.from(document.querySelectorAll(".stock-card"));
+      if (!cards.length) return;
+      const active = document.activeElement ? cards.findIndex(c=>c.contains(document.activeElement)) : -1;
+      const next = e.key === "ArrowDown"
+        ? (active + 1) % cards.length
+        : (active - 1 + cards.length) % cards.length;
+      cards[next].scrollIntoView({behavior:"smooth",block:"center"});
+      cards[next].classList.add("kbd-focus");
+      setTimeout(()=>cards[next].classList.remove("kbd-focus"),1500);
+      return;
+    }
+    if (e.key === "Escape") {
+      document.activeElement && document.activeElement.blur();
+      return;
+    }
+  });
+
   controller.select("live");
 })();
