@@ -122,7 +122,9 @@
       requests.add(requestController);
       const timeout = schedule(() => requestController.abort(), 8000);
       try {
-        const response = await fetcher(path, {cache:"no-store", signal:requestController.signal});
+        const sep = path.includes("?") ? "&" : "?";
+        const freshPath = path + sep + "_t=" + Date.now();
+        const response = await fetcher(freshPath, {cache:"no-store", signal:requestController.signal});
         if (!response.ok) throw Error("feed_unavailable");
         const data = await response.json();
         return expectedGeneration === generation ? data : null;
@@ -180,7 +182,7 @@
         if (!validFeed(feed, "live")) throw Error("feed_invalid");
         if (lastQuotes?.run_id === feed.run_id
           && timeValue(feed.generated_at) !== null && timeValue(lastQuotes.generated_at) !== null
-          && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) throw Error("feed_older");
+          && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) return;
         if(Number.isInteger(lastQuotes?.manual_watch_revision) && Number.isInteger(feed.manual_watch_revision)
           && feed.manual_watch_revision < lastQuotes.manual_watch_revision)throw Error("manual_revision_older");
         const nextScope=scope(feed);

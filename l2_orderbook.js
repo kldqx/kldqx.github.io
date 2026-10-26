@@ -892,7 +892,8 @@
       const tick = async function() {
         const request = ++latestRequest;
         try {
-          const resp = await fetch(self.options.pollPath, { cache: "no-store" });
+          const sep = self.options.pollPath.includes("?") ? "&" : "?";
+      const resp = await fetch(self.options.pollPath + sep + "_t=" + Date.now(), { cache: "no-store" });
           if (generation !== self._pollGeneration || request !== latestRequest) return;
           if (resp.ok) {
             const data = await resp.json();
@@ -1339,7 +1340,7 @@
       const tick = async function() {
         const request = ++latestRequest;
         try {
-          const resp = await fetch("./l2-all.json", { cache: "no-store" });
+          const resp = await fetch("./l2-all.json?_t=" + Date.now(), { cache: "no-store" });
           if (generation !== self._pollGeneration || request !== latestRequest) return;
           if (resp.ok) {
             const data = await resp.json();
