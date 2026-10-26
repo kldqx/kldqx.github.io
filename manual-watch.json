@@ -1,1 +1,1 @@
-{"schema": "manual-watch-state/v1", "signal_boundary": "not_a_trading_signal", "revision": 0, "stocks": []}
+{"schema": "manual-watch-state/v1", "signal_boundary": "not_a_trading_signal", "revision": 1, "stocks": [{"code": "SZ.002241", "manual_label": "bought", "manual_revision": 1, "watch_id": "c5363fda851642f89b9c15bf03e8b509", "recorded_at": "2026-10-26T14:59:22.580679+08:00", "entry_price": null, "entry_at": "2026-10-26T14:59:22.580679+08:00", "exit_price": null, "exit_at": null}]}
