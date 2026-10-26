@@ -745,7 +745,7 @@
         ssePath: "./l2-sse",
         pollPath: "./l2-all.json",
         subscriptionsPath: "./l2-subscriptions.json",
-        pollInterval: 2000,
+        pollInterval: 1000,
         autoConnect: true,
       }, options || {});
 
