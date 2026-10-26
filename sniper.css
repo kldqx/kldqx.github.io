@@ -436,3 +436,59 @@ footer{padding:14px 0;margin-top:2px;font-size:10px}
   color: #cbd5e1;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+
+/* 微观盘口总买卖量对抗条与撤单统计 */
+.micro-depth-panel {
+  background: rgba(19, 29, 43, 0.85);
+  border: 1px solid var(--line, #263448);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 10px 0 8px;
+  font-size: 11px;
+}
+.micro-depth-header, .micro-depth-cancels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 1.4;
+}
+.micro-depth-header .depth-buy {
+  color: var(--red, #ff8795);
+  font-weight: 600;
+}
+.micro-depth-header .depth-sell {
+  color: var(--green, #73d5ac);
+  font-weight: 600;
+}
+.micro-depth-header .depth-ratio {
+  color: var(--cyan, #65d6de);
+  font-size: 11px;
+  font-weight: 600;
+}
+.micro-depth-bar {
+  display: flex;
+  height: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #1b2636;
+  margin: 5px 0;
+}
+.depth-bar-buy {
+  background: var(--red, #ff8795);
+  transition: width 0.3s ease;
+}
+.depth-bar-sell {
+  background: var(--green, #73d5ac);
+  transition: width 0.3s ease;
+}
+.micro-depth-cancels {
+  color: var(--muted, #93a5bc);
+  font-size: 10px;
+}
+.cancel-ratio {
+  color: var(--text, #edf3fb);
+  font-weight: 600;
+}
+.cancel-ratio.positive { color: var(--red, #ff8795); }
+.cancel-ratio.negative { color: var(--green, #73d5ac); }
