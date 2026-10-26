@@ -30,6 +30,12 @@
   const numeric = value => typeof value === "number" && Number.isFinite(value);
   const numberText = (value, digits = 2) => numeric(value) ? value.toFixed(digits) : "—";
   const percent = value => numeric(value) ? `${value > 0 ? "+" : ""}${value.toFixed(2)}%` : "—";
+  const formatHands = value => {
+    if (!numeric(value)) return "—";
+    if (value >= 100000000) return (value / 100000000).toFixed(2) + "亿手";
+    if (value >= 10000) return (value / 10000).toFixed(1) + "万手";
+    return Math.round(value) + "手";
+  };
   const tone = value => numeric(value) ? value > 0 ? "positive" : value < 0 ? "negative" : "" : "";
   const timeValue = value => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value) && Number.isFinite(Date.parse(value)) ? Date.parse(value) : null;
   const clock = value => timeValue(value) === null ? "—" : new Intl.DateTimeFormat("zh-CN", {timeZone:"Asia/Shanghai",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date(value));
@@ -64,7 +70,7 @@
     if (feed?.mode !== "live" || feed.status !== "observing" || feed.handoff?.status !== "ready"
       || !["PHASE_4_OPENING_REVERSAL", "INTRADAY", "INTRADAY_AM", "INTRADAY_PM"].includes(feed.phase)
       || observationEligible(stock) !== true || (stock.observation_status ?? stock.monitoring_status) !== "active"
-      || stock.source_id !== "TENCENT_QUOTE") return null;
+      || !["TENCENT_QUOTE", "TDX_L2", "TDX_L2_NATIVE"].includes(stock.source_id)) return null;
     const sourceAt = timeValue(stock?.source_data_at), generatedAt = timeValue(feed.generated_at);
     if (sourceAt === null || generatedAt === null || !numeric(now) || generatedAt < sourceAt
       || generatedAt - sourceAt > 30000 || now < generatedAt || now - generatedAt > 30000
@@ -197,7 +203,7 @@
         if (!validFeed(feed, "live")) throw Error("feed_invalid");
         if (lastQuotes?.run_id === feed.run_id
           && timeValue(feed.generated_at) !== null && timeValue(lastQuotes.generated_at) !== null
-          && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) return;
+          && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) throw Error("snapshot_older");
         if(Number.isInteger(lastQuotes?.manual_watch_revision) && Number.isInteger(feed.manual_watch_revision)
           && feed.manual_watch_revision < lastQuotes.manual_watch_revision)throw Error("manual_revision_older");
         const nextScope=scope(feed);
@@ -363,6 +369,27 @@
     const metricRefs = ["累计成交", "分时 VWAP", "偏离 VWAP"].map(label => {
       const box = el("div", "metric"), value = el("strong"); box.append(el("span","",label),value); metrics.append(box); return value;
     });
+    // 微观盘口总买卖量与撤单对比条
+    const microDepth = el("div", "micro-depth-panel");
+    const depthHeader = el("div", "micro-depth-header");
+    const depthBuy = el("span", "depth-buy");
+    const depthRatio = el("span", "depth-ratio");
+    const depthSell = el("span", "depth-sell");
+    depthHeader.append(depthBuy, depthRatio, depthSell);
+
+    const depthBar = el("div", "micro-depth-bar");
+    const depthBarBuy = el("div", "depth-bar-buy");
+    const depthBarSell = el("div", "depth-bar-sell");
+    depthBar.append(depthBarBuy, depthBarSell);
+
+    const depthCancels = el("div", "micro-depth-cancels");
+    const cancelBuy = el("span", "cancel-buy");
+    const cancelRatio = el("span", "cancel-ratio");
+    const cancelSell = el("span", "cancel-sell");
+    depthCancels.append(cancelBuy, cancelRatio, cancelSell);
+
+    microDepth.append(depthHeader, depthBar, depthCancels);
+
     const chart = el("div", "chart-area"), legend = el("div", "chart-legend"), keys = el("div", "chart-legend-items");
     for (const [label,cls] of [["价格",""],["VWAP","vwap-key"]]) {const key = el("span");key.append(el("i",cls),document.createTextNode(label));keys.append(key);}
     const quoteAt = el("span"); legend.append(keys,quoteAt);
@@ -388,8 +415,8 @@
     const l2SignalBadge = el("span", "l2-signal-badge");
     const l2AlertList = el("div", "l2-alert-list");
     l2Container.append(l2SignalBadge, l2AlertList);
-    card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,name,code,moneyBadge,status,vwapBadge,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,l2SignalBadge,l2AlertList,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(heading,priceRow,metrics,microDepth,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,name,code,moneyBadge,status,vwapBadge,price,change,metricRefs,microDepth,depthBuy,depthRatio,depthSell,depthBarBuy,depthBarSell,cancelBuy,cancelRatio,cancelSell,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,l2SignalBadge,l2AlertList,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -498,6 +525,38 @@
     ref.change.textContent = percent(stock.change_pct);ref.change.className = `stock-change ${tone(stock.change_pct)}`;
     ref.metricRefs[0].replaceChildren(document.createTextNode(numberText(stock.turnover_yi)),el("small","","亿"));
     ref.metricRefs[1].textContent = numberText(stock.vwap);ref.metricRefs[2].textContent = percent(stock.vwap_deviation_pct);
+
+    // 渲染微观总买卖量与撤单对比条
+    const tb = numeric(stock.total_bvol) ? stock.total_bvol : 0;
+    const ts = numeric(stock.total_svol) ? stock.total_svol : 0;
+    const bc = numeric(stock.bcancel) ? stock.bcancel : 0;
+    const sc = numeric(stock.scancel) ? stock.scancel : 0;
+    const hasMicro = (tb > 0 || ts > 0 || bc > 0 || sc > 0);
+    ref.microDepth.hidden = !hasMicro;
+    if (hasMicro) {
+      ref.depthBuy.textContent = `总买 ${formatHands(tb)}`;
+      ref.depthSell.textContent = `总卖 ${formatHands(ts)}`;
+      if (ts === 0 && tb > 0) {
+        ref.depthRatio.textContent = "买卖比 — (涨停封板)";
+        ref.depthBarBuy.style.width = "100%";
+        ref.depthBarSell.style.width = "0%";
+      } else if (tb + ts > 0) {
+        const ratioText = numeric(stock.bid_ask_ratio) ? stock.bid_ask_ratio.toFixed(2) : (tb / ts).toFixed(2);
+        ref.depthRatio.textContent = `买卖比 ${ratioText}`;
+        const buyPct = (tb / (tb + ts) * 100).toFixed(1);
+        ref.depthBarBuy.style.width = `${buyPct}%`;
+        ref.depthBarSell.style.width = `${(100 - buyPct).toFixed(1)}%`;
+      } else {
+        ref.depthRatio.textContent = "买卖比 —";
+        ref.depthBarBuy.style.width = "50%";
+        ref.depthBarSell.style.width = "50%";
+      }
+      ref.cancelBuy.textContent = `买撤 ${formatHands(bc)}`;
+      ref.cancelSell.textContent = `卖撤 ${formatHands(sc)}`;
+      const cr = numeric(stock.cancel_ratio) ? stock.cancel_ratio : (bc + sc > 0 ? ((bc - sc) / (bc + sc) * 100) : 0);
+      ref.cancelRatio.textContent = `总撤委比 ${cr > 0 ? "+" : ""}${cr.toFixed(1)}%`;
+      ref.cancelRatio.className = `cancel-ratio ${cr > 0 ? "positive" : cr < 0 ? "negative" : ""}`;
+    }
     ref.quoteAt.textContent = timeValue(stock.source_data_at) === null ? "行情时点 —" : `行情 ${clock(stock.source_data_at)}`;
     const signature = JSON.stringify([stock.points || [],original && eligible]);
     if (signature !== ref.chartSignature) {drawChart(ref.chart,stock.points,original && eligible === false ? "本次观察暂无行情采样" : "等待首个行情采样");ref.chartSignature = signature;}
@@ -511,7 +570,12 @@
     ref.hypothesis.hidden = !original;
     ref.hypothesis.textContent = original && typeof stock.hypothesis === "string" ? stock.hypothesis : "";
     const intraday = feed.mode === "live" && ["accepted","expired"].includes(stock.review_status) && stock.intraday_review?.status === stock.review_status ? stock.intraday_review : null;
-    const originalStatus = {expired_unverified:"原竞价已到期 · 未核实",expired:"原竞价已到期",invalidated:"原竞价条件已失效",withdrawn:"原竞价判断已撤回"}[stock.original_condition_status];
+    let originalStatus = {expired_unverified:"原竞价已到期 · 未核实",expired:"原竞价已到期",invalidated:"原竞价条件已失效",withdrawn:"原竞价判断已撤回"}[stock.original_condition_status];
+    if (feed.mode === "live" && feed.phase && feed.phase.startsWith("INTRADAY") && (stock.observation_status || stock.monitoring_status) === "active") {
+      if (stock.original_condition_status === "expired_unverified") {
+        originalStatus = "盘中实盘追踪中";
+      }
+    }
     const reviewLabel = feed.mode === "live" ? (stock.review_status === "expired" ? "盘中复核已到期 · QA 已审历史" : stock.review_status === "accepted" && !intraday ? "盘中复核结果待同步" : REVIEW_LABELS[stock.review_status]) : null;
     ref.reviewState.hidden = !originalStatus && !reviewLabel;
     ref.reviewState.className = `review-state ${["error","uncertain","budget_exhausted"].includes(stock.review_status) ? "warning" : ""}`;
