@@ -6,18 +6,20 @@
   <meta name="color-scheme" content="dark">
   <title>A股资金监控台</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./sniper.css?v=20261026_vwap">
-  <link rel="stylesheet" href="./l2_orderbook.css?v=20261026_1030">
-  <script src="./l2_orderbook.js?v=20261026_1030" defer></script>
-  <script src="./sniper.js?v=20261026_vwap" defer></script>
+  <link rel="stylesheet" href="./sniper.css">
+  <link rel="stylesheet" href="./l2_orderbook.css">
+  <script src="./l2_orderbook.js" defer></script>
+  <script src="./sniper.js" defer></script>
 </head>
 <body data-signal-boundary="not_a_trading_signal">
   <div class="page-shell">
     <header class="page-header">
       <div class="brand"><span class="brand-mark" aria-hidden="true">⌁</span><span>FUND FLOW<small>A股资金流向观察</small></span></div>
       <div class="header-actions">
+        <a href="./performance.html" class="mode-button" style="text-decoration:none;display:inline-flex;align-items:center">📊 信号表现</a>
         <div class="mode-switch" role="group" aria-label="查看模式">
           <button id="live-mode" class="mode-button selected" type="button" aria-pressed="true">当前监控</button>
+          <button id="demo-mode" class="mode-button" type="button" aria-pressed="false">演练预览</button>
         </div>
         <button id="refresh-button" class="icon-button" type="button" aria-label="刷新当前监控" title="刷新当前监控"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19 11a7 7 0 0 0-12-4L4 10m16 4-3 3A7 7 0 0 1 5 13"/></svg></button>
       </div>
@@ -34,6 +36,7 @@
           <div class="session-stat"><span>持仓中</span><strong id="holding-count">—</strong><small>只</small></div>
           <div class="session-stat"><span>持仓浮盈亏</span><strong id="pnl-summary">—</strong></div>
           <div class="session-stat"><span>条件触发</span><strong id="event-count">—</strong><small>条</small></div>
+          <div class="session-stat"><button id="export-holdings-btn" class="export-btn" type="button" title="导出持仓报告 (JSON)">📥 导出持仓</button></div>
           <div class="session-stat time-stat"><span>最新行情时点</span><strong id="quote-time">—</strong></div>
           <div class="session-source"><span id="source-label">行情来源待确认</span><span id="seed-date"></span></div>
         </div>

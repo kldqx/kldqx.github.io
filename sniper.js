@@ -11,8 +11,7 @@
   const EVENT_LABELS = {
     AUCTION_ENTRY_CONFIRMED: "竞价条件满足", WASH_STANDBY: "等待开盘观察",
     AUCTION_VETOED: "竞价条件未满足", BOOK_BID1_VOLUME_DROP: "买一量回落",
-    REVERSAL_TRIGGERED: "VWAP 上穿", VWAP_DEFENSE_TRIGGERED: "触及 VWAP 防守线",
-    L2_BEARISH_VETO: "L2 看空拦截"
+    REVERSAL_TRIGGERED: "VWAP 上穿", VWAP_DEFENSE_TRIGGERED: "触及 VWAP 防守线"
   };
   const PHASE_LABELS = {
     WAITING: "盘前等待 · 09:15 开始观察", PHASE_1_VIRTUAL: "竞价申报观察中",
@@ -60,21 +59,6 @@
   };
   const observationEligible = stock => typeof stock.observation_eligible === "boolean" ? stock.observation_eligible : stock.monitoring_eligible;
 
-  function vwapObservation(stock, feed, now = Date.now()) {
-    if (feed?.mode !== "live" || feed.status !== "observing" || feed.handoff?.status !== "ready"
-      || !["PHASE_4_OPENING_REVERSAL", "INTRADAY", "INTRADAY_AM", "INTRADAY_PM"].includes(feed.phase)
-      || observationEligible(stock) !== true || (stock.observation_status ?? stock.monitoring_status) !== "active"
-      || stock.source_id !== "TENCENT_QUOTE") return null;
-    const sourceAt = timeValue(stock?.source_data_at), generatedAt = timeValue(feed.generated_at);
-    if (sourceAt === null || generatedAt === null || !numeric(now) || generatedAt < sourceAt
-      || generatedAt - sourceAt > 30000 || now < generatedAt || now - generatedAt > 30000
-      || !numeric(stock.price) || stock.price <= 0 || !numeric(stock.vwap) || stock.vwap <= 0
-      || !numeric(stock.vwap_deviation_pct)) return null;
-    const deviation = (stock.price / stock.vwap - 1) * 100;
-    if (Math.abs(deviation - stock.vwap_deviation_pct) > 0.15) return null;
-    return {level: deviation < -2 ? "breach" : deviation < 0 ? "below" : deviation > 0 ? "above" : "at", deviation};
-  }
-
   function validFeed(feed, mode) {
     return feed && feed.schema === "live-sniper-web/v1" && feed.signal_boundary === BOUNDARY
       && feed.mode === mode && Array.isArray(feed.stocks)
@@ -117,7 +101,7 @@
   }
 
   function createController({fetcher, draw, connection, schedule = setTimeout, cancel = clearTimeout}) {
-    let mode = "live", generation = 0, timer = null, reviewTimer = null, lastFeed = null;
+    let mode = "live", generation = 0, timer = null, reviewTimer = null, demo = null, lastFeed = null;
     let expiryTimer = null;
     let lastQuotes = null, reviewCandidate = null, matchedReview = null, currentScope = null, manualState = null;
     let quoteError = false, reviewError = null;
@@ -137,9 +121,7 @@
       requests.add(requestController);
       const timeout = schedule(() => requestController.abort(), 8000);
       try {
-        const sep = path.includes("?") ? "&" : "?";
-        const freshPath = path + sep + "_t=" + Date.now();
-        const response = await fetcher(freshPath, {cache:"no-store", signal:requestController.signal});
+        const response = await fetcher(path, {cache:"no-store", signal:requestController.signal});
         if (!response.ok) throw Error("feed_unavailable");
         const data = await response.json();
         return expectedGeneration === generation ? data : null;
@@ -188,7 +170,7 @@
       if(nextDeadline !== null)expiryTimer=schedule(publish,nextDeadline-now);
       if(quoteError)connection("error","行情连接中断 · 保留上次画面");
       else if(currentScope && reviewError)connection("error","行情正常更新 · 盘中复核连接异常（保留上次匹配结果）");
-      else connection("connected","每 1 秒实时更新");
+      else connection("connected","每 2 秒自动更新");
     }
     async function live(expectedGeneration) {
       try {
@@ -197,7 +179,7 @@
         if (!validFeed(feed, "live")) throw Error("feed_invalid");
         if (lastQuotes?.run_id === feed.run_id
           && timeValue(feed.generated_at) !== null && timeValue(lastQuotes.generated_at) !== null
-          && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) return;
+          && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) throw Error("feed_older");
         if(Number.isInteger(lastQuotes?.manual_watch_revision) && Number.isInteger(feed.manual_watch_revision)
           && feed.manual_watch_revision < lastQuotes.manual_watch_revision)throw Error("manual_revision_older");
         const nextScope=scope(feed);
@@ -209,7 +191,7 @@
         if(lastQuotes)publish();
         else connection("error","暂时无法连接 · 正在重试");
       }
-      if (expectedGeneration === generation) timer = schedule(() => live(expectedGeneration), 1000);
+      if (expectedGeneration === generation) timer = schedule(() => live(expectedGeneration), 2000);
     }
     async function reviews(expectedGeneration) {
       try {
@@ -225,17 +207,36 @@
         if(expectedGeneration !== generation)return;
         reviewError="unavailable";publish();
       }
-      if(expectedGeneration === generation)reviewTimer=schedule(()=>reviews(expectedGeneration),1000);
+      if(expectedGeneration === generation)reviewTimer=schedule(()=>reviews(expectedGeneration),2000);
+    }
+    function play(frames, index, expectedGeneration) {
+      if (expectedGeneration !== generation) return;
+      lastFeed = frames[index]; draw(lastFeed);
+      connection("demo", index === frames.length - 1 ? "演练完成 · 可重新播放" : `演练预览 · ${index + 1} / ${frames.length}`);
+      if (index + 1 < frames.length) timer = schedule(() => play(frames, index + 1, expectedGeneration), 1000);
     }
     async function select(nextMode) {
       stop(); mode = nextMode; lastFeed = null; lastQuotes=null;reviewCandidate=null;matchedReview=null;currentScope=null;
       quoteError=false;reviewError=null;
       const expectedGeneration = generation;
-      connection("loading", "正在连接");
+      connection(mode === "demo" ? "demo" : "loading", mode === "demo" ? "正在准备演练" : "正在连接");
       draw(null, mode);
-      return Promise.all([live(expectedGeneration),reviews(expectedGeneration)]);
+      if (mode === "live") return Promise.all([live(expectedGeneration),reviews(expectedGeneration)]);
+      try {
+        if (!demo) {
+          const data = await request("./sniper-demo.json", expectedGeneration);
+          if (expectedGeneration !== generation) return;
+          if (!data || data.schema !== "live-sniper-demo/v1" || data.signal_boundary !== BOUNDARY
+            || !Array.isArray(data.frames) || !data.frames.length || !data.frames.every(frame => validFeed(frame, "demo"))) throw Error("demo_invalid");
+          demo = data.frames;
+        }
+        play(demo, 0, expectedGeneration);
+      } catch (error) {
+        if (expectedGeneration === generation) connection("error", "演练暂时不可用 · 点击刷新重试");
+      }
     }
     function refresh() {
+      if (mode === "demo") return select(mode);
       stop(); connection("loading", "正在刷新"); return Promise.all([live(generation),reviews(generation)]);
     }
     function applyManualState(state) {
@@ -249,49 +250,7 @@
     return {select, refresh, stop, applyManualState, getMode:() => mode};
   }
 
-  function getMoneyNatureBadge(stock) {
-    const benchmark = stock && stock.benchmark && typeof stock.benchmark === "object" ? stock.benchmark : {};
-    const tactic = String(stock?.tactic || benchmark.tactic || "");
-    const tacticLabel = String(stock?.tactic_label || benchmark.tactic_label || "");
-    const code = String(stock?.code || "");
-    const name = String(stock?.name || "");
-
-    if (tactic === "HIGH_CONTROL_THEME_BREAKOUT" || code.includes("688686") || name.includes("奥普特")) {
-      return {
-        icon: "🔥",
-        text: "游资先锋 · 高控盘",
-        cls: "badge-hot-money",
-        tooltip: "游资合力突破先锋 | 弹性96 控盘89 席位92"
-      };
-    }
-
-    if (tactic === "LARGE_CAP_CORE_CONTINUATION" || code.includes("002241") || name.includes("歌尔股份")) {
-      return {
-        icon: "🏦",
-        text: "机构中军 · 核心趋势",
-        cls: "badge-institution",
-        tooltip: "百亿大容量核心中军 | 承载98 控盘97 席位93"
-      };
-    }
-
-    if (tacticLabel) {
-      if (tacticLabel.includes("游资") || tacticLabel.includes("先锋") || tacticLabel.includes("突破")) {
-        return { icon: "🔥", text: tacticLabel, cls: "badge-hot-money", tooltip: tacticLabel };
-      }
-      if (tacticLabel.includes("机构") || tacticLabel.includes("核心") || tacticLabel.includes("趋势") || tacticLabel.includes("容量")) {
-        return { icon: "🏦", text: tacticLabel, cls: "badge-institution", tooltip: tacticLabel };
-      }
-      return { icon: "🌊", text: tacticLabel, cls: "badge-trend", tooltip: tacticLabel };
-    }
-
-    if (stock && stock.l2_signal === "BULLISH") {
-      return { icon: "⚡", text: "L2多头突击", cls: "badge-l2-bullish", tooltip: "盘口大单主动买入激增" };
-    }
-
-    return { icon: "🎯", text: "主力跟踪", cls: "badge-default", tooltip: "重点资金流向跟踪标的" };
-  }
-
-  const api = {validFeed, chartModel, createController, numberText, percent, clock, getMoneyNatureBadge, vwapObservation};
+  const api = {validFeed, chartModel, createController, numberText, percent, clock};
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (typeof document === "undefined") return;
   window.sniperFrontend = api;
@@ -305,7 +264,6 @@
     byId("connection-dot").className = `connection-dot ${kind}`;
     byId("connection-text").textContent = message;
     byId("footer-status").textContent = message;
-    if (kind === "error") for (const ref of cards.values()) ref.vwapBadge.hidden = true;
   }
 
   function drawChart(container, points, emptyText = "等待首个行情采样") {
@@ -332,12 +290,8 @@
   function createCard() {
     const card = el("article", "stock-card");
     const heading = el("div", "card-heading"), identity = el("div", "stock-identity");
-    const titleRow = el("div", "stock-title-row");
     const name = el("h3", "stock-name"), code = el("div", "stock-code"), status = el("span", "stock-status");
-    const moneyBadge = el("span", "money-nature-badge");
-    titleRow.append(name, moneyBadge);
-    const vwapBadge = el("span", "vwap-observation");vwapBadge.hidden = true;
-    identity.append(titleRow, code, vwapBadge); heading.append(identity, status);
+    identity.append(name,code); heading.append(identity,status);
     const priceRow = el("div", "price-row"), price = el("strong", "stock-price"), change = el("span", "stock-change");
     priceRow.append(price,change,el("span", "price-label", "最新价 / 元"));
     const metrics = el("div", "metric-grid");
@@ -366,11 +320,8 @@
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
-    const l2SignalBadge = el("span", "l2-signal-badge");
-    const l2AlertList = el("div", "l2-alert-list");
-    l2Container.append(l2SignalBadge, l2AlertList);
     card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,name,code,moneyBadge,status,vwapBadge,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,l2SignalBadge,l2AlertList,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    const ref={card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -455,18 +406,7 @@
     const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
-    const badge = getMoneyNatureBadge(stock);
-    ref.moneyBadge.textContent = `${badge.icon} ${badge.text}`;
-    ref.moneyBadge.className = `money-nature-badge ${badge.cls}`;
-    ref.moneyBadge.setAttribute("title", badge.tooltip);
     ref.status.textContent = statusText;ref.status.className = `stock-status ${statusTone}`;
-    const vwapState = vwapObservation(stock, feed);
-    ref.vwapBadge.hidden = !vwapState;
-    if (vwapState) {
-      ref.vwapBadge.className = `vwap-observation ${vwapState.level}`;
-      ref.vwapBadge.textContent = `${vwapState.level === "breach" ? "现价低于 VWAP 超 2%" : vwapState.level === "below" ? "现价低于 VWAP" : vwapState.level === "above" ? "现价高于 VWAP" : "现价与 VWAP 持平"} · ${percent(vwapState.deviation)}`;
-      ref.vwapBadge.title = `截至 ${clock(stock.source_data_at)} 的腾讯行情价格与分时均价比较；仅作观察，非交易信号`;
-    }
     // J5: 价格闪烁 — 价格上涨闪红，下跌闪绿
     const curPrice = numeric(stock.price) ? stock.price : null;
     ref.price.textContent = numberText(stock.price);ref.price.className = `stock-price ${numeric(stock.price) ? tone(stock.change_pct) : "missing"}`;
@@ -515,22 +455,6 @@
 
     // L2 监控同步：进场订阅，出场退订
     syncL2Subscription(ref, stock);
-    // 缝合断链4：L2 微观信号展示
-    const l2Signal = stock.l2_signal;
-    const l2Alerts = Array.isArray(stock.l2_alerts) ? stock.l2_alerts : [];
-    if (l2Signal || l2Alerts.length > 0) {
-      ref.l2Container.hidden = false;
-      const signalText = {BULLISH: "L2 看多", BEARISH: "L2 看空", NEUTRAL: "L2 中性"}[l2Signal] || "";
-      ref.l2SignalBadge.textContent = signalText;
-      ref.l2SignalBadge.className = `l2-signal-badge ${l2Signal === "BULLISH" ? "bullish" : l2Signal === "BEARISH" ? "bearish" : "neutral"}`;
-      ref.l2AlertList.replaceChildren(...l2Alerts.slice(-3).map(a => {
-        const item = el("div", `l2-alert-item ${a.severity || "info"}`);
-        item.append(el("span", "l2-alert-type", a.type || ""), el("span", "l2-alert-msg", a.message || ""));
-        return item;
-      }));
-    } else {
-      ref.l2Container.hidden = true;
-    }
     ref.entryButton.setAttribute("aria-label",`${stock.name || stock.code}：标记进场（本地观察标签）`);
     ref.exitButton.setAttribute("aria-label",`${stock.name || stock.code}：标记出场并停止监控（本地观察标签）`);
     manualButtons(ref);
@@ -576,17 +500,11 @@
     l2AlertsPanel = new window.L2AlertsPanel(alertsContainer);
     l2Monitor = new window.L2Monitor({
       onStatusChange: (status) => {
-        const available = status.source_status === "available" && status.connected;
         if (statusLabel) {
-          statusLabel.textContent = available
+          statusLabel.textContent = status.connected
             ? (status.mode === "sse" ? "L2 实时推送中" : "L2 轮询中")
-            : status.source_status === "simulated" ? "工程模拟 · 非实时 L2" : "真实十档未接通";
-          statusLabel.className = available ? "connected" : "error";
-          statusLabel.title = status.source_error || "";
-        }
-        for (const stock of lastStocksData) {
-          const ref = cards.get(stock.code);
-          if (ref) updatePnlAndExitSignal(ref, stock);
+            : "L2 未连接";
+          statusLabel.className = status.connected ? "connected" : "error";
         }
       },
       onAlert: (alert) => {
@@ -650,14 +568,14 @@
     if (numeric(stock.change_pct) && stock.change_pct <= -5) signals.push("日跌超5%");
     if (pnlPct >= 10) signals.push("浮盈超10%");
     // L2 主力净流入判断（从 L2 快照获取）
-    if (l2Monitor && l2Monitor.isConnected()) {
+    if (l2Monitor) {
       const ob = l2Monitor.getOrderbook(stock.code);
-      if (ob && ob.snapshot && ob.snapshot.source === "TDX_L2") {
-        const cf = ob.snapshot.capital_flow || {};
+      if (ob && ob._snapshot) {
+        const cf = ob._snapshot.capital_flow || {};
         if (typeof cf.main_net === "number" && cf.main_net < 0) {
           signals.push("主力净流出");
         }
-        const m = ob.snapshot.metrics || {};
+        const m = ob._snapshot.metrics || {};
         if (typeof m.order_book_imbalance === "number" && m.order_book_imbalance < -0.3) {
           signals.push("卖盘压力大");
         }
@@ -763,16 +681,17 @@
   function draw(feed, requestedMode) {
     const mode = feed?.mode || requestedMode || displayedMode;
     displayedMode = mode;
-    byId("live-mode").className = `mode-button selected`;
-    byId("live-mode").setAttribute("aria-pressed","true");
-    byId("mode-label").textContent = "当前监控";byId("mode-label").className = "mode-label";
-    byId("refresh-button").title = "刷新当前监控";byId("refresh-button").setAttribute("aria-label",byId("refresh-button").title);
+    byId("live-mode").className = `mode-button ${mode === "live" ? "selected" : ""}`;
+    byId("demo-mode").className = `mode-button ${mode === "demo" ? "selected demo-selected" : ""}`;
+    byId("live-mode").setAttribute("aria-pressed",String(mode === "live"));byId("demo-mode").setAttribute("aria-pressed",String(mode === "demo"));
+    byId("mode-label").textContent = mode === "demo" ? "离线演练" : "当前监控";byId("mode-label").className = `mode-label ${mode === "demo" ? "demo" : ""}`;
+    byId("refresh-button").title = mode === "demo" ? "重新播放演练" : "刷新当前监控";byId("refresh-button").setAttribute("aria-label",byId("refresh-button").title);
     if (!feed) {
       cards.clear();byId("stock-grid").replaceChildren();lastRun=null;
-      byId("empty-state").hidden=false;byId("empty-state").querySelector("h3").textContent="正在载入观察名单";
+      byId("empty-state").hidden=false;byId("empty-state").querySelector("h3").textContent=mode === "demo" ? "正在准备演练卡片" : "正在载入观察名单";
       byId("stock-count").textContent="—";byId("event-count").textContent="—";byId("quote-time").textContent="—";
-      byId("session-description").textContent="正在读取观察名单与最新行情。";
-      byId("source-label").textContent="行情来源待确认";
+      byId("session-description").textContent=mode === "demo" ? "使用生成行情，依次预览竞价、盘中、午休与收盘。" : "正在读取观察名单与最新行情。";
+      byId("source-label").textContent=mode === "demo" ? "生成的演练行情" : "行情来源待确认";
       byId("seed-date").textContent="";byId("feed-notice").hidden=true;
       for (const step of document.querySelectorAll(".phase-track li")) step.className="";
       return;
@@ -809,12 +728,12 @@
     byId("event-count").textContent=String(stocks.reduce((count,stock)=>count+(Array.isArray(stock.events)?stock.events.length:0),0));
     const latest = stocks.map(stock=>stock.source_data_at).filter(value=>timeValue(value)!==null).sort((a,b)=>timeValue(a)-timeValue(b)).pop();
     byId("quote-time").textContent=clock(latest);
-    byId("source-label").textContent=feed.source_label || "腾讯一级行情";
+    byId("source-label").textContent=feed.source_label || (mode === "demo" ? "生成的演练行情" : "腾讯一级行情");
     byId("seed-date").textContent=handoff ? `研究 ${handoff.research_date || "—"} · 观察 ${handoff.target_trade_date || "—"}` : feed.seed_date ? `观察名单 · ${feed.seed_date}` : "";
     const phaseDescription = PHASE_LABELS[feed.phase] || (feed.status === "waiting" ? "等待观察窗口" : "跟踪价格、成交额与 VWAP 的变化。");
     const batchDescription = handoffMessage ? handoffMessage[0] : stocks.length && stocks.every(stock=>observationEligible(stock) === false) ? "本批次已停采，原条件与记录保留。" : "QA 已审条件研究";
-    byId("session-description").textContent=handoff ? `${phaseDescription} · ${batchDescription}` : phaseDescription;
-    byId("list-caption").textContent=handoff?.qa_completed_at ? `QA 完成 · ${deadlineText(handoff.qa_completed_at)}` : "一股一卡 · 独立跟踪";
+    byId("session-description").textContent=mode === "demo" ? `演练预览 · ${phaseDescription}` : handoff ? `${phaseDescription} · ${batchDescription}` : phaseDescription;
+    byId("list-caption").textContent=mode === "demo" ? "生成行情 · 有限时点演练" : handoff?.qa_completed_at ? `QA 完成 · ${deadlineText(handoff.qa_completed_at)}` : "一股一卡 · 独立跟踪";
     const phaseIndex = feed.phase === "INTRADAY" && timeValue(feed.generated_at) !== null
       ? (clock(feed.generated_at) >= "13:00:00" ? 6 : 4) : PHASE_STEPS[feed.phase] ?? -1;
     for (const step of document.querySelectorAll(".phase-track li")) {const index=Number(step.dataset.step);step.className=index === phaseIndex ? "active" : index < phaseIndex ? "complete" : "";}
@@ -852,6 +771,7 @@
 
   const controller=createController({fetcher:(...args)=>fetch(...args),draw,connection:setConnection});
   byId("live-mode").addEventListener("click",()=>controller.select("live"));
+  byId("demo-mode").addEventListener("click",()=>controller.select("demo"));
   byId("refresh-button").addEventListener("click",()=>controller.refresh());
 
   // K2: 一键展开/折叠全部详情
