@@ -7,6 +7,9 @@
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
 /* Compact cards keep the full watchlist visible in everyday desktop windows. */
+.vwap-observation{display:inline-block;margin-top:7px;padding:3px 7px;border:1px solid #65d6de55;border-radius:5px;color:var(--cyan);font-size:11px;line-height:1.35}
+.vwap-observation.below{border-color:#ecc77766;color:var(--yellow)}
+.vwap-observation.breach{border-color:#ff879588;background:#ff879515;color:var(--red);font-weight:700}
 :root{font-size:15px;--radius:14px}
 .page-shell{padding-right:clamp(18px,2.3vw,40px);padding-left:clamp(18px,2.3vw,40px)}
 .page-header{min-height:62px}

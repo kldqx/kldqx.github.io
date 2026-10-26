@@ -60,6 +60,21 @@
   };
   const observationEligible = stock => typeof stock.observation_eligible === "boolean" ? stock.observation_eligible : stock.monitoring_eligible;
 
+  function vwapObservation(stock, feed, now = Date.now()) {
+    if (feed?.mode !== "live" || feed.status !== "observing" || feed.handoff?.status !== "ready"
+      || !["PHASE_4_OPENING_REVERSAL", "INTRADAY", "INTRADAY_AM", "INTRADAY_PM"].includes(feed.phase)
+      || observationEligible(stock) !== true || (stock.observation_status ?? stock.monitoring_status) !== "active"
+      || stock.source_id !== "TENCENT_QUOTE") return null;
+    const sourceAt = timeValue(stock?.source_data_at), generatedAt = timeValue(feed.generated_at);
+    if (sourceAt === null || generatedAt === null || !numeric(now) || generatedAt < sourceAt
+      || generatedAt - sourceAt > 30000 || now < generatedAt || now - generatedAt > 30000
+      || !numeric(stock.price) || stock.price <= 0 || !numeric(stock.vwap) || stock.vwap <= 0
+      || !numeric(stock.vwap_deviation_pct)) return null;
+    const deviation = (stock.price / stock.vwap - 1) * 100;
+    if (Math.abs(deviation - stock.vwap_deviation_pct) > 0.15) return null;
+    return {level: deviation < -2 ? "breach" : deviation < 0 ? "below" : deviation > 0 ? "above" : "at", deviation};
+  }
+
   function validFeed(feed, mode) {
     return feed && feed.schema === "live-sniper-web/v1" && feed.signal_boundary === BOUNDARY
       && feed.mode === mode && Array.isArray(feed.stocks)
@@ -295,7 +310,7 @@
     return { icon: "🎯", text: "主力跟踪", cls: "badge-default", tooltip: "重点资金流向跟踪标的" };
   }
 
-  const api = {validFeed, chartModel, createController, numberText, percent, clock, getMoneyNatureBadge};
+  const api = {validFeed, chartModel, createController, numberText, percent, clock, getMoneyNatureBadge, vwapObservation};
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (typeof document === "undefined") return;
   window.sniperFrontend = api;
@@ -309,6 +324,7 @@
     byId("connection-dot").className = `connection-dot ${kind}`;
     byId("connection-text").textContent = message;
     byId("footer-status").textContent = message;
+    if (kind === "error") for (const ref of cards.values()) ref.vwapBadge.hidden = true;
   }
 
   function drawChart(container, points, emptyText = "等待首个行情采样") {
@@ -339,7 +355,8 @@
     const name = el("h3", "stock-name"), code = el("div", "stock-code"), status = el("span", "stock-status");
     const moneyBadge = el("span", "money-nature-badge");
     titleRow.append(name, moneyBadge);
-    identity.append(titleRow, code); heading.append(identity, status);
+    const vwapBadge = el("span", "vwap-observation");vwapBadge.hidden = true;
+    identity.append(titleRow, code, vwapBadge); heading.append(identity, status);
     const priceRow = el("div", "price-row"), price = el("strong", "stock-price"), change = el("span", "stock-change");
     priceRow.append(price,change,el("span", "price-label", "最新价 / 元"));
     const metrics = el("div", "metric-grid");
@@ -372,7 +389,7 @@
     const l2AlertList = el("div", "l2-alert-list");
     l2Container.append(l2SignalBadge, l2AlertList);
     card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,name,code,moneyBadge,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,l2SignalBadge,l2AlertList,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    const ref={card,name,code,moneyBadge,status,vwapBadge,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,l2SignalBadge,l2AlertList,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -462,6 +479,13 @@
     ref.moneyBadge.className = `money-nature-badge ${badge.cls}`;
     ref.moneyBadge.setAttribute("title", badge.tooltip);
     ref.status.textContent = statusText;ref.status.className = `stock-status ${statusTone}`;
+    const vwapState = vwapObservation(stock, feed);
+    ref.vwapBadge.hidden = !vwapState;
+    if (vwapState) {
+      ref.vwapBadge.className = `vwap-observation ${vwapState.level}`;
+      ref.vwapBadge.textContent = `${vwapState.level === "breach" ? "现价低于 VWAP 超 2%" : vwapState.level === "below" ? "现价低于 VWAP" : vwapState.level === "above" ? "现价高于 VWAP" : "现价与 VWAP 持平"} · ${percent(vwapState.deviation)}`;
+      ref.vwapBadge.title = `截至 ${clock(stock.source_data_at)} 的腾讯行情价格与分时均价比较；仅作观察，非交易信号`;
+    }
     // J5: 价格闪烁 — 价格上涨闪红，下跌闪绿
     const curPrice = numeric(stock.price) ? stock.price : null;
     ref.price.textContent = numberText(stock.price);ref.price.className = `stock-price ${numeric(stock.price) ? tone(stock.change_pct) : "missing"}`;
