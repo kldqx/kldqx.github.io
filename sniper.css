@@ -74,7 +74,7 @@ h1{font-size:25px;gap:11px;letter-spacing:-.4px}
 .card-details{margin:0 -16px;padding:0 16px}
 .card-details summary{font-size:12px;line-height:1.3;padding:9px 0}
 .detail-content{font-size:13px;padding-bottom:14px}
-.hypothesis-preview{margin:0 0 8px;font-size:11px;line-height:1.5;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hypothesis-preview{margin:0 0 8px;font-size:11.5px;line-height:1.5;color:#c3d4e7;white-space:normal;overflow:visible;background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:4px;border-left:2px solid #3b82f6}
 .hypothesis-preview[hidden]{display:none}
 .review-state{margin:0 0 8px;padding:6px 8px;border-left:2px solid #65d6de66;background:#0c192555;font-size:10px;color:var(--muted)}
 .review-state.warning{border-left-color:var(--yellow);color:var(--yellow)}
