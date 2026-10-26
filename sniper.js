@@ -173,7 +173,7 @@
       if(nextDeadline !== null)expiryTimer=schedule(publish,nextDeadline-now);
       if(quoteError)connection("error","行情连接中断 · 保留上次画面");
       else if(currentScope && reviewError)connection("error","行情正常更新 · 盘中复核连接异常（保留上次匹配结果）");
-      else connection("connected","每 2 秒自动更新");
+      else connection("connected","每 1 秒实时更新");
     }
     async function live(expectedGeneration) {
       try {
@@ -194,7 +194,7 @@
         if(lastQuotes)publish();
         else connection("error","暂时无法连接 · 正在重试");
       }
-      if (expectedGeneration === generation) timer = schedule(() => live(expectedGeneration), 2000);
+      if (expectedGeneration === generation) timer = schedule(() => live(expectedGeneration), 1000);
     }
     async function reviews(expectedGeneration) {
       try {
@@ -210,7 +210,7 @@
         if(expectedGeneration !== generation)return;
         reviewError="unavailable";publish();
       }
-      if(expectedGeneration === generation)reviewTimer=schedule(()=>reviews(expectedGeneration),2000);
+      if(expectedGeneration === generation)reviewTimer=schedule(()=>reviews(expectedGeneration),1000);
     }
     function play(frames, index, expectedGeneration) {
       if (expectedGeneration !== generation) return;
