@@ -573,7 +573,7 @@
     let originalStatus = {expired_unverified:"原竞价已到期 · 未核实",expired:"原竞价已到期",invalidated:"原竞价条件已失效",withdrawn:"原竞价判断已撤回"}[stock.original_condition_status];
     if (feed.mode === "live" && feed.phase && feed.phase.startsWith("INTRADAY") && (stock.observation_status || stock.monitoring_status) === "active") {
       if (stock.original_condition_status === "expired_unverified") {
-        originalStatus = "盘中实盘追踪中";
+        originalStatus = "原竞价已到期 · 盘中实盘追踪";
       }
     }
     const reviewLabel = feed.mode === "live" ? (stock.review_status === "expired" ? "盘中复核已到期 · QA 已审历史" : stock.review_status === "accepted" && !intraday ? "盘中复核结果待同步" : REVIEW_LABELS[stock.review_status]) : null;
