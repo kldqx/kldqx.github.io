@@ -19,7 +19,7 @@
     PHASE_1_DROP_CHECK: "观察盘口买一量变化", PHASE_2_REAL_AUCTION: "竞价锁定期",
     PHASE_3_FINAL_VERDICT: "观察集合竞价结果", PHASE_4_OPENING_REVERSAL: "开盘 VWAP 观察中",
     INTRADAY: "盘中观察", INTRADAY_AM: "上午盘中观察", LUNCH_BREAK: "午休 · 暂停行情采样",
-    INTRADAY_PM: "下午盘中观察", CLOSING_AUCTION: "收盘竞价观察", POSTMARKET_REVIEW: "已收盘 · 盘后复核",
+    INTRADAY_PM: "下午盘中观察", CLOSING_AUCTION: "收盘竞价观察", POSTMARKET_REVIEW: "盘后固定价格交易 · 15:00-15:30 (盘后复核)",
     CLOSED: "本次观察已结束 · 保留当日记录", FINISHED: "本次监控任务已结束"
   };
   const PHASE_STEPS = {
@@ -495,10 +495,11 @@
     const benchmark = stock.benchmark && typeof stock.benchmark === "object" ? stock.benchmark : {};
     const original = feed.mode === "live" && stock.original_conditions && typeof stock.original_conditions === "object" ? stock.original_conditions : null;
     const eligible = observationEligible(stock);
-    const monitoringStatus = feed.handoff?.status === "stopped" ? "stopped" : stock.observation_status || stock.monitoring_status;
-    const monitorLabel = {waiting:"等待观察",eligible:"等待观察",active:"行情观察中",paused:"午休 · 暂停采样",closed:"已收盘",expired:"期限已到 · 已停采",expired_unverified:"期限已到 · 已停采",stopped:"监控已停止",withdrawn:"原判断已撤回",unverifiable:"暂停观察",invalidated:"原条件已失效",withdrawn_due_to_data_or_method_error:"原判断已撤回"}[monitoringStatus];
-    const statusText = original ? monitorLabel || (eligible === false ? "当前未采样" : "等待行情") : latest ? eventLabel(latest) : gaps.length ? "数据待补" : !numeric(stock.price) ? "等待行情" : feed.status === "finished" ? "观察结束" : "动态观察";
-    const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
+    const isHolding = stock.manual_label === "bought";
+    const monitoringStatus = feed.handoff?.status === "stopped" ? "stopped" : (isHolding ? "holding" : (stock.observation_status || stock.monitoring_status));
+    const monitorLabel = {waiting:"等待观察",eligible:"等待观察",active:"行情观察中",holding:"持仓监控中",paused:"午休 · 暂停采样",closed:"已收盘",expired:"期限已到 · 已停止",expired_unverified:"期限已到 · 已停止",stopped:"监控已停止",withdrawn:"原判断已撤回",unverifiable:"暂停观察",invalidated:"原条件已失效",withdrawn_due_to_data_or_method_error:"原判断已撤回"}[monitoringStatus];
+    const statusText = isHolding ? "持仓监控中" : (original ? monitorLabel || (eligible === false ? "当前未采样" : "等待行情") : latest ? eventLabel(latest) : gaps.length ? "数据待补" : !numeric(stock.price) ? "等待行情" : feed.status === "finished" ? "观察结束" : "动态观察");
+    const statusTone = isHolding ? "positive" : (latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "");
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
     const badge = getMoneyNatureBadge(stock);
@@ -571,7 +572,9 @@
     ref.hypothesis.textContent = original && typeof stock.hypothesis === "string" ? stock.hypothesis : "";
     const intraday = feed.mode === "live" && ["accepted","expired"].includes(stock.review_status) && stock.intraday_review?.status === stock.review_status ? stock.intraday_review : null;
     let originalStatus = {expired_unverified:"原竞价已到期 · 未核实",expired:"原竞价已到期",invalidated:"原竞价条件已失效",withdrawn:"原竞价判断已撤回"}[stock.original_condition_status];
-    if (feed.mode === "live" && feed.phase && feed.phase.startsWith("INTRADAY") && (stock.observation_status || stock.monitoring_status) === "active") {
+    if (stock.manual_label === "bought") {
+      originalStatus = "已标记进场 · 实盘持仓追踪中";
+    } else if (feed.mode === "live" && feed.phase && (feed.phase.startsWith("INTRADAY") || feed.phase === "POSTMARKET_REVIEW") && (stock.observation_status || stock.monitoring_status) === "active") {
       if (stock.original_condition_status === "expired_unverified") {
         originalStatus = "原竞价已到期 · 盘中实盘追踪";
       }
