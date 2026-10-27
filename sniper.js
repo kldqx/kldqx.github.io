@@ -348,7 +348,9 @@
     const card = el("article", "stock-card");
     const heading = el("div", "card-heading"), identity = el("div", "stock-identity");
     const name = el("h3", "stock-name"), code = el("div", "stock-code"), status = el("span", "stock-status");
-    identity.append(name,code); heading.append(identity,status);
+    const auctionBadge = el("span", "auction-confirmed-badge", "👑 竞价金标"); auctionBadge.hidden = true;
+    identity.append(name, auctionBadge, code); heading.append(identity, status);
+    const auctionBanner = el("div", "auction-confirmed-banner"); auctionBanner.hidden = true;
     const priceRow = el("div", "price-row"), price = el("strong", "stock-price"), change = el("span", "stock-change");
     priceRow.append(price,change,el("span", "price-label", "最新价 / 元"));
     const metrics = el("div", "metric-grid");
@@ -378,8 +380,8 @@
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
-    card.append(heading,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,name,code,status,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(heading,auctionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,name,code,status,auctionBadge,auctionBanner,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -464,7 +466,19 @@
     const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
-    ref.status.textContent = statusText;ref.status.className = `stock-status ${statusTone}`;
+    const isAuctionConfirmed = Boolean(stock.auction_confirmed || (Array.isArray(stock.events) && stock.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED")));
+    ref.auctionBadge.hidden = !isAuctionConfirmed;
+    ref.auctionBanner.hidden = !isAuctionConfirmed;
+    if (isAuctionConfirmed) {
+      ref.card.classList.add("auction-confirmed");
+      ref.status.textContent = "⚡ 竞价达标 · 确定性高";
+      ref.status.className = "stock-status positive gold-status";
+      ref.auctionBanner.textContent = "👑 集合竞价确立金标：高开幅度与主力承接符合预期，具备确定性！";
+    } else {
+      ref.card.classList.remove("auction-confirmed");
+      ref.status.textContent = statusText;
+      ref.status.className = `stock-status ${statusTone}`;
+    }
     // J5: 价格闪烁 — 价格上涨闪红，下跌闪绿
     const curPrice = numeric(stock.price) ? stock.price : null;
     ref.price.textContent = numberText(stock.price);ref.price.className = `stock-price ${numeric(stock.price) ? tone(stock.change_pct) : "missing"}`;
@@ -817,8 +831,14 @@
           ? (b.price - b.entry_price) / b.entry_price : -Infinity;
         return bPnl - aPnl;
       }
+      const aConfirmed = (a.auction_confirmed || (Array.isArray(a.events) && a.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))) ? 1 : 0;
+      const bConfirmed = (b.auction_confirmed || (Array.isArray(b.events) && b.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))) ? 1 : 0;
+      if (aConfirmed !== bConfirmed) return bConfirmed - aConfirmed;
       return 0;
     });
+    const confirmedCount = stocks.filter(s => s.auction_confirmed || (Array.isArray(s.events) && s.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))).length;
+    const auctionCountEl = byId("auction-confirmed-count");
+    if (auctionCountEl) auctionCountEl.textContent = String(confirmedCount);
     for (const stock of sortedStocks) {
       let ref=cards.get(stock.code);
       if(!ref){ref=createCard();cards.set(stock.code,ref);}
