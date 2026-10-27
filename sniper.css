@@ -1078,3 +1078,18 @@ footer {
   margin-top: 10px !important;
   font-size: 10.5px !important;
 }
+
+/* === 竞价一票否决卡片 (黑名单锁死视觉) === */
+.stock-card.auction-vetoed-card {
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  background: linear-gradient(155deg, rgba(23, 35, 51, 0.8) 0%, rgba(18, 28, 43, 0.8) 75%) !important;
+  opacity: 0.85;
+}
+.stock-card.auction-vetoed-card:hover {
+  opacity: 1;
+}
+.stock-card.auction-vetoed-card .entry-button {
+  cursor: not-allowed !important;
+  opacity: 0.3 !important;
+  filter: grayscale(1) !important;
+}
