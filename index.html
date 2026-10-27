@@ -6,10 +6,10 @@
   <meta name="color-scheme" content="dark">
   <title>A股资金监控台</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./sniper.css?v=20261027_1046">
-  <link rel="stylesheet" href="./l2_orderbook.css?v=20261027_1046">
-  <script src="./l2_orderbook.js?v=20261027_1046" defer></script>
-  <script src="./sniper.js?v=20261027_1046" defer></script>
+  <link rel="stylesheet" href="./sniper.css?v=20261027_1105">
+  <link rel="stylesheet" href="./l2_orderbook.css?v=20261027_1105">
+  <script src="./l2_orderbook.js?v=20261027_1105" defer></script>
+  <script src="./sniper.js?v=20261027_1105" defer></script>
 </head>
 <body data-signal-boundary="not_a_trading_signal">
   <div class="page-shell">
@@ -17,6 +17,7 @@
       <div class="brand"><span class="brand-mark" aria-hidden="true">⌁</span><span>FUND FLOW<small>A股资金流向观察</small></span></div>
       <div class="header-actions">
         <a href="./performance.html" class="mode-button" style="text-decoration:none;display:inline-flex;align-items:center">📊 信号表现</a>
+        <button id="alarm-sound-toggle" class="alarm-sound-btn enabled" type="button" title="点击切换破位警报音">🚨 破位声警: 开启</button>
         <div class="mode-switch" role="group" aria-label="查看模式">
           <button id="live-mode" class="mode-button selected" type="button" aria-pressed="true">当前监控</button>
           <button id="demo-mode" class="mode-button" type="button" aria-pressed="false">演练预览</button>
@@ -37,6 +38,7 @@
           <div class="session-stat"><span>持仓浮盈亏</span><strong id="pnl-summary">—</strong></div>
           <div class="session-stat gold-stat"><span>竞价金标</span><strong id="auction-confirmed-count" class="gold-text">—</strong><small>只</small></div>
           <div class="session-stat surge-stat"><span>走强确立</span><strong id="surge-confirmed-count" class="surge-text">—</strong><small>只</small></div>
+          <div class="session-stat reject-stat"><span>竞价作废</span><strong id="rejected-count" style="color:#ef4444;text-shadow:0 0 10px rgba(239,68,68,0.5)">—</strong><small>只</small></div>
           <div class="session-stat"><span>条件触发</span><strong id="event-count">—</strong><small>条</small></div>
           <div class="session-stat"><button id="export-holdings-btn" class="export-btn" type="button" title="导出持仓报告 (JSON)">📥 导出持仓</button></div>
           <div class="session-stat time-stat"><span>最新行情时点</span><strong id="quote-time">—</strong></div>

@@ -8,6 +8,38 @@
   let l2OverviewPanel = null;
   let lastStocksData = []; // L4: latest stocks for export
   const l2Containers = new Map(); // code -> container element for L2 orderbook
+  let audioAlarmEnabled = true;
+  const lastAlarmTimeByCode = new Map(); // code -> timestamp
+
+  function playLethalDefenseAlarm(code) {
+    if (!audioAlarmEnabled) return;
+    const nowMs = Date.now();
+    const last = lastAlarmTimeByCode.get(code) || 0;
+    if (nowMs - last < 45000) return; // 45 秒内节流，防止一直刺耳轰炸
+    lastAlarmTimeByCode.set(code, nowMs);
+
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === "suspended") ctx.resume();
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = "sawtooth";
+      // 警笛交替双频：880Hz -> 587Hz -> 880Hz -> 587Hz (刺耳警笛)
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.setValueAtTime(587, now + 0.12);
+      osc.frequency.setValueAtTime(880, now + 0.24);
+      osc.frequency.setValueAtTime(587, now + 0.36);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } catch(e) {}
+  }
   const EVENT_LABELS = {
     AUCTION_ENTRY_CONFIRMED: "竞价条件满足", WASH_STANDBY: "等待开盘观察",
     AUCTION_VETOED: "竞价条件未满足", BOOK_BID1_VOLUME_DROP: "买一量回落",
@@ -351,6 +383,13 @@
     const auctionBadge = el("span", "auction-confirmed-badge", "👑 竞价金标"); auctionBadge.hidden = true;
     identity.append(name, auctionBadge, code); heading.append(identity, status);
     const auctionBanner = el("div", "auction-confirmed-banner"); auctionBanner.hidden = true;
+    // 09:25:01 竞价不及格硬核熔断作废印章
+    const rejectedStamp = el("div", "auction-rejected-stamp");
+    rejectedStamp.hidden = true;
+    // 跌破分时均线破位警报横幅
+    const defenseAlarmBanner = el("div", "defense-alarm-banner");
+    defenseAlarmBanner.hidden = true;
+
     // 实时监控动态确立与颜色变幻提示条
     const convictionBanner = el("div", "live-conviction-banner");
     const convictionTop = el("div", "conviction-banner-top");
@@ -392,8 +431,8 @@
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
-    card.append(heading,auctionBanner,convictionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,name,code,status,auctionBadge,auctionBanner,convictionBanner,convictionTitle,convictionScore,convictionDesc,convictionPulse,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(rejectedStamp,heading,defenseAlarmBanner,auctionBanner,convictionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,rejectedStamp,defenseAlarmBanner,name,code,status,auctionBadge,auctionBanner,convictionBanner,convictionTitle,convictionScore,convictionDesc,convictionPulse,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -511,12 +550,39 @@
       ref.convictionBanner.hidden = true;
     }
 
+    // 09:25:01 竞价不及格硬核熔断作废印章
+    const isAuctionRejected = Boolean(stock.auction_rejected);
+    ref.rejectedStamp.hidden = !isAuctionRejected;
+    if (isAuctionRejected) {
+      ref.card.classList.add("auction-rejected");
+      ref.rejectedStamp.textContent = stock.rejection_stamp || "🚫 竞价不达标 · 强制熔断作废（禁止买入）";
+      ref.entryButton.disabled = true;
+      ref.status.textContent = "🚫 竞价不符 · 已熔断";
+      ref.status.className = "stock-status negative";
+    } else {
+      ref.card.classList.remove("auction-rejected");
+    }
+
+    // 跌破 VWAP 均线刺耳声光警报
+    const isDefenseAlarm = Boolean(stock.defense_alarm);
+    ref.defenseAlarmBanner.hidden = !isDefenseAlarm;
+    if (isDefenseAlarm) {
+      ref.card.classList.add("defense-alarm-active");
+      ref.defenseAlarmBanner.replaceChildren(
+        el("span", "defense-alarm-icon", "🚨"),
+        document.createTextNode(stock.defense_alarm_desc || "跌破分时均线防守线，主力放弃承接！禁止抄底！")
+      );
+      playLethalDefenseAlarm(stock.code);
+    } else {
+      ref.card.classList.remove("defense-alarm-active");
+    }
+
     if (isAuctionConfirmed) {
       ref.card.classList.add("auction-confirmed");
       ref.status.textContent = cTier === "surge" ? "🔥 极度确立 · 涨停加速" : "⚡ 竞价达标 · 确定性高";
       ref.status.className = `stock-status positive ${cTier === "surge" ? "surge-status" : "gold-status"}`;
       ref.auctionBanner.textContent = "👑 集合竞价确立金标：高开幅度与主力承接符合预期，具备确定性！";
-    } else {
+    } else if (!isAuctionRejected) {
       ref.card.classList.remove("auction-confirmed");
       ref.status.textContent = cTier === "strengthening" ? "⚡ 盘中走强 · 均线共振" : statusText;
       ref.status.className = `stock-status ${cTier === "strengthening" ? "purple" : statusTone}`;
@@ -873,7 +939,12 @@
           ? (b.price - b.entry_price) / b.entry_price : -Infinity;
         return bPnl - aPnl;
       }
-      // 优先持仓，其次按肯定度/走强综合评分降序
+      // 09:25 竞价作废的标的统统垫底（排到最后）
+      const aRejected = a.auction_rejected ? 1 : 0;
+      const bRejected = b.auction_rejected ? 1 : 0;
+      if (aRejected !== bRejected) return aRejected - bRejected;
+
+      // 其次按肯定度/走强综合评分降序
       const scoreA = numeric(a.conviction_score) ? a.conviction_score : ((a.auction_confirmed ? 60 : 30) + (numeric(a.change_pct) ? a.change_pct : 0));
       const scoreB = numeric(b.conviction_score) ? b.conviction_score : ((b.auction_confirmed ? 60 : 30) + (numeric(b.change_pct) ? b.change_pct : 0));
       if (scoreA !== scoreB) return scoreB - scoreA;
@@ -888,6 +959,9 @@
     const surgeCount = stocks.filter(s => s.conviction_tier === "surge" || s.conviction_tier === "strengthening").length;
     const surgeCountEl = byId("surge-confirmed-count");
     if (surgeCountEl) surgeCountEl.textContent = String(surgeCount);
+    const rejectedCount = stocks.filter(s => s.auction_rejected).length;
+    const rejectedCountEl = byId("rejected-count");
+    if (rejectedCountEl) rejectedCountEl.textContent = String(rejectedCount);
     for (const stock of sortedStocks) {
       let ref=cards.get(stock.code);
       if(!ref){ref=createCard();cards.set(stock.code,ref);}
@@ -902,6 +976,24 @@
   byId("refresh-button").addEventListener("click",()=>controller.refresh());
 
   // K2: 一键展开/折叠全部详情
+  const alarmSoundToggle = byId("alarm-sound-toggle");
+  if (alarmSoundToggle) {
+    alarmSoundToggle.addEventListener("click", () => {
+      audioAlarmEnabled = !audioAlarmEnabled;
+      alarmSoundToggle.className = `alarm-sound-btn ${audioAlarmEnabled ? "enabled" : ""}`;
+      alarmSoundToggle.textContent = audioAlarmEnabled ? "🚨 破位声警: 开启" : "🔇 破位声警: 静音";
+      alarmSoundToggle.title = audioAlarmEnabled ? "点击静音破位声效" : "点击开启破位声效";
+      try { localStorage.setItem("defense_alarm_sound", audioAlarmEnabled ? "1" : "0"); } catch(e) {}
+    });
+    try {
+      if (localStorage.getItem("defense_alarm_sound") === "0") {
+        audioAlarmEnabled = false;
+        alarmSoundToggle.className = "alarm-sound-btn";
+        alarmSoundToggle.textContent = "🔇 破位声警: 静音";
+      }
+    } catch(e) {}
+  }
+
   const toggleAllBtn = byId("toggle-all-details");
   if (toggleAllBtn) {
     toggleAllBtn.textContent = "折叠全部";
