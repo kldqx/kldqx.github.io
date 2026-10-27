@@ -69,15 +69,16 @@
   function chartModel(points) {
     const original = Array.isArray(points) ? points : [];
     const accepted = original.filter(point => point && timeValue(point.at) !== null);
+    const pricePoints = accepted.filter(p => numeric(p.price) && p.price > 0);
     const values = accepted.flatMap(point => [point.price, point.vwap].filter(value => numeric(value) && value > 0));
-    if (!values.length) return null;
+    if (!values.length || !pricePoints.length) return null;
     const times = accepted.map(point => timeValue(point.at));
     const start = Math.min(...times), end = Math.max(...times);
     let low = Math.min(...values), high = Math.max(...values);
-    const pad = Math.max((high - low) * .2, high * .0005, .001);
+    const pad = Math.max((high - low) * .18, high * .001, .01);
     low -= pad; high += pad;
-    const x = at => end === start ? 240 : 8 + (timeValue(at) - start) / (end - start) * 464;
-    const y = value => 8 + (high - value) / (high - low) * 94;
+    const x = at => end === start ? 200 : 8 + (timeValue(at) - start) / (end - start) * 390;
+    const y = value => 12 + (high - value) / (high - low) * 88;
     const segments = key => {
       const result = []; let current = [], previous = null;
       for (const point of original) {
@@ -96,8 +97,28 @@
       if (current.length) result.push(current);
       return result;
     };
-    return {price:segments("price"), vwap:segments("vwap"), start:accepted[0].at,
-      end:accepted[accepted.length - 1].at, count:accepted.filter(point => numeric(point.price)).length};
+    const maxP = Math.max(...pricePoints.map(p => p.price));
+    const minP = Math.min(...pricePoints.map(p => p.price));
+    const lastP = pricePoints[pricePoints.length - 1].price;
+    const firstP = pricePoints[0].price;
+    const midP = (maxP + minP) / 2;
+    return {
+      price: segments("price"),
+      vwap: segments("vwap"),
+      start: accepted[0].at,
+      end: accepted[accepted.length - 1].at,
+      count: pricePoints.length,
+      maxPrice: maxP,
+      minPrice: minP,
+      midPrice: midP,
+      lastPrice: lastP,
+      firstPrice: firstP,
+      maxY: y(maxP),
+      minY: y(minP),
+      midY: y(midP),
+      lastX: x(pricePoints[pricePoints.length - 1].at),
+      lastY: y(lastP),
+    };
   }
 
   function createController({fetcher, draw, connection, schedule = setTimeout, cancel = clearTimeout}) {
@@ -274,17 +295,53 @@
       icon.append(svgEl("path", {d:"M1 20h54M6 15l10-7 10 6 12-10 12 5"}));
       placeholder.append(icon, el("span", "", emptyText)); container.replaceChildren(placeholder); return;
     }
-    const svg = svgEl("svg", {viewBox:"0 0 480 130", class:"stock-chart", role:"img", "aria-label":`${model.count} 个行情采样点，实线为价格，虚线为 VWAP`});
-    for (const y of [18,60,102]) svg.append(svgEl("line", {x1:8,x2:472,y1:y,y2:y,class:"chart-grid"}));
+    const svg = svgEl("svg", {viewBox:"0 0 480 136", class:"stock-chart", role:"img", "aria-label":`${model.count} 个行情采样点，实线为价格，虚线为 VWAP`});
+    
+    // 3 条水平价格标尺线与刻度标签 (最高/中间/最低)
+    const ticks = [
+      [model.maxY, `高 ¥${model.maxPrice.toFixed(2)}`, "#ff334b"],
+      [model.midY, `中 ¥${model.midPrice.toFixed(2)}`, "#8ba2be"],
+      [model.minY, `低 ¥${model.minPrice.toFixed(2)}`, "#00d072"]
+    ];
+    for (const [yPos, label, color] of ticks) {
+      const line = svgEl("line", {x1:8, x2:400, y1:yPos, y2:yPos, class:"chart-grid"});
+      line.setAttribute("stroke-dasharray", "3 3");
+      const text = svgEl("text", {x:406, y:Math.min(108, Math.max(16, yPos + 4)), class:"chart-scale-label"});
+      text.textContent = label;
+      text.setAttribute("fill", color);
+      svg.append(line, text);
+    }
+
+    // 绘制 VWAP 虚线与分时价格实线
     for (const [key,cls] of [["vwap","vwap-path"],["price","price-path"]]) {
       for (const segment of model[key]) {
         if (segment.length === 1) svg.append(svgEl("circle", {cx:segment[0][0],cy:segment[0][1],r:key === "price" ? 3.2 : 2, class:key === "price" ? "chart-point" : "vwap-path"}));
         else svg.append(svgEl("path", {d:segment.map((point,index) => `${index ? "L" : "M"}${point[0].toFixed(2)},${point[1].toFixed(2)}`).join(" "),class:cls}));
       }
     }
-    const start = svgEl("text", {x:8,y:124,class:"chart-label"}); start.textContent = clock(model.start);
-    const end = svgEl("text", {x:472,y:124,class:"chart-label","text-anchor":"end"}); end.textContent = clock(model.end);
-    svg.append(start,end); container.replaceChildren(svg);
+
+    // 最新成交点光标 (发光脉冲)
+    if (numeric(model.lastX) && numeric(model.lastY)) {
+      const pulseBg = svgEl("circle", {cx:model.lastX, cy:model.lastY, r:6, class:"chart-last-pulse"});
+      const pulse = svgEl("circle", {cx:model.lastX, cy:model.lastY, r:3.5, class:"chart-last-point"});
+      const pColor = model.lastPrice >= model.firstPrice ? "#ff334b" : "#00d072";
+      pulseBg.setAttribute("fill", pColor);
+      pulseBg.setAttribute("opacity", "0.4");
+      pulse.setAttribute("fill", pColor);
+      svg.append(pulseBg, pulse);
+    }
+
+    // 底部时间刻度
+    const start = svgEl("text", {x:8, y:128, class:"chart-label"});
+    start.textContent = clock(model.start);
+    const midTime = timeValue(model.start) + (timeValue(model.end) - timeValue(model.start)) / 2;
+    const mid = svgEl("text", {x:204, y:128, class:"chart-label", "text-anchor":"middle"});
+    mid.textContent = clock(midTime);
+    const end = svgEl("text", {x:400, y:128, class:"chart-label", "text-anchor":"end"});
+    end.textContent = clock(model.end);
+    
+    svg.append(start, mid, end);
+    container.replaceChildren(svg);
   }
 
   function createCard() {
