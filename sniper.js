@@ -174,7 +174,8 @@
       requests.add(requestController);
       const timeout = schedule(() => requestController.abort(), 8000);
       try {
-        const response = await fetcher(path, {cache:"no-store", signal:requestController.signal});
+        const cacheBustUrl = path + (path.includes("?") ? "&" : "?") + "_t=" + Date.now();
+        const response = await fetcher(cacheBustUrl, {cache:"no-store", signal:requestController.signal});
         if (!response.ok) throw Error("feed_unavailable");
         const data = await response.json();
         return expectedGeneration === generation ? data : null;
