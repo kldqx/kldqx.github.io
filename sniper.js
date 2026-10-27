@@ -386,22 +386,15 @@
     const name = el("h3", "stock-name"), code = el("div", "stock-code"), status = el("span", "stock-status");
     const auctionBadge = el("span", "auction-confirmed-badge", "👑 竞价金标"); auctionBadge.hidden = true;
     identity.append(name, auctionBadge, code); heading.append(identity, status);
-    const auctionBanner = el("div", "auction-confirmed-banner"); auctionBanner.hidden = true;
-    // 跌破分时均线破位警报横幅
-    const defenseAlarmBanner = el("div", "defense-alarm-banner");
-    defenseAlarmBanner.hidden = true;
 
-    // 实时监控动态确立与颜色变幻提示条
-    const convictionBanner = el("div", "live-conviction-banner");
-    const convictionTop = el("div", "conviction-banner-top");
+    // 一体化固定高度监控状态栏 (槽位锁定 28px，绝不参差)
+    const unifiedBanner = el("div", "unified-status-banner");
     const radarDot = el("span", "live-radar-dot");
-    const convictionTitle = el("strong", "conviction-title");
-    const convictionScore = el("span", "conviction-score-badge");
-    const convictionPulse = el("span", "conviction-pulse-clock");
-    convictionTop.append(radarDot, convictionTitle, convictionScore, convictionPulse);
-    const convictionDesc = el("p", "conviction-desc");
-    convictionBanner.append(convictionTop, convictionDesc);
-    convictionBanner.hidden = true;
+    const bannerTitle = el("strong", "banner-title");
+    const bannerScore = el("span", "banner-score-badge");
+    const bannerDesc = el("span", "banner-desc");
+    const bannerPulse = el("span", "banner-pulse-clock");
+    unifiedBanner.append(radarDot, bannerTitle, bannerScore, bannerDesc, bannerPulse);
 
     const priceRow = el("div", "price-row"), price = el("strong", "stock-price"), change = el("span", "stock-change");
     priceRow.append(price,change,el("span", "price-label", "最新价 / 元"));
@@ -432,8 +425,8 @@
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
-    card.append(heading,defenseAlarmBanner,auctionBanner,convictionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,defenseAlarmBanner,name,code,status,auctionBadge,auctionBanner,convictionBanner,convictionTitle,convictionScore,convictionDesc,convictionPulse,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(heading,unifiedBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,unifiedBanner,radarDot,bannerTitle,bannerScore,bannerDesc,bannerPulse,name,code,status,auctionBadge,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -520,60 +513,65 @@
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
     const isAuctionConfirmed = Boolean(stock.auction_confirmed || (Array.isArray(stock.events) && stock.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED")));
     ref.auctionBadge.hidden = !isAuctionConfirmed;
-    ref.auctionBanner.hidden = !isAuctionConfirmed;
-    // 盘中动态确立度与变色机制
+
+    // 一体化固定高度状态横幅与变色机制 (永不参差，槽位严格固定)
+    const isDefenseAlarm = Boolean(stock.defense_alarm);
     const cTier = stock.conviction_tier || "observing";
     const cScore = stock.conviction_score;
-    const cTitle = stock.conviction_title;
-    const cDesc = stock.conviction_desc;
     const cPulseAt = stock.live_pulse_at || stock.source_data_at;
 
-    ref.card.classList.remove("conviction-surge", "conviction-strengthening", "conviction-weakening", "conviction-auction");
-    if (cTier === "surge") {
+    ref.card.classList.remove("conviction-surge", "conviction-strengthening", "conviction-weakening", "conviction-auction", "defense-alarm-active", "auction-confirmed");
+    if (isDefenseAlarm) {
+      ref.card.classList.add("defense-alarm-active");
+      playLethalDefenseAlarm(stock.code);
+    } else if (cTier === "surge") {
       ref.card.classList.add("conviction-surge");
     } else if (cTier === "strengthening") {
       ref.card.classList.add("conviction-strengthening");
-    } else if (cTier === "weakening") {
-      ref.card.classList.add("conviction-weakening");
     } else if (isAuctionConfirmed) {
       ref.card.classList.add("conviction-auction");
+    } else if (cTier === "weakening") {
+      ref.card.classList.add("conviction-weakening");
     }
 
-    if (cTitle && cDesc) {
-      ref.convictionBanner.hidden = false;
-      ref.convictionBanner.className = `live-conviction-banner tier-${cTier}`;
-      ref.convictionTitle.textContent = cTitle;
-      ref.convictionScore.textContent = numeric(cScore) ? `肯定度 ${cScore}分` : "";
-      ref.convictionScore.className = `conviction-score-badge score-${cTier}`;
-      ref.convictionDesc.textContent = cDesc;
-      ref.convictionPulse.textContent = cPulseAt ? `${clock(cPulseAt)} 持续盯盘中` : "实时毫秒级监控中";
-    } else {
-      ref.convictionBanner.hidden = true;
-    }
-
-
-
-    // 跌破 VWAP 均线刺耳声光警报
-    const isDefenseAlarm = Boolean(stock.defense_alarm);
-    ref.defenseAlarmBanner.hidden = !isDefenseAlarm;
+    ref.unifiedBanner.className = `unified-status-banner tier-${cTier} ${isDefenseAlarm ? "alarm" : ""}`;
     if (isDefenseAlarm) {
-      ref.card.classList.add("defense-alarm-active");
-      ref.defenseAlarmBanner.replaceChildren(
-        el("span", "defense-alarm-icon", "🚨"),
-        document.createTextNode(stock.defense_alarm_desc || "跌破分时均线防守线，主力放弃承接！禁止抄底！")
-      );
-      playLethalDefenseAlarm(stock.code);
+      ref.bannerTitle.textContent = "🚨 弱势防守";
+      ref.bannerScore.textContent = `${cScore || 5}分`;
+      ref.bannerScore.className = "banner-score-badge score-weakening";
+      ref.bannerDesc.textContent = `偏离均线 ${percent(stock.vwap_bias_pct)}，警惕诱多！`;
+    } else if (isAuctionConfirmed && cTier === "surge") {
+      ref.bannerTitle.textContent = "👑 金标 · 🔥 极度确立";
+      ref.bannerScore.textContent = `${cScore || 100}分`;
+      ref.bannerScore.className = "banner-score-badge score-surge";
+      ref.bannerDesc.textContent = `主力强力封板 (${percent(stock.change_pct)})`;
+    } else if (isAuctionConfirmed) {
+      ref.bannerTitle.textContent = "👑 竞价金标确立";
+      ref.bannerScore.textContent = `${cScore || 70}分`;
+      ref.bannerScore.className = "banner-score-badge score-auction_lead";
+      ref.bannerDesc.textContent = "高开放量达标，均线上方蓄势";
+    } else if (cTier === "strengthening") {
+      ref.bannerTitle.textContent = "⚡ 持续走强 · 均线共振";
+      ref.bannerScore.textContent = `${cScore || 75}分`;
+      ref.bannerScore.className = "banner-score-badge score-strengthening";
+      ref.bannerDesc.textContent = `站稳分时均线 (${percent(stock.vwap_bias_pct)})`;
+    } else if (cTier === "weakening") {
+      ref.bannerTitle.textContent = "⚠️ 弱势防守";
+      ref.bannerScore.textContent = `${cScore || 20}分`;
+      ref.bannerScore.className = "banner-score-badge score-weakening";
+      ref.bannerDesc.textContent = `跌破分时均线 (${percent(stock.vwap_bias_pct)})`;
     } else {
-      ref.card.classList.remove("defense-alarm-active");
+      ref.bannerTitle.textContent = "👀 动态监控";
+      ref.bannerScore.textContent = `${cScore || 40}分`;
+      ref.bannerScore.className = "banner-score-badge score-observing";
+      ref.bannerDesc.textContent = `均线附近蓄势洗盘，高频监控中`;
     }
+    ref.bannerPulse.textContent = cPulseAt ? clock(cPulseAt) : "";
 
     if (isAuctionConfirmed) {
-      ref.card.classList.add("auction-confirmed");
       ref.status.textContent = cTier === "surge" ? "🔥 极度确立 · 涨停加速" : "⚡ 竞价达标 · 确定性高";
       ref.status.className = `stock-status positive ${cTier === "surge" ? "surge-status" : "gold-status"}`;
-      ref.auctionBanner.textContent = "👑 集合竞价确立金标：高开幅度与主力承接符合预期，具备确定性！";
     } else {
-      ref.card.classList.remove("auction-confirmed");
       ref.status.textContent = cTier === "strengthening" ? "⚡ 盘中走强 · 均线共振" : statusText;
       ref.status.className = `stock-status ${cTier === "strengthening" ? "purple" : statusTone}`;
     }
@@ -600,7 +598,9 @@
     ref.chips.className = `condition-list ${original ? "reviewed-conditions" : ""}`;
     ref.chips.replaceChildren(...chipData.map(([label,value]) => {const chip=el("div","condition-chip");chip.append(el("span","",label),el("strong","",value));return chip;}));
     ref.hypothesis.hidden = !original;
-    ref.hypothesis.textContent = original && typeof stock.hypothesis === "string" ? stock.hypothesis : "";
+    const hText = original && typeof stock.hypothesis === "string" ? stock.hypothesis : "";
+    ref.hypothesis.textContent = hText;
+    ref.hypothesis.title = hText;
     const intraday = feed.mode === "live" && ["accepted","expired"].includes(stock.review_status) && stock.intraday_review?.status === stock.review_status ? stock.intraday_review : null;
     const originalStatus = {expired_unverified:"原竞价已到期 · 未核实",expired:"原竞价已到期",invalidated:"原竞价条件已失效",withdrawn:"原竞价判断已撤回"}[stock.original_condition_status];
     const reviewLabel = feed.mode === "live" ? (stock.review_status === "expired" ? "盘中复核已到期 · QA 已审历史" : stock.review_status === "accepted" && !intraday ? "盘中复核结果待同步" : REVIEW_LABELS[stock.review_status]) : null;

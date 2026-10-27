@@ -687,3 +687,324 @@ footer{padding:14px 0;margin-top:2px;font-size:10px}
   background: rgba(239, 68, 68, 0.15);
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
 }
+
+/* === 单行一体化状态条 (固定 28px，确保 6 卡片整齐划一) === */
+.unified-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  min-height: 28px;
+  max-height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
+  margin: 6px 0 8px;
+  box-sizing: border-box;
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+.unified-status-banner .live-radar-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  background: #38bdf8;
+}
+.unified-status-banner .banner-title {
+  font-weight: 750;
+  font-size: 11.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.unified-status-banner .banner-score-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+}
+.unified-status-banner .banner-desc {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.9;
+}
+.unified-status-banner .banner-pulse-clock {
+  font-size: 10px;
+  font-family: Consolas, monospace;
+  opacity: 0.6;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* 统一状态条各状态色彩 */
+.unified-status-banner.tier-surge {
+  background: linear-gradient(90deg, rgba(255, 42, 75, 0.22) 0%, rgba(255, 100, 0, 0.12) 100%);
+  border: 1px solid rgba(255, 42, 75, 0.55);
+  color: #ffb3be;
+}
+.unified-status-banner.tier-surge .live-radar-dot { background: #ff334b; }
+.unified-status-banner.tier-surge .live-radar-dot::after { border-color: #ff334b; }
+.unified-status-banner.tier-surge .banner-title { color: #ffffff; text-shadow: 0 0 8px #ff334b; }
+.unified-status-banner.tier-surge .banner-score-badge { background: #ff334b; color: #fff; }
+
+.unified-status-banner.tier-strengthening {
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.2) 0%, rgba(6, 182, 212, 0.1) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  color: #c4b5fd;
+}
+.unified-status-banner.tier-strengthening .live-radar-dot { background: #8b5cf6; }
+.unified-status-banner.tier-strengthening .live-radar-dot::after { border-color: #8b5cf6; }
+.unified-status-banner.tier-strengthening .banner-title { color: #ffffff; text-shadow: 0 0 8px #8b5cf6; }
+.unified-status-banner.tier-strengthening .banner-score-badge { background: #8b5cf6; color: #fff; }
+
+.unified-status-banner.tier-auction_lead {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #fde68a;
+}
+.unified-status-banner.tier-auction_lead .live-radar-dot { background: #f59e0b; }
+.unified-status-banner.tier-auction_lead .live-radar-dot::after { border-color: #f59e0b; }
+.unified-status-banner.tier-auction_lead .banner-title { color: #ffffff; text-shadow: 0 0 8px #f59e0b; }
+.unified-status-banner.tier-auction_lead .banner-score-badge { background: #f59e0b; color: #fff; }
+
+.unified-status-banner.tier-weakening {
+  background: rgba(0, 208, 114, 0.08);
+  border: 1px solid rgba(0, 208, 114, 0.35);
+  color: #a7f3d0;
+}
+.unified-status-banner.tier-weakening .live-radar-dot { background: #00d072; }
+.unified-status-banner.tier-weakening .live-radar-dot::after { border-color: #00d072; }
+.unified-status-banner.tier-weakening .banner-title { color: #ffffff; }
+.unified-status-banner.tier-weakening .banner-score-badge { background: #00d072; color: #fff; }
+
+.unified-status-banner.alarm {
+  background: linear-gradient(90deg, rgba(127, 29, 29, 0.8) 0%, rgba(153, 27, 27, 0.5) 100%);
+  border: 1.5px solid #ef4444 !important;
+  color: #fecaca !important;
+  animation: banner-panic-pulse 1.2s infinite alternate ease-in-out;
+}
+.unified-status-banner.alarm .live-radar-dot { background: #ef4444; }
+.unified-status-banner.alarm .live-radar-dot::after { border-color: #ef4444; }
+.unified-status-banner.alarm .banner-title { color: #ffffff; text-shadow: 0 0 8px #ef4444; }
+
+/* 假说单行截断省略号 */
+.hypothesis-preview {
+  margin: 0 0 6px !important;
+  font-size: 11px !important;
+  line-height: 20px !important;
+  height: 20px !important;
+  color: #c3d4e7 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  padding: 0 8px !important;
+  border-radius: 4px !important;
+  border-left: 2px solid #3b82f6 !important;
+  box-sizing: border-box !important;
+}
+
+/* ============================================================== */
+/* 大屏 100vh 一屏全景自适应布局 (无垂直滚动条，6 卡片严整 3x2 网格) */
+/* ============================================================== */
+@media (min-width: 1024px) {
+  html, body {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow-y: hidden !important;
+  }
+  .page-shell {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+  .page-header {
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+    flex: 0 0 auto !important;
+    border-bottom: 1px solid rgba(38, 52, 72, 0.5) !important;
+  }
+  .overview {
+    padding: 6px 0 4px !important;
+    flex: 0 0 auto !important;
+  }
+  .overview-heading {
+    gap: 8px !important;
+  }
+  .eyebrow {
+    margin-bottom: 2px !important;
+    font-size: 11px !important;
+  }
+  h1 {
+    font-size: 20px !important;
+    gap: 8px !important;
+  }
+  .mode-label {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+  .session-strip {
+    margin-top: 6px !important;
+    padding: 5px 14px !important;
+    border-radius: 8px !important;
+    flex: 0 0 auto !important;
+  }
+  .session-stat {
+    padding-right: 16px !important;
+    margin-right: 16px !important;
+  }
+  .session-stat > span {
+    font-size: 11px !important;
+  }
+  .session-stat strong {
+    font-size: 17px !important;
+  }
+  .time-stat strong {
+    font-size: 16px !important;
+  }
+  .phase-track {
+    margin-top: 5px !important;
+    gap: 8px !important;
+    flex: 0 0 auto !important;
+  }
+  .section-heading {
+    margin: 4px 0 6px !important;
+    flex: 0 0 auto !important;
+  }
+  .section-heading h2 {
+    font-size: 14px !important;
+  }
+
+  /* 核心：6 张卡片 3x2 撑满剩余空间，上下对齐，高度绝对一致 */
+  .stock-grid {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-rows: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    align-items: stretch !important;
+    margin-bottom: 2px !important;
+  }
+  .stock-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 8px 12px 0 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+  }
+  .card-heading {
+    flex: 0 0 auto !important;
+  }
+  .stock-name {
+    font-size: 16px !important;
+  }
+  .stock-code {
+    font-size: 10px !important;
+  }
+  .stock-status {
+    font-size: 10px !important;
+    padding: 2px 5px !important;
+  }
+  .unified-status-banner {
+    flex: 0 0 26px !important;
+    height: 26px !important;
+    min-height: 26px !important;
+    max-height: 26px !important;
+    margin: 4px 0 4px !important;
+    padding: 0 6px !important;
+    font-size: 11px !important;
+  }
+  .hypothesis-preview {
+    flex: 0 0 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+    font-size: 10px !important;
+    padding: 0 6px !important;
+    margin: 0 0 3px !important;
+  }
+  .price-row {
+    flex: 0 0 auto !important;
+    margin: 2px 0 4px !important;
+    gap: 8px !important;
+  }
+  .stock-price {
+    font-size: 24px !important;
+    line-height: 1 !important;
+  }
+  .stock-change {
+    font-size: 13px !important;
+  }
+  .metric-grid {
+    flex: 0 0 auto !important;
+    gap: 4px !important;
+  }
+  .metric span {
+    font-size: 10px !important;
+    margin-bottom: 1px !important;
+  }
+  .metric strong {
+    font-size: 13px !important;
+  }
+  .chart-area {
+    flex: 1 1 auto !important;
+    min-height: 35px !important;
+    height: auto !important;
+    margin: 3px 0 2px !important;
+  }
+  .stock-chart {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .chart-legend {
+    flex: 0 0 auto !important;
+    margin-bottom: 2px !important;
+    font-size: 9px !important;
+  }
+  .conditions {
+    flex: 0 0 auto !important;
+    padding: 3px 0 !important;
+  }
+  .condition-list {
+    gap: 3px !important;
+  }
+  .condition-chip {
+    padding: 2px 4px !important;
+    font-size: 10px !important;
+  }
+  .manual-controls {
+    flex: 0 0 auto !important;
+    padding: 2px 0 3px !important;
+  }
+  .card-details {
+    flex: 0 0 auto !important;
+  }
+  .card-details summary {
+    padding: 3px 0 !important;
+    font-size: 11px !important;
+  }
+  footer {
+    display: none !important;
+  }
+}
