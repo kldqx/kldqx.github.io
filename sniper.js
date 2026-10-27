@@ -534,37 +534,70 @@
       ref.card.classList.add("conviction-weakening");
     }
 
-    ref.unifiedBanner.className = `unified-status-banner tier-${cTier} ${isDefenseAlarm ? "alarm" : ""}`;
-    if (isDefenseAlarm) {
-      ref.bannerTitle.textContent = "🚨 弱势防守";
-      ref.bannerScore.textContent = `${cScore || 5}分`;
+    const verdict = stock.auction_verdict;
+    const isVetoed = (verdict === "AUCTION_VETOED");
+    const isGold = (verdict === "AUCTION_ENTRY_CONFIRMED" || isAuctionConfirmed);
+
+    if (isVetoed) {
+      ref.card.classList.add("auction-vetoed-card");
+      if (ref.entryButton) {
+        ref.entryButton.disabled = true;
+        ref.entryButton.title = "竞价不及预期，守门人已锁死买点，严禁盲目追高";
+      }
+      ref.unifiedBanner.className = "unified-status-banner tier-weakening alarm";
+      ref.bannerTitle.textContent = "🚫 竞价否决";
+      ref.bannerScore.textContent = "0分";
       ref.bannerScore.className = "banner-score-badge score-weakening";
-      ref.bannerDesc.textContent = `偏离均线 ${percent(stock.vwap_bias_pct)}，警惕诱多！`;
-    } else if (isAuctionConfirmed && cTier === "surge") {
-      ref.bannerTitle.textContent = "👑 金标 · 🔥 极度确立";
-      ref.bannerScore.textContent = `${cScore || 100}分`;
-      ref.bannerScore.className = "banner-score-badge score-surge";
-      ref.bannerDesc.textContent = `主力强力封板 (${percent(stock.change_pct)})`;
-    } else if (isAuctionConfirmed) {
-      ref.bannerTitle.textContent = "👑 竞价金标确立";
-      ref.bannerScore.textContent = `${cScore || 70}分`;
-      ref.bannerScore.className = "banner-score-badge score-auction_lead";
-      ref.bannerDesc.textContent = "高开放量达标，均线上方蓄势";
-    } else if (cTier === "strengthening") {
-      ref.bannerTitle.textContent = "⚡ 持续走强 · 均线共振";
-      ref.bannerScore.textContent = `${cScore || 75}分`;
-      ref.bannerScore.className = "banner-score-badge score-strengthening";
-      ref.bannerDesc.textContent = `站稳分时均线 (${percent(stock.vwap_bias_pct)})`;
-    } else if (cTier === "weakening") {
-      ref.bannerTitle.textContent = "⚠️ 弱势防守";
-      ref.bannerScore.textContent = `${cScore || 20}分`;
-      ref.bannerScore.className = "banner-score-badge score-weakening";
-      ref.bannerDesc.textContent = `跌破分时均线 (${percent(stock.vwap_bias_pct)})`;
+      ref.bannerDesc.textContent = stock.auction_reason || "竞价低开/缩量不及预期，当日放弃追高";
     } else {
-      ref.bannerTitle.textContent = "👀 动态监控";
-      ref.bannerScore.textContent = `${cScore || 40}分`;
-      ref.bannerScore.className = "banner-score-badge score-observing";
-      ref.bannerDesc.textContent = `均线附近蓄势洗盘，高频监控中`;
+      ref.card.classList.remove("auction-vetoed-card");
+      if (ref.entryButton) {
+        ref.entryButton.disabled = false;
+        ref.entryButton.title = "";
+      }
+      ref.unifiedBanner.className = `unified-status-banner tier-${cTier} ${isDefenseAlarm ? "alarm" : ""}`;
+      
+      if (isDefenseAlarm) {
+        ref.bannerTitle.textContent = "🚨 弱势防守";
+        ref.bannerScore.textContent = `${cScore || 5}分`;
+        ref.bannerScore.className = "banner-score-badge score-weakening";
+        ref.bannerDesc.textContent = `偏离均线 ${percent(stock.vwap_bias_pct)}，警惕诱多！`;
+      } else if (isGold && cTier === "surge") {
+        ref.bannerTitle.textContent = "👑 金标 · 🔥 极度确立";
+        ref.bannerScore.textContent = `${cScore || 100}分`;
+        ref.bannerScore.className = "banner-score-badge score-surge";
+        ref.bannerDesc.textContent = `主力强力封板 (${percent(stock.change_pct)})`;
+      } else if (isGold) {
+        ref.bannerTitle.textContent = "👑 竞价金标";
+        ref.bannerScore.textContent = `${cScore || 85}分`;
+        ref.bannerScore.className = "banner-score-badge score-auction_lead";
+        ref.bannerDesc.textContent = `真金白银超预期抢筹，均线上方蓄势`;
+      } else if (verdict === "WASH_STANDBY") {
+        ref.bannerTitle.textContent = "⏳ 反抽观察";
+        ref.bannerScore.textContent = `${cScore || 60}分`;
+        ref.bannerScore.className = "banner-score-badge score-auction_lead";
+        ref.bannerDesc.textContent = stock.auction_reason || "高开量能稍逊，观察09:30-10:00回踩承接";
+      } else if (cTier === "surge") {
+        ref.bannerTitle.textContent = "🔥 盘中爆发";
+        ref.bannerScore.textContent = `${cScore || 90}分`;
+        ref.bannerScore.className = "banner-score-badge score-surge";
+        ref.bannerDesc.textContent = `放量突破，主力买盘强劲 (${percent(stock.change_pct)})`;
+      } else if (cTier === "strengthening") {
+        ref.bannerTitle.textContent = "⚡ 持续走强";
+        ref.bannerScore.textContent = `${cScore || 75}分`;
+        ref.bannerScore.className = "banner-score-badge score-strengthening";
+        ref.bannerDesc.textContent = `均线共振良好，分时稳步抬升`;
+      } else if (cTier === "weakening") {
+        ref.bannerTitle.textContent = "🛡️ 偏弱防守";
+        ref.bannerScore.textContent = `${cScore || 30}分`;
+        ref.bannerScore.className = "banner-score-badge score-weakening";
+        ref.bannerDesc.textContent = `反抽乏力，注意防守回踩`;
+      } else {
+        ref.bannerTitle.textContent = "👀 假说蓄势";
+        ref.bannerScore.textContent = `${cScore || 50}分`;
+        ref.bannerScore.className = "banner-score-badge score-observing";
+        ref.bannerDesc.textContent = `分时震荡整固，等待放量确认`;
+      }
     }
     ref.bannerPulse.textContent = cPulseAt ? clock(cPulseAt) : "";
 
