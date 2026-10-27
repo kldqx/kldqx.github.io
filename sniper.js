@@ -572,7 +572,7 @@
       ref.status.textContent = cTier === "surge" ? "🔥 极度确立 · 涨停加速" : "⚡ 竞价达标 · 确定性高";
       ref.status.className = `stock-status positive ${cTier === "surge" ? "surge-status" : "gold-status"}`;
       ref.auctionBanner.textContent = "👑 集合竞价确立金标：高开幅度与主力承接符合预期，具备确定性！";
-    } else if (!isAuctionRejected) {
+    } else {
       ref.card.classList.remove("auction-confirmed");
       ref.status.textContent = cTier === "strengthening" ? "⚡ 盘中走强 · 均线共振" : statusText;
       ref.status.className = `stock-status ${cTier === "strengthening" ? "purple" : statusTone}`;
