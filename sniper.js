@@ -384,9 +384,6 @@
     const auctionBadge = el("span", "auction-confirmed-badge", "👑 竞价金标"); auctionBadge.hidden = true;
     identity.append(name, auctionBadge, code); heading.append(identity, status);
     const auctionBanner = el("div", "auction-confirmed-banner"); auctionBanner.hidden = true;
-    // 09:25:01 竞价不及格硬核熔断作废印章
-    const rejectedStamp = el("div", "auction-rejected-stamp");
-    rejectedStamp.hidden = true;
     // 跌破分时均线破位警报横幅
     const defenseAlarmBanner = el("div", "defense-alarm-banner");
     defenseAlarmBanner.hidden = true;
@@ -432,8 +429,8 @@
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
-    card.append(rejectedStamp,heading,defenseAlarmBanner,auctionBanner,convictionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,rejectedStamp,defenseAlarmBanner,name,code,status,auctionBadge,auctionBanner,convictionBanner,convictionTitle,convictionScore,convictionDesc,convictionPulse,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(heading,defenseAlarmBanner,auctionBanner,convictionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,defenseAlarmBanner,name,code,status,auctionBadge,auctionBanner,convictionBanner,convictionTitle,convictionScore,convictionDesc,convictionPulse,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -551,18 +548,7 @@
       ref.convictionBanner.hidden = true;
     }
 
-    // 09:25:01 竞价不及格硬核熔断作废印章
-    const isAuctionRejected = Boolean(stock.auction_rejected);
-    ref.rejectedStamp.hidden = !isAuctionRejected;
-    if (isAuctionRejected) {
-      ref.card.classList.add("auction-rejected");
-      ref.rejectedStamp.textContent = stock.rejection_stamp || "🚫 竞价不达标 · 强制熔断作废（禁止买入）";
-      ref.entryButton.disabled = true;
-      ref.status.textContent = "🚫 竞价不符 · 已熔断";
-      ref.status.className = "stock-status negative";
-    } else {
-      ref.card.classList.remove("auction-rejected");
-    }
+
 
     // 跌破 VWAP 均线刺耳声光警报
     const isDefenseAlarm = Boolean(stock.defense_alarm);
@@ -941,12 +927,7 @@
           ? (b.price - b.entry_price) / b.entry_price : -Infinity;
         return bPnl - aPnl;
       }
-      // 09:25 竞价作废的标的统统垫底（排到最后）
-      const aRejected = a.auction_rejected ? 1 : 0;
-      const bRejected = b.auction_rejected ? 1 : 0;
-      if (aRejected !== bRejected) return aRejected - bRejected;
-
-      // 其次按肯定度/走强综合评分降序
+      // 按肯定度/走强综合评分动态降序（下午拉起即时动态跃升）
       const scoreA = numeric(a.conviction_score) ? a.conviction_score : ((a.auction_confirmed ? 60 : 30) + (numeric(a.change_pct) ? a.change_pct : 0));
       const scoreB = numeric(b.conviction_score) ? b.conviction_score : ((b.auction_confirmed ? 60 : 30) + (numeric(b.change_pct) ? b.change_pct : 0));
       if (scoreA !== scoreB) return scoreB - scoreA;
@@ -961,9 +942,6 @@
     const surgeCount = stocks.filter(s => s.conviction_tier === "surge" || s.conviction_tier === "strengthening").length;
     const surgeCountEl = byId("surge-confirmed-count");
     if (surgeCountEl) surgeCountEl.textContent = String(surgeCount);
-    const rejectedCount = stocks.filter(s => s.auction_rejected).length;
-    const rejectedCountEl = byId("rejected-count");
-    if (rejectedCountEl) rejectedCountEl.textContent = String(rejectedCount);
     for (const stock of sortedStocks) {
       let ref=cards.get(stock.code);
       if(!ref){ref=createCard();cards.set(stock.code,ref);}
