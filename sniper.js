@@ -351,6 +351,18 @@
     const auctionBadge = el("span", "auction-confirmed-badge", "👑 竞价金标"); auctionBadge.hidden = true;
     identity.append(name, auctionBadge, code); heading.append(identity, status);
     const auctionBanner = el("div", "auction-confirmed-banner"); auctionBanner.hidden = true;
+    // 实时监控动态确立与颜色变幻提示条
+    const convictionBanner = el("div", "live-conviction-banner");
+    const convictionTop = el("div", "conviction-banner-top");
+    const radarDot = el("span", "live-radar-dot");
+    const convictionTitle = el("strong", "conviction-title");
+    const convictionScore = el("span", "conviction-score-badge");
+    const convictionPulse = el("span", "conviction-pulse-clock");
+    convictionTop.append(radarDot, convictionTitle, convictionScore, convictionPulse);
+    const convictionDesc = el("p", "conviction-desc");
+    convictionBanner.append(convictionTop, convictionDesc);
+    convictionBanner.hidden = true;
+
     const priceRow = el("div", "price-row"), price = el("strong", "stock-price"), change = el("span", "stock-change");
     priceRow.append(price,change,el("span", "price-label", "最新价 / 元"));
     const metrics = el("div", "metric-grid");
@@ -380,8 +392,8 @@
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
-    card.append(heading,auctionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,name,code,status,auctionBadge,auctionBanner,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(heading,auctionBanner,convictionBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,name,code,status,auctionBadge,auctionBanner,convictionBanner,convictionTitle,convictionScore,convictionDesc,convictionPulse,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -469,15 +481,45 @@
     const isAuctionConfirmed = Boolean(stock.auction_confirmed || (Array.isArray(stock.events) && stock.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED")));
     ref.auctionBadge.hidden = !isAuctionConfirmed;
     ref.auctionBanner.hidden = !isAuctionConfirmed;
+    // 盘中动态确立度与变色机制
+    const cTier = stock.conviction_tier || "observing";
+    const cScore = stock.conviction_score;
+    const cTitle = stock.conviction_title;
+    const cDesc = stock.conviction_desc;
+    const cPulseAt = stock.live_pulse_at || stock.source_data_at;
+
+    ref.card.classList.remove("conviction-surge", "conviction-strengthening", "conviction-weakening", "conviction-auction");
+    if (cTier === "surge") {
+      ref.card.classList.add("conviction-surge");
+    } else if (cTier === "strengthening") {
+      ref.card.classList.add("conviction-strengthening");
+    } else if (cTier === "weakening") {
+      ref.card.classList.add("conviction-weakening");
+    } else if (isAuctionConfirmed) {
+      ref.card.classList.add("conviction-auction");
+    }
+
+    if (cTitle && cDesc) {
+      ref.convictionBanner.hidden = false;
+      ref.convictionBanner.className = `live-conviction-banner tier-${cTier}`;
+      ref.convictionTitle.textContent = cTitle;
+      ref.convictionScore.textContent = numeric(cScore) ? `肯定度 ${cScore}分` : "";
+      ref.convictionScore.className = `conviction-score-badge score-${cTier}`;
+      ref.convictionDesc.textContent = cDesc;
+      ref.convictionPulse.textContent = cPulseAt ? `${clock(cPulseAt)} 持续盯盘中` : "实时毫秒级监控中";
+    } else {
+      ref.convictionBanner.hidden = true;
+    }
+
     if (isAuctionConfirmed) {
       ref.card.classList.add("auction-confirmed");
-      ref.status.textContent = "⚡ 竞价达标 · 确定性高";
-      ref.status.className = "stock-status positive gold-status";
+      ref.status.textContent = cTier === "surge" ? "🔥 极度确立 · 涨停加速" : "⚡ 竞价达标 · 确定性高";
+      ref.status.className = `stock-status positive ${cTier === "surge" ? "surge-status" : "gold-status"}`;
       ref.auctionBanner.textContent = "👑 集合竞价确立金标：高开幅度与主力承接符合预期，具备确定性！";
     } else {
       ref.card.classList.remove("auction-confirmed");
-      ref.status.textContent = statusText;
-      ref.status.className = `stock-status ${statusTone}`;
+      ref.status.textContent = cTier === "strengthening" ? "⚡ 盘中走强 · 均线共振" : statusText;
+      ref.status.className = `stock-status ${cTier === "strengthening" ? "purple" : statusTone}`;
     }
     // J5: 价格闪烁 — 价格上涨闪红，下跌闪绿
     const curPrice = numeric(stock.price) ? stock.price : null;
@@ -831,6 +873,10 @@
           ? (b.price - b.entry_price) / b.entry_price : -Infinity;
         return bPnl - aPnl;
       }
+      // 优先持仓，其次按肯定度/走强综合评分降序
+      const scoreA = numeric(a.conviction_score) ? a.conviction_score : ((a.auction_confirmed ? 60 : 30) + (numeric(a.change_pct) ? a.change_pct : 0));
+      const scoreB = numeric(b.conviction_score) ? b.conviction_score : ((b.auction_confirmed ? 60 : 30) + (numeric(b.change_pct) ? b.change_pct : 0));
+      if (scoreA !== scoreB) return scoreB - scoreA;
       const aConfirmed = (a.auction_confirmed || (Array.isArray(a.events) && a.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))) ? 1 : 0;
       const bConfirmed = (b.auction_confirmed || (Array.isArray(b.events) && b.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))) ? 1 : 0;
       if (aConfirmed !== bConfirmed) return bConfirmed - aConfirmed;
@@ -839,6 +885,9 @@
     const confirmedCount = stocks.filter(s => s.auction_confirmed || (Array.isArray(s.events) && s.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))).length;
     const auctionCountEl = byId("auction-confirmed-count");
     if (auctionCountEl) auctionCountEl.textContent = String(confirmedCount);
+    const surgeCount = stocks.filter(s => s.conviction_tier === "surge" || s.conviction_tier === "strengthening").length;
+    const surgeCountEl = byId("surge-confirmed-count");
+    if (surgeCountEl) surgeCountEl.textContent = String(surgeCount);
     for (const stock of sortedStocks) {
       let ref=cards.get(stock.code);
       if(!ref){ref=createCard();cards.set(stock.code,ref);}

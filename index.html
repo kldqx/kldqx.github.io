@@ -6,10 +6,10 @@
   <meta name="color-scheme" content="dark">
   <title>A股资金监控台</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./sniper.css?v=20261027_1038">
-  <link rel="stylesheet" href="./l2_orderbook.css?v=20261027_1038">
-  <script src="./l2_orderbook.js?v=20261027_1038" defer></script>
-  <script src="./sniper.js?v=20261027_1038" defer></script>
+  <link rel="stylesheet" href="./sniper.css?v=20261027_1046">
+  <link rel="stylesheet" href="./l2_orderbook.css?v=20261027_1046">
+  <script src="./l2_orderbook.js?v=20261027_1046" defer></script>
+  <script src="./sniper.js?v=20261027_1046" defer></script>
 </head>
 <body data-signal-boundary="not_a_trading_signal">
   <div class="page-shell">
@@ -36,6 +36,7 @@
           <div class="session-stat"><span>持仓中</span><strong id="holding-count">—</strong><small>只</small></div>
           <div class="session-stat"><span>持仓浮盈亏</span><strong id="pnl-summary">—</strong></div>
           <div class="session-stat gold-stat"><span>竞价金标</span><strong id="auction-confirmed-count" class="gold-text">—</strong><small>只</small></div>
+          <div class="session-stat surge-stat"><span>走强确立</span><strong id="surge-confirmed-count" class="surge-text">—</strong><small>只</small></div>
           <div class="session-stat"><span>条件触发</span><strong id="event-count">—</strong><small>条</small></div>
           <div class="session-stat"><button id="export-holdings-btn" class="export-btn" type="button" title="导出持仓报告 (JSON)">📥 导出持仓</button></div>
           <div class="session-stat time-stat"><span>最新行情时点</span><strong id="quote-time">—</strong></div>

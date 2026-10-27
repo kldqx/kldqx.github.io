@@ -444,3 +444,179 @@ footer{padding:14px 0;margin-top:2px;font-size:10px}
   50% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.85); transform: scale(1.03); }
   100% { box-shadow: 0 0 6px rgba(245, 158, 11, 0.4); }
 }
+
+/* === 实时监控动态确立与颜色变幻体系 === */
+
+/* 1. 极度确立 (🔥 主力爆发 / 触及涨停) */
+.stock-card.conviction-surge {
+  border: 2px solid #ff2a4b !important;
+  border-top: 5px solid #ff0055 !important;
+  background: radial-gradient(ellipse at top right, rgba(255, 42, 75, 0.16), transparent 75%), #131d2b !important;
+  box-shadow: 0 0 32px rgba(255, 42, 75, 0.38), inset 0 0 16px rgba(255, 42, 75, 0.1) !important;
+  animation: surge-card-glow 3s infinite alternate ease-in-out;
+}
+
+@keyframes surge-card-glow {
+  0% { box-shadow: 0 0 20px rgba(255, 42, 75, 0.3); }
+  100% { box-shadow: 0 0 38px rgba(255, 0, 85, 0.55), inset 0 0 20px rgba(255, 42, 75, 0.15); }
+}
+
+/* 2. 盘中持续走强 (⚡ 均线多头共振 / 量价齐升) */
+.stock-card.conviction-strengthening {
+  border: 2px solid #8b5cf6 !important;
+  border-top: 5px solid #06b6d4 !important;
+  background: radial-gradient(ellipse at top right, rgba(139, 92, 246, 0.15), transparent 75%), #131d2b !important;
+  box-shadow: 0 0 26px rgba(139, 92, 246, 0.32), inset 0 0 14px rgba(6, 182, 212, 0.08) !important;
+  animation: strength-card-glow 3s infinite alternate ease-in-out;
+}
+
+@keyframes strength-card-glow {
+  0% { box-shadow: 0 0 18px rgba(139, 92, 246, 0.25); }
+  100% { box-shadow: 0 0 32px rgba(6, 182, 212, 0.45); }
+}
+
+/* 3. 竞价金标确立 (👑 竞价符合) */
+.stock-card.conviction-auction {
+  border: 2px solid #f59e0b !important;
+  border-top: 4px solid #f59e0b !important;
+  background: radial-gradient(ellipse at top right, rgba(245, 158, 11, 0.12), transparent 75%), #131d2b !important;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.32) !important;
+}
+
+/* 4. 破位弱化 (⚠️ 跌破均线防守) */
+.stock-card.conviction-weakening {
+  border: 1px solid rgba(0, 208, 114, 0.4) !important;
+  border-top: 4px solid #00d072 !important;
+  opacity: 0.88;
+}
+
+/* 实时监控动态确立提示条 */
+.live-conviction-banner {
+  margin: 6px 0 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 1.4;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.conviction-banner-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 心跳雷达波纹动效 */
+.live-radar-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.live-radar-dot::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  animation: radar-ripple 1.6s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes radar-ripple {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* 各等级颜色 */
+.live-conviction-banner.tier-surge {
+  background: linear-gradient(135deg, rgba(255, 42, 75, 0.18) 0%, rgba(255, 100, 0, 0.1) 100%);
+  border: 1px solid rgba(255, 42, 75, 0.5);
+  color: #ffb3be;
+}
+.live-conviction-banner.tier-surge .live-radar-dot { background: #ff334b; }
+.live-conviction-banner.tier-surge .live-radar-dot::after { border: 2px solid #ff334b; }
+.live-conviction-banner.tier-surge .conviction-title { color: #ffffff; text-shadow: 0 0 8px #ff334b; }
+
+.live-conviction-banner.tier-strengthening {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.18) 0%, rgba(6, 182, 212, 0.1) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  color: #c4b5fd;
+}
+.live-conviction-banner.tier-strengthening .live-radar-dot { background: #8b5cf6; }
+.live-conviction-banner.tier-strengthening .live-radar-dot::after { border: 2px solid #8b5cf6; }
+.live-conviction-banner.tier-strengthening .conviction-title { color: #ffffff; text-shadow: 0 0 8px #8b5cf6; }
+
+.live-conviction-banner.tier-auction_lead {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.1) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #fde68a;
+}
+.live-conviction-banner.tier-auction_lead .live-radar-dot { background: #f59e0b; }
+.live-conviction-banner.tier-auction_lead .live-radar-dot::after { border: 2px solid #f59e0b; }
+.live-conviction-banner.tier-auction_lead .conviction-title { color: #ffffff; text-shadow: 0 0 8px #f59e0b; }
+
+.live-conviction-banner.tier-weakening {
+  background: rgba(0, 208, 114, 0.08);
+  border: 1px solid rgba(0, 208, 114, 0.35);
+  color: #a7f3d0;
+}
+.live-conviction-banner.tier-weakening .live-radar-dot { background: #00d072; }
+.live-conviction-banner.tier-weakening .live-radar-dot::after { border: 2px solid #00d072; }
+.live-conviction-banner.tier-weakening .conviction-title { color: #ffffff; }
+
+.live-conviction-banner.tier-observing {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+.live-conviction-banner.tier-observing .live-radar-dot { background: #38bdf8; }
+.live-conviction-banner.tier-observing .live-radar-dot::after { border: 2px solid #38bdf8; }
+.live-conviction-banner.tier-observing .conviction-title { color: #e2e8f0; }
+
+.conviction-score-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.conviction-score-badge.score-surge { background: #ff334b; color: #ffffff; }
+.conviction-score-badge.score-strengthening { background: #8b5cf6; color: #ffffff; }
+.conviction-score-badge.score-auction_lead { background: #f59e0b; color: #ffffff; }
+.conviction-score-badge.score-weakening { background: #00d072; color: #ffffff; }
+.conviction-score-badge.score-observing { background: rgba(255, 255, 255, 0.15); color: #cbd5e1; }
+
+.conviction-pulse-clock {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: auto;
+  font-family: Consolas, monospace;
+}
+
+.conviction-desc {
+  margin: 0;
+  font-size: 11px;
+  opacity: 0.95;
+  line-height: 1.35;
+}
+
+.surge-stat strong, .surge-text {
+  color: #ff334b !important;
+  text-shadow: 0 0 10px rgba(255, 51, 75, 0.5);
+}
+.stock-status.surge-status {
+  background: rgba(255, 51, 75, 0.22) !important;
+  color: #ff334b !important;
+  border: 1px solid rgba(255, 51, 75, 0.6) !important;
+  font-weight: 750 !important;
+}
