@@ -862,9 +862,10 @@
   function draw(feed, requestedMode) {
     const mode = feed?.mode || requestedMode || displayedMode;
     displayedMode = mode;
-    byId("live-mode").className = `mode-button ${mode === "live" ? "selected" : ""}`;
-    byId("demo-mode").className = `mode-button ${mode === "demo" ? "selected demo-selected" : ""}`;
-    byId("live-mode").setAttribute("aria-pressed",String(mode === "live"));byId("demo-mode").setAttribute("aria-pressed",String(mode === "demo"));
+    const liveBtn = byId("live-mode");
+    const demoBtn = byId("demo-mode");
+    if (liveBtn) { liveBtn.className = `mode-button ${mode === "live" ? "selected" : ""}`; liveBtn.setAttribute("aria-pressed",String(mode === "live")); }
+    if (demoBtn) { demoBtn.className = `mode-button ${mode === "demo" ? "selected demo-selected" : ""}`; demoBtn.setAttribute("aria-pressed",String(mode === "demo")); }
     byId("mode-label").textContent = mode === "demo" ? "离线演练" : "当前监控";byId("mode-label").className = `mode-label ${mode === "demo" ? "demo" : ""}`;
     byId("refresh-button").title = mode === "demo" ? "重新播放演练" : "刷新当前监控";byId("refresh-button").setAttribute("aria-label",byId("refresh-button").title);
     if (!feed) {
@@ -973,7 +974,8 @@
 
   const controller=createController({fetcher:(...args)=>fetch(...args),draw,connection:setConnection});
   byId("live-mode").addEventListener("click",()=>controller.select("live"));
-  byId("demo-mode").addEventListener("click",()=>controller.select("demo"));
+  const demoBtnInit = byId("demo-mode");
+  if (demoBtnInit) demoBtnInit.addEventListener("click",()=>controller.select("demo"));
   byId("refresh-button").addEventListener("click",()=>controller.refresh());
 
   // K2: 一键展开/折叠全部详情
