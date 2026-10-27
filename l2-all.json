@@ -1,1 +1,1 @@
-{"schema": "l2-feed/v1", "signal_boundary": "not_a_trading_signal", "source_label": "TDX_L2_SIMULATED", "subscriptions": [], "snapshots": {}, "generated_at": "2026-10-27T03:16:27.814601+00:00"}
+{"schema": "l2-feed/v1", "signal_boundary": "not_a_trading_signal", "source_label": "TDX_L2_SIMULATED", "subscriptions": [], "snapshots": {}, "generated_at": "2026-10-27T03:16:30.059234+00:00"}
