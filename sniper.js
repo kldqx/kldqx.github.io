@@ -315,9 +315,12 @@
   let displayedMode = "live", lastRun = null;
 
   function setConnection(kind, message) {
-    byId("connection-dot").className = `connection-dot ${kind}`;
-    byId("connection-text").textContent = message;
-    byId("footer-status").textContent = message;
+    const dot = byId("connection-dot");
+    if (dot) dot.className = `connection-dot ${kind}`;
+    const txt = byId("connection-text");
+    if (txt) txt.textContent = message;
+    const footer = byId("footer-status");
+    if (footer) footer.textContent = message;
   }
 
   function drawChart(container, points, emptyText = "等待首个行情采样") {
