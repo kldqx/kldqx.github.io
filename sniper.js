@@ -428,7 +428,7 @@
     entryButton.type=exitButton.type="button";manualMessage.hidden=true;manualMessage.setAttribute("role","status");
     manualControls.append(manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage);
     const details = el("details", "card-details"), summary = el("summary", "", "观察要点与记录"), content = el("div", "detail-content");
-    details.open = true;
+    details.open = false;
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
@@ -980,7 +980,7 @@
 
   const toggleAllBtn = byId("toggle-all-details");
   if (toggleAllBtn) {
-    toggleAllBtn.textContent = "折叠全部";
+    toggleAllBtn.textContent = "展开全部";
     toggleAllBtn.addEventListener("click", () => {
       const details = document.querySelectorAll(".card-details");
       const anyClosed = Array.from(details).some(d => !d.open);
