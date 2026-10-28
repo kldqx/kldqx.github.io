@@ -994,6 +994,8 @@
           stock.price = quote.price;
           stock.change_pct = quote.changePct;
           stock.turnover_yi = quote.turnoverYi;
+          stock.vwap_deviation_pct = numeric(stock.price) && stock.price > 0 && numeric(stock.vwap) && stock.vwap > 0
+            ? (stock.price / stock.vwap - 1) * 100 : null;
 
           if (ref) {
             ref.price.textContent = numberText(quote.price);
@@ -1002,6 +1004,9 @@
             ref.change.className = `stock-change ${tone(quote.changePct)}`;
             if (ref.metricRefs && ref.metricRefs[0]) {
               ref.metricRefs[0].replaceChildren(document.createTextNode(numberText(quote.turnoverYi)), el("small", "", "亿"));
+            }
+            if (ref.metricRefs && ref.metricRefs[2]) {
+              ref.metricRefs[2].textContent = percent(stock.vwap_deviation_pct);
             }
             if (ref.quoteAt && quote.sourceDataAt) {
               ref.quoteAt.textContent = `行情 ${clock(quote.sourceDataAt)}`;
@@ -1098,6 +1103,8 @@
           if (numeric(cached.changePct)) stock.change_pct = cached.changePct;
           if (numeric(cached.turnoverYi)) stock.turnover_yi = cached.turnoverYi;
           if (cached.sourceDataAt) stock.source_data_at = cached.sourceDataAt;
+          stock.vwap_deviation_pct = numeric(stock.price) && stock.price > 0 && numeric(stock.vwap) && stock.vwap > 0
+            ? (stock.price / stock.vwap - 1) * 100 : null;
         }
       }
     }
