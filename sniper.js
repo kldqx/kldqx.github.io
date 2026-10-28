@@ -880,10 +880,12 @@
 
   
   // ---------------------------------------------------------------------------
-  // 方案 A: 实时行情直通引擎（毫秒级同步本地与公网行情，彻底消除 40s 延迟）
+  // 方案 A: 实时行情直通引擎（权威缓存 + 单调时钟，防止旧静态快照反向冲刷）
   // ---------------------------------------------------------------------------
   let pulseTimer = null;
   let pulseInFlight = false;
+  const realtimeQuoteCache = new Map(); // code -> latest quote data
+  let maxSeenQuoteTimeMs = 0; // 单调递增时间戳，绝对禁止时间倒退跳动
 
   function toTencentSymbol(code) {
     if (!code) return "";
@@ -975,8 +977,13 @@
         if (!stock) continue;
         const ref = cards.get(stock.code);
 
+        // 写入权威缓存
+        realtimeQuoteCache.set(stock.code, quote);
+
         if (quote.sourceDataAt) {
-          if (!latestIso || quote.sourceDataAt > latestIso) {
+          const qMs = timeValue(quote.sourceDataAt) || 0;
+          if (qMs >= maxSeenQuoteTimeMs) {
+            maxSeenQuoteTimeMs = qMs;
             latestIso = quote.sourceDataAt;
           }
           stock.source_data_at = quote.sourceDataAt;
@@ -1080,6 +1087,20 @@
       l2Containers.clear(); updateL2SectionVisibility();
     }
     const stocks = feed.stocks;
+    // 权威保护：将最新的直通行情合并进 feed.stocks，绝对禁止旧文件倒退覆盖
+    for (const stock of stocks) {
+      const cached = realtimeQuoteCache.get(stock.code);
+      if (cached) {
+        const cTime = timeValue(cached.sourceDataAt) || 0;
+        const sTime = timeValue(stock.source_data_at) || 0;
+        if (cTime >= sTime) {
+          if (numeric(cached.price) && cached.price > 0) stock.price = cached.price;
+          if (numeric(cached.changePct)) stock.change_pct = cached.changePct;
+          if (numeric(cached.turnoverYi)) stock.turnover_yi = cached.turnoverYi;
+          if (cached.sourceDataAt) stock.source_data_at = cached.sourceDataAt;
+        }
+      }
+    }
     lastStocksData = stocks; // L4: store for export
     const handoff = mode === "live" ? feed.handoff : null;
     const handoffMessage = HANDOFF_LABELS[handoff?.status];
@@ -1105,7 +1126,11 @@
     }
     byId("event-count").textContent=String(stocks.reduce((count,stock)=>count+(Array.isArray(stock.events)?stock.events.length:0),0));
     const latest = stocks.map(stock=>stock.source_data_at).filter(value=>timeValue(value)!==null).sort((a,b)=>timeValue(a)-timeValue(b)).pop();
-    byId("quote-time").textContent=clock(latest);
+    const lMs = timeValue(latest) || 0;
+    if (lMs >= maxSeenQuoteTimeMs) {
+      maxSeenQuoteTimeMs = lMs;
+      byId("quote-time").textContent = clock(latest);
+    }
     byId("source-label").textContent=feed.source_label || (mode === "demo" ? "生成的演练行情" : "腾讯一级行情");
     byId("seed-date").textContent=handoff ? `研究 ${handoff.research_date || "—"} · 观察 ${handoff.target_trade_date || "—"}` : feed.seed_date ? `观察名单 · ${feed.seed_date}` : "";
     const phaseDescription = PHASE_LABELS[feed.phase] || (feed.status === "waiting" ? "等待观察窗口" : "跟踪价格、成交额与 VWAP 的变化。");
