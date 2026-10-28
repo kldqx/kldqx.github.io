@@ -921,28 +921,9 @@
         isoTime = `${timeStr.slice(0,4)}-${timeStr.slice(4,6)}-${timeStr.slice(6,8)}T${timeStr.slice(8,10)}:${timeStr.slice(10,12)}:${timeStr.slice(12,14)}+08:00`;
       }
 
-      const bids = [];
-      for (let i = 0; i < 5; i++) {
-        const p = parseFloat(parts[9 + i * 2]) || 0;
-        const v = parseInt(parts[10 + i * 2], 10) || 0;
-        if (p > 0 || v > 0) bids.push({ price: p, volume: v, orders: null });
-      }
-
-      const asks = [];
-      for (let i = 0; i < 5; i++) {
-        const p = parseFloat(parts[19 + i * 2]) || 0;
-        const v = parseInt(parts[20 + i * 2], 10) || 0;
-        if (p > 0 || v > 0) asks.push({ price: p, volume: v, orders: null });
-      }
-
-      const bidVol = bids.reduce((acc, b) => acc + (b.volume || 0), 0);
-      const askVol = asks.reduce((acc, a) => acc + (a.volume || 0), 0);
-      const imb = (bidVol + askVol > 0) ? (bidVol - askVol) / (bidVol + askVol) : 0;
-      const spread = (asks.length && bids.length) ? Math.max(0, asks[0].price - bids[0].price) : 0;
-
       result[sym] = {
         price, prevClose, openP, volHand, turnoverYi, changePct,
-        sourceDataAt: isoTime, bids, asks, spread, imbalance: imb
+        sourceDataAt: isoTime
       };
     }
     return result;
@@ -1032,21 +1013,6 @@
           }
         }
 
-        if (l2Monitor) {
-          const ob = l2Monitor.getOrderbook(stock.code);
-          if (ob) {
-            ob.update({
-              code: stock.code,
-              sequence: Date.now(),
-              metrics: {
-                spread: quote.spread,
-                order_book_imbalance: quote.imbalance,
-              },
-              bids: quote.bids,
-              asks: quote.asks,
-            });
-          }
-        }
       }
 
       if (latestIso) {
