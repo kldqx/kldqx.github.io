@@ -157,6 +157,12 @@
 }
 .l2-ob-summary span { white-space: nowrap; }
 
+.l2-card-container .l2-ob-summary,
+.l2-card-container .l2-ob-trades,
+.l2-card-container .l2-ob-capflow {
+  display: none;
+}
+
 /* Trade tape */
 .l2-ob-trades {
   margin-top: 8px;
