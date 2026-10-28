@@ -174,7 +174,11 @@
       requests.add(requestController);
       const timeout = schedule(() => requestController.abort(), 8000);
       try {
-        const cacheBustUrl = path + (path.includes("?") ? "&" : "?") + "_t=" + Date.now();
+        const publicFeed = typeof location !== "undefined"
+          && ["kldqx.me", "www.kldqx.me", "kldqx.github.io"].includes(location.hostname)
+          && ["./sniper-feed.json", "./intraday-review-feed.json"].includes(path);
+        const endpoint = publicFeed ? "https://raw.githubusercontent.com/kldqx/kldqx.github.io/main/" + path.slice(2) : path;
+        const cacheBustUrl = endpoint + (endpoint.includes("?") ? "&" : "?") + "_t=" + Date.now();
         const response = await fetcher(cacheBustUrl, {cache:"no-store", signal:requestController.signal});
         if (!response.ok) throw Error("feed_unavailable");
         const data = await response.json();
