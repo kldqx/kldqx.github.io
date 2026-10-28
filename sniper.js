@@ -119,11 +119,11 @@
           current = []; previous = null; continue;
         }
         const at = timeValue(point.at);
-        if (!numeric(point[key]) || point[key] <= 0 || (previous !== null && at < previous)) {
+        if (previous !== null && at < previous) {
           if (current.length) result.push(current);
           current = []; previous = at;
-          if (!numeric(point[key]) || point[key] <= 0) continue;
         }
+        if (!numeric(point[key]) || point[key] <= 0) continue;
         current.push([x(point.at), y(point[key])]); previous = at;
       }
       if (current.length) result.push(current);
