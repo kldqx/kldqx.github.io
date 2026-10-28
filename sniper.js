@@ -858,17 +858,10 @@
   function syncL2Subscription(ref, stock) {
     if (!l2Monitor) return;
     const code = stock.code;
-    if (stock.manual_label === "bought") {
-      // 进场：显示 L2 容器并订阅
-      ref.l2Container.hidden = false;
-      l2Containers.set(code, ref.l2Container);
-      l2Monitor.register(code, ref.l2Container, { showDepthChart: true });
-    } else {
-      // 出场或未进场：隐藏并退订
-      ref.l2Container.hidden = true;
-      l2Containers.delete(code);
-      l2Monitor.unregister(code);
-    }
+    // 方案A/L2常驻：当前有效观察标的默认激活并显示 L2 盘口
+    ref.l2Container.hidden = false;
+    l2Containers.set(code, ref.l2Container);
+    l2Monitor.register(code, ref.l2Container, { showDepthChart: true });
     // 更新 L2 区块可见性
     updateL2SectionVisibility();
   }
@@ -876,13 +869,190 @@
   function updateL2SectionVisibility() {
     const section = byId("l2-section");
     if (!section) return;
-    const hasHeld = l2Containers.size > 0;
-    section.hidden = !hasHeld;
+    // 只要有观察卡片，常驻显示底部 L2 盘口监控区
+    section.hidden = false;
   }
 
   function stopL2Monitor() {
     if (l2Monitor) { l2Monitor.stop(); l2Monitor = null; }
     if (l2OverviewPanel) { l2OverviewPanel.stop(); l2OverviewPanel = null; }
+  }
+
+  
+  // ---------------------------------------------------------------------------
+  // 方案 A: 实时行情直通引擎（毫秒级同步本地与公网行情，彻底消除 40s 延迟）
+  // ---------------------------------------------------------------------------
+  let pulseTimer = null;
+  let pulseInFlight = false;
+
+  function toTencentSymbol(code) {
+    if (!code) return "";
+    const clean = code.replace(".", "").toLowerCase();
+    if (clean.startsWith("sh") || clean.startsWith("sz") || clean.startsWith("bj")) return clean;
+    if (code.startsWith("SH.")) return "sh" + code.slice(3);
+    if (code.startsWith("SZ.")) return "sz" + code.slice(3);
+    if (code.startsWith("BJ.")) return "bj" + code.slice(3);
+    return code.toLowerCase();
+  }
+
+  function parseTencentQuoteText(rawText) {
+    const result = {};
+    const lines = rawText.trim().split(';\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      const m = trimmed.match(/^v_([a-z0-9]+)="([^"]*)"/);
+      if (!m) continue;
+      const sym = m[1];
+      const parts = m[2].split('~');
+      if (parts.length < 35) continue;
+      const price = parseFloat(parts[3]) || 0;
+      const prevClose = parseFloat(parts[4]) || 0;
+      const openP = parseFloat(parts[5]) || 0;
+      const volHand = parseFloat(parts[6]) || 0;
+      const turnoverWan = (parts.length > 37 && parts[37]) ? parseFloat(parts[37]) : 0;
+      const turnoverYi = Math.round((turnoverWan / 10000) * 10000) / 10000;
+      const changePct = parts[32] ? parseFloat(parts[32]) : 0;
+      const timeStr = parts[30]; // YYYYMMDDHHMMSS
+      let isoTime = null;
+      if (timeStr && timeStr.length === 14) {
+        isoTime = `${timeStr.slice(0,4)}-${timeStr.slice(4,6)}-${timeStr.slice(6,8)}T${timeStr.slice(8,10)}:${timeStr.slice(10,12)}:${timeStr.slice(12,14)}+08:00`;
+      }
+
+      const bids = [];
+      for (let i = 0; i < 5; i++) {
+        const p = parseFloat(parts[9 + i * 2]) || 0;
+        const v = parseInt(parts[10 + i * 2], 10) || 0;
+        if (p > 0 || v > 0) bids.push({ price: p, volume: v, orders: null });
+      }
+
+      const asks = [];
+      for (let i = 0; i < 5; i++) {
+        const p = parseFloat(parts[19 + i * 2]) || 0;
+        const v = parseInt(parts[20 + i * 2], 10) || 0;
+        if (p > 0 || v > 0) asks.push({ price: p, volume: v, orders: null });
+      }
+
+      const bidVol = bids.reduce((acc, b) => acc + (b.volume || 0), 0);
+      const askVol = asks.reduce((acc, a) => acc + (a.volume || 0), 0);
+      const imb = (bidVol + askVol > 0) ? (bidVol - askVol) / (bidVol + askVol) : 0;
+      const spread = (asks.length && bids.length) ? Math.max(0, asks[0].price - bids[0].price) : 0;
+
+      result[sym] = {
+        price, prevClose, openP, volHand, turnoverYi, changePct,
+        sourceDataAt: isoTime, bids, asks, spread, imbalance: imb
+      };
+    }
+    return result;
+  }
+
+  async function directMarketPulse(stocks) {
+    if (!Array.isArray(stocks) || stocks.length === 0 || pulseInFlight) return;
+    const symbolMap = new Map();
+    const symList = [];
+    for (const stock of stocks) {
+      if (!stock || !stock.code) continue;
+      const sym = toTencentSymbol(stock.code);
+      if (sym) {
+        symList.push(sym);
+        symbolMap.set(sym, stock);
+      }
+    }
+    if (symList.length === 0) return;
+
+    pulseInFlight = true;
+    try {
+      const url = "https://qt.gtimg.cn/q=" + symList.join(",") + "&_t=" + Date.now();
+      const resp = await fetch(url, { cache: "no-store", mode: "cors" });
+      if (!resp.ok) return;
+      const buffer = await resp.arrayBuffer();
+      const rawText = new TextDecoder("gbk").decode(buffer);
+      const parsed = parseTencentQuoteText(rawText);
+
+      let latestIso = null;
+      for (const [sym, quote] of Object.entries(parsed)) {
+        const stock = symbolMap.get(sym);
+        if (!stock) continue;
+        const ref = cards.get(stock.code);
+
+        if (quote.sourceDataAt) {
+          if (!latestIso || quote.sourceDataAt > latestIso) {
+            latestIso = quote.sourceDataAt;
+          }
+          stock.source_data_at = quote.sourceDataAt;
+        }
+
+        if (quote.price > 0) {
+          const oldPrice = stock.price;
+          stock.price = quote.price;
+          stock.change_pct = quote.changePct;
+          stock.turnover_yi = quote.turnoverYi;
+
+          if (ref) {
+            ref.price.textContent = numberText(quote.price);
+            ref.price.className = `stock-price ${tone(quote.changePct)}`;
+            ref.change.textContent = percent(quote.changePct);
+            ref.change.className = `stock-change ${tone(quote.changePct)}`;
+            if (ref.metricRefs && ref.metricRefs[0]) {
+              ref.metricRefs[0].replaceChildren(document.createTextNode(numberText(quote.turnoverYi)), el("small", "", "亿"));
+            }
+            if (ref.quoteAt && quote.sourceDataAt) {
+              ref.quoteAt.textContent = `行情 ${clock(quote.sourceDataAt)}`;
+            }
+
+            if (oldPrice !== null && oldPrice !== undefined && oldPrice !== quote.price) {
+              void ref.price.offsetWidth;
+              ref.price.classList.add(quote.price > oldPrice ? "price-tick-up" : "price-tick-down");
+              setTimeout(() => ref.price.classList.remove("price-tick-up", "price-tick-down"), 500);
+            }
+            ref.prevPrice = quote.price;
+
+            if (Array.isArray(stock.points) && quote.sourceDataAt) {
+              const lastPt = stock.points[stock.points.length - 1];
+              if (!lastPt || lastPt.at !== quote.sourceDataAt) {
+                stock.points.push({ at: quote.sourceDataAt, price: quote.price, vwap: stock.vwap });
+                if (stock.points.length > 300) stock.points.shift();
+                drawChart(ref.chart, stock.points, "实时分时采样中");
+              }
+            }
+
+            updatePnlAndExitSignal(ref, stock);
+          }
+        }
+
+        if (l2Monitor) {
+          const ob = l2Monitor.getOrderbook(stock.code);
+          if (ob) {
+            ob.update({
+              code: stock.code,
+              sequence: Date.now(),
+              metrics: {
+                spread: quote.spread,
+                order_book_imbalance: quote.imbalance,
+              },
+              bids: quote.bids,
+              asks: quote.asks,
+            });
+          }
+        }
+      }
+
+      if (latestIso) {
+        const timeEl = byId("quote-time");
+        if (timeEl) timeEl.textContent = clock(latestIso);
+      }
+    } catch (e) {
+      // 容错降级
+    } finally {
+      pulseInFlight = false;
+    }
+  }
+
+  function triggerDirectMarketPulse(stocks) {
+    if (pulseTimer !== null) clearInterval(pulseTimer);
+    if (!Array.isArray(stocks) || stocks.length === 0) return;
+    directMarketPulse(stocks);
+    pulseTimer = setInterval(() => directMarketPulse(stocks), 1500);
   }
 
   function draw(feed, requestedMode) {
@@ -988,6 +1158,8 @@
       updateCard(ref,stock,feed);
       byId("stock-grid").append(ref.card);
     }
+    // 启动毫秒级实时行情引擎
+    triggerDirectMarketPulse(stocks);
   }
 
   const controller=createController({fetcher:(...args)=>fetch(...args),draw,connection:setConnection});
