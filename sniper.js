@@ -536,20 +536,23 @@
     }
 
     const verdict = stock.auction_verdict;
-    const isVetoed = (verdict === "AUCTION_VETOED");
-    const isGold = (verdict === "AUCTION_ENTRY_CONFIRMED" || isAuctionConfirmed);
+    const isCriticRejected = (stock.critic_verdict === "REJECTED_BY_CRITIC");
+    const isVetoed = (verdict === "AUCTION_VETOED" || isCriticRejected);
+    const isGold = (verdict === "AUCTION_ENTRY_CONFIRMED" || isAuctionConfirmed) && !isCriticRejected;
+
+    const criticDesc = (stock.critic_flaws && stock.critic_flaws.length > 0) ? stock.critic_flaws[0] : (stock.auction_reason || "竞价低开/缩量不及预期");
 
     if (isVetoed) {
       ref.card.classList.add("auction-vetoed-card");
       if (ref.entryButton) {
         ref.entryButton.disabled = true;
-        ref.entryButton.title = "竞价不及预期，守门人已锁死买点，严禁盲目追高";
+        ref.entryButton.title = `挑刺官一票否决 (${stock.critic_score || 0}分): ${criticDesc}`;
       }
       ref.unifiedBanner.className = "unified-status-banner tier-weakening alarm";
-      ref.bannerTitle.textContent = "🚫 竞价否决";
-      ref.bannerScore.textContent = "0分";
+      ref.bannerTitle.textContent = isCriticRejected ? "🚫 挑刺官否决" : "🚫 竞价否决";
+      ref.bannerScore.textContent = `${stock.critic_score ? Math.round(stock.critic_score) : 0}分`;
       ref.bannerScore.className = "banner-score-badge score-weakening";
-      ref.bannerDesc.textContent = stock.auction_reason || "竞价低开/缩量不及预期，当日放弃追高";
+      ref.bannerDesc.textContent = criticDesc;
     } else {
       ref.card.classList.remove("auction-vetoed-card");
       if (ref.entryButton) {
