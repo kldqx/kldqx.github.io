@@ -154,7 +154,7 @@
   }
 
   function createController({fetcher, draw, connection, schedule = setTimeout, cancel = clearTimeout}) {
-    const refreshMs = typeof location !== "undefined" && ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname) ? 1000 : 2000;
+    const refreshMs = 1000;
     let mode = "live", generation = 0, timer = null, reviewTimer = null, demo = null, lastFeed = null;
     let expiryTimer = null;
     let lastQuotes = null, reviewCandidate = null, matchedReview = null, currentScope = null, manualState = null;
