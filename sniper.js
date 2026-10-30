@@ -119,19 +119,14 @@
     const x = at => end === start ? 200 : 8 + (timeValue(at) - start) / (end - start) * 390;
     const y = value => 12 + (high - value) / (high - low) * 88;
     const segments = key => {
-      const result = []; let current = [], previous = null;
-      for (const point of original) {
-        if (!point || timeValue(point.at) === null) {
-          if (current.length) result.push(current);
-          current = []; previous = null; continue;
-        }
-        const at = timeValue(point.at);
-        if (previous !== null && at < previous) {
-          if (current.length) result.push(current);
-          current = []; previous = at;
-        }
+      const result = []; let current = [];
+      // 采样点可能因亚秒级时间戳抖动而乱序，先按时间排序再连线，避免线段被打碎成孤立点
+      const ordered = original
+        .filter(point => point && timeValue(point.at) !== null)
+        .sort((a, b) => timeValue(a.at) - timeValue(b.at));
+      for (const point of ordered) {
         if (!numeric(point[key]) || point[key] <= 0) continue;
-        current.push([x(point.at), y(point[key])]); previous = at;
+        current.push([x(point.at), y(point[key])]);
       }
       if (current.length) result.push(current);
       return result;
