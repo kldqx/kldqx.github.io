@@ -1133,3 +1133,20 @@ footer {
   background: rgba(148, 163, 184, 0.12);
   border-color: rgba(148, 163, 184, 0.4);
 }
+
+/* 竞价裁决条件常显区块 */
+.auction-box{padding:14px 0 16px;border-top:1px solid #2d3d5166}
+.auction-box h3{font-size:14px;font-weight:650;color:#f0d9a8;margin:0 0 10px;letter-spacing:.3px}
+.auction-group{margin:0 0 10px;padding:9px 12px;border-radius:8px;border:1px solid #2d4055;background:#0f1a28}
+.auction-group:last-child{margin-bottom:0}
+.auction-group h4{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.auction-list{margin:0;padding-left:18px}
+.auction-list li{font-size:14px;line-height:1.55;color:#d5e2f2;margin:2px 0;overflow-wrap:anywhere}
+.auction-support{border-left:3px solid var(--green)}
+.auction-support h4{color:var(--green)}
+.auction-invalid{border-left:3px solid var(--red)}
+.auction-invalid h4{color:var(--red)}
+.auction-tightened{border-left:3px solid var(--yellow);background:#ecc77712;border-color:#ecc77733}
+.auction-tightened h4{color:var(--yellow)}
+.auction-tightened .auction-list li{font-size:15px;font-weight:600;color:#ffe9b8}
+@media(max-width:390px){.auction-box h3{font-size:13px}.auction-list li{font-size:13px}.auction-tightened .auction-list li{font-size:14px}}

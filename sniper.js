@@ -410,6 +410,7 @@
     for (const [label,cls] of [["价格",""],["VWAP","vwap-key"]]) {const key = el("span");key.append(el("i",cls),document.createTextNode(label));keys.append(key);}
     const quoteAt = el("span"); legend.append(keys,quoteAt);
     const conditions = el("section", "conditions"), chips = el("div", "condition-list");conditions.append(el("h3","","观察条件"),chips);
+    const auctionBox = el("section", "auction-box"); auctionBox.hidden = true;
     const hypothesis = el("p", "hypothesis-preview"), latest = el("div", "latest-event");
     const reviewState = el("div", "review-state"), reviewStatus = el("span", "review-status"), reviewSummary = el("p", "review-summary"), reviewAlert = el("span", "review-alert");
     reviewState.append(reviewStatus,reviewAlert,reviewSummary);
@@ -429,8 +430,8 @@
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
-    card.append(heading,unifiedBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,unifiedBanner,radarDot,bannerTitle,bannerScore,bannerDesc,bannerPulse,name,code,status,auctionBadge,cycleBadge,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(heading,unifiedBanner,priceRow,metrics,chart,legend,conditions,auctionBox,hypothesis,reviewState,manualControls,latest,l2Container,details);
+    const ref={card,unifiedBanner,radarDot,bannerTitle,bannerScore,bannerDesc,bannerPulse,name,code,status,auctionBadge,cycleBadge,price,change,metricRefs,chart,quoteAt,chips,auctionBox,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,auctionSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -646,10 +647,39 @@
     const target = Array.isArray(benchmark.target_open_pct) && benchmark.target_open_pct.length === 2 && benchmark.target_open_pct.every(numeric)
       ? `${benchmark.target_open_pct[0] > 0 ? "+" : ""}${benchmark.target_open_pct[0]}% ~ ${benchmark.target_open_pct[1] > 0 ? "+" : ""}${benchmark.target_open_pct[1]}%` : "—";
     const reviewed = ["accepted", "approved", "corrected", "accepted_bounded_research_only", "supported_as_conditional_research_hypothesis"].includes(stock.qa_verdict);
-    const chipData = original ? [["原研究审核",reviewed ? "QA 已审" : "QA · " + (stock.qa_verdict || "待确认")],["原结果级别","条件研究"],["原复核截止",deadlineText(original.deadline_at)]]
+    const chipData = original ? [["原研究审核",reviewed ? "QA 已审" : "QA · " + (stock.qa_verdict || "待确认")],["对抗审查",stock.adversarial_verdict || "—"],["原复核截止",deadlineText(original.deadline_at)]]
       : [["高开",target],["成交",numeric(benchmark.min_turnover_yi) ? `≥ ${numberText(benchmark.min_turnover_yi)} 亿` : "—"],["防守",numeric(benchmark.max_vwap_pullback_pct) ? `${benchmark.max_vwap_pullback_pct}%` : "未配置"]];
     ref.chips.className = `condition-list ${original ? "reviewed-conditions" : ""}`;
     ref.chips.replaceChildren(...chipData.map(([label,value]) => {const chip=el("div","condition-chip");chip.append(el("span","",label),el("strong","",value));return chip;}));
+    // 竞价裁决条件常显：支持/失效/对抗收紧，不折叠
+    const auctionSig = original ? JSON.stringify(original) : "";
+    if (auctionSig !== ref.auctionSignature) {
+      ref.auctionSignature = auctionSig;
+      const hasSupport = original && Array.isArray(original.support_conditions) && original.support_conditions.length;
+      if (hasSupport) {
+        const head = el("h3", "", `竞价裁决条件 · ${original.trade_date || "T日"}（截止 ${deadlineText(original.deadline_at)}）`);
+        const support = el("div", "auction-group auction-support");
+        support.append(el("h4", "", "支持条件（满足才考虑进场）"));
+        const sList = el("ul", "auction-list");
+        for (const c of original.support_conditions) sList.append(el("li", "", String(c)));
+        support.append(sList);
+        const invalid = el("div", "auction-group auction-invalid");
+        invalid.append(el("h4", "", "失效条件（任一命中即作废）"));
+        const iList = el("ul", "auction-list");
+        for (const c of (original.invalidation_conditions || [])) iList.append(el("li", "", String(c)));
+        invalid.append(iList);
+        const tight = el("div", "auction-group auction-tightened");
+        tight.append(el("h4", "", "对抗性挑刺收紧（必须同时满足）"));
+        const tList = el("ul", "auction-list");
+        for (const c of (original.adversarial_tightened || [])) tList.append(el("li", "", String(c)));
+        tight.append(tList);
+        ref.auctionBox.replaceChildren(head, support, invalid, tight);
+        ref.auctionBox.hidden = false;
+      } else {
+        ref.auctionBox.replaceChildren();
+        ref.auctionBox.hidden = true;
+      }
+    }
     ref.hypothesis.hidden = !original;
     const hText = original && typeof stock.hypothesis === "string" ? stock.hypothesis : "";
     ref.hypothesis.textContent = hText;
