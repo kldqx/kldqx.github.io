@@ -1093,3 +1093,43 @@ footer {
   opacity: 0.3 !important;
   filter: grayscale(1) !important;
 }
+
+/* 周期位置徽章 (T/T-1/T+1…) */
+.cycle-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+  border: 1px solid transparent;
+}
+.cycle-badge.cycle-pre {
+  color: #7dd3fc;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+.cycle-badge.cycle-t1 {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.45);
+}
+.cycle-badge.cycle-high {
+  color: #fb923c;
+  background: rgba(251, 146, 60, 0.12);
+  border-color: rgba(251, 146, 60, 0.45);
+}
+.cycle-badge.cycle-avoid {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.14);
+  border-color: rgba(248, 113, 113, 0.55);
+}
+.cycle-badge.cycle-observe {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.4);
+}

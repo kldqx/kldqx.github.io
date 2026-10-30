@@ -62,6 +62,13 @@
   const numberText = (value, digits = 2) => numeric(value) ? value.toFixed(digits) : "—";
   const percent = value => numeric(value) ? `${value > 0 ? "+" : ""}${value.toFixed(2)}%` : "—";
   const tone = value => numeric(value) ? value > 0 ? "positive" : value < 0 ? "negative" : "" : "";
+  const cycleClass = (label, rec) => {
+    if (rec === "avoid") return "cycle-avoid";
+    if (rec === "observe_only" || rec === "watch_only") return "cycle-observe";
+    if (label === "T" || label === "T-1" || label === "T-2" || label === "T-3") return "cycle-pre";
+    if (label === "T+1") return "cycle-t1";
+    return "cycle-high";
+  };
   const timeValue = value => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/.test(value) && Number.isFinite(Date.parse(value)) ? Date.parse(value) : null;
   const clock = value => timeValue(value) === null ? "—" : new Intl.DateTimeFormat("zh-CN", {timeZone:"Asia/Shanghai",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date(value));
   const eventLabel = event => EVENT_LABELS[event?.type] || (typeof event?.label === "string" ? event.label : "观察记录");
@@ -386,7 +393,8 @@
     const heading = el("div", "card-heading"), identity = el("div", "stock-identity");
     const name = el("h3", "stock-name"), code = el("div", "stock-code"), status = el("span", "stock-status");
     const auctionBadge = el("span", "auction-confirmed-badge", "👑 竞价金标"); auctionBadge.hidden = true;
-    identity.append(name, auctionBadge, code); heading.append(identity, status);
+    const cycleBadge = el("span", "cycle-badge"); cycleBadge.hidden = true;
+    identity.append(name, auctionBadge, code, cycleBadge); heading.append(identity, status);
 
     // 一体化固定高度监控状态栏 (槽位锁定 28px，绝不参差)
     const unifiedBanner = el("div", "unified-status-banner");
@@ -427,7 +435,7 @@
     const l2Container = el("div", "l2-card-container");
     l2Container.hidden = true;
     card.append(heading,unifiedBanner,priceRow,metrics,chart,legend,conditions,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,unifiedBanner,radarDot,bannerTitle,bannerScore,bannerDesc,bannerPulse,name,code,status,auctionBadge,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    const ref={card,unifiedBanner,radarDot,bannerTitle,bannerScore,bannerDesc,bannerPulse,name,code,status,auctionBadge,cycleBadge,price,change,metricRefs,chart,quoteAt,chips,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -512,6 +520,19 @@
     const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
+    const cp = stock.cycle_position && typeof stock.cycle_position === "object" ? stock.cycle_position : null;
+    const rec = typeof stock.recommendation === "string" ? stock.recommendation : "";
+    if (cp && cp.label) {
+      ref.cycleBadge.hidden = false;
+      const suffix = rec === "avoid" ? " · 回避" : rec === "observe_only" ? " · 仅观察" : rec === "watch_only" ? " · 仅看" : rec === "watch_cautious" ? " · 谨慎" : "";
+      ref.cycleBadge.textContent = `${cp.label}${suffix}`;
+      ref.cycleBadge.title = cp.role || cp.label;
+      ref.cycleBadge.className = `cycle-badge ${cycleClass(cp.label, rec)}`;
+    } else {
+      ref.cycleBadge.hidden = true;
+      ref.cycleBadge.textContent = "";
+      ref.cycleBadge.className = "cycle-badge";
+    }
     const isAuctionConfirmed = Boolean(stock.auction_confirmed || (Array.isArray(stock.events) && stock.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED")));
     ref.auctionBadge.hidden = !isAuctionConfirmed;
 
