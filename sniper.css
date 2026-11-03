@@ -197,34 +197,6 @@ footer{padding:14px 0;margin-top:2px;font-size:10px}
   .time-stat strong{font-size:17px}
 }
 
-/* L2 盘口监控区块 */
-.l2-section{margin-top:16px}
-.l2-section .section-heading{display:flex;justify-content:space-between;align-items:center}
-#l2-status-label{font-size:11px;color:var(--subtle,#6d819b)}
-#l2-status-label.connected{color:var(--green,#73d5ac)}
-#l2-status-label.error{color:var(--yellow,#ecc777)}
-.l2-layout{display:grid;grid-template-columns:280px 1fr;gap:14px;align-items:start}
-.l2-alerts-container{min-width:0}
-.l2-orderbooks-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;min-width:0}
-@media(max-width:900px){.l2-layout{grid-template-columns:1fr}}
-@media(max-width:600px){.l2-orderbooks-container{grid-template-columns:1fr}}
-
-/* L2 mute button */
-.l2-mute-btn {
-  border: 1px solid var(--line, #263448);
-  background: transparent;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 12px;
-  cursor: pointer;
-  line-height: 1;
-}
-.l2-mute-btn:hover { background: rgba(255,255,255,0.05); }
-
-/* G4: L2 overview container */
-#l2-overview-container { margin-bottom: 12px; }
-#l2-overview-container:empty { display: none; }
-
 /* H3: 持仓浮盈亏汇总 */
 #pnl-summary.pnl-up { color: var(--red, #ff8795); }
 #pnl-summary.pnl-down { color: var(--green, #73d5ac); }

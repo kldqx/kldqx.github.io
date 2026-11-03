@@ -2,12 +2,7 @@
 // Display only. signal_boundary=not_a_trading_signal.
 (() => {
   const BOUNDARY = "not_a_trading_signal";
-  // L2 监控状态
-  let l2Monitor = null;
-  let l2AlertsPanel = null;
-  let l2OverviewPanel = null;
   let lastStocksData = []; // L4: latest stocks for export
-  const l2Containers = new Map(); // code -> container element for L2 orderbook
   let audioAlarmEnabled = true;
   const lastAlarmTimeByCode = new Map(); // code -> timestamp
 
@@ -428,10 +423,8 @@
     const details = el("details", "card-details"), summary = el("summary", "", "观察要点与记录"), content = el("div", "detail-content");
     details.open = false;
     const description = el("p"), original = el("div", "source-conditions"), intraday = el("div", "intraday-conditions"), eventList = el("ol", "event-list"); content.append(description,original,intraday,eventList);details.append(summary,content);
-    const l2Container = el("div", "l2-card-container");
-    l2Container.hidden = true;
-    card.append(heading,unifiedBanner,priceRow,metrics,chart,legend,conditions,auctionBox,hypothesis,reviewState,manualControls,latest,l2Container,details);
-    const ref={card,unifiedBanner,radarDot,bannerTitle,bannerScore,bannerDesc,bannerPulse,name,code,status,auctionBadge,cycleBadge,price,change,metricRefs,chart,quoteAt,chips,auctionBox,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,l2Container,details,summary,description,original,intraday,eventList,chartSignature:null,auctionSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
+    card.append(heading,unifiedBanner,priceRow,metrics,chart,legend,conditions,auctionBox,hypothesis,reviewState,manualControls,latest,details);
+    const ref={card,unifiedBanner,radarDot,bannerTitle,bannerScore,bannerDesc,bannerPulse,name,code,status,auctionBadge,cycleBadge,price,change,metricRefs,chart,quoteAt,chips,auctionBox,hypothesis,reviewState,reviewStatus,reviewSummary,reviewAlert,manualControls,manualLabel,pnlEl,exitSignalEl,alertBadge,entryButton,exitButton,manualMessage,latest,details,summary,description,original,intraday,eventList,chartSignature:null,auctionSignature:null,eventSignature:null,conditionSignature:null,reviewSignature:null,manualBusy:false,prevPrice:null,priceAlertPct:null,priceAlertTriggered:false};
     entryButton.addEventListener("click",()=>markManual(ref,"mark_bought"));
     exitButton.addEventListener("click",()=>markManual(ref,"mark_sold"));
     // L3: 价格提醒 — 点击循环切换阈值: 无 → +3% → +5% → +10% → -3% → -5% → 无
@@ -706,8 +699,6 @@
     // H1: 浮动盈亏显示 + H2: 出场信号建议
     updatePnlAndExitSignal(ref, stock);
 
-    // L2 监控同步：进场订阅，出场退订
-    syncL2Subscription(ref, stock);
     ref.entryButton.setAttribute("aria-label",`${stock.name || stock.code}：标记进场（本地观察标签）`);
     ref.exitButton.setAttribute("aria-label",`${stock.name || stock.code}：标记出场并停止监控（本地观察标签）`);
     manualButtons(ref);
@@ -742,54 +733,6 @@
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // L2 监控集成
-  // ---------------------------------------------------------------------------
-  function initL2Monitor() {
-    if (typeof window.L2Monitor === "undefined") return;
-    if (l2Monitor) return;
-    const alertsContainer = byId("l2-alerts-container");
-    const statusLabel = byId("l2-status-label");
-    l2AlertsPanel = new window.L2AlertsPanel(alertsContainer);
-    l2Monitor = new window.L2Monitor({
-      onStatusChange: (status) => {
-        if (statusLabel) {
-          statusLabel.textContent = status.connected
-            ? (status.mode === "sse" ? "L2 实时推送中" : "L2 轮询中")
-            : "L2 未连接";
-          statusLabel.className = status.connected ? "connected" : "error";
-        }
-      },
-      onAlert: (alert) => {
-        if (l2AlertsPanel) {
-          // Normalize backend alert_type to frontend type
-          if (alert && alert.alert_type && !alert.type) alert.type = alert.alert_type;
-          l2AlertsPanel.addAlert(alert);
-        }
-      },
-    });
-    l2Monitor.start();
-
-    // G4: 持仓L2概览面板
-    if (typeof window.L2OverviewPanel !== "undefined") {
-      const overviewContainer = byId("l2-overview-container");
-      if (overviewContainer) {
-        l2OverviewPanel = new window.L2OverviewPanel(overviewContainer, { pollInterval: 3000 });
-        l2OverviewPanel.start();
-      }
-    }
-
-    // Mute/unmute toggle
-    const muteBtn = byId("l2-mute-btn");
-    if (muteBtn && l2AlertsPanel) {
-      muteBtn.addEventListener("click", () => {
-        l2AlertsPanel.options.enableSound = !l2AlertsPanel.options.enableSound;
-        muteBtn.textContent = l2AlertsPanel.options.enableSound ? "🔊" : "🔇";
-        muteBtn.title = l2AlertsPanel.options.enableSound ? "关闭告警音效" : "开启告警音效";
-      });
-    }
-  }
-
   // H1+H2: 浮动盈亏与出场信号建议（观察提示，非交易信号）
   function updatePnlAndExitSignal(ref, stock) {
     const pnlEl = ref.pnlEl, exitEl = ref.exitSignalEl;
@@ -820,20 +763,6 @@
     if (pnlPct <= -5) signals.push("浮亏超5%");
     if (numeric(stock.change_pct) && stock.change_pct <= -5) signals.push("日跌超5%");
     if (pnlPct >= 10) signals.push("浮盈超10%");
-    // L2 主力净流入判断（从 L2 快照获取）
-    if (l2Monitor) {
-      const ob = l2Monitor.getOrderbook(stock.code);
-      if (ob && ob._snapshot) {
-        const cf = ob._snapshot.capital_flow || {};
-        if (typeof cf.main_net === "number" && cf.main_net < 0) {
-          signals.push("主力净流出");
-        }
-        const m = ob._snapshot.metrics || {};
-        if (typeof m.order_book_imbalance === "number" && m.order_book_imbalance < -0.3) {
-          signals.push("卖盘压力大");
-        }
-      }
-    }
 
     if (signals.length > 0) {
       exitEl.hidden = false;
@@ -901,30 +830,6 @@
     }
   }
 
-  function syncL2Subscription(ref, stock) {
-    if (!l2Monitor) return;
-    const code = stock.code;
-    // 方案A/L2常驻：当前有效观察标的默认激活并显示 L2 盘口
-    ref.l2Container.hidden = false;
-    l2Containers.set(code, ref.l2Container);
-    l2Monitor.register(code, ref.l2Container, { showDepthChart: true });
-    // 更新 L2 区块可见性
-    updateL2SectionVisibility();
-  }
-
-  function updateL2SectionVisibility() {
-    const section = byId("l2-section");
-    if (!section) return;
-    // 只要有观察卡片，常驻显示底部 L2 盘口监控区
-    section.hidden = false;
-  }
-
-  function stopL2Monitor() {
-    if (l2Monitor) { l2Monitor.stop(); l2Monitor = null; }
-    if (l2OverviewPanel) { l2OverviewPanel.stop(); l2OverviewPanel = null; }
-  }
-
-  
   // ---------------------------------------------------------------------------
   // 方案 A: 实时行情直通引擎（权威缓存 + 单调时钟，防止旧静态快照反向冲刷）
   // ---------------------------------------------------------------------------
@@ -1099,9 +1004,6 @@
       return;
     }
     if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;
-      // 清理 L2 订阅
-      if (l2Monitor) { for (const code of l2Monitor.getAllCodes()) l2Monitor.unregister(code); }
-      l2Containers.clear(); updateL2SectionVisibility();
     }
     const stocks = feed.stocks;
     // 权威保护：将最新的直通行情合并进 feed.stocks，绝对禁止旧文件倒退覆盖
@@ -1167,8 +1069,7 @@
     }
     byId("stock-grid").className=`stock-grid ${stocks.length === 2 ? "two-cards" : stocks.length === 3 || stocks.length === 6 ? "three-columns" : ""}`;
     const currentCodes=new Set(stocks.map(stock=>stock.code));
-    for (const [code,ref] of cards) if(!currentCodes.has(code)){ref.card.remove();cards.delete(code);
-      if(l2Monitor) l2Monitor.unregister(code); l2Containers.delete(code);}
+    for (const [code,ref] of cards) if(!currentCodes.has(code)){ref.card.remove();cards.delete(code);}
     // K1: 持仓优先排序 — 持仓中的股票排在前面，按浮动盈亏降序
     const sortedStocks = stocks.slice().sort((a, b) => {
       const aHolding = a.manual_label === "bought" ? 1 : 0;
@@ -1280,8 +1181,7 @@
     });
   }
 
-  window.addEventListener("pagehide",()=>{controller.stop();stopL2Monitor();});
-  initL2Monitor();
+  window.addEventListener("pagehide",()=>{controller.stop();});
 
   // J2: 键盘快捷键
   // R = 刷新, M = 静音切换, B = 进场(第一条可进场), S = 出场(第一条持仓中)
@@ -1290,7 +1190,6 @@
     if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable)) return;
     const key = e.key.toLowerCase();
     if (key === "r") { e.preventDefault(); controller.refresh(); return; }
-    if (key === "m") { e.preventDefault(); const mb=byId("l2-mute-btn"); if(mb) mb.click(); return; }
     if (key === "b") {
       e.preventDefault();
       const firstEntry = document.querySelector(".stock-card:not(.exited) .entry-button:not(:disabled)");
