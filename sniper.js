@@ -513,7 +513,7 @@
     const rec = typeof stock.recommendation === "string" ? stock.recommendation : "";
     if (cp && cp.label) {
       ref.cycleBadge.hidden = false;
-      const suffix = rec === "avoid" ? " · 回避" : rec === "observe_only" ? " · 仅观察" : rec === "watch_only" ? " · 仅看" : rec === "watch_cautious" ? " · 谨慎" : "";
+      const suffix = rec === "avoid" ? " · 回避" : rec === "exit" ? " · 出场" : rec === "observe_only" ? " · 仅观察" : rec === "watch_only" ? " · 仅看" : rec === "watch_cautious" ? " · 谨慎" : "";
       ref.cycleBadge.textContent = `${cp.label}${suffix}`;
       ref.cycleBadge.title = cp.role || cp.label;
       ref.cycleBadge.className = `cycle-badge ${cycleClass(cp.label, rec)}`;
@@ -763,6 +763,9 @@
     if (pnlPct <= -5) signals.push("浮亏超5%");
     if (numeric(stock.change_pct) && stock.change_pct <= -5) signals.push("日跌超5%");
     if (pnlPct >= 10) signals.push("浮盈超10%");
+    // T+1 出场规则：只看到 T+1 就出场，T+1 尾盘必须出（参考信号，非交易指令）
+    const cpLabel = stock.cycle_position && typeof stock.cycle_position === "object" ? stock.cycle_position.label : null;
+    if (cpLabel === "T+1") signals.push("T+1 尾盘必须出");
 
     if (signals.length > 0) {
       exitEl.hidden = false;
