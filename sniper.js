@@ -514,9 +514,15 @@
     if (cp && cp.label) {
       ref.cycleBadge.hidden = false;
       const suffix = rec === "avoid" ? " · 回避" : rec === "exit" ? " · 出场" : rec === "observe_only" ? " · 仅观察" : rec === "watch_only" ? " · 仅看" : rec === "watch_cautious" ? " · 谨慎" : "";
-      ref.cycleBadge.textContent = `${cp.label}${suffix}`;
-      ref.cycleBadge.title = cp.role || cp.label;
-      ref.cycleBadge.className = `cycle-badge ${cycleClass(cp.label, rec)}`;
+      let label = cp.label;
+      const targetDate = stock.original_conditions?.trade_date || feed?.target_trade_date;
+      const todayIso = new Date().toISOString().slice(0, 10);
+      if (label === "T-1" && targetDate && (targetDate === todayIso || targetDate <= todayIso)) {
+        label = "T";
+      }
+      ref.cycleBadge.textContent = `${label}${suffix}`;
+      ref.cycleBadge.title = (cp.role || label).replace("T-1", "T");
+      ref.cycleBadge.className = `cycle-badge ${cycleClass(label, rec)}`;
     } else {
       ref.cycleBadge.hidden = true;
       ref.cycleBadge.textContent = "";
@@ -843,12 +849,19 @@
 
   function toTencentSymbol(code) {
     if (!code) return "";
-    const clean = code.replace(".", "").toLowerCase();
+    const trimmed = code.trim();
+    const upper = trimmed.toUpperCase();
+    if (upper.endsWith(".SZ")) return "sz" + upper.split(".")[0];
+    if (upper.endsWith(".SH")) return "sh" + upper.split(".")[0];
+    if (upper.endsWith(".BJ")) return "bj" + upper.split(".")[0];
+    if (upper.startsWith("SZ.")) return "sz" + upper.slice(3);
+    if (upper.startsWith("SH.")) return "sh" + upper.slice(3);
+    if (upper.startsWith("BJ.")) return "bj" + upper.slice(3);
+    const clean = upper.replace(".", "").toLowerCase();
     if (clean.startsWith("sh") || clean.startsWith("sz") || clean.startsWith("bj")) return clean;
-    if (code.startsWith("SH.")) return "sh" + code.slice(3);
-    if (code.startsWith("SZ.")) return "sz" + code.slice(3);
-    if (code.startsWith("BJ.")) return "bj" + code.slice(3);
-    return code.toLowerCase();
+    if (upper.startsWith("60") || upper.startsWith("68")) return "sh" + upper.split(".")[0];
+    if (upper.startsWith("00") || upper.startsWith("30")) return "sz" + upper.split(".")[0];
+    return clean;
   }
 
   function parseTencentQuoteText(rawText) {
