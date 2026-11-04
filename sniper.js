@@ -321,6 +321,92 @@
     if (footer) footer.textContent = message;
   }
 
+  function renderKlineAndEnergy(container, stock) {
+    if (!container) return;
+    if (!stock || !numeric(stock.price)) {
+      const placeholder = el("div", "chart-placeholder");
+      const icon = svgEl("svg", {viewBox:"0 0 56 25", "aria-hidden":"true"});
+      icon.append(svgEl("path", {d:"M1 20h54M6 15l10-7 10 6 12-10 12 5"}));
+      placeholder.append(icon, el("span", "", "等待首个行情采样")); container.replaceChildren(placeholder); return;
+    }
+
+    const price = numeric(stock.price) && stock.price > 0 ? stock.price : 10;
+    const prevClose = numeric(stock.prevClose) && stock.prevClose > 0 ? stock.prevClose : price;
+    const openP = numeric(stock.open) && stock.open > 0 ? stock.open : price;
+    const highP = numeric(stock.high) && stock.high > 0 ? Math.max(stock.high, price, openP) : Math.max(price, openP);
+    const lowP = numeric(stock.low) && stock.low > 0 ? Math.min(stock.low, price, openP) : Math.min(price, openP);
+
+    const outer = numeric(stock.outerHand) ? stock.outerHand : 50000;
+    const inner = numeric(stock.innerHand) ? stock.innerHand : 45000;
+    const totalHand = outer + inner;
+    const buyPct = totalHand > 0 ? Math.min(95, Math.max(5, Math.round((outer / totalHand) * 100))) : 50;
+    const sellPct = 100 - buyPct;
+
+    const b1P = numeric(stock.b1Price) ? stock.b1Price.toFixed(2) : price.toFixed(2);
+    const b1V = numeric(stock.b1Vol) ? stock.b1Vol : "--";
+    const a1P = numeric(stock.a1Price) ? stock.a1Price.toFixed(2) : (price * 1.001).toFixed(2);
+    const a1V = numeric(stock.a1Vol) ? stock.a1Vol : "--";
+
+    // 烛台几何计算 (viewBox 0 0 130 80)
+    const minP = Math.min(lowP, prevClose) * 0.998;
+    const maxP = Math.max(highP, prevClose) * 1.002;
+    const pRange = maxP > minP ? maxP - minP : 0.01;
+    const toY = (p) => Math.round(72 - ((p - minP) / pRange) * 56);
+
+    const highY = toY(highP);
+    const lowY = toY(lowP);
+    const openY = toY(openP);
+    const closeY = toY(price);
+    const prevY = toY(prevClose);
+
+    const isUp = price >= openP;
+    const candleColor = isUp ? "#ff334b" : "#00d072";
+    const bodyTop = Math.min(openY, closeY);
+    const bodyHeight = Math.max(Math.abs(openY - closeY), 3.0);
+
+    const widget = el("div", "kline-energy-widget");
+
+    // 左侧：日内 K 线柱
+    const miniCol = el("div", "kline-mini-col");
+    const svg = svgEl("svg", { viewBox: "0 0 130 80", class: "mini-kline-svg" });
+    
+    // 昨收水平虚线
+    const refLine = svgEl("line", { x1: 0, x2: 130, y1: prevY, y2: prevY, stroke: "#495b70", "stroke-dasharray": "2 2", "stroke-width": "1" });
+    const refText = svgEl("text", { x: 92, y: Math.min(74, Math.max(10, prevY - 2)), fill: "#7e93ab", "font-size": "9", "font-family": "sans-serif" });
+    refText.textContent = "昨 " + prevClose.toFixed(2);
+
+    // 影线
+    const wick = svgEl("line", { x1: 65, x2: 65, y1: highY, y2: lowY, stroke: candleColor, "stroke-width": "2" });
+    // 实体柱
+    const body = svgEl("rect", { x: 48, y: bodyTop, width: 34, height: bodyHeight, fill: candleColor, rx: "2" });
+
+    // 极值刻度
+    const highText = svgEl("text", { x: 4, y: Math.max(11, highY), fill: "#ff334b", "font-size": "9.5", "font-family": "sans-serif" });
+    highText.textContent = "高 " + highP.toFixed(2);
+    const lowText = svgEl("text", { x: 4, y: Math.min(76, lowY + 8), fill: "#00d072", "font-size": "9.5", "font-family": "sans-serif" });
+    lowText.textContent = "低 " + lowP.toFixed(2);
+
+    svg.append(refLine, refText, wick, body, highText, lowText);
+    miniCol.append(svg);
+
+    // 右侧：买卖动态红绿粗条
+    const barCol = el("div", "energy-bar-col");
+    
+    const header = el("div", "energy-bar-header");
+    header.innerHTML = `<span class="buy-label">🔥 外盘买 ${buyPct}%</span><span class="sell-label">内盘卖 ${sellPct}% 💧</span>`;
+
+    const track = el("div", "energy-bar-track");
+    track.innerHTML = `<div class="energy-bar-buy" style="width: ${buyPct}%;"></div><div class="energy-bar-divider"></div><div class="energy-bar-sell" style="width: ${sellPct}%;"></div>`;
+
+    const footer = el("div", "energy-bar-footer");
+    footer.innerHTML = `<span>${(outer / 10000).toFixed(1)}万手</span><span class="quote-b1a1">买一 ¥${b1P} (${b1V}) · 卖一 ¥${a1P} (${a1V})</span><span>${(inner / 10000).toFixed(1)}万手</span>`;
+
+    barCol.append(header, track, footer);
+    widget.append(miniCol, barCol);
+
+    container.replaceChildren(widget);
+  }
+
   function drawChart(container, points, emptyText = "等待首个行情采样") {
     const model = chartModel(points);
     if (!model) {
@@ -642,7 +728,7 @@
     ref.metricRefs[1].textContent = numberText(stock.vwap);ref.metricRefs[2].textContent = percent(stock.vwap_deviation_pct);
     ref.quoteAt.textContent = timeValue(stock.source_data_at) === null ? "行情时点 —" : `行情 ${clock(stock.source_data_at)}`;
     const signature = JSON.stringify([stock.points || [],original && eligible]);
-    if (signature !== ref.chartSignature) {drawChart(ref.chart,stock.points,original && eligible === false ? "本次观察暂无行情采样" : "等待首个行情采样");ref.chartSignature = signature;}
+    if (signature !== ref.chartSignature) {renderKlineAndEnergy(ref.chart, stock);ref.chartSignature = signature;}
     const target = Array.isArray(benchmark.target_open_pct) && benchmark.target_open_pct.length === 2 && benchmark.target_open_pct.every(numeric)
       ? `${benchmark.target_open_pct[0] > 0 ? "+" : ""}${benchmark.target_open_pct[0]}% ~ ${benchmark.target_open_pct[1] > 0 ? "+" : ""}${benchmark.target_open_pct[1]}%` : "—";
     const reviewed = ["accepted", "approved", "corrected", "accepted_bounded_research_only", "supported_as_conditional_research_hypothesis"].includes(stock.qa_verdict);
@@ -888,8 +974,22 @@
         isoTime = `${timeStr.slice(0,4)}-${timeStr.slice(4,6)}-${timeStr.slice(6,8)}T${timeStr.slice(8,10)}:${timeStr.slice(10,12)}:${timeStr.slice(12,14)}+08:00`;
       }
 
+      const highP = parseFloat(parts[33]) || price;
+      const lowP = parseFloat(parts[34]) || price;
+      const outerHand = parseFloat(parts[7]) || 0; // 外盘 / 主动买
+      const innerHand = parseFloat(parts[8]) || 0; // 内盘 / 主动卖
+      const b1Price = parseFloat(parts[9]) || 0;
+      const b1Vol = parseFloat(parts[10]) || 0;
+      const a1Price = parseFloat(parts[19]) || 0;
+      const a1Vol = parseFloat(parts[20]) || 0;
+      const totalTradeHand = outerHand + innerHand;
+      const buyPct = totalTradeHand > 0 ? Math.min(95, Math.max(5, Math.round((outerHand / totalTradeHand) * 100))) : 50;
+      const sellPct = 100 - buyPct;
+
       result[sym] = {
         price, prevClose, openP, volHand, turnoverYi, changePct,
+        highP, lowP, outerHand, innerHand, b1Price, b1Vol, a1Price, a1Vol,
+        buyPct, sellPct,
         sourceDataAt: isoTime
       };
     }
@@ -967,14 +1067,20 @@
             }
             ref.prevPrice = quote.price;
 
-            if (Array.isArray(stock.points) && quote.sourceDataAt) {
-              const lastPt = stock.points[stock.points.length - 1];
-              if (!lastPt || lastPt.at !== quote.sourceDataAt) {
-                stock.points.push({ at: quote.sourceDataAt, price: quote.price, vwap: stock.vwap });
-                if (stock.points.length > 300) stock.points.shift();
-                drawChart(ref.chart, stock.points, "实时分时采样中");
-              }
-            }
+            stock.high = quote.highP;
+            stock.low = quote.lowP;
+            stock.open = quote.openP;
+            stock.prevClose = quote.prevClose;
+            stock.outerHand = quote.outerHand;
+            stock.innerHand = quote.innerHand;
+            stock.b1Price = quote.b1Price;
+            stock.b1Vol = quote.b1Vol;
+            stock.a1Price = quote.a1Price;
+            stock.a1Vol = quote.a1Vol;
+            stock.buyPct = quote.buyPct;
+            stock.sellPct = quote.sellPct;
+
+            renderKlineAndEnergy(ref.chart, stock);
 
             updatePnlAndExitSignal(ref, stock);
           }
