@@ -1107,21 +1107,41 @@ footer {
 }
 
 /* 竞价裁决条件常显区块 */
-.auction-box{padding:14px 0 16px;border-top:1px solid #2d3d5166}
-.auction-box h3{font-size:14px;font-weight:650;color:#f0d9a8;margin:0 0 10px;letter-spacing:.3px}
-.auction-group{margin:0 0 10px;padding:9px 12px;border-radius:8px;border:1px solid #2d4055;background:#0f1a28}
-.auction-group:last-child{margin-bottom:0}
-.auction-group h4{margin:0 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
-.auction-list{margin:0;padding-left:18px}
-.auction-list li{font-size:14px;line-height:1.55;color:#d5e2f2;margin:2px 0;overflow-wrap:anywhere}
-.auction-support{border-left:3px solid var(--green)}
-.auction-support h4{color:var(--green)}
-.auction-invalid{border-left:3px solid var(--red)}
-.auction-invalid h4{color:var(--red)}
-.auction-tightened{border-left:3px solid var(--yellow);background:#ecc77712;border-color:#ecc77733}
-.auction-tightened h4{color:var(--yellow)}
-.auction-tightened .auction-list li{font-size:15px;font-weight:600;color:#ffe9b8}
-@media(max-width:390px){.auction-box h3{font-size:13px}.auction-list li{font-size:13px}.auction-tightened .auction-list li{font-size:14px}}
+.auction-box{padding:12px 0 14px;border-top:1px solid #2d3d5166;min-width:0}
+.auction-evidence-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.auction-box h3{font-size:14px;font-weight:650;color:#f0d9a8;margin:0;letter-spacing:.3px}
+.auction-result,.auction-row-status{display:inline-block;font-size:12px;font-weight:600;border-radius:5px;padding:2px 6px;background:#203044;overflow-wrap:anywhere}
+.auction-result.status-pass,.auction-row-status.status-pass{color:var(--green);background:#73d5ac12}
+.auction-result.status-fail,.auction-row-status.status-fail{color:var(--red);background:#ff879512}
+.auction-result.status-missing,.auction-row-status.status-missing{color:var(--yellow);background:#ecc77712}
+.auction-result.status-pending,.auction-row-status.status-pending{color:var(--muted)}
+.auction-evidence-meta,.auction-evidence-counts,.auction-evidence-reason,.auction-evidence-note{font-size:12px;line-height:1.55;margin:5px 0;overflow-wrap:anywhere}
+.auction-evidence-meta,.auction-evidence-note{color:var(--muted);font-size:11px}
+.auction-evidence-counts{color:#d5e2f2;font-variant-numeric:tabular-nums}
+.auction-evidence-reason{color:var(--yellow)}
+.auction-evidence-table{margin-top:8px;border:1px solid #2d4055;border-radius:8px;overflow:hidden;background:#0f1a2866}
+.auction-evidence-columns,.auction-evidence-row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,.75fr) minmax(0,1.65fr) minmax(50px,.55fr);gap:5px 10px;padding:8px 10px;align-items:start}
+.auction-evidence-columns{font-size:11px;color:var(--muted);background:#1b2a3b}
+.auction-evidence-row{border-top:1px solid #2d405580;font-size:12px;line-height:1.45}
+.auction-evidence-row>div{min-width:0;overflow-wrap:anywhere}
+.auction-evidence-row strong{display:block;font-weight:550;font-size:12px;white-space:normal;font-variant-numeric:tabular-nums}
+.auction-evidence-row small{display:block;margin-top:3px;font-size:11px;color:var(--muted)}
+.auction-evidence-actual strong{color:#e5edf8}
+.auction-evidence-provenance{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:2px 10px;color:var(--muted);font-size:10px;line-height:1.45}
+.auction-row-reason{color:var(--yellow)}
+.auction-evidence-empty{margin:10px;font-size:12px;color:var(--muted)}
+.auction-mobile-label{display:none}
+@media(max-width:640px){
+  .auction-evidence-columns{display:none}
+  .auction-evidence-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding:10px}
+  .auction-evidence-metric{grid-column:1;grid-row:1}
+  .auction-evidence-metric small{display:inline;margin-left:5px}
+  .auction-evidence-outcome{grid-column:2;grid-row:1;text-align:right}
+  .auction-evidence-actual{grid-column:1;grid-row:2}
+  .auction-evidence-rule{grid-column:2;grid-row:2}
+  .auction-mobile-label{display:block;color:var(--muted);font-size:10px;margin-bottom:3px}
+  .auction-evidence-row strong{font-size:13px}
+}
 
 /* === 迷你 K 线与买卖能量粗条组件 === */
 .kline-energy-widget {

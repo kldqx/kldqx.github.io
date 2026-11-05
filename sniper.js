@@ -92,6 +92,36 @@
     risks:"盘中风险", gaps:"未核实范围"
   };
   const observationEligible = stock => typeof stock.observation_eligible === "boolean" ? stock.observation_eligible : stock.monitoring_eligible;
+  const AUCTION_STATUS_LABELS = {pass:"竞价条件满足",fail:"竞价未达标",missing:"待核验",pending:"待竞价结束"};
+  const AUCTION_ROW_LABELS = {pass:"达标",fail:"未达标",missing:"缺数据",pending:"待观察"};
+  const AUCTION_REASON_LABELS = {
+    value_missing:"缺少实际数据",value_invalid:"实际数据格式待核实",unit_mismatch:"数据单位与规则不一致",
+    trade_date_mismatch:"数据交易日与观察日不一致",source_missing:"缺少数据来源",source_time_missing:"缺少数据时点",
+    source_time_invalid:"数据时点待核实",source_date_mismatch:"数据日期与观察日不一致",source_time_future:"数据时点晚于核验时点",
+    observed_time_missing:"缺少读取时点",observed_time_invalid:"读取时点待核实",observed_time_future:"读取时点晚于核验时点",
+    observed_before_source:"读取时点早于数据时点",semantics_mismatch:"数据口径与规则不一致",fact_unverified:"数据尚未核实",
+    original_conditions_missing:"缺少原竞价条件",target_trade_date_missing:"缺少观察交易日",evaluation_time_invalid:"核验时点待核实",
+    rule_unparsed:"原条件尚未完成逐项核验",auction_not_final:"竞价尚未结束，等待最终数据",
+    invalidation_not_hit:"未触发失效条件",invalidation_hit:"已触发失效条件",condition_met:"符合原条件",condition_not_met:"未符合原条件",
+    all_original_conditions_met:"原竞价条件逐项满足",original_condition_failed:"存在未满足或已失效的原条件",evidence_missing:"逐项证据尚未补齐"
+  };
+  const evidenceText = (value, fallback = "—") => typeof value === "string" && value.trim() ? value : fallback;
+  const auctionReasonText = (value, fallback) => AUCTION_REASON_LABELS[value] || (/^[a-z]+(?:_[a-z]+)+$/.test(value || "")
+    ? "核验依据待补充" : evidenceText(value, fallback));
+  function auctionEvaluation(stock) {
+    const value = stock?.auction_evaluation;
+    if (value?.schema === "auction-rule-evaluation/v1" && Object.hasOwn(AUCTION_STATUS_LABELS, value.status) && Array.isArray(value.rows)) return value;
+    return {status:"missing",status_label:"待核验",reason:"缺少逐项竞价数据",rows:[],counts:{}};
+  }
+  const auctionConfirmed = (stock, mode) => mode === "live" ? auctionEvaluation(stock).status === "pass"
+    : Boolean(stock.auction_confirmed || stock.events?.some(event => (event?.type || event) === "AUCTION_ENTRY_CONFIRMED"));
+  function auctionCounts(evaluation) {
+    return Object.fromEntries(Object.keys(AUCTION_ROW_LABELS).map(status => [status,
+      Number.isInteger(evaluation.counts?.[status]) && evaluation.counts[status] >= 0 ? evaluation.counts[status]
+        : evaluation.rows.filter(row => row?.status === status).length]));
+  }
+  const auctionCountText = evaluation => Object.entries(auctionCounts(evaluation))
+    .map(([status, count]) => `${AUCTION_ROW_LABELS[status]} ${count}`).join(" · ");
 
   function validFeed(feed, mode) {
     return feed && feed.schema === "live-sniper-web/v1" && feed.signal_boundary === BOUNDARY
@@ -302,7 +332,7 @@
     return {select, refresh, stop, applyManualState, getMode:() => mode};
   }
 
-  const api = {validFeed, chartModel, createController, numberText, percent, clock};
+  const api = {validFeed, chartModel, createController, numberText, percent, clock, auctionEvaluation};
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (typeof document === "undefined") return;
   window.sniperFrontend = api;
@@ -468,7 +498,7 @@
     const card = el("article", "stock-card");
     const heading = el("div", "card-heading"), identity = el("div", "stock-identity");
     const name = el("h3", "stock-name"), code = el("div", "stock-code"), status = el("span", "stock-status");
-    const auctionBadge = el("span", "auction-confirmed-badge", "👑 竞价金标"); auctionBadge.hidden = true;
+    const auctionBadge = el("span", "auction-confirmed-badge", "竞价达标"); auctionBadge.hidden = true;
     const cycleBadge = el("span", "cycle-badge"); cycleBadge.hidden = true;
     identity.append(name, auctionBadge, code, cycleBadge); heading.append(identity, status);
 
@@ -582,12 +612,82 @@
     return el("span","",value === null ? "未提供" : String(value));
   }
 
+  function renderAuctionEvidence(container, evaluation, tradeDate) {
+    const heading = el("div", "auction-evidence-heading");
+    heading.append(el("h3", "", "竞价逐项核验"), el("span", `auction-result status-${evaluation.status}`,
+      evidenceText(evaluation.status_label, AUCTION_STATUS_LABELS[evaluation.status])));
+    const date = evidenceText(evaluation.target_trade_date, evidenceText(tradeDate));
+    const meta = el("p", "auction-evidence-meta", `观察日 ${date} · 核验时点 ${evidenceText(evaluation.evaluated_at)}`);
+    const connection = evaluation.source_connection;
+    const sourceLine = el("p", "auction-source-connection auction-evidence-meta");
+    sourceLine.hidden = !connection || typeof connection !== "object";
+    if (!sourceLine.hidden) {
+      const connected = connection.source === "TDX_NATIVE_REAL" && ["available", "partial"].includes(connection.status);
+      const parts = [connected ? "通达信已接通" : "通达信尚未确认连接"];
+      if (connected && Number.isInteger(connection.book_depth) && connection.book_depth > 0) parts.push(`${connection.book_depth} 档盘口`);
+      const fieldCount = Array.isArray(connection.l2_fields) ? new Set(connection.l2_fields.filter(value => typeof value === "string")).size : 0;
+      if (connected && fieldCount) parts.push(`${fieldCount} 项 L2 汇总`);
+      parts.push(connection.source_time_precision === "day"
+        ? `行情日期 ${evidenceText(connection.source_data_at)}（源未提供秒级时点） · 读取于 ${evidenceText(connection.observed_at)}`
+        : `数据时点 ${evidenceText(connection.source_data_at)}`);
+      if (connection.reason) {
+        const reason = {native_capabilities_partial:"已取得部分数据，其余项目待核实",
+          official_sdk_connected_partial_capabilities:"已取得真实数据；其余竞价指标按下方证据核验",
+          native_request_timeout:"通达信读取超时，本次数据尚不可核验",
+          native_request_in_progress:"正在等待通达信返回本次数据",
+          tdx_snapshot_response_missing:"本次通达信行情回包为空",
+          native_client_not_checked:"等待读取通达信数据",client_not_logged_in:"通达信尚未登录",
+          native_snapshot_unavailable:"暂未取得通达信数据"}[connection.reason];
+        parts.push(reason || (/^[a-zA-Z0-9_:.-]+$/.test(connection.reason)
+          ? AUCTION_REASON_LABELS[connection.reason] || "连接或数据完整性待核实" : evidenceText(connection.reason)));
+      }
+      sourceLine.textContent = parts.join(" · ");
+    }
+    const counts = el("p", "auction-evidence-counts", auctionCountText(evaluation));
+    const reason = el("p", "auction-evidence-reason", evidenceText(evaluation.reason_label, auctionReasonText(evaluation.reason, "逐项结果如下")));
+    const note = el("p", "auction-evidence-note", "阈值沿用已存规则；本股比较依据逐项列示。原文保留在详情中。");
+    const table = el("div", "auction-evidence-table");
+    table.setAttribute("role", "table");
+    table.setAttribute("aria-label", "竞价实际数据与规则对照");
+    const columns = el("div", "auction-evidence-columns"); columns.setAttribute("role", "row");
+    for (const label of ["指标", "本股实际", "规则阈值 / 比较依据", "结果"]) {
+      const cell = el("span", "", label); cell.setAttribute("role", "columnheader"); columns.append(cell);
+    }
+    table.append(columns);
+    for (const row of evaluation.rows) {
+      if (!row || typeof row !== "object") continue;
+      const status = Object.hasOwn(AUCTION_ROW_LABELS, row.status) ? row.status : "missing";
+      const item = el("div", `auction-evidence-row status-${status}`); item.setAttribute("role", "row");
+      const metric = el("div", "auction-evidence-metric");
+      metric.append(el("strong", "", evidenceText(row.label, evidenceText(row.metric))),
+        el("small", "", {support:"支持条件",invalidation:"失效排查",tightened:"收紧条件"}[row.group] || "原规则"));
+      const actual = el("div", "auction-evidence-actual");
+      actual.append(el("span", "auction-mobile-label", "本股实际"), el("strong", "", evidenceText(row.actual_display)));
+      const rule = el("div", "auction-evidence-rule");
+      rule.append(el("span", "auction-mobile-label", "规则阈值 / 比较依据"), el("strong", "", evidenceText(row.threshold_display)),
+        el("small", "auction-evidence-basis", `依据：${evidenceText(row.basis)}`));
+      rule.title = evidenceText(row.rule_text, evidenceText(row.threshold_display));
+      const outcome = el("div", "auction-evidence-outcome");
+      outcome.append(el("span", `auction-row-status status-${status}`, evidenceText(row.status_label, AUCTION_ROW_LABELS[status])));
+      for (const cell of [metric,actual,rule,outcome]) {cell.setAttribute("role", "cell");item.append(cell);}
+      const provenance = el("div", "auction-evidence-provenance"); provenance.setAttribute("role", "cell");
+      provenance.setAttribute("aria-colspan", "4");
+      if (row.reason_label || row.reason) provenance.append(el("span", "auction-row-reason", evidenceText(row.reason_label, auctionReasonText(row.reason))));
+      if (typeof row.evidence_reason === "string" && row.evidence_reason.trim()) provenance.append(el("span", "auction-row-reason", auctionReasonText(row.evidence_reason)));
+      provenance.append(el("span", "", `数据${row.source_time_precision === "day" ? "日期" : "时点"} ${evidenceText(row.source_data_at)}${row.source_time_precision === "day" ? `（日精度） · 读取于 ${evidenceText(row.observed_at)}` : ""} · 来源 ${evidenceText(row.source_id)}`));
+      item.append(provenance);table.append(item);
+    }
+    if (!evaluation.rows.length) table.append(el("p", "auction-evidence-empty", "缺少逐项竞价数据，等待补齐后核验。"));
+    container.replaceChildren(heading,sourceLine,meta,counts,reason,note,table);
+  }
+
   function updateCard(ref, stock, feed) {
     const events = Array.isArray(stock.events) ? stock.events.filter(event => event && typeof event.type === "string") : [];
     const latest = events[events.length - 1];
     const gaps = Array.isArray(stock.gaps) ? stock.gaps.filter(gap => typeof gap === "string") : [];
     const benchmark = stock.benchmark && typeof stock.benchmark === "object" ? stock.benchmark : {};
     const original = feed.mode === "live" && stock.original_conditions && typeof stock.original_conditions === "object" ? stock.original_conditions : null;
+    const evaluation = feed.mode === "live" ? auctionEvaluation(stock) : null;
     const eligible = observationEligible(stock);
     const monitoringStatus = feed.handoff?.status === "stopped" ? "stopped" : stock.observation_status || stock.monitoring_status;
     const monitorLabel = {waiting:"等待观察",eligible:"等待观察",active:"行情观察中",paused:"午休 · 暂停采样",closed:"已收盘",expired:"期限已到 · 已停采",expired_unverified:"期限已到 · 已停采",stopped:"监控已停止",withdrawn:"原判断已撤回",unverifiable:"暂停观察",invalidated:"原条件已失效",withdrawn_due_to_data_or_method_error:"原判断已撤回"}[monitoringStatus];
@@ -614,12 +714,12 @@
       ref.cycleBadge.textContent = "";
       ref.cycleBadge.className = "cycle-badge";
     }
-    const isAuctionConfirmed = Boolean(stock.auction_confirmed || (Array.isArray(stock.events) && stock.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED")));
+    const isAuctionConfirmed = auctionConfirmed(stock, feed.mode);
     ref.auctionBadge.hidden = !isAuctionConfirmed;
 
     // 一体化固定高度状态横幅与变色机制 (永不参差，槽位严格固定)
     const isDefenseAlarm = Boolean(stock.defense_alarm);
-    const cTier = stock.conviction_tier || "observing";
+    const cTier = evaluation && !isAuctionConfirmed && stock.conviction_tier === "auction_lead" ? "observing" : stock.conviction_tier || "observing";
     const cScore = stock.conviction_score;
     const cPulseAt = stock.live_pulse_at || stock.source_data_at;
 
@@ -639,12 +739,20 @@
 
     const verdict = stock.auction_verdict;
     const isCriticRejected = (stock.critic_verdict === "REJECTED_BY_CRITIC");
-    const isVetoed = (verdict === "AUCTION_VETOED" || isCriticRejected);
-    const isGold = (verdict === "AUCTION_ENTRY_CONFIRMED" || isAuctionConfirmed) && !isCriticRejected;
+    const isVetoed = evaluation ? evaluation.status === "fail" : (verdict === "AUCTION_VETOED" || isCriticRejected);
+    const isGold = evaluation ? isAuctionConfirmed : (verdict === "AUCTION_ENTRY_CONFIRMED" || isAuctionConfirmed) && !isCriticRejected;
 
     const criticDesc = (stock.critic_flaws && stock.critic_flaws.length > 0) ? stock.critic_flaws[0] : (stock.auction_reason || "竞价低开/缩量不及预期");
 
-    if (isVetoed) {
+    if (evaluation) {
+      const tier = isAuctionConfirmed ? "auction_lead" : isVetoed ? "weakening" : "observing";
+      ref.unifiedBanner.className = `unified-status-banner tier-${tier} ${isDefenseAlarm ? "alarm" : ""}`;
+      ref.bannerTitle.textContent = evidenceText(evaluation.status_label, AUCTION_STATUS_LABELS[evaluation.status]);
+      ref.bannerScore.textContent = `${auctionCounts(evaluation).pass}/${evaluation.rows.length} 项达标`;
+      ref.bannerScore.className = `banner-score-badge score-${tier}`;
+      ref.bannerDesc.textContent = evidenceText(evaluation.reason_label, auctionReasonText(evaluation.reason, "逐项证据见下方"));
+      ref.bannerDesc.title = ref.bannerDesc.textContent;
+    } else if (isVetoed) {
       ref.card.classList.add("auction-vetoed-card");
       if (ref.entryButton) {
         ref.entryButton.disabled = true;
@@ -705,9 +813,12 @@
         ref.bannerDesc.textContent = `分时震荡整固，等待放量确认`;
       }
     }
-    ref.bannerPulse.textContent = cPulseAt ? clock(cPulseAt) : "";
+    ref.bannerPulse.textContent = evaluation ? clock(evaluation.evaluated_at) : cPulseAt ? clock(cPulseAt) : "";
 
-    if (isAuctionConfirmed) {
+    if (evaluation) {
+      ref.status.textContent = evidenceText(evaluation.status_label, AUCTION_STATUS_LABELS[evaluation.status]);
+      ref.status.className = `stock-status ${isAuctionConfirmed ? "positive" : "warning"}`;
+    } else if (isAuctionConfirmed) {
       ref.status.textContent = cTier === "surge" ? "🔥 极度确立 · 涨停加速" : "⚡ 竞价达标 · 确定性高";
       ref.status.className = `stock-status positive ${cTier === "surge" ? "surge-status" : "gold-status"}`;
     } else {
@@ -736,29 +847,12 @@
       : [["高开",target],["成交",numeric(benchmark.min_turnover_yi) ? `≥ ${numberText(benchmark.min_turnover_yi)} 亿` : "—"],["防守",numeric(benchmark.max_vwap_pullback_pct) ? `${benchmark.max_vwap_pullback_pct}%` : "未配置"]];
     ref.chips.className = `condition-list ${original ? "reviewed-conditions" : ""}`;
     ref.chips.replaceChildren(...chipData.map(([label,value]) => {const chip=el("div","condition-chip");chip.append(el("span","",label),el("strong","",value));return chip;}));
-    // 竞价裁决条件常显：支持/失效/对抗收紧，不折叠
-    const auctionSig = original ? JSON.stringify(original) : "";
+    // Frozen rules remain in details; current evidence and the shared verdict stay visible.
+    const auctionSig = JSON.stringify([evaluation,original?.trade_date]);
     if (auctionSig !== ref.auctionSignature) {
       ref.auctionSignature = auctionSig;
-      const hasSupport = original && Array.isArray(original.support_conditions) && original.support_conditions.length;
-      if (hasSupport) {
-        const head = el("h3", "", `竞价裁决条件 · ${original.trade_date || "T日"}（截止 ${deadlineText(original.deadline_at)}）`);
-        const support = el("div", "auction-group auction-support");
-        support.append(el("h4", "", "支持条件（满足才考虑进场）"));
-        const sList = el("ul", "auction-list");
-        for (const c of original.support_conditions) sList.append(el("li", "", String(c)));
-        support.append(sList);
-        const invalid = el("div", "auction-group auction-invalid");
-        invalid.append(el("h4", "", "失效条件（任一命中即作废）"));
-        const iList = el("ul", "auction-list");
-        for (const c of (original.invalidation_conditions || [])) iList.append(el("li", "", String(c)));
-        invalid.append(iList);
-        const tight = el("div", "auction-group auction-tightened");
-        tight.append(el("h4", "", "对抗性挑刺收紧（必须同时满足）"));
-        const tList = el("ul", "auction-list");
-        for (const c of (original.adversarial_tightened || [])) tList.append(el("li", "", String(c)));
-        tight.append(tList);
-        ref.auctionBox.replaceChildren(head, support, invalid, tight);
+      if (evaluation) {
+        renderAuctionEvidence(ref.auctionBox, evaluation, original?.trade_date);
         ref.auctionBox.hidden = false;
       } else {
         ref.auctionBox.replaceChildren();
@@ -805,7 +899,7 @@
     }
     ref.summary.textContent = original ? "原始条件、盘中复核与记录" : "观察要点与记录";
     ref.latest.className = `latest-event ${gaps.length ? "warning" : ""}`;
-    ref.latest.textContent = original && eligible === false ? "本股已停采，原条件与已有记录保留。" : gaps.length ? "部分数据待补，查看观察记录了解详情。" : latest ? `${clock(latest.at)}  ${eventLabel(latest)}` : !numeric(stock.price) ? "等待有效行情采样。" : "持续观察价格、成交额与 VWAP 变化。";
+    ref.latest.textContent = original && eligible === false ? "本股已停采，原条件与已有记录保留。" : gaps.length ? "部分数据待补，查看观察记录了解详情。" : latest ? `${evaluation && latest.type.startsWith("AUCTION_") ? "历史记录 · " : ""}${clock(latest.at)}  ${eventLabel(latest)}` : !numeric(stock.price) ? "等待有效行情采样。" : "持续观察价格、成交额与 VWAP 变化。";
     ref.description.textContent = original ? stock.hypothesis || "" : typeof benchmark.desc === "string" && benchmark.desc.trim() ? benchmark.desc : "按卡片中的竞价与 VWAP 条件跟踪。";
     const conditionSignature = JSON.stringify([original,stock.risk_reason]);
     if(conditionSignature !== ref.conditionSignature){
@@ -1205,15 +1299,15 @@
         return bPnl - aPnl;
       }
       // 按肯定度/走强综合评分动态降序（下午拉起即时动态跃升）
-      const scoreA = numeric(a.conviction_score) ? a.conviction_score : ((a.auction_confirmed ? 60 : 30) + (numeric(a.change_pct) ? a.change_pct : 0));
-      const scoreB = numeric(b.conviction_score) ? b.conviction_score : ((b.auction_confirmed ? 60 : 30) + (numeric(b.change_pct) ? b.change_pct : 0));
+      const scoreA = numeric(a.conviction_score) ? a.conviction_score : ((auctionConfirmed(a, mode) ? 60 : 30) + (numeric(a.change_pct) ? a.change_pct : 0));
+      const scoreB = numeric(b.conviction_score) ? b.conviction_score : ((auctionConfirmed(b, mode) ? 60 : 30) + (numeric(b.change_pct) ? b.change_pct : 0));
       if (scoreA !== scoreB) return scoreB - scoreA;
-      const aConfirmed = (a.auction_confirmed || (Array.isArray(a.events) && a.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))) ? 1 : 0;
-      const bConfirmed = (b.auction_confirmed || (Array.isArray(b.events) && b.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))) ? 1 : 0;
+      const aConfirmed = auctionConfirmed(a, mode) ? 1 : 0;
+      const bConfirmed = auctionConfirmed(b, mode) ? 1 : 0;
       if (aConfirmed !== bConfirmed) return bConfirmed - aConfirmed;
       return 0;
     });
-    const confirmedCount = stocks.filter(s => s.auction_confirmed || (Array.isArray(s.events) && s.events.some(e => (e?.type || e) === "AUCTION_ENTRY_CONFIRMED"))).length;
+    const confirmedCount = stocks.filter(stock => auctionConfirmed(stock, mode)).length;
     const auctionCountEl = byId("auction-confirmed-count");
     if (auctionCountEl) auctionCountEl.textContent = String(confirmedCount);
     const surgeCount = stocks.filter(s => s.conviction_tier === "surge" || s.conviction_tier === "strengthening").length;
