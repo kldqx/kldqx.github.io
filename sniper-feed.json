@@ -1,12 +1,12 @@
 {
  "schema": "live-sniper-web/v1",
  "signal_boundary": "not_a_trading_signal",
- "workspace_id": "A股资金流向自主看盘",
- "mode": "pm_afternoon_t2wash",
- "status": "active",
- "phase": "PM_SESSION",
- "generated_at": "2026-11-09T11:34:39+08:00",
- "source_label": "腾讯一级行情+东财clist/trends2 实时",
+ "workspace_id": "01c9c9660c33cf342a49a83a7c76311f2afa1a00a4fed72b827d9db7c027beaf",
+ "mode": "live",
+ "status": "waiting",
+ "phase": "WAITING",
+ "generated_at": "2026-11-09T11:55:00.766053+08:00",
+ "source_label": "腾讯一级行情",
  "seed_date": "2026-11-09",
  "handoff": "runtime/runs/20261109-v24-fullchain",
  "run_id": "20261109-v24-fullchain-pm",
@@ -17,29 +17,28 @@
    "price": 66.58,
    "change_pct": 7.4,
    "turnover_yi": null,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-09 11:34:23",
+   "observed_at": "2026-11-09 11:34:23",
    "phase": "PM_SESSION",
    "benchmark": {
-    "desc": "下午票(T=11-09盘中): 有色BK0478今日涨停3只轮动；T-2(11-06)回踩-6.27% 极致缩量vr=0.455；今日+7.40%未板 峰回落仅+1.25%筹码稳；非龙虎榜非今日涨停；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2"
+    "desc": "下午票(T=11-09盘中): 有色BK0478今日涨停3只轮动；T-2(11-06)回踩-6.27% 极致缩量vr=0.455；今日+7.40%未板 峰回落仅+1.25%筹码稳；非龙虎榜非今日涨停；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2",
+    "min_turnover_yi": null
    },
    "gaps": [
-    "venvoo逐笔 20261109 未落盘记缺口(只到20261108), L2订单流缺口不伪造"
+    "venvoo逐笔20261109未落盘记缺口(只到20261108)"
    ],
    "events": [],
    "points": [],
-   "hypothesis": "下午票(T=11-09盘中): 有色BK0478今日涨停3只轮动；T-2(11-06)回踩-6.27% 极致缩量vr=0.455；今日+7.40%未板 峰回落仅+1.25%筹码稳；非龙虎榜非今日涨停；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
-   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股",
    "original_conditions": "下午盘中入场闸: 主力净流入>0 + 未涨停(pct<9.9%) + 今开<+3% + T-2回踩缩量特征 + 分时午后走强(无09:25竞价闸)",
-   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
-   "auction_evaluation": null,
-   "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "N/A(下午盘中入场, 无09:25竞价闸)",
-   "auction_badge": "PM_T2WASH",
-   "auction_reason": "下午票: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+T日分时午后走强",
-   "buy_permission": "not_a_trading_signal",
+   "hypothesis": "下午票(T=11-09盘中): 有色BK0478今日涨停3只轮动；T-2(11-06)回踩-6.27% 极致缩量vr=0.455；今日+7.40%未板 峰回落仅+1.25%筹码稳；非龙虎榜非今日涨停；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
+   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股; 北交所封存已剔除",
+   "qa_verdict": "PASS_WITH_GAPS(venvoo逐笔20261109缺口)",
    "seed_trade_date": "2026-11-09",
    "monitoring_eligible": true,
    "monitoring_status": "ready",
+   "original_condition_status": "pm_afternoon",
    "observation_eligible": true,
    "observation_status": "pm_watch",
    "manual_label": "pm_afternoon_t2wash",
@@ -50,9 +49,17 @@
     "pm_final_candidates_20261109.json",
     "data/daily_picks_ledger.csv"
    ],
-   "cycle_position": "T(盘中) 入场, T+1=2026-11-10 出场: 破开盘价3%止损 | 14:55清仓",
+   "cycle_position": "T(盘中)入场, T+1=2026-11-10出场: 破开盘价3%止损|14:55清仓",
    "recommendation": "观察",
-   "adversarial_verdict": "not_a_trading_signal"
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "N/A(下午盘中入场,无09:25竞价闸)",
+   "auction_badge": "PM_T2WASH",
+   "auction_reason": "下午票闸: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+分时午后走强",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险"
   },
   {
    "code": "688385.SH",
@@ -60,29 +67,28 @@
    "price": 50.28,
    "change_pct": 7.39,
    "turnover_yi": null,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-09 11:34:23",
+   "observed_at": "2026-11-09 11:34:23",
    "phase": "PM_SESSION",
    "benchmark": {
-    "desc": "下午票(T=11-09盘中): 半导体主线BK1036今日资金+18亿；T-2回踩-5.51% vr=0.561；今日+7.39%振幅8.7% 主力+0.21亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT"
+    "desc": "下午票(T=11-09盘中): 半导体主线BK1036今日资金+18亿；T-2回踩-5.51% vr=0.561；今日+7.39%振幅8.7% 主力+0.21亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT",
+    "min_turnover_yi": null
    },
    "gaps": [
-    "venvoo逐笔 20261109 未落盘记缺口(只到20261108), L2订单流缺口不伪造"
+    "venvoo逐笔20261109未落盘记缺口(只到20261108)"
    ],
    "events": [],
    "points": [],
-   "hypothesis": "下午票(T=11-09盘中): 半导体主线BK1036今日资金+18亿；T-2回踩-5.51% vr=0.561；今日+7.39%振幅8.7% 主力+0.21亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
-   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股",
    "original_conditions": "下午盘中入场闸: 主力净流入>0 + 未涨停(pct<9.9%) + 今开<+3% + T-2回踩缩量特征 + 分时午后走强(无09:25竞价闸)",
-   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
-   "auction_evaluation": null,
-   "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "N/A(下午盘中入场, 无09:25竞价闸)",
-   "auction_badge": "PM_T2WASH",
-   "auction_reason": "下午票: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+T日分时午后走强",
-   "buy_permission": "not_a_trading_signal",
+   "hypothesis": "下午票(T=11-09盘中): 半导体主线BK1036今日资金+18亿；T-2回踩-5.51% vr=0.561；今日+7.39%振幅8.7% 主力+0.21亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
+   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股; 北交所封存已剔除",
+   "qa_verdict": "PASS_WITH_GAPS(venvoo逐笔20261109缺口)",
    "seed_trade_date": "2026-11-09",
    "monitoring_eligible": true,
    "monitoring_status": "ready",
+   "original_condition_status": "pm_afternoon",
    "observation_eligible": true,
    "observation_status": "pm_watch",
    "manual_label": "pm_afternoon_t2wash",
@@ -93,9 +99,17 @@
     "pm_final_candidates_20261109.json",
     "data/daily_picks_ledger.csv"
    ],
-   "cycle_position": "T(盘中) 入场, T+1=2026-11-10 出场: 破开盘价3%止损 | 14:55清仓",
+   "cycle_position": "T(盘中)入场, T+1=2026-11-10出场: 破开盘价3%止损|14:55清仓",
    "recommendation": "观察",
-   "adversarial_verdict": "not_a_trading_signal"
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "N/A(下午盘中入场,无09:25竞价闸)",
+   "auction_badge": "PM_T2WASH",
+   "auction_reason": "下午票闸: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+分时午后走强",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险"
   },
   {
    "code": "688035.SH",
@@ -103,29 +117,28 @@
    "price": 58.13,
    "change_pct": 5.84,
    "turnover_yi": null,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-09 11:34:23",
+   "observed_at": "2026-11-09 11:34:23",
    "phase": "PM_SESSION",
    "benchmark": {
-    "desc": "下午票(T=11-09盘中): 半导体主线；T-2回踩-5.76% vr=0.585；今日+5.84% 11:26午后新高 距日低+6.58%；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0"
+    "desc": "下午票(T=11-09盘中): 半导体主线；T-2回踩-5.76% vr=0.585；今日+5.84% 11:26午后新高 距日低+6.58%；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
+    "min_turnover_yi": null
    },
    "gaps": [
-    "venvoo逐笔 20261109 未落盘记缺口(只到20261108), L2订单流缺口不伪造"
+    "venvoo逐笔20261109未落盘记缺口(只到20261108)"
    ],
    "events": [],
    "points": [],
-   "hypothesis": "下午票(T=11-09盘中): 半导体主线；T-2回踩-5.76% vr=0.585；今日+5.84% 11:26午后新高 距日低+6.58%；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
-   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股",
    "original_conditions": "下午盘中入场闸: 主力净流入>0 + 未涨停(pct<9.9%) + 今开<+3% + T-2回踩缩量特征 + 分时午后走强(无09:25竞价闸)",
-   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
-   "auction_evaluation": null,
-   "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "N/A(下午盘中入场, 无09:25竞价闸)",
-   "auction_badge": "PM_T2WASH",
-   "auction_reason": "下午票: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+T日分时午后走强",
-   "buy_permission": "not_a_trading_signal",
+   "hypothesis": "下午票(T=11-09盘中): 半导体主线；T-2回踩-5.76% vr=0.585；今日+5.84% 11:26午后新高 距日低+6.58%；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
+   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股; 北交所封存已剔除",
+   "qa_verdict": "PASS_WITH_GAPS(venvoo逐笔20261109缺口)",
    "seed_trade_date": "2026-11-09",
    "monitoring_eligible": true,
    "monitoring_status": "ready",
+   "original_condition_status": "pm_afternoon",
    "observation_eligible": true,
    "observation_status": "pm_watch",
    "manual_label": "pm_afternoon_t2wash",
@@ -136,9 +149,17 @@
     "pm_final_candidates_20261109.json",
     "data/daily_picks_ledger.csv"
    ],
-   "cycle_position": "T(盘中) 入场, T+1=2026-11-10 出场: 破开盘价3%止损 | 14:55清仓",
+   "cycle_position": "T(盘中)入场, T+1=2026-11-10出场: 破开盘价3%止损|14:55清仓",
    "recommendation": "观察",
-   "adversarial_verdict": "not_a_trading_signal"
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "N/A(下午盘中入场,无09:25竞价闸)",
+   "auction_badge": "PM_T2WASH",
+   "auction_reason": "下午票闸: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+分时午后走强",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险"
   },
   {
    "code": "002141.SZ",
@@ -146,29 +167,28 @@
    "price": 5.06,
    "change_pct": 5.42,
    "turnover_yi": null,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-09 11:34:23",
+   "observed_at": "2026-11-09 11:34:23",
    "phase": "PM_SESSION",
    "benchmark": {
-    "desc": "下午票(T=11-09盘中): 电子主线BK1201今日资金+77亿；T-2回踩-7.23% vr=0.569；今日+5.42%收盘最高(峰回落0.00%) 主力+0.88亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-"
+    "desc": "下午票(T=11-09盘中): 电子主线BK1201今日资金+77亿；T-2回踩-7.23% vr=0.569；今日+5.42%收盘最高(峰回落0.00%) 主力+0.88亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-",
+    "min_turnover_yi": null
    },
    "gaps": [
-    "venvoo逐笔 20261109 未落盘记缺口(只到20261108), L2订单流缺口不伪造"
+    "venvoo逐笔20261109未落盘记缺口(只到20261108)"
    ],
    "events": [],
    "points": [],
-   "hypothesis": "下午票(T=11-09盘中): 电子主线BK1201今日资金+77亿；T-2回踩-7.23% vr=0.569；今日+5.42%收盘最高(峰回落0.00%) 主力+0.88亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
-   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股",
    "original_conditions": "下午盘中入场闸: 主力净流入>0 + 未涨停(pct<9.9%) + 今开<+3% + T-2回踩缩量特征 + 分时午后走强(无09:25竞价闸)",
-   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
-   "auction_evaluation": null,
-   "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "N/A(下午盘中入场, 无09:25竞价闸)",
-   "auction_badge": "PM_T2WASH",
-   "auction_reason": "下午票: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+T日分时午后走强",
-   "buy_permission": "not_a_trading_signal",
+   "hypothesis": "下午票(T=11-09盘中): 电子主线BK1201今日资金+77亿；T-2回踩-7.23% vr=0.569；今日+5.42%收盘最高(峰回落0.00%) 主力+0.88亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
+   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股; 北交所封存已剔除",
+   "qa_verdict": "PASS_WITH_GAPS(venvoo逐笔20261109缺口)",
    "seed_trade_date": "2026-11-09",
    "monitoring_eligible": true,
    "monitoring_status": "ready",
+   "original_condition_status": "pm_afternoon",
    "observation_eligible": true,
    "observation_status": "pm_watch",
    "manual_label": "pm_afternoon_t2wash",
@@ -179,9 +199,17 @@
     "pm_final_candidates_20261109.json",
     "data/daily_picks_ledger.csv"
    ],
-   "cycle_position": "T(盘中) 入场, T+1=2026-11-10 出场: 破开盘价3%止损 | 14:55清仓",
+   "cycle_position": "T(盘中)入场, T+1=2026-11-10出场: 破开盘价3%止损|14:55清仓",
    "recommendation": "观察",
-   "adversarial_verdict": "not_a_trading_signal"
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "N/A(下午盘中入场,无09:25竞价闸)",
+   "auction_badge": "PM_T2WASH",
+   "auction_reason": "下午票闸: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+分时午后走强",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险"
   },
   {
    "code": "300739.SZ",
@@ -189,29 +217,28 @@
    "price": 22.88,
    "change_pct": 4.28,
    "turnover_yi": null,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-09 11:34:23",
+   "observed_at": "2026-11-09 11:34:23",
    "phase": "PM_SESSION",
    "benchmark": {
-    "desc": "下午票(T=11-09盘中): PCB/元件 板块今日资金+24.5亿；T-2回踩-14.0% vr=0.554深度洗盘；今日+4.28% 11:22午后新高 主力+0.17亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11"
+    "desc": "下午票(T=11-09盘中): PCB/元件 板块今日资金+24.5亿；T-2回踩-14.0% vr=0.554深度洗盘；今日+4.28% 11:22午后新高 主力+0.17亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11",
+    "min_turnover_yi": null
    },
    "gaps": [
-    "venvoo逐笔 20261109 未落盘记缺口(只到20261108), L2订单流缺口不伪造"
+    "venvoo逐笔20261109未落盘记缺口(只到20261108)"
    ],
    "events": [],
    "points": [],
-   "hypothesis": "下午票(T=11-09盘中): PCB/元件 板块今日资金+24.5亿；T-2回踩-14.0% vr=0.554深度洗盘；今日+4.28% 11:22午后新高 主力+0.17亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
-   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股",
    "original_conditions": "下午盘中入场闸: 主力净流入>0 + 未涨停(pct<9.9%) + 今开<+3% + T-2回踩缩量特征 + 分时午后走强(无09:25竞价闸)",
-   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
-   "auction_evaluation": null,
-   "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "N/A(下午盘中入场, 无09:25竞价闸)",
-   "auction_badge": "PM_T2WASH",
-   "auction_reason": "下午票: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+T日分时午后走强",
-   "buy_permission": "not_a_trading_signal",
+   "hypothesis": "下午票(T=11-09盘中): PCB/元件 板块今日资金+24.5亿；T-2回踩-14.0% vr=0.554深度洗盘；今日+4.28% 11:22午后新高 主力+0.17亿；非龙虎榜；异常因子画像来自T-1/T-2涨停连板样本(11-06涨停41只→11-09均值+2.93% 6只连板)；verify_anomaly_factor_integrity --target-date 2026-11-09 EXIT=0",
+   "risk_reason": "T-2(11-06)回踩缩量洗盘特征 + T日(11-09)主力资金启动 + 未涨停博弈尾盘/T+1; 非龙虎榜非涨停股; 北交所封存已剔除",
+   "qa_verdict": "PASS_WITH_GAPS(venvoo逐笔20261109缺口)",
    "seed_trade_date": "2026-11-09",
    "monitoring_eligible": true,
    "monitoring_status": "ready",
+   "original_condition_status": "pm_afternoon",
    "observation_eligible": true,
    "observation_status": "pm_watch",
    "manual_label": "pm_afternoon_t2wash",
@@ -222,11 +249,19 @@
     "pm_final_candidates_20261109.json",
     "data/daily_picks_ledger.csv"
    ],
-   "cycle_position": "T(盘中) 入场, T+1=2026-11-10 出场: 破开盘价3%止损 | 14:55清仓",
+   "cycle_position": "T(盘中)入场, T+1=2026-11-10出场: 破开盘价3%止损|14:55清仓",
    "recommendation": "观察",
-   "adversarial_verdict": "not_a_trading_signal"
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "N/A(下午盘中入场,无09:25竞价闸)",
+   "auction_badge": "PM_T2WASH",
+   "auction_reason": "下午票闸: 主力净流入>0+未涨停+今开<+3%+T-2回踩缩量+分时午后走强",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-10: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险"
   }
  ],
- "manual_watch_revision": "2026-11-09 盘中修正: 母池=全市场∩异动层, 龙虎榜/涨停池仅作T-3/T-1特征样本不当标的; 北交所封存; 下午票=T-2回踩缩量特征+T日资金启动未涨停股",
- "holding_summary": "signal_boundary=not_a_trading_signal; 5只下午观察票, T+1=2026-11-10 破开盘3%止损/14:55清仓"
+ "manual_watch_revision": 1,
+ "holding_summary": "signal_boundary=not_a_trading_signal; 5只下午观察票(T-2洗盘特征+T日资金启动), T+1=2026-11-10 破开盘3%止损/14:55清仓"
 }
