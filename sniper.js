@@ -647,39 +647,9 @@
     const counts = el("p", "auction-evidence-counts", auctionCountText(evaluation));
     const reason = el("p", "auction-evidence-reason", evidenceText(evaluation.reason_label, auctionReasonText(evaluation.reason, "逐项结果如下")));
     const note = el("p", "auction-evidence-note", "阈值沿用已存规则；本股比较依据逐项列示。原文保留在详情中。");
-    const table = el("div", "auction-evidence-table");
-    table.setAttribute("role", "table");
-    table.setAttribute("aria-label", "竞价实际数据与规则对照");
-    const columns = el("div", "auction-evidence-columns"); columns.setAttribute("role", "row");
-    for (const label of ["指标", "本股实际", "规则阈值 / 比较依据", "结果"]) {
-      const cell = el("span", "", label); cell.setAttribute("role", "columnheader"); columns.append(cell);
-    }
-    table.append(columns);
-    for (const row of evaluation.rows) {
-      if (!row || typeof row !== "object") continue;
-      const status = Object.hasOwn(AUCTION_ROW_LABELS, row.status) ? row.status : "missing";
-      const item = el("div", `auction-evidence-row status-${status}`); item.setAttribute("role", "row");
-      const metric = el("div", "auction-evidence-metric");
-      metric.append(el("strong", "", evidenceText(row.label, evidenceText(row.metric))),
-        el("small", "", {support:"支持条件",invalidation:"失效排查",tightened:"收紧条件"}[row.group] || "原规则"));
-      const actual = el("div", "auction-evidence-actual");
-      actual.append(el("span", "auction-mobile-label", "本股实际"), el("strong", "", evidenceText(row.actual_display)));
-      const rule = el("div", "auction-evidence-rule");
-      rule.append(el("span", "auction-mobile-label", "规则阈值 / 比较依据"), el("strong", "", evidenceText(row.threshold_display)),
-        el("small", "auction-evidence-basis", `依据：${evidenceText(row.basis)}`));
-      rule.title = evidenceText(row.rule_text, evidenceText(row.threshold_display));
-      const outcome = el("div", "auction-evidence-outcome");
-      outcome.append(el("span", `auction-row-status status-${status}`, evidenceText(row.status_label, AUCTION_ROW_LABELS[status])));
-      for (const cell of [metric,actual,rule,outcome]) {cell.setAttribute("role", "cell");item.append(cell);}
-      const provenance = el("div", "auction-evidence-provenance"); provenance.setAttribute("role", "cell");
-      provenance.setAttribute("aria-colspan", "4");
-      if (row.reason_label || row.reason) provenance.append(el("span", "auction-row-reason", evidenceText(row.reason_label, auctionReasonText(row.reason))));
-      if (typeof row.evidence_reason === "string" && row.evidence_reason.trim()) provenance.append(el("span", "auction-row-reason", auctionReasonText(row.evidence_reason)));
-      provenance.append(el("span", "", `数据${row.source_time_precision === "day" ? "日期" : "时点"} ${evidenceText(row.source_data_at)}${row.source_time_precision === "day" ? `（日精度） · 读取于 ${evidenceText(row.observed_at)}` : ""} · 来源 ${evidenceText(row.source_id)}`));
-      item.append(provenance);table.append(item);
-    }
-    if (!evaluation.rows.length) table.append(el("p", "auction-evidence-empty", "缺少逐项竞价数据，等待补齐后核验。"));
-    container.replaceChildren(heading,sourceLine,meta,counts,reason,note,table);
+    // 2026-11-11 起卡片不再展开竞价逐项明细：只保留汇总(状态徽章/计数/原因)，
+    // 逐项 rows 仍完整保留在 sniper-feed.json 的 auction_evaluation.rows 中，不丢数据
+    container.replaceChildren(heading,sourceLine,meta,counts,reason,note);
   }
 
   function updateCard(ref, stock, feed) {
