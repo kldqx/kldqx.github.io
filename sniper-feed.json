@@ -5,11 +5,11 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-11T02:38:53.162375+08:00",
+ "generated_at": "2026-11-11T02:39:28.549761+08:00",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-10",
  "handoff": "runtime/runs/20261111-morning-v26",
- "run_id": "20261110-postmarket-v26",
+ "run_id": "20261111-morning-v26",
  "stocks": [
   {
    "code": "300413.SZ",
@@ -20,7 +20,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "observed_at": "2026-11-11T02:39:28.549761+08:00",
    "phase": "T-1_POSTMARKET",
    "benchmark": {
     "desc": "V26五日战役研判 alpha=0.6858；板块 BK1221；vol_ratio=0.0104 回踩=-3.19%；20日涨停基因=True；v23=0.2692；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=156.66",
@@ -48,7 +48,7 @@
    "observation_eligible": true,
    "observation_status": "pre_auction_watch",
    "manual_label": "t_minus1_v26_B级",
-   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_batch_id": "20261111-morning-v26",
    "origin_source_refs": [
     "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
     "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
@@ -85,7 +85,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "observed_at": "2026-11-11T02:39:28.549761+08:00",
    "phase": "T-1_POSTMARKET",
    "benchmark": {
     "desc": "V26五日战役研判 alpha=0.6659；板块 BK0481,BK1526；vol_ratio=0.0132 回踩=-7.16%；20日涨停基因=True；v23=0.4693；抓手=0.24；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=42.01",
@@ -113,7 +113,7 @@
    "observation_eligible": true,
    "observation_status": "pre_auction_watch",
    "manual_label": "t_minus1_v26_B级",
-   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_batch_id": "20261111-morning-v26",
    "origin_source_refs": [
     "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
     "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
@@ -151,7 +151,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "observed_at": "2026-11-11T02:39:28.549761+08:00",
    "phase": "T-1_POSTMARKET",
    "benchmark": {
     "desc": "V26五日战役研判 alpha=0.6659；板块 BK1201；vol_ratio=0.0108 回踩=-7.98%；20日涨停基因=True；v23=0.4693；抓手=0.24；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=87.29",
@@ -179,7 +179,7 @@
    "observation_eligible": true,
    "observation_status": "pre_auction_watch",
    "manual_label": "t_minus1_v26_B级",
-   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_batch_id": "20261111-morning-v26",
    "origin_source_refs": [
     "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
     "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
@@ -216,7 +216,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "observed_at": "2026-11-11T02:39:28.549761+08:00",
    "phase": "T-1_POSTMARKET",
    "benchmark": {
     "desc": "V26五日战役研判 alpha=0.6559；板块 BK0448,BK1215；vol_ratio=0.0116 回踩=-9.89%；20日涨停基因=True；v23=0.1193；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=10.45",
@@ -244,7 +244,7 @@
    "observation_eligible": true,
    "observation_status": "pre_auction_watch",
    "manual_label": "t_minus1_v26_B级",
-   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_batch_id": "20261111-morning-v26",
    "origin_source_refs": [
     "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
     "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
@@ -282,7 +282,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "observed_at": "2026-11-11T02:39:28.549761+08:00",
    "phase": "T-1_POSTMARKET",
    "benchmark": {
     "desc": "V26五日战役研判 alpha=0.6557；板块 BK1326；vol_ratio=0.0088 回踩=-15.06%；20日涨停基因=True；v23=0.1184；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=319.72",
@@ -310,7 +310,7 @@
    "observation_eligible": true,
    "observation_status": "pre_auction_watch",
    "manual_label": "t_minus1_v26_B级",
-   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_batch_id": "20261111-morning-v26",
    "origin_source_refs": [
     "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
     "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
@@ -347,7 +347,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.474312+08:00",
+   "observed_at": "2026-11-11T02:39:28.871812+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘68.13(+3.27%), 收盘68.08(+3.2%), 止损线66.09未触发"
@@ -397,7 +397,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.474312+08:00",
+   "observed_at": "2026-11-11T02:39:28.871812+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘51.0(+2.25%), 收盘51.31(+2.87%), 止损线49.47未触发"
@@ -447,7 +447,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.474312+08:00",
+   "observed_at": "2026-11-11T02:39:28.871812+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘60.82(+1.96%), 收盘60.08(+0.72%), 止损线59.0未触发"
@@ -497,7 +497,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.474312+08:00",
+   "observed_at": "2026-11-11T02:39:28.871812+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘5.15(+1.98%), 收盘5.06(+0.2%), 止损线5.0未触发"
@@ -547,7 +547,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:38:53.474312+08:00",
+   "observed_at": "2026-11-11T02:39:28.871812+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘23.01(+2.68%), 收盘22.92(+2.28%), 止损线22.32未触发"
@@ -590,11 +590,11 @@
   }
  ],
  "manual_watch_revision": 1,
- "holding_summary": "signal_boundary=not_a_trading_signal; V26 2026-11-11 候选5只(A级2: 300413芒果超媒/688608恒玄科技; B级3: 600345长江通信/301583托伦斯/000559万向钱潮), T=2026-11-11 09:25集合竞价硬闸门裁决, T+1 破开盘3%止损/14:55清仓 | 全生命周期监控: T-3板块观察见 lifecycle_watch.T_minus3_sector_watch; T+1出场战绩见 stocks 中 T+1_EXIT_DONE",
+ "holding_summary": "signal_boundary=not_a_trading_signal; V26 2026-11-11 候选5只(B级5: 300413芒果超媒/000559万向钱潮/300493润欣科技/600345长江通信/301583托伦斯), T=2026-11-11 09:25集合竞价硬闸门裁决, T+1 破开盘3%止损/14:55清仓 | 全生命周期监控: T-3板块观察见 lifecycle_watch.T_minus3_sector_watch; T+1出场战绩见 stocks 中 T+1_EXIT_DONE",
  "lifecycle_watch": {
   "schema": "lifecycle-watch/v1",
   "signal_boundary": "not_a_trading_signal",
-  "updated_at": "2026-11-11T02:38:53.474312+08:00",
+  "updated_at": "2026-11-11T02:39:28.871812+08:00",
   "T_minus3_sector_watch": [
    {
     "bk": "BK1201",
