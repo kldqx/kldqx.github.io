@@ -3,7 +3,9 @@
 (() => {
   const BOUNDARY = "not_a_trading_signal";
   let lastStocksData = []; // L4: latest stocks for export
-  let phaseFilter = "all"; // 战役时段分页: all | T-1_POSTMARKET | T+1_EXIT_DONE
+  // 战役时段分页: 默认 T 页只显示刚推的 T 候选(T-1_POSTMARKET);
+  // t-minus1.html / t-plus1.html 通过 window.PHASE_FILTER 或 ?phase= 指定自己的组
+  let phaseFilter = (window.PHASE_FILTER || new URLSearchParams(location.search).get("phase") || "T-1_POSTMARKET");
   let audioAlarmEnabled = true;
   const lastAlarmTimeByCode = new Map(); // code -> timestamp
 
@@ -1213,10 +1215,12 @@
     const handoff = mode === "live" ? feed.handoff : null;
     const handoffMessage = HANDOFF_LABELS[handoff?.status];
     byId("stock-count").textContent=!stocks.length && handoffMessage ? "—" : String(stocks.length);
+    highlightPhaseTabs();
     for (const tab of document.querySelectorAll(".phase-tab")) {
       const f = tab.dataset.phaseFilter;
-      const n = f === "all" ? feed.stocks.length : feed.stocks.filter(st => st.phase === f).length;
-      tab.textContent = (f === "all" ? "全部" : f === "T-1_POSTMARKET" ? "T-1 候选" : "T+1 出场") + " " + n;
+      const n = feed.stocks.filter(st => st.phase === f).length;
+      const label = f === "T-1_POSTMARKET" ? "狙击台(T)" : f === "T-1_PM_WATCH" ? "T-1观察" : "T+1出场";
+      tab.textContent = label + " " + n;
     }
     const holdingCount=feed.holding_summary?.holding_count ?? stocks.filter(s=>s.manual_label === "bought").length;
     const holdingEl=byId("holding-count");
@@ -1301,12 +1305,13 @@
 
   const controller=createController({fetcher:(...args)=>fetch(...args),draw,connection:setConnection});
   byId("live-mode").addEventListener("click",()=>controller.select("live"));
-  for (const tab of document.querySelectorAll(".phase-tab")) {
-    tab.addEventListener("click",()=>{
-      phaseFilter = tab.dataset.phaseFilter || "all";
-      for (const t2 of document.querySelectorAll(".phase-tab")) {const on = t2 === tab;t2.classList.toggle("selected",on);t2.setAttribute("aria-pressed",String(on));}
-      if (lastFeed) draw(lastFeed);
-    });
+  // 页签为页面导航链接(<a href>), 这里只做当前页高亮
+  function highlightPhaseTabs() {
+    for (const tab of document.querySelectorAll(".phase-tab")) {
+      const on = tab.dataset.phaseFilter === phaseFilter;
+      tab.classList.toggle("selected", on);
+      tab.setAttribute("aria-pressed", String(on));
+    }
   }
   const demoBtnInit = byId("demo-mode");
   if (demoBtnInit) demoBtnInit.addEventListener("click",()=>controller.select("demo"));

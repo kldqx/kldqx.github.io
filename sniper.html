@@ -9,8 +9,8 @@
   <meta name="color-scheme" content="dark">
   <title>A股资金监控台</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./sniper.css?v=20261111_v13">
-  <script src="./sniper.js?v=20261111_v13" defer></script>
+  <link rel="stylesheet" href="./sniper.css?v=20261111_v14">
+  <script src="./sniper.js?v=20261111_v14" defer></script>
 </head>
 <body data-signal-boundary="not_a_trading_signal">
   <div class="page-shell">
@@ -58,7 +58,7 @@
       </section>
 
       <section class="watchlist" aria-labelledby="watchlist-title">
-        <div class="section-heading"><h2 id="watchlist-title">股票观察卡</h2><span style="display:flex;gap:10px;align-items:center"><span class="mode-switch" role="group" aria-label="按战役时段分页"><button class="mode-button phase-tab selected" type="button" data-phase-filter="all" aria-pressed="true">全部</button><button class="mode-button phase-tab" type="button" data-phase-filter="T-1_POSTMARKET" aria-pressed="false">T-1 候选</button><button class="mode-button phase-tab" type="button" data-phase-filter="T+1_EXIT_DONE" aria-pressed="false">T+1 出场</button></span><button id="toggle-all-details" class="toggle-all-btn" type="button" title="展开/折叠全部详情">展开全部</button><span id="list-caption">一股一卡 · 独立跟踪</span></span></div>
+        <div class="section-heading"><h2 id="watchlist-title">股票观察卡</h2><span style="display:flex;gap:10px;align-items:center"><span class="mode-switch" role="group" aria-label="战役时段页面"><a class="mode-button phase-tab" data-phase-filter="T-1_POSTMARKET" href="./sniper.html">狙击台(T)</a><a class="mode-button phase-tab" data-phase-filter="T-1_PM_WATCH" href="./t-minus1.html">T-1观察</a><a class="mode-button phase-tab" data-phase-filter="T+1_EXIT_DONE" href="./t-plus1.html">T+1出场</a></span><button id="toggle-all-details" class="toggle-all-btn" type="button" title="展开/折叠全部详情">展开全部</button><span id="list-caption">一股一卡 · 独立跟踪</span></span></div>
         <p id="feed-notice" class="feed-notice" role="status" hidden></p>
         <div id="stock-grid" class="stock-grid" aria-label="股票观察卡片"></div>
         <div id="empty-state" class="empty-state"><span class="empty-orbit" aria-hidden="true">◎</span><h3>正在载入观察名单</h3><p>QA 交接到达后，行情与原始观察条件会显示在每只股票的卡片里。</p></div>
