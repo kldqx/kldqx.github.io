@@ -5,12 +5,339 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-11T02:31:42.743551+08:00",
+ "generated_at": "2026-11-11T02:38:53.162375+08:00",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-10",
  "handoff": "runtime/runs/20261111-morning-v26",
  "run_id": "20261110-postmarket-v26",
  "stocks": [
+  {
+   "code": "300413.SZ",
+   "name": "芒果超媒",
+   "price": 35.55,
+   "change_pct": -0.7,
+   "turnover_yi": 47.606,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-10 15:00:00",
+   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V26五日战役研判 alpha=0.6858；板块 BK1221；vol_ratio=0.0104 回踩=-3.19%；20日涨停基因=True；v23=0.2692；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=156.66",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.9521
+   },
+   "gaps": [
+    "goldminer 20261110 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
+    "venvoo 云端逐笔只到 20261108",
+    "11-10 龙虎榜 17:00 后补拉校验剔除"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
+   "hypothesis": "V26五日战役研判 alpha=0.6858；板块 BK1221；vol_ratio=0.0104 回踩=-3.19%；20日涨停基因=True；v23=0.2692；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=156.66; verify_anomaly_factor_integrity --target-date 2026-11-11 EXIT=0; 名称腾讯+东财双源一致",
+   "risk_reason": "goldminer 20261110 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-10",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v26_B级",
+   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_source_refs": [
+    "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
+    "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
+    "runtime/runs/20261111-morning-v26/sector_top15.json",
+    "runtime/runs/20261111-morning-v26/micro_factors.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-10盘后定案) -> T=2026-11-11 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-11 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V26_B",
+   "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-11: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
+   "tier": "B",
+   "alpha_score": 0.6858,
+   "pe": 156.66,
+   "vol_ratio": 0.0104,
+   "pullback_pct": -3.19,
+   "sectors": [
+    "BK1221"
+   ]
+  },
+  {
+   "code": "000559.SZ",
+   "name": "万向钱潮",
+   "price": 13.2,
+   "change_pct": 2.88,
+   "turnover_yi": 16.705,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-10 15:00:00",
+   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V26五日战役研判 alpha=0.6659；板块 BK0481,BK1526；vol_ratio=0.0132 回踩=-7.16%；20日涨停基因=True；v23=0.4693；抓手=0.24；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=42.01",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.3341
+   },
+   "gaps": [
+    "goldminer 20261110 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
+    "venvoo 云端逐笔只到 20261108",
+    "11-10 龙虎榜 17:00 后补拉校验剔除"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
+   "hypothesis": "V26五日战役研判 alpha=0.6659；板块 BK0481,BK1526；vol_ratio=0.0132 回踩=-7.16%；20日涨停基因=True；v23=0.4693；抓手=0.24；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=42.01; verify_anomaly_factor_integrity --target-date 2026-11-11 EXIT=0; 名称腾讯+东财双源一致",
+   "risk_reason": "goldminer 20261110 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-10",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v26_B级",
+   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_source_refs": [
+    "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
+    "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
+    "runtime/runs/20261111-morning-v26/sector_top15.json",
+    "runtime/runs/20261111-morning-v26/micro_factors.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-10盘后定案) -> T=2026-11-11 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-11 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V26_B",
+   "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-11: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
+   "tier": "B",
+   "alpha_score": 0.6659,
+   "pe": 42.01,
+   "vol_ratio": 0.0132,
+   "pullback_pct": -7.16,
+   "sectors": [
+    "BK0481",
+    "BK1526"
+   ]
+  },
+  {
+   "code": "300493.SZ",
+   "name": "润欣科技",
+   "price": 14.32,
+   "change_pct": 6.15,
+   "turnover_yi": 9.914,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-10 15:00:00",
+   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V26五日战役研判 alpha=0.6659；板块 BK1201；vol_ratio=0.0108 回踩=-7.98%；20日涨停基因=True；v23=0.4693；抓手=0.24；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=87.29",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.1983
+   },
+   "gaps": [
+    "goldminer 20261110 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
+    "venvoo 云端逐笔只到 20261108",
+    "11-10 龙虎榜 17:00 后补拉校验剔除"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
+   "hypothesis": "V26五日战役研判 alpha=0.6659；板块 BK1201；vol_ratio=0.0108 回踩=-7.98%；20日涨停基因=True；v23=0.4693；抓手=0.24；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=87.29; verify_anomaly_factor_integrity --target-date 2026-11-11 EXIT=0; 名称腾讯+东财双源一致",
+   "risk_reason": "goldminer 20261110 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-10",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v26_B级",
+   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_source_refs": [
+    "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
+    "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
+    "runtime/runs/20261111-morning-v26/sector_top15.json",
+    "runtime/runs/20261111-morning-v26/micro_factors.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-10盘后定案) -> T=2026-11-11 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-11 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V26_B",
+   "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-11: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
+   "tier": "B",
+   "alpha_score": 0.6659,
+   "pe": 87.29,
+   "vol_ratio": 0.0108,
+   "pullback_pct": -7.98,
+   "sectors": [
+    "BK1201"
+   ]
+  },
+  {
+   "code": "600345.SH",
+   "name": "长江通信",
+   "price": 40.59,
+   "change_pct": 1.42,
+   "turnover_yi": 5.572,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-10 15:00:00",
+   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V26五日战役研判 alpha=0.6559；板块 BK0448,BK1215；vol_ratio=0.0116 回踩=-9.89%；20日涨停基因=True；v23=0.1193；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=10.45",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.1114
+   },
+   "gaps": [
+    "goldminer 20261110 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
+    "venvoo 云端逐笔只到 20261108",
+    "11-10 龙虎榜 17:00 后补拉校验剔除"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
+   "hypothesis": "V26五日战役研判 alpha=0.6559；板块 BK0448,BK1215；vol_ratio=0.0116 回踩=-9.89%；20日涨停基因=True；v23=0.1193；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=10.45; verify_anomaly_factor_integrity --target-date 2026-11-11 EXIT=0; 名称腾讯+东财双源一致",
+   "risk_reason": "goldminer 20261110 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-10",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v26_B级",
+   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_source_refs": [
+    "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
+    "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
+    "runtime/runs/20261111-morning-v26/sector_top15.json",
+    "runtime/runs/20261111-morning-v26/micro_factors.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-10盘后定案) -> T=2026-11-11 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-11 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V26_B",
+   "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-11: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
+   "tier": "B",
+   "alpha_score": 0.6559,
+   "pe": 10.45,
+   "vol_ratio": 0.0116,
+   "pullback_pct": -9.89,
+   "sectors": [
+    "BK0448",
+    "BK1215"
+   ]
+  },
+  {
+   "code": "301583.SZ",
+   "name": "托伦斯",
+   "price": 102.76,
+   "change_pct": -1.55,
+   "turnover_yi": 9.655,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-10 15:00:00",
+   "observed_at": "2026-11-11T02:38:53.162375+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V26五日战役研判 alpha=0.6557；板块 BK1326；vol_ratio=0.0088 回踩=-15.06%；20日涨停基因=True；v23=0.1184；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=319.72",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.1931
+   },
+   "gaps": [
+    "goldminer 20261110 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
+    "venvoo 云端逐笔只到 20261108",
+    "11-10 龙虎榜 17:00 后补拉校验剔除"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
+   "hypothesis": "V26五日战役研判 alpha=0.6557；板块 BK1326；vol_ratio=0.0088 回踩=-15.06%；20日涨停基因=True；v23=0.1184；抓手=0.44；L2=goldminer_l2[goldminer_ticks]:20261110；名称双源一致=True；PE=319.72; verify_anomaly_factor_integrity --target-date 2026-11-11 EXIT=0; 名称腾讯+东财双源一致",
+   "risk_reason": "goldminer 20261110 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-10",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v26_B级",
+   "origin_batch_id": "20261110-postmarket-v26",
+   "origin_source_refs": [
+    "runtime/runs/20261111-morning-v26/monitoring_ticket_v1.json",
+    "runtime/runs/20261111-morning-v26/final_picks_20261111.json",
+    "runtime/runs/20261111-morning-v26/sector_top15.json",
+    "runtime/runs/20261111-morning-v26/micro_factors.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-10盘后定案) -> T=2026-11-11 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-11 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V26_B",
+   "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal",
+   "exit_rule_T1": "T+1=2026-11-11: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
+   "tier": "B",
+   "alpha_score": 0.6557,
+   "pe": 319.72,
+   "vol_ratio": 0.0088,
+   "pullback_pct": -15.06,
+   "sectors": [
+    "BK1326"
+   ]
+  },
   {
    "code": "600259.SH",
    "name": "中稀有色",
@@ -20,7 +347,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:31:43.078297+08:00",
+   "observed_at": "2026-11-11T02:38:53.474312+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘68.13(+3.27%), 收盘68.08(+3.2%), 止损线66.09未触发"
@@ -70,7 +397,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:31:43.078297+08:00",
+   "observed_at": "2026-11-11T02:38:53.474312+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘51.0(+2.25%), 收盘51.31(+2.87%), 止损线49.47未触发"
@@ -120,7 +447,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:31:43.078297+08:00",
+   "observed_at": "2026-11-11T02:38:53.474312+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘60.82(+1.96%), 收盘60.08(+0.72%), 止损线59.0未触发"
@@ -170,7 +497,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:31:43.078297+08:00",
+   "observed_at": "2026-11-11T02:38:53.474312+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘5.15(+1.98%), 收盘5.06(+0.2%), 止损线5.0未触发"
@@ -220,7 +547,7 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-10 15:00:00",
-   "observed_at": "2026-11-11T02:31:43.078297+08:00",
+   "observed_at": "2026-11-11T02:38:53.474312+08:00",
    "phase": "T+1_EXIT_DONE",
    "benchmark": {
     "desc": "T+1出场日 2026-11-10: 开盘23.01(+2.68%), 收盘22.92(+2.28%), 止损线22.32未触发"
@@ -267,7 +594,7 @@
  "lifecycle_watch": {
   "schema": "lifecycle-watch/v1",
   "signal_boundary": "not_a_trading_signal",
-  "updated_at": "2026-11-11T02:31:43.078297+08:00",
+  "updated_at": "2026-11-11T02:38:53.474312+08:00",
   "T_minus3_sector_watch": [
    {
     "bk": "BK1201",
