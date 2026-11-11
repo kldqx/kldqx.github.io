@@ -1,0 +1,191 @@
+{
+  "signal_boundary": "not_a_trading_signal",
+  "schema": "web-factor-gap-map/v1",
+  "generated_at": "2026-11-11T13:20:01+08:00",
+  "generated_at_utc": "2026-11-11T05:20:01Z",
+  "collector_role": "网页端因子缺口盘点子代理 (只读盘点 + 实际请求验证, 不写任何只读路径)",
+  "task_date": "2026-11-11",
+  "note": "盘点 DFCF/THS/腾讯 网页端页面上明晃晃摆着但现役采集未覆盖的因子。所有可达性均经 2026-11-11 13:0x-13:20 实际 HTTP 请求验证 (带 Referer + UA, 单源超时 25s 落在 30s 上限内)。厂商推导指标(主力/DDE/BBD/超大单分档)仅作交叉验证, 不作为真实资金主体证据。缺口标 gap 不零填不脑补。数据时间与读取时间分别保留。",
+  "probe_env": {
+    "method": "本机 curl 直连 (connector open_url 无 Referer 被 push2/d.10jqka 拒绝, 已换源为本机 HTTP + Referer, 与 micro_20261111/web_xcheck_evidence.md 记录一致)",
+    "headers": "UA Chrome/120 + Referer 按站点设置 (quote.eastmoney.com / data.eastmoney.com / stockpage.10jqka.com.cn / gu.qq.com)",
+    "single_source_timeout_sec": 25,
+    "collection_order": ["DFCF", "TENCENT", "THS", "TDX"],
+    "encoding_note": "腾讯 qt.gtimg.cn 返回编码不稳定 (本次 GBK, 单只请求曾见 UTF-8), 东财 push2 JSON 同样偶发 UTF-8/GBK 混杂, 采集端须按字节探测编码; 页面 HTML 多为 GBK (iconv -f GBK)"
+  },
+  "name_binding_check": {
+    "rule": "代码-名称 腾讯 qt.gtimg.cn + 东财 push2 ulist.np/get 双向反查",
+    "subjects_15": ["300413.SZ","000559.SZ","300493.SZ","600345.SH","301583.SZ","600259.SH","688385.SH","688035.SH","002141.SZ","300739.SZ","603728.SH","603667.SH","603893.SH","603341.SH","605188.SH"],
+    "result": "15/15 双源一致 (2026-11-11T13:1x 读取, 行情时间 20261111131000)",
+    "sample": {"300413": "芒果超媒", "600345": "长江通信", "605188": "国光连锁"}
+  },
+  "pages": [
+    {
+      "site": "DFCF",
+      "page": "全市场资金流向 /zjlx/ (个股大单榜 detail.html, 概念 dpzjlx.html, 行业 hyzjlx.html)",
+      "url": "https://data.eastmoney.com/zjlx/detail.html",
+      "fields": [
+        {"name": "全市场个股主力净流入排行", "desc": "clist fid=f62 全市场排序", "collected_now": true, "endpoint": "push2 clist/get fid=f62 (sector-flow/concept-flow/market-breadth-style 已用)", "status": "collected", "priority": "-"},
+        {"name": "全市场分档资金(超大单/大单/中单/小单 流入/流出/净额)", "desc": "ulist.np/get fields f62,f64,f65,f66,f70,f71,f76,f77,f82,f83,f84; 页面 detail.js 实际调用 ulist.np/get", "collected_now": false, "endpoint": "https://push2.eastmoney.com/api/qt/ulist.np/get?secids=<批量>&fields=f12,f14,f62,f64,f65,f66,f70,f71,f76,f77,f82,f83,f84,f124 (实测 15 只批量 HTTP 200; clist 不支持分档字段 rc=102)", "status": "gap: 现役只采了 15 只 feed 股票 (stock-fund-breakdown), 全市场批量未采", "priority": "P1", "suggested_endpoint": "market-fund-tier-batch"},
+        {"name": "概念/行业板块资金流向页", "desc": "dpzjlx/hyzjlx 页面数据", "collected_now": true, "endpoint": "push2 clist + fflow/daykline (concept-flow.json, sector-flow.json 已采); 注: /zjlx/hyzjlx.html 实测 404 已改版", "status": "collected (THS 侧 hyzjl 见下)", "priority": "-"},
+        {"name": "个股资金流向页 /zjlx/{code}.html", "desc": "近5日分档 daykline + 当日分钟累计分档 fflow kline klt=1", "collected_now": true, "endpoint": "push2his fflow/daykline/get + push2 fflow/kline/get klt=1 (stock-fund-breakdown.json 15 只已采)", "status": "collected (仅 15 只)", "priority": "-"}
+      ]
+    },
+    {
+      "site": "DFCF",
+      "page": "北向资金 /hsgt/ (index + hsgtV2/hsgtDetail/* + hsgtcg/ 沪深港通持股)",
+      "url": "https://data.eastmoney.com/hsgt/index.html",
+      "fields": [
+        {"name": "北向实时净流入 kamt/get", "desc": "沪股通/深股通/北向合计实时", "collected_now": true, "endpoint": "push2 kamt/get (northbound-flow.json)", "status": "collected", "priority": "-"},
+        {"name": "北向分时 kamt.rtmin/get + BBD分时 kamtbs.rtmin/get", "desc": "分钟级北向净流入/BBD", "collected_now": true, "endpoint": "push2 kamt.rtmin/get, kamtbs.rtmin/get (northbound-flow.json)", "status": "collected", "priority": "-"},
+        {"name": "北向近5日净买额+领涨股", "desc": "datacenter 日级北向", "collected_now": true, "endpoint": "datacenter (northbound-signal.json)", "status": "collected", "priority": "-"},
+        {"name": "北向十大成交股", "desc": "RPT_MUTUAL_TOP10DEAL, 沪/深十大成交股代码+买卖净额", "collected_now": false, "endpoint": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_MUTUAL_TOP10DEAL&filter=(TRADE_DATE='2026-11-10') (实测 HTTP 200, 14 页)", "status": "gap: 页面 hsgtV2/hsgtDetail/sdcjg.html 摆着, 现役未采", "priority": "P1", "suggested_endpoint": "northbound-top10-deal"},
+        {"name": "北向净流入分时段明细", "desc": "RPT_MUTUAL_NETINFLOW_DETAILS (TIME_TYPE 分段 NET_INFLOW_SH/SZ/BOTH)", "collected_now": false, "endpoint": "datacenter reportName=RPT_MUTUAL_NETINFLOW_DETAILS&filter=(TRADE_DATE=...) (实测 200)", "status": "gap", "priority": "P2", "suggested_endpoint": "northbound-inflow-detail"},
+        {"name": "北向每日买卖额/额度历史", "desc": "RPT_MUTUAL_DEAL_HISTORY (BUY_AMT/SELL_AMT/NET_DEAL_AMT/QUOTA_BALANCE)", "collected_now": false, "endpoint": "datacenter reportName=RPT_MUTUAL_DEAL_HISTORY&filter=(TRADE_DATE=...) (实测 200)", "status": "gap", "priority": "P2", "suggested_endpoint": "northbound-deal-history"},
+        {"name": "北向个股持股排行(持股市值/数量/占比)", "desc": "RPT_MUTUAL_HOLDRANK_NEW, 按 HOLD_DATE; 注意样本最新 HOLD_DATE 为 2026-09-30 (报表口径滞后, 须标注数据时间)", "collected_now": false, "endpoint": "datacenter reportName=RPT_MUTUAL_HOLDRANK_NEW&sortColumns=HOLD_DATE&sortTypes=-1 (实测 200, 6778 页)", "status": "gap: 页面 hsgtcg/ 摆着持股排行, 现役未采; 2026-11-10 日 HOLD_DATE 过滤返回空(9201), 需按最新 HOLD_DATE 取", "priority": "P1", "suggested_endpoint": "northbound-hold-rank"},
+        {"name": "北向板块持股排行", "desc": "RPT_MUTUAL_BOARD_HOLDRANK_WEB / _NEW", "collected_now": false, "endpoint": "datacenter reportName=RPT_MUTUAL_BOARD_HOLDRANK_WEB (实测 200)", "status": "gap", "priority": "P2", "suggested_endpoint": "northbound-board-hold"},
+        {"name": "北向机构持股排行", "desc": "RPT_NORTH_ORG_HOLDRANK_NEW (机构名称/持股)", "collected_now": false, "endpoint": "datacenter reportName=RPT_NORTH_ORG_HOLDRANK_NEW (实测 200, 552 页)", "status": "gap", "priority": "P2", "suggested_endpoint": "northbound-org-hold"},
+        {"name": "个股北向持股明细(持股市值/数量/占发行股本/持股日期)", "desc": "页面 /hsgt/StockHdDetail/{code}.html 及 /hsgtcg/StockHdDetail/{code}/, 页内含持股市值(元/港元)、持股数量(股)、占发行股百分比字段", "collected_now": false, "endpoint": "https://data.eastmoney.com/hsgt/StockHdDetail/300413.html (实测 HTTP 200, 190KB, 含持股明细表)", "status": "gap: 个股级北向持股现役完全未采 (仅北向合计/分时)", "priority": "P0", "suggested_endpoint": "northbound-stock-hold-detail"}
+      ]
+    },
+    {
+      "site": "DFCF",
+      "page": "两融 /rzrq/ (total.html 总貌 + detail.html 明细)",
+      "url": "https://data.eastmoney.com/rzrq/detail.html",
+      "fields": [
+        {"name": "两融总规模日历史", "desc": "RPTA_RZRQ_LSHJ 融资余额/融券余量", "collected_now": true, "endpoint": "datacenter RPTA_RZRQ_LSHJ (margin.json)", "status": "collected", "priority": "-"},
+        {"name": "融资净买额前50榜", "desc": "RPTA_WEB_RZRQ_GGMX 排行", "collected_now": true, "endpoint": "datacenter RPTA_WEB_RZRQ_GGMX (margin.json)", "status": "collected", "priority": "-"},
+        {"name": "个股两融明细历史(融资余额/融券余量/融资净买额/融券卖出量 日级)", "desc": "RPTA_WEB_RZRQ_GGMX 按 SCODE 过滤; 300413 实测 874 页历史", "collected_now": false, "endpoint": "datacenter reportName=RPTA_WEB_RZRQ_GGMX&filter=(SCODE='300413')&sortColumns=DATE&sortTypes=-1 (实测 HTTP 200)", "status": "gap: 现役 margin.json 只有总貌+Top50, 15 只个股两融明细未采 — V27 P08 两融因子缺个股层", "priority": "P0", "suggested_endpoint": "margin-stock-detail"},
+        {"name": "板块两融明细", "desc": "RPTA_WEB_BKJYMXN (板块 FIN_BALANCE/LOAN_BALANCE/FIN_BUY_AMT)", "collected_now": false, "endpoint": "datacenter reportName=RPTA_WEB_BKJYMXN&filter=(TRADE_DATE=...) (实测 200)", "status": "gap", "priority": "P2", "suggested_endpoint": "margin-board"},
+        {"name": "两融市场历史(沪/深)", "desc": "RPTA_WEB_RZRQ_LSSH", "collected_now": false, "endpoint": "datacenter reportName=RPTA_WEB_RZRQ_LSSH (实测 200, 与 LSHJ 口径交叉)", "status": "gap (与总貌重复度高)", "priority": "P3", "suggested_endpoint": "margin-market-history"}
+      ]
+    },
+    {
+      "site": "DFCF",
+      "page": "龙虎榜 /stock/lhb.html 及新版 /stock/yybph.html /stock/hyyyb.html /stock/jgmmtj.html /stock/jgstatistic.html /stock/yybcx.html",
+      "url": "https://data.eastmoney.com/stock/lhb.html",
+      "fields": [
+        {"name": "上榜个股+买卖席位明细", "desc": "RPT_DAILYBILLBOARD_DETAILSNEW", "collected_now": true, "endpoint": "datacenter RPT_DAILYBILLBOARD_DETAILSNEW (lhb-seats.json, lhb-seat-detail.json)", "status": "collected", "priority": "-"},
+        {"name": "营业部上榜统计(次数/买卖总额/净额)", "desc": "RPT_OPERATEDEPT_LIST_STATISTICS", "collected_now": false, "endpoint": "datacenter reportName=RPT_OPERATEDEPT_LIST_STATISTICS (实测 200, 3613 页)", "status": "gap: yybph 页面摆着, 现役未采", "priority": "P1", "suggested_endpoint": "lhb-seat-stats"},
+        {"name": "营业部买卖明细(日/席位/个股)", "desc": "RPT_OPERATEDEPT_TRADE_DETAILSNEW", "collected_now": false, "endpoint": "datacenter reportName=RPT_OPERATEDEPT_TRADE_DETAILSNEW&filter=(TRADE_DATE=...) (实测 200)", "status": "gap", "priority": "P1", "suggested_endpoint": "lhb-seat-trade-detail"},
+        {"name": "机构买卖明细", "desc": "RPT_ORGANIZATION_TRADE_DETAILSNEW", "collected_now": false, "endpoint": "datacenter reportName=RPT_ORGANIZATION_TRADE_DETAILSNEW&filter=(TRADE_DATE=...) (实测 200)", "status": "gap (jgmmtj 页面)", "priority": "P1", "suggested_endpoint": "lhb-org-trade-detail"},
+        {"name": "机构席位统计", "desc": "RPT_ORGANIZATION_SEATNEW (ONLIST_TIMES/BUY_AMT/NET_BUY_AMT)", "collected_now": false, "endpoint": "datacenter reportName=RPT_ORGANIZATION_SEATNEW (实测 200, 3210 页)", "status": "gap", "priority": "P2", "suggested_endpoint": "lhb-org-seat-stats"},
+        {"name": "活跃营业部", "desc": "RPT_OPERATEDEPT_ACTIVE (BUYER_APPEAR_NUM/TOTAL_BUYAMT...)", "collected_now": false, "endpoint": "datacenter reportName=RPT_OPERATEDEPT_ACTIVE (实测 200, 685966 页)", "status": "gap", "priority": "P2", "suggested_endpoint": "lhb-active-seat"},
+        {"name": "营业部成功率排行(近1/3/5日上涨概率)", "desc": "RPT_RATEDEPT_RETURNT_RANKING (RISE_PROB/AVERAGE_INCREASE_1DAY)", "collected_now": false, "endpoint": "datacenter reportName=RPT_RATEDEPT_RETURNT_RANKING (实测 200, 3606 页)", "status": "gap: 对游资席位打板成功率有用", "priority": "P2", "suggested_endpoint": "lhb-seat-winrate"},
+        {"name": "旧路径 /stock/lhb/yybph.html 等", "desc": "实测 404, 页面已迁移至 /stock/yybph.html", "collected_now": false, "endpoint": "-", "status": "gap(路径变更, 三端路径报告滞后)", "priority": "P3"}
+      ]
+    },
+    {
+      "site": "DFCF",
+      "page": "大宗交易 /dzjy/ (dzjy_mrmx 明细 + dzjy_jgsc 机构 + dzjy_hyyyb 活跃营业部)",
+      "url": "https://data.eastmoney.com/dzjy/dzjy_mrmx.html",
+      "fields": [
+        {"name": "每日大宗交易明细", "desc": "RPT_DATA_BLOCKTRADE (价格/折价率/买卖方营业部/机构专用标记)", "collected_now": true, "endpoint": "datacenter RPT_DATA_BLOCKTRADE (blocktrade.json)", "status": "collected", "priority": "-"},
+        {"name": "个股大宗成交统计", "desc": "RPT_BLOCKTRADE_ACSTA (按股票+日期 DEAL_NUM/DEAL_AMT)", "collected_now": false, "endpoint": "datacenter reportName=RPT_BLOCKTRADE_ACSTA&filter=(TRADE_DATE=...) (实测 200, 64 页)", "status": "gap", "priority": "P2", "suggested_endpoint": "blocktrade-stock-stats"},
+        {"name": "营业部大宗交易(机构席位大宗/活跃营业部)", "desc": "RPT_BLOCKTRADE_OPERATEDEPT_NAME / _RANK / _OPERATEDEPTSTATISTICS; 注意过滤列不是 TRADE_DATE/DEAL_DATE (实测报错), NAME 报表列为 ORG_CODE/ORG_NAME_ABBR/OPERATEDEPT_SPLICING", "collected_now": false, "endpoint": "datacenter reportName=RPT_BLOCKTRADE_OPERATEDEPT_NAME (实测 200, 101 页)", "status": "gap: jgsc/hyyyb 页面 302→200, 报表可采但过滤列需再核", "priority": "P2", "suggested_endpoint": "blocktrade-seat"}
+      ]
+    },
+    {
+      "site": "DFCF",
+      "page": "个股行情页 quote.eastmoney.com/{code}.html (分时/盘口/逐笔/竞价)",
+      "url": "https://quote.eastmoney.com/sz300413.html",
+      "fields": [
+        {"name": "全天分时分钟序列(含 09:15-09:25 竞价段)", "desc": "push2his trends2/get, trends 含 09:15 起竞价分钟价/均价/量; 实测 300413 返回 256 条且 09:15 行存在", "collected_now": false, "endpoint": "https://push2his.eastmoney.com/api/qt/stock/trends2/get?secid=0.300413&fields1=f1..f11&fields2=f51..f58 (实测 HTTP 200)", "status": "gap: 现役 xcheck 用的是 kline/腾讯 minute, trends2 未持久化; 竞价段分钟价只有 trends2 有", "priority": "P0", "suggested_endpoint": "stock-trends2"},
+        {"name": "实时逐笔成交窗口(时间/价/手/笔数/内外盘)", "desc": "push2 stock/details/get, details[] = \"HH:MM:SS,价,手,笔数,方向(1买2卖3中性)\"; 实测返回最新约 10 笔窗口", "collected_now": false, "endpoint": "https://push2.eastmoney.com/api/qt/stock/details/get?secid=0.300413&fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55 (实测 HTTP 200)", "status": "gap: web 端实时逐笔未接入 (现役逐笔来自 venvoo PC 数据湖 l2-venvoo-micro.json); 盘中高频轮询可采", "priority": "P0", "suggested_endpoint": "stock-tick-live"},
+        {"name": "全天历史逐笔", "desc": "push2his stock/details/get 实测返回 details:[] 空", "collected_now": false, "endpoint": "push2his details/get (实测 200 但空)", "status": "gap(永久性 web 缺口): 东财 web 不暴露历史全天逐笔, 历史逐笔只能走 venvoo 数据湖/PC 端; 标 gap 不脑补", "priority": "P3", "suggested_endpoint": "-"},
+        {"name": "五档盘口(买一~买五/卖一~卖五)", "desc": "push2 stock/get 的 f31..f40 实测为空(非盘口字段); 页面盘口来自 JS bundle 未深逆; 可采替代 = 腾讯 qt.gtimg fields 9-28 (已验证含五档价量)", "collected_now": false, "endpoint": "腾讯 https://qt.gtimg.cn/q=sz300413 (fields 9-28 买一~卖五价量, 实测 200)", "status": "gap: DFCF web 五档字段未定位, 腾讯五档可采但现役只持久化了名称/价格", "priority": "P1", "suggested_endpoint": "stock-orderbook-5"},
+        {"name": "量比/换手率快照", "desc": "腾讯 qt.gtimg field 36 换手率 / 量比字段同响应内 (实测 300413: 换手 8.95, 量比 ~1.33); DFCF clist 不带量比", "collected_now": false, "endpoint": "qt.gtimg.cn/q= (同一响应)", "status": "gap: 现役未持久化量比/换手 (V27 shrink 抓手依赖 vol_ratio, 量比是重要交叉)", "priority": "P1", "suggested_endpoint": "stock-quote-extra-fields"},
+        {"name": "集合竞价量/价 (09:25)", "desc": "DFCF 侧: trends2 09:15-09:25 行 + kline 5分钟首根含竞价 (xcheck 已证); THS 侧: d.10jqka v2/realhead field 17 集合竞价成交量 (xcheck 已采)", "collected_now": true, "endpoint": "trends2 / realhead f17 / tencent minute 0930 bar", "status": "collected (交叉三源), 但 DFCF 竞价段逐笔明细 details/get 在 09:25 窗口可采未接入", "priority": "P2"}
+      ]
+    },
+    {
+      "site": "THS",
+      "page": "资金流向专题 data.10jqka.com.cn/funds/ (ggzjl 个股 / gnzjl 概念 / hyzjl 行业 / ddzz 大单追踪)",
+      "url": "https://data.10jqka.com.cn/funds/gnzjl/",
+      "fields": [
+        {"name": "个股资金流向榜 ggzjl (服务端渲染首屏50行)", "desc": "超大单/大单/中单/小单净流入排行", "collected_now": true, "endpoint": "https://data.10jqka.com.cn/funds/ggzjl/ SSR 首屏 (stock-fund-breakdown.json market_fund_rank); ajax /funds/ggzjl/order/desc/ajax/1/free/1/ 实测 401 chameleon", "status": "collected (仅首屏50, 分页被拦)", "priority": "-"},
+        {"name": "概念板块资金流 gnzjl", "desc": "SSR 首屏实测含表格行 (涨跌幅/主力净额等); ajax 同款 401 chameleon", "collected_now": false, "endpoint": "https://data.10jqka.com.cn/funds/gnzjl/ SSR 首屏 (实测 HTTP 200 含 <td> 数据行)", "status": "gap: 现役概念资金流只用了 DFCF concept-flow, THS 侧未采 (可作交叉验证源)", "priority": "P2", "suggested_endpoint": "ths-concept-flow-ssr"},
+        {"name": "行业板块资金流 hyzjl", "desc": "同上, SSR 首屏可采", "collected_now": false, "endpoint": "https://data.10jqka.com.cn/funds/hyzjl/ SSR 首屏 (实测 HTTP 200)", "status": "gap", "priority": "P2", "suggested_endpoint": "ths-industry-flow-ssr"},
+        {"name": "大单追踪 ddzz (盘中瞬时大单>=50万)", "desc": "SSR 首屏50条倒序", "collected_now": true, "endpoint": "https://data.10jqka.com.cn/funds/ddzz/ SSR (bigorder-track.json); ajax 401", "status": "collected (仅首屏50)", "priority": "-"}
+      ]
+    },
+    {
+      "site": "THS",
+      "page": "两融 data.10jqka.com.cn/market/rzrq/ + 个股 /market/rzrqgg/code/{code}/",
+      "url": "https://data.10jqka.com.cn/market/rzrqgg/code/300413/",
+      "fields": [
+        {"name": "两融总貌/融资排行 rzrq 首页", "desc": "SSR 页面 189KB", "collected_now": false, "endpoint": "https://data.10jqka.com.cn/market/rzrq/ (实测 HTTP 200)", "status": "gap: 现役两融只有 DFCF margin.json, THS 侧未采", "priority": "P2", "suggested_endpoint": "ths-margin"},
+        {"name": "个股两融明细 rzrqgg/code/{code}", "desc": "页面内嵌 融资余额 历史序列 (实测 300413 页含 [\"融资余额\",104909.56,...] 数组)", "collected_now": false, "endpoint": "https://data.10jqka.com.cn/market/rzrqgg/code/300413/ (实测 HTTP 200, 148KB, SSR 内嵌数据)", "status": "gap: THS 个股两融可作 DFCF RPTA_WEB_RZRQ_GGMX 交叉源", "priority": "P1", "suggested_endpoint": "ths-margin-stock"}
+      ]
+    },
+    {
+      "site": "THS",
+      "page": "北向资金 data.10jqka.com.cn/hgt/hgtb/",
+      "url": "https://data.10jqka.com.cn/hgt/hgtb/",
+      "fields": [
+        {"name": "沪股通/深股通资金流表格", "desc": "hgtb 页面为 JS 骨架 (26KB 无 <td> 数据), ajax 实测 401 chameleon", "collected_now": false, "endpoint": "https://data.10jqka.com.cn/hgt/hgtb/ (实测 200 但无数据) + /hgt/hgtb/ajax/ (401)", "status": "gap(THS 侧被 chameleon 拦): 换源 DFCF /hsgt/ 全套可采 (见上), THS 北向持股变动排行未找到可采 web 入口", "priority": "P3", "suggested_endpoint": "- (DFCF 替代)"}
+      ]
+    },
+    {
+      "site": "THS",
+      "page": "个股中心 stockpage.10jqka.com.cn/{code}/ (主页 /quote/ 走势 /funds/ 资金)",
+      "url": "https://stockpage.10jqka.com.cn/300413/funds/",
+      "fields": [
+        {"name": "个股资金明细页 (超大单/大单/中单/小单 逐笔资金流+买卖对比+资金结构饼图)", "desc": "Next.js 渲染, 页面无内嵌数据, /funds/ajax/ 实测 302, 数据在 s.thsi.cn/cd/news-p-fe-app-news-flow-home Next chunk 内, 未定位到免密 ajax", "collected_now": false, "endpoint": "https://stockpage.10jqka.com.cn/300413/funds/ (实测 HTTP 200 但数据在 JS chunk)", "status": "gap: THS 个股资金明细 web ajax 未打通; DFCF fflow kline 已覆盖同口径分档分时资金, 可先不采", "priority": "P2", "suggested_endpoint": "ths-stock-funds (需再逆向 Next chunk)"},
+        {"name": "分时明细 d.10jqka v6/time/hs_{code}/today.js", "desc": "每分钟 时间,价,累计成交额,分时均价,累计股数; https 实测 200 (http 版 502, 必须 https)", "collected_now": false, "endpoint": "https://d.10jqka.com.cn/v6/time/hs_300413/today.js (Referer stockpage, 实测 HTTP 200, quotebridge JSONP)", "status": "gap: xcheck 已验证可采但未持久化; 与腾讯 minute/query 交叉", "priority": "P2", "suggested_endpoint": "ths-minute-detail"},
+        {"name": "实时快照+盘口 d.10jqka v2/realhead/hs_{code}/last.js", "desc": "含 field17 集合竞价成交量, 买一/卖一 (仅一档)", "collected_now": true, "endpoint": "d.10jqka v2/realhead (micro-web-xcheck.json 已采)", "status": "collected (仅买一卖一, 五档无)", "priority": "-"},
+        {"name": "逐笔 tick d.10jqka v6/tick/", "desc": "实测 404", "collected_now": false, "endpoint": "-", "status": "gap(永久性): THS web 无逐笔 tick 免密口, 历史逐笔走 venvoo 数据湖", "priority": "P3"},
+        {"name": "stockpage /quote/ 逐笔明细表页", "desc": "curl 实测返回 0 字节 (JS 渲染)", "collected_now": false, "endpoint": "-", "status": "gap: 页面数据在 JS, 未打通", "priority": "P3"}
+      ]
+    },
+    {
+      "site": "TENCENT",
+      "page": "行情 ifzq.gtimg.cn / qt.gtimg.cn",
+      "url": "https://qt.gtimg.cn/q=sz300413",
+      "fields": [
+        {"name": "名称/现价/昨收/今开/涨跌幅/成交量额/时间", "desc": "qt.gtimg.cn fields 1-35", "collected_now": true, "endpoint": "qt.gtimg.cn/q= (xcheck + 本次双源反查已用)", "status": "collected", "priority": "-"},
+        {"name": "五档盘口 买一~买五/卖一~卖五 价+量", "desc": "qt.gtimg fields 9-28, 实测 300413 含 36.87~36.93 五档买卖价量", "collected_now": false, "endpoint": "qt.gtimg.cn/q= (同一响应, 实测 200)", "status": "gap: 响应里有但现役只存了名称/价格, 五档盘口未持久化 — 盘口因子 P05 缺 web 落点", "priority": "P1", "suggested_endpoint": "tencent-orderbook-5"},
+        {"name": "换手率/市盈率/量比", "desc": "qt.gtimg field 36 换手率, 37 市盈率, 量比字段同响应 (实测 8.95 / 162.48 / ~1.33)", "collected_now": false, "endpoint": "qt.gtimg.cn/q=", "status": "gap: 未持久化", "priority": "P1", "suggested_endpoint": "tencent-quote-extra"},
+        {"name": "当日分时分钟 web.ifzq minute/query", "desc": "0930 根含集合竞价成交", "collected_now": true, "endpoint": "web.ifzq.gtimg.cn/appstock/app/minute/query?code= (xcheck 已采)", "status": "collected", "priority": "-"},
+        {"name": "历史复权日K fqkline", "desc": "web.ifzq fqkline/get", "collected_now": true, "endpoint": "web.ifzq.gtimg.cn/appstock/app/fqkline/get (xcheck 已采)", "status": "collected", "priority": "-"}
+      ]
+    }
+  ],
+  "gap_list": [
+    {"id": "G01", "site": "DFCF", "page_url": "https://data.eastmoney.com/hsgt/StockHdDetail/{code}.html", "api_template": "页面 SSR / datacenter RPT_MUTUAL_HOLDRANK_NEW (HOLD_DATE)", "fields": ["个股北向持股市值/数量/占发行股本/持股日期变动"], "priority": "P0", "collected_now": false, "reason": "现役北向只有合计+分时 (northbound-flow/signal), 个股持股明细页面摆着未采", "suggested_endpoint": "northbound-stock-hold-detail"},
+    {"id": "G02", "site": "DFCF", "page_url": "https://data.eastmoney.com/rzrq/detail.html", "api_template": "datacenter RPTA_WEB_RZRQ_GGMX&filter=(SCODE='{code}')&sortColumns=DATE&sortTypes=-1", "fields": ["个股融资余额/融券余量/融资净买额/融券卖出量 日历史"], "priority": "P0", "collected_now": false, "reason": "V27 P08 两融因子缺个股层; 实测 300413 874 页历史可拉", "suggested_endpoint": "margin-stock-detail"},
+    {"id": "G03", "site": "DFCF", "page_url": "https://quote.eastmoney.com/sz{code}.html 逐笔", "api_template": "https://push2.eastmoney.com/api/qt/stock/details/get?secid={mkt}.{code}&fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55", "fields": ["实时逐笔 时间/价/手/笔数/内外盘方向"], "priority": "P0", "collected_now": false, "reason": "web 实时逐笔窗口可采 (实测 200), 现役逐笔只来自 venvoo PC 湖; 盘中轮询可补 L2 订单流缺口", "suggested_endpoint": "stock-tick-live"},
+    {"id": "G04", "site": "DFCF", "page_url": "https://quote.eastmoney.com/sz{code}.html 分时", "api_template": "https://push2his.eastmoney.com/api/qt/stock/trends2/get?secid={mkt}.{code}&fields1=f1..f11&fields2=f51..f58", "fields": ["全天分钟价/均价/量 含 09:15-09:25 竞价段"], "priority": "P0", "collected_now": false, "reason": "竞价段分钟价只有 trends2 有 (实测 09:15 行存在), 现役未持久化", "suggested_endpoint": "stock-trends2"},
+    {"id": "G05", "site": "DFCF", "page_url": "https://data.eastmoney.com/zjlx/detail.html", "api_template": "https://push2.eastmoney.com/api/qt/ulist.np/get?secids=<批量>&fields=f12,f14,f62,f64,f65,f66,f70,f71,f76,f77,f82,f83,f84,f124", "fields": ["全市场分档资金(超大单/大单/中单/小单)净额"], "priority": "P1", "collected_now": false, "reason": "现役只采 15 只; clist 不支持分档 (rc=102), ulist.np/get 批量实测 200", "suggested_endpoint": "market-fund-tier-batch"},
+    {"id": "G06", "site": "TENCENT", "page_url": "https://qt.gtimg.cn/q={txcode}", "api_template": "qt.gtimg.cn/q= (fields 9-28 五档, 36 换手, 量比)", "fields": ["五档盘口价量/换手率/量比/市盈率"], "priority": "P1", "collected_now": false, "reason": "同一响应已验证含五档+量比, 现役只持久化名称/价格; 盘口 P05 与 vol_ratio 交叉缺 web 落点", "suggested_endpoint": "tencent-orderbook-5 / tencent-quote-extra"},
+    {"id": "G07", "site": "DFCF", "page_url": "https://data.eastmoney.com/stock/yybph.html (新路径) / jgmmtj.html", "api_template": "datacenter RPT_OPERATEDEPT_LIST_STATISTICS / RPT_OPERATEDEPT_TRADE_DETAILSNEW / RPT_ORGANIZATION_TRADE_DETAILSNEW / RPT_RATEDEPT_RETURNT_RANKING", "fields": ["营业部统计/买卖明细/机构买卖明细/席位成功率"], "priority": "P1", "collected_now": false, "reason": "现役 lhb 只有上榜个股+席位 (lhb-seats/seat-detail), 营业部维度未采; 旧路径 /stock/lhb/yybph.html 已 404", "suggested_endpoint": "lhb-seat-stats / lhb-seat-trade-detail / lhb-org-trade-detail / lhb-seat-winrate"},
+    {"id": "G08", "site": "DFCF", "page_url": "https://data.eastmoney.com/hsgtV2/hsgtDetail/sdcjg.html", "api_template": "datacenter RPT_MUTUAL_TOP10DEAL&filter=(TRADE_DATE='{date}')", "fields": ["北向十大成交股 买卖净额"], "priority": "P1", "collected_now": false, "reason": "页面摆着, 现役未采, 实测 200", "suggested_endpoint": "northbound-top10-deal"},
+    {"id": "G09", "site": "THS", "page_url": "https://data.10jqka.com.cn/market/rzrqgg/code/{code}/", "api_template": "SSR 页面内嵌融资余额历史数组", "fields": ["个股两融明细(THS 口径, 交叉验证用)"], "priority": "P1", "collected_now": false, "reason": "DFCF 个股两融采了之后 THS 侧作交叉; 页面实测 200 含数据", "suggested_endpoint": "ths-margin-stock"},
+    {"id": "G10", "site": "THS", "page_url": "https://data.10jqka.com.cn/funds/gnzjl/ 与 /funds/hyzjl/", "api_template": "SSR 首屏 (ajax 401 chameleon)", "fields": ["概念/行业资金流 THS 口径"], "priority": "P2", "collected_now": false, "reason": "现役板块资金只有 DFCF sector/concept-flow; THS SSR 首屏实测含数据行, 可作交叉源", "suggested_endpoint": "ths-concept-flow-ssr / ths-industry-flow-ssr"},
+    {"id": "G11", "site": "DFCF", "page_url": "https://data.eastmoney.com/dzjy/dzjy_jgsc.html / dzjy_hyyyb.html", "api_template": "datacenter RPT_BLOCKTRADE_ACSTA / RPT_BLOCKTRADE_OPERATEDEPT_NAME / _RANK / _OPERATEDEPTSTATISTICS", "fields": ["个股大宗统计/营业部大宗"], "priority": "P2", "collected_now": false, "reason": "现役 blocktrade 只有每日明细; 统计报表实测 200 (过滤列需再核)", "suggested_endpoint": "blocktrade-stock-stats / blocktrade-seat"},
+    {"id": "G12", "site": "DFCF", "page_url": "https://data.eastmoney.com/hsgt/index.html 持股", "api_template": "datacenter RPT_MUTUAL_HOLDRANK_NEW / RPT_MUTUAL_BOARD_HOLDRANK_WEB / RPT_NORTH_ORG_HOLDRANK_NEW / RPT_MUTUAL_NETINFLOW_DETAILS / RPT_MUTUAL_DEAL_HISTORY", "fields": ["北向持股排行(个股/板块/机构)/净流入分段/每日买卖额"], "priority": "P2", "collected_now": false, "reason": "均实测 200; 注意 HOLDRANK 最新 HOLD_DATE 样本为 2026-09-30, 须标数据时间防过期冒充", "suggested_endpoint": "northbound-hold-rank / northbound-board-hold / northbound-org-hold / northbound-inflow-detail / northbound-deal-history"},
+    {"id": "G13", "site": "THS", "page_url": "https://d.10jqka.com.cn/v6/time/hs_{code}/today.js (https)", "api_template": "https://d.10jqka.com.cn/v6/time/hs_{code}/today.js", "fields": ["每分钟 价/累计成交额/分时均价/累计股数"], "priority": "P2", "collected_now": false, "reason": "http 版 502, https 版实测 200; 与腾讯 minute/query 交叉, xcheck 已验证未持久化", "suggested_endpoint": "ths-minute-detail"},
+    {"id": "G14", "site": "THS", "page_url": "https://stockpage.10jqka.com.cn/{code}/funds/", "api_template": "Next.js chunk 内数据, 免密 ajax 未定位 (/funds/ajax/ 302)", "fields": ["个股分档资金流 THS 口径逐笔"], "priority": "P2", "collected_now": false, "reason": "DFCF fflow kline 已覆盖同口径, 优先级低于打通; 需再逆向 s.thsi.cn Next chunk", "suggested_endpoint": "ths-stock-funds"},
+    {"id": "G15", "site": "DFCF", "page_url": "https://data.eastmoney.com/rzrq/detail.html 板块", "api_template": "datacenter RPTA_WEB_BKJYMXN / RPTA_WEB_RZRQ_LSSH", "fields": ["板块两融/两融市场历史"], "priority": "P3", "collected_now": false, "reason": "与 margin.json 总貌重复度高, 实测 200", "suggested_endpoint": "margin-board / margin-market-history"},
+    {"id": "G16", "site": "THS", "page_url": "https://data.10jqka.com.cn/hgt/hgtb/", "api_template": "ajax 401 chameleon, 页面无 SSR 数据", "fields": ["THS 北向资金表格"], "priority": "P3", "collected_now": false, "reason": "THS 侧被拦, 换源 DFCF /hsgt 全套可采; THS 北向持股变动排行未找到可采 web 入口 — 标 gap", "suggested_endpoint": "- (DFCF 替代)"}
+  ],
+  "gaps": [
+    "G01 DFCF 个股北向持股明细 (P0) — 页面可采, 现役未采",
+    "G02 DFCF 个股两融明细历史 RPTA_WEB_RZRQ_GGMX SCODE 过滤 (P0) — 实测 200",
+    "G03 DFCF 实时逐笔 details/get 窗口 (P0) — 实测 200, 全天历史逐笔 push2his 空 = 永久 web gap (venvoo 湖补)",
+    "G04 DFCF trends2 分时含竞价段 (P0) — 实测 200, 09:15 行存在",
+    "G05 DFCF 全市场分档资金 ulist.np/get 批量 (P1) — clist 分档 rc=102, ulist 批量 200",
+    "G06 腾讯 五档盘口/换手/量比 同响应未持久化 (P1)",
+    "G07 DFCF 龙虎榜营业部/机构统计与成功率 (P1) — 旧路径 404 已迁移",
+    "G08 DFCF 北向十大成交股 (P1)",
+    "G09 THS 个股两融 rzrqgg SSR (P1)",
+    "G10 THS gnzjl/hyzjl SSR 首屏 (P2, ajax 401)",
+    "G11 DFCF 大宗统计报表 (P2)",
+    "G12 DFCF 北向持股排行/净流入分段/买卖额历史 (P2, HOLD_DATE 滞后注意)",
+    "G13 THS v6/time https 分时明细 (P2, http 版 502)",
+    "G14 THS stockpage funds Next chunk 未打通 (P2, DFCF 已覆盖同口径)",
+    "G15 DFCF 板块两融/两融历史 (P3)",
+    "G16 THS hgtb 北向被 chameleon 401 拦截 (P3, 永久 gap 走 DFCF 替代)",
+    "补充永久 gap: 科创50(1.688000) 分钟资金 stock/get rc=100 (minute_flow.evidence 已记); DFCF web 全天历史逐笔不存在; THS web 逐笔 tick 404; DDE/TOPVIEW 无 web 来源 (dde-vendor/topview 已标 gap)"
+  ]
+}
