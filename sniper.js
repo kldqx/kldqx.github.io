@@ -1196,7 +1196,7 @@
     }
     if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;
     }
-    const stocks = mode === 'demo' || phaseFilter === 'all' ? feed.stocks : feed.stocks.filter(st => st.phase === phaseFilter);
+    const stocks = mode === 'demo' || phaseFilter === 'all' ? feed.stocks : feed.stocks.filter(st => phaseFilter === 'T-1_PM_WATCH' ? /^T-/.test(st.phase || '') : st.phase === phaseFilter);
     // 权威保护：将最新的直通行情合并进 feed.stocks，绝对禁止旧文件倒退覆盖
     for (const stock of stocks) {
       const cached = realtimeQuoteCache.get(stock.code);
@@ -1220,7 +1220,7 @@
     highlightPhaseTabs();
     for (const tab of document.querySelectorAll(".phase-tab")) {
       const f = tab.dataset.phaseFilter;
-      const n = feed.stocks.filter(st => st.phase === f).length;
+      const n = f === 'T-1_PM_WATCH' ? feed.stocks.filter(st => /^T-/.test(st.phase || '')).length : feed.stocks.filter(st => st.phase === f).length;
       const label = f === "T-1_POSTMARKET" ? "今日(T)" : f === "T-1_PM_WATCH" ? "未来(T−)" : "往日(T+)";
       tab.textContent = label + " " + n;
     }
