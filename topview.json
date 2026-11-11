@@ -1,0 +1,15 @@
+{
+ "schema": "topview/v1",
+ "signal_boundary": "not_a_trading_signal",
+ "generated_at": "2026-11-11T11:40:56.804814+08:00",
+ "task_date": "2026-11-11",
+ "status": "gap",
+ "gap_reason": "TOPVIEW 机构/大户/散户持仓变动无可用来源: PC 端仅有字段字典无数据缓存, 网页端无对应页面; 按纪律标 gap 不零填不脑补",
+ "pc_cache_audit": {
+  "E:/THS/同花顺/同花顺/TOPVIEW_DATA.INI": "存在, 仅为字段映射字典(法人/券基/大户/散户 -> TVC_* 字段ID), 无持仓数据",
+  "E:/THS/同花顺/同花顺/realtime/*/stocknow.dat": "行情快照, 无 TVC_ 持仓字段, shase mtime 2026-11-03 过期",
+  "E:/THS/同花顺/同花顺/JG1223": "无 topview 数据文件 (topview.config 为广告配置)",
+  "THS 网页端": "路径树中无 TOPVIEW/赢富 web 页面 (仅 PC 端 skin/topview)"
+ },
+ "field_dictionary_note": "TOPVIEW_DATA.INI 映射: 法人持股数=2097704/占盘比=2097705/增减股=TVC_B_SUB; 券基持股数=2097707 等, 供后续接入 PC 数据服务时使用"
+}

@@ -1,0 +1,286 @@
+{
+ "signal_boundary": "not_a_trading_signal",
+ "generated_at": "2026-11-11T11:40:00+08:00",
+ "generated_at_utc": "2026-11-11T03:40:00Z",
+ "collector_role": "Gemini 3.8 采集子代理",
+ "task_date": "2026-11-11",
+ "note": "采集原始数据与证据; 厂商推导指标(主力/DDE/BBD等)仅作交叉验证, 不作为真实资金主体证据; 缺口标gap不零填不脑补",
+ "schema": "macro-northbound-flow/v1",
+ "category": "北向资金(沪股通/深股通)",
+ "sources": [
+  {
+   "name": "DFCF push2 kamt/get 实时",
+   "url": "https://push2.eastmoney.com/api/qt/kamt/get?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f56,f60,f61,f62,f63,f65,f66&ut=fa5fd1943c7b386f172d6893dbfba10b",
+   "page": "https://data.eastmoney.com/hsgt/index.html"
+  },
+  {
+   "name": "DFCF push2 kamt.rtmin/get 分时",
+   "url": "https://push2.eastmoney.com/api/qt/kamt.rtmin/get?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55,f56&ut=b2884a393a59ad64002292a3e90d46a5"
+  },
+  {
+   "name": "DFCF push2 kamtbs.rtmin/get BBD分时",
+   "url": "https://push2.eastmoney.com/api/qt/kamtbs.rtmin/get?fields1=f1,f2,f3,f4&fields2=f51,f54,f52,f58,f53,f62,f56,f57,f60,f61&ut=b2884a393a59ad64002292a3e90d46a5"
+  },
+  {
+   "name": "DFCF datacenter RPT_MUTUAL_DEALAMT 日线成交净买额",
+   "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_MUTUAL_DEALAMT&columns=ALL&source=WEB&client=WEB&sortColumns=TRADE_DATE&sortTypes=-1&pageSize=10&pageNumber=1"
+  },
+  {
+   "name": "DFCF datacenter RPT_MUTUAL_DEAL_HISTORY 交叉验证",
+   "url": "https://datacenter-web.eastmoney.com/api/data/v1/get?reportName=RPT_MUTUAL_DEAL_HISTORY&columns=ALL&source=WEB&client=WEB&filter=%28MUTUAL_TYPE+in+%28%22001%22%2C%22003%22%2C%22005%22%29%29&sortColumns=TRADE_DATE&sortTypes=-1&pageSize=15&pageNumber=1"
+  },
+  {
+   "name": "DFCF securities RPT_MUTUAL_NETINFLOW_DETAILS(本次返回数据止于2024-08-16, 判定过期)",
+   "url": "https://datacenter-web.eastmoney.com/securities/api/data/v1/get?reportName=RPT_MUTUAL_NETINFLOW_DETAILS&columns=DIRECTION_TYPE%2CTRADE_DATE%2CNET_INFLOW_SH%2CNET_INFLOW_SZ%2CNET_INFLOW_BOTH%2CTIME_TYPE&token=894050c76af8597a853f5b408b759f5d&client=WEB&filter=%28DIRECTION_TYPE%3D%221%22%29%28TIME_TYPE%3D%224%22%29&sortColumns=TRADE_DATE&sortTypes=-1&pageSize=5&pageNumber=1"
+  }
+ ],
+ "realtime": {
+  "hk2sh_沪股通": {
+   "status": 1,
+   "date": "2026-11-11",
+   "buyAmt": 0.0,
+   "sellAmt": 0.0,
+   "buySellAmt": 0.0,
+   "netBuyAmt": 0.0,
+   "dayNetAmtIn": 0.0,
+   "dayAmtRemain": 0.0,
+   "dayAmtThreshold": 5200000.0,
+   "amtStatus": 1
+  },
+  "hk2sz_深股通": {
+   "status": 1,
+   "date": "2026-11-11",
+   "buyAmt": 0.0,
+   "sellAmt": 0.0,
+   "buySellAmt": 0.0,
+   "netBuyAmt": 0.0,
+   "dayNetAmtIn": 0.0,
+   "dayAmtRemain": 0.0,
+   "dayAmtThreshold": 5200000.0,
+   "amtStatus": 1
+  },
+  "sh2hk_南向沪": {
+   "status": 1,
+   "date": "2026-11-11",
+   "buyAmt": 1214316.65,
+   "sellAmt": 1045864.68,
+   "buySellAmt": 2260181.33,
+   "netBuyAmt": 168451.97,
+   "dayNetAmtIn": 4200000.0,
+   "dayAmtRemain": 0.0,
+   "dayAmtThreshold": 4200000.0,
+   "amtStatus": 1
+  },
+  "sz2hk_南向深": {
+   "status": 1,
+   "date": "2026-11-11",
+   "buyAmt": 504145.09,
+   "sellAmt": 504535.14,
+   "buySellAmt": 1008680.23,
+   "netBuyAmt": -390.05,
+   "dayNetAmtIn": 4200000.0,
+   "dayAmtRemain": 0.0,
+   "dayAmtThreshold": 4200000.0,
+   "amtStatus": 1
+  },
+  "unit": "万元(源返回原值)",
+  "as_of": "2026-11-11"
+ },
+ "intraday_series": {
+  "s2n_north": {
+   "date": "11-11",
+   "points": 241,
+   "nonzero_points": 0
+  },
+  "n2s_south": {
+   "date": "11-11",
+   "points": 371
+  }
+ },
+ "bbd_intraday": {
+  "s2n_date": "2026-11-11",
+  "points": 241,
+  "nonzero_points": 0,
+  "note": "kamtbs.rtmin BBD分时, 本次会话源返回全0"
+ },
+ "daily_last5": [
+  {
+   "date": "2026-11-10",
+   "north_net_deal_amt": 198329.21,
+   "sh_stock_connect": 91977.61,
+   "sz_stock_connect": 106351.6,
+   "sh_lead_stock": "603366.SH",
+   "sz_lead_stock": "002310.SZ",
+   "unit": "万元(DFCF datacenter原始口径)"
+  },
+  {
+   "date": "2026-11-09",
+   "north_net_deal_amt": 216236.4,
+   "sh_stock_connect": 102043.18,
+   "sz_stock_connect": 114193.22,
+   "sh_lead_stock": "603366.SH",
+   "sz_lead_stock": "002037.SZ",
+   "unit": "万元(DFCF datacenter原始口径)"
+  },
+  {
+   "date": "2026-11-06",
+   "north_net_deal_amt": 262593.3,
+   "sh_stock_connect": 128368.26,
+   "sz_stock_connect": 134225.04,
+   "sh_lead_stock": "603381.SH",
+   "sz_lead_stock": "000595.SZ",
+   "unit": "万元(DFCF datacenter原始口径)"
+  },
+  {
+   "date": "2026-11-05",
+   "north_net_deal_amt": 320163.82,
+   "sh_stock_connect": 151997.13,
+   "sz_stock_connect": 168166.69,
+   "sh_lead_stock": "603381.SH",
+   "sz_lead_stock": "002081.SZ",
+   "unit": "万元(DFCF datacenter原始口径)"
+  },
+  {
+   "date": "2026-11-04",
+   "north_net_deal_amt": 339181.36,
+   "sh_stock_connect": 164238.03,
+   "sz_stock_connect": 174943.33,
+   "sh_lead_stock": "603598.SH",
+   "sz_lead_stock": "000096.SZ",
+   "unit": "万元(DFCF datacenter原始口径)"
+  }
+ ],
+ "daily_crosscheck_deal_history": [
+  {
+   "date": "2026-11-10",
+   "mutual_type": "001",
+   "net_deal_amt": null,
+   "deal_amt": 91977.61,
+   "lead_stock": "603366.SH"
+  },
+  {
+   "date": "2026-11-10",
+   "mutual_type": "003",
+   "net_deal_amt": null,
+   "deal_amt": 106351.6,
+   "lead_stock": "002310.SZ"
+  },
+  {
+   "date": "2026-11-10",
+   "mutual_type": "005",
+   "net_deal_amt": null,
+   "deal_amt": 198329.21,
+   "lead_stock": "002310.SZ"
+  },
+  {
+   "date": "2026-11-09",
+   "mutual_type": "001",
+   "net_deal_amt": null,
+   "deal_amt": 102043.18,
+   "lead_stock": "603366.SH"
+  },
+  {
+   "date": "2026-11-09",
+   "mutual_type": "005",
+   "net_deal_amt": null,
+   "deal_amt": 216236.4,
+   "lead_stock": "002037.SZ"
+  },
+  {
+   "date": "2026-11-09",
+   "mutual_type": "003",
+   "net_deal_amt": null,
+   "deal_amt": 114193.22,
+   "lead_stock": "002037.SZ"
+  },
+  {
+   "date": "2026-11-06",
+   "mutual_type": "003",
+   "net_deal_amt": null,
+   "deal_amt": 134225.04,
+   "lead_stock": "000595.SZ"
+  },
+  {
+   "date": "2026-11-06",
+   "mutual_type": "001",
+   "net_deal_amt": null,
+   "deal_amt": 128368.26,
+   "lead_stock": "603381.SH"
+  },
+  {
+   "date": "2026-11-06",
+   "mutual_type": "005",
+   "net_deal_amt": null,
+   "deal_amt": 262593.3,
+   "lead_stock": "603381.SH"
+  },
+  {
+   "date": "2026-11-05",
+   "mutual_type": "003",
+   "net_deal_amt": null,
+   "deal_amt": 168166.69,
+   "lead_stock": "002081.SZ"
+  },
+  {
+   "date": "2026-11-05",
+   "mutual_type": "001",
+   "net_deal_amt": null,
+   "deal_amt": 151997.13,
+   "lead_stock": "603381.SH"
+  },
+  {
+   "date": "2026-11-05",
+   "mutual_type": "005",
+   "net_deal_amt": null,
+   "deal_amt": 320163.82,
+   "lead_stock": "002081.SZ"
+  },
+  {
+   "date": "2026-11-04",
+   "mutual_type": "001",
+   "net_deal_amt": null,
+   "deal_amt": 164238.03,
+   "lead_stock": "603598.SH"
+  },
+  {
+   "date": "2026-11-04",
+   "mutual_type": "003",
+   "net_deal_amt": null,
+   "deal_amt": 174943.33,
+   "lead_stock": "000096.SZ"
+  },
+  {
+   "date": "2026-11-04",
+   "mutual_type": "005",
+   "net_deal_amt": null,
+   "deal_amt": 339181.36,
+   "lead_stock": "000096.SZ"
+  }
+ ],
+ "gaps": [
+  {
+   "gap": "当日2026-11-11日线净流入尚未发布(盘中), RPT_MUTUAL_DEALAMT最新为2026-11-10; 当日口径以kamt实时/分时为准",
+   "affected": "daily 当日行"
+  },
+  {
+   "gap": "RPT_MUTUAL_NETINFLOW_DETAILS 本次返回数据止于2024-08-16(源端滞后), 未用于近5日计算",
+   "affected": "NET_INFLOW_SH/SZ 近5日"
+  },
+  {
+   "gap": "RPT_MUTUAL_DEAL_HISTORY 中陆股通(001/003/005)的NET_DEAL_AMT/FUND_INFLOW字段返回null, 仅作结构交叉验证",
+   "affected": "交叉验证字段"
+  },
+  {
+   "gap": "kamt实时与rtmin/BBD分时本次会话北向(s2n/hk2sh)返回全0.00, 按源返回原样记录, 未脑补",
+   "affected": "当日实时北向净买入"
+  }
+ ],
+ "raw_files": [
+  "raw/kamt_realtime.json",
+  "raw/kamt_rtmin.json",
+  "raw/kamtbs_rtmin.json",
+  "raw/hsgt_dealamt_10d.json",
+  "raw/hsgt_deal_history.json",
+  "raw/hsgt_netinflow_details.json"
+ ]
+}

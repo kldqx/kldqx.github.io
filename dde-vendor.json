@@ -1,0 +1,139 @@
+{
+ "schema": "dde-vendor/v1",
+ "signal_boundary": "not_a_trading_signal",
+ "generated_at": "2026-11-11T11:40:56.803814+08:00",
+ "task_date": "2026-11-11",
+ "derived_vendor": true,
+ "subjects": [
+  "300413.SZ",
+  "000559.SZ",
+  "300493.SZ",
+  "600345.SH",
+  "301583.SZ",
+  "600259.SH",
+  "688385.SH",
+  "688035.SH",
+  "002141.SZ",
+  "300739.SZ",
+  "603728.SH",
+  "603667.SH",
+  "603893.SH",
+  "603341.SH",
+  "605188.SH"
+ ],
+ "status": "gap",
+ "gap_reason": "DDX/DDY/DDZ/SUPV 近5日 PC 只读缓存均无数据: 东财 MoneyKlineFile/Level1 为空目录, 通达信 hq_cache 无 DDE 数据文件, 同花顺 stocknow.dat 过期(2026-11-03)且非 DDE; 未找到可用来源, 按纪律标 gap 不零填",
+ "pc_cache_audit": {
+  "E:/eastmoney/dfcf/data/STOCK/MoneyKlineFile": "file_count=0",
+  "E:/new_tdx64/T0002/hq_cache": "DDE 相关文件: 无 (101个文件均非 DDE/MoneyKline; 仅 EX_DDESUP.sp 公式在 funcs/)",
+  "E:/THS realtime stocknow.dat": "存在但 mtime 2026-11-03 过期且为行情快照非 DDE"
+ },
+ "cross_validation_note": "厂商 DDE/超赢为推导指标, 仅作交叉验证不当真实资金主体; 可用的厂商推导替代见 stock-fund-breakdown.json 各股 snapshot (f62/f66/f72/f78/f84, derived_vendor=true)",
+ "per_stock": {
+  "300413.SZ": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "000559.SZ": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "300493.SZ": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "600345.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "301583.SZ": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "600259.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "688385.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "688035.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "002141.SZ": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "300739.SZ": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "603728.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "603667.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "603893.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "603341.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  },
+  "605188.SH": {
+   "ddx": "gap",
+   "ddy": "gap",
+   "ddz": "gap",
+   "supv": "gap",
+   "vendor_proxy": "see stock-fund-breakdown.json snapshot"
+  }
+ }
+}
