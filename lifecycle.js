@@ -2,6 +2,7 @@
   'use strict';
   const M = window.LifecycleModel;
   const before = document.body.dataset.view === 'before';
+  const selectionKey = 'lifecycle-selection-' + (before ? 'before' : 'after');
   const offsets = before ? [-3,-2,-1] : [1,2,3];
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -15,7 +16,7 @@
   let data = null, batch = '', selected = '', scope = 'all', search = '', loading = false;
   const initial = new URLSearchParams(location.search);
   try {
-    const saved = JSON.parse(sessionStorage.getItem('lifecycle-selection') || '{}');
+    const saved = JSON.parse(sessionStorage.getItem(selectionKey) || '{}');
     batch = initial.get('batch') || saved.batch || '';
     selected = initial.get('code') || saved.code || '';
   } catch { batch = initial.get('batch') || ''; selected = initial.get('code') || ''; }
@@ -23,8 +24,8 @@
   function saveSelection(record) {
     const query = new URLSearchParams({batch,code:record.code});
     history.replaceState(null,'',location.pathname+'?'+query.toString());
-    try { sessionStorage.setItem('lifecycle-selection',JSON.stringify({batch,code:record.code})); } catch {}
-    document.querySelectorAll('[data-cross]').forEach(a=>{ a.href = a.dataset.cross + '?' + query.toString(); });
+    try { sessionStorage.setItem(selectionKey,JSON.stringify({batch,code:record.code})); } catch {}
+    document.querySelectorAll('[data-cross]').forEach(a=>{ a.href = a.dataset.cross; });
   }
   const currentDay = r => offsets.map(o=>r.days?.[o]).filter(d=>d && (M.numeric(d.last)||M.numeric(d.close))).at(-1);
   const latest = r => {const d=currentDay(r);return M.value(d);};
@@ -37,25 +38,32 @@
   }
   function metric(label,value,note,cls='') {return `<div class="stat"><span class="label">${esc(label)}</span><strong class="${cls}">${esc(value)}</strong><small>${esc(note)}</small></div>`;}
   function render() {
-    const groups = [...new Set(data.records.map(group))];
+    const available = M.recordsForView(data.records, before ? 'before' : 'after');
+    const groups = [...new Set(available.map(group))];
     if(!groups.includes(batch)) {
       batch = groups[0] || '';
-      if(!before) batch = groups.find(g => data.records.some(r=>group(r)===g && r.exit?.reported)) || batch;
+      if(!before) batch = groups.find(g => available.some(r=>group(r)===g && r.exit?.reported)) || batch;
     }
-    $('batch').innerHTML = groups.map(g=>{const r=data.records.find(r=>group(r)===g);return `<option value="${esc(g)}">T = ${esc(r.t_date)} · ${esc(r.batch_id)} · ${data.records.filter(x=>group(x)===g).length}只</option>`;}).join('');
+    $('batch').innerHTML = groups.map(g=>{const r=available.find(r=>group(r)===g);return `<option value="${esc(g)}">T = ${esc(r.t_date)} · ${esc(r.batch_id)} · ${available.filter(x=>group(x)===g).length}只</option>`;}).join('');
     $('batch').value=batch;
-    const rows = data.records.filter(r=>group(r)===batch);
+    const rows = available.filter(r=>group(r)===batch);
     const coverage = rows.reduce((s,r)=>s+offsets.filter(o=>r.days?.[o]?.state==='有数据').length,0);
     $('stats').innerHTML = before
-      ? metric('本批次观察',rows.length,'保持同一 T 日、同一批次') + metric('前序数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日') + metric('已存依据',rows.filter(r=>r.original?.hypothesis).length,'首次观察时保存，不覆盖') + metric('T 日已有行情',rows.filter(r=>r.days?.['0']?.state==='有数据').length,'与入选前依据并列对照')
-      : metric('本批次跟踪',rows.length,'离场后仍保留至 T+3') + metric('T+1 确认价位触及',rows.filter(r=>M.defense(r).touched).length,`${rows.filter(r=>M.defense(r).touched===null).length} 只尚无法判断`,'up') + metric('原记录已离场',rows.filter(r=>r.exit?.reported).length,'不把收盘价当作离场价') + metric('后续数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日');
+      ? metric('T− 候选观察票',rows.length,'仅候选观察组 · 不含当日 T 票') + metric('前序数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日') + metric('已存依据',rows.filter(r=>r.original?.hypothesis).length,'首次观察时保存，不覆盖') + metric('T 日已有行情',rows.filter(r=>r.days?.['0']?.state==='有数据').length,'与入选前依据并列对照')
+      : metric('T+ 离场跟踪票',rows.length,'离场后仍保留至 T+3') + metric('T+1 确认价位触及',rows.filter(r=>M.defense(r).touched).length,`${rows.filter(r=>M.defense(r).touched===null).length} 只尚无法判断`,'up') + metric('原记录已离场',rows.filter(r=>r.exit?.reported).length,'不把收盘价当作离场价') + metric('后续数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日');
     const filtered = rows.filter(r=>(r.name+' '+r.code).toLowerCase().includes(search.toLowerCase()));
     if(!filtered.some(r=>r.code===selected)) selected=filtered[0]?.code || '';
     $('stock-count').textContent=`${filtered.length} 只`;
     $('stocks').innerHTML = filtered.map(r=>{const s=recordStatus(r),price=latest(r),change=M.percent(price,r.baseline?.price);return `<button class="stock ${r.code===selected?'selected':''}" data-code="${esc(r.code)}" aria-pressed="${r.code===selected}"><span class="stock-top"><span>${esc(r.name)}</span><span>${n(price)}</span></span><small>${esc(r.code)}</small><span class="stock-foot"><span class="pill ${s.cls}">${esc(s.label)}</span><span class="${tone(change)}">${pct(change)}</span></span></button>`;}).join('') || '<div class="empty">没有匹配的股票</div>';
     $('stocks').querySelectorAll('[data-code]').forEach(b=>b.onclick=()=>{selected=b.dataset.code;render();});
     const r=filtered.find(x=>x.code===selected);
-    if(!r){$('detail').innerHTML='<div class="panel empty">暂无可绑定的批次数据。<br>需要原记录中的 T 日及股票代码。</div>';return;}
+    if(!r){
+      $('detail').innerHTML=`<div class="panel empty">${rows.length?'没有匹配的股票':before?'暂无 T− 候选观察票':'暂无 T+ 离场跟踪票'}<br>本页只显示对应阶段的名单。</div>`;
+      $('source-time').textContent='暂无匹配行情';
+      $('refresh-time').textContent='数据生成 '+briefTime(data.generated_at);
+      if(!available.length){history.replaceState(null,'',location.pathname);document.querySelectorAll('[data-cross]').forEach(a=>a.href=a.dataset.cross);}
+      return;
+    }
     saveSelection(r); renderDetail(r);
     const times=rows.flatMap(r=>offsets.map(o=>r.days?.[o]?.source_at)).filter(Boolean).sort();
     $('source-time').textContent='行情资料截至 '+briefTime(times.at(-1))+' · 日期均为上海时间';

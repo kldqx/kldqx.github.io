@@ -3,6 +3,13 @@
   const numeric = v => typeof v === 'number' && Number.isFinite(v);
   const percent = (value, base) => numeric(value) && numeric(base) && base > 0 ? Math.round((value / base - 1) * 10000) / 100 : null;
   const value = day => day?.complete && numeric(day.close) ? day.close : day?.last ?? null;
+  function pool(record) {
+    if(record.exit?.reported || /^T\+/.test(record.phase || '')) return 'after';
+    if(record.phase === 'T-1_PM_WATCH') return 'before';
+    if(record.phase === 'T-1_POSTMARKET') return 'today';
+    return 'unknown';
+  }
+  const recordsForView = (records, view) => ['before','after','today'].includes(view) ? records.filter(r=>pool(r)===view) : [];
   function defense(record) {
     const day = record.days?.['1'] || {};
     const ruleDate = /T\+1\s*[=：:]\s*(\d{4}-\d{2}-\d{2})/.exec(record.rule_text || '')?.[1];
@@ -17,7 +24,7 @@
     const observedAt = Date.parse(day?.complete && numeric(day.close) ? `${day.date}T15:00:00+08:00` : day?.last_at || day?.source_at);
     return Number.isFinite(exitAt) && Number.isFinite(observedAt) && observedAt >= exitAt ? percent(value(day),record.exit?.price) : null;
   };
-  const model = {numeric, percent, value, defense, afterExit};
+  const model = {numeric, percent, value, defense, afterExit, recordsForView};
   if (typeof module !== 'undefined') module.exports = model;
   root.LifecycleModel = model;
 })(typeof window === 'undefined' ? globalThis : window);
