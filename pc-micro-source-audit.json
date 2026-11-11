@@ -1,0 +1,187 @@
+{
+  "signal_boundary": "not_a_trading_signal",
+  "audit_time": "2026-11-11 12:32:34 +0800",
+  "audit_date": "2026-11-11",
+  "auditor_role": "PC端微观数据源审计子代理 (只读审计, 不写任何三端路径)",
+  "read_time_note": "所有 mtime 为文件系统读取时间; 内部数据日期单独标注, 二者不混用",
+  "codes_audited": ["300413.SZ","000559.SZ","300493.SZ","600345.SH","301583.SZ","600259.SH","688385.SH","688035.SH","002141.SZ","300739.SZ","603728.SH","603667.SH","603893.SH","603341.SH","605188.SH"],
+  "code_name_binding": {
+    "300413.SZ": "芒果超媒", "000559.SZ": "万向钱潮", "300493.SZ": "润欣科技", "600345.SH": "长江通信",
+    "301583.SZ": "托伦斯", "600259.SH": "中稀有色", "688385.SH": "复旦微电", "688035.SH": "德邦科技",
+    "002141.SZ": "贤丰控股", "300739.SZ": "明阳电路", "603728.SH": "鸣志电器", "603667.SH": "五洲新春",
+    "603893.SH": "瑞芯微", "603341.SH": "龙旗科技", "605188.SH": "国光连锁",
+    "dual_source_check": "腾讯 qt.gtimg.cn (行情时间 20261111120457~20261111120557) 与东方财富 push2.eastmoney.com 逐只双向反查, 15 只名称全部一致, 与 data/daily_picks_ledger.csv 留存一致 (名称双源一致=True)"
+  },
+  "sources": [
+    {
+      "name": "TDX hq_cache 百档订单簿缓存 sh.th2",
+      "path": "E:/new_tdx64/T0002/hq_cache/sh.th2",
+      "size": 14376792,
+      "mtime": "2026-11-11 09:16:52 +0800",
+      "probe": "全文件逐字节扫描: total=14376792, nonzero=0, first_nz_off=None, last_nz_off=None",
+      "status": "empty",
+      "impact_on_V27_micro": "百档盘口/订单簿缓存为全零预分配空文件, 今日无任何盘口深度数据; V27 百档因子不可用",
+      "recovery": "需 TDX 客户端登录 L2 行情服务器并实际写入盘口缓存 (当前 TdxW.exe 在跑但未写入非零字节), 或改走实时行情接口"
+    },
+    {
+      "name": "TDX hq_cache 百档订单簿缓存 sz.th2",
+      "path": "E:/new_tdx64/T0002/hq_cache/sz.th2",
+      "size": 12720948,
+      "mtime": "2026-11-11 09:16:52 +0800",
+      "probe": "全文件逐字节扫描: total=12720948, nonzero=0",
+      "status": "empty",
+      "impact_on_V27_micro": "同上, 深市百档盘口为空",
+      "recovery": "同上"
+    },
+    {
+      "name": "TDX hq_cache 百档订单簿缓存 bj.th2",
+      "path": "E:/new_tdx64/T0002/hq_cache/bj.th2",
+      "size": 203304,
+      "mtime": "2026-11-11 09:16:52 +0800",
+      "probe": "全文件逐字节扫描: total=203304, nonzero=0",
+      "status": "empty",
+      "impact_on_V27_micro": "北交所百档盘口为空 (15 只标的不含北交所, 影响为 0)",
+      "recovery": "同上"
+    },
+    {
+      "name": "TDX hq_cache 同目录相关文件 (ds_stk.dat / TcApi_Cache)",
+      "path": "E:/new_tdx64/T0002/hq_cache/ds_stk.dat; E:/new_tdx64/TcApi_Cache",
+      "size": "ds_stk.dat=10287225; TcApi_Cache 目录为空(0 文件)",
+      "mtime": "ds_stk.dat=2026-11-05 12:12; TcApi_Cache dir=2026-03-13",
+      "probe": "ds_stk.dat 头部含 IMCI/T001 数据服务条目 (instrument 元信息, 非微观逐笔); TcApi_Cache 为空目录",
+      "status": "stale (元信息, 非微观) / empty",
+      "impact_on_V27_micro": "不含逐笔/委托/撤单; 对 V27 微观因子无贡献",
+      "recovery": "无需恢复 (本就不是微观源); 微观缺口走实时接口"
+    },
+    {
+      "name": "TDX broker_data 逐笔/分笔目录 tic_v3, tic_v4, bar_v3, bar_v4",
+      "path": "E:/new_tdx64/broker_data/{tic_v3,tic_v4,bar_v3,bar_v4}",
+      "size": "4 个目录均 0 文件",
+      "mtime": "目录 mtime 2026-04-11",
+      "probe": "find 统计: tic_v3=0, tic_v4=0, bar_v3=0, bar_v4=0 文件",
+      "status": "empty",
+      "impact_on_V27_micro": "TDX 本地逐笔(tick)与分笔(bar)缓存完全为空, V27 L2 逐笔因子本地不可用",
+      "recovery": "需券商席位数据 (broker_data) 实际落盘, 当前无任何写入"
+    },
+    {
+      "name": "TDX broker_data day_v4_tck0 / day_v4_tck1 / day_bj (日线 tck 格式)",
+      "path": "E:/new_tdx64/broker_data/{day_v4_tck0,day_v4_tck1,day_bj}",
+      "size": "day_v4_tck0=39372 文件; day_v4_tck1=39725 文件; day_bj=568 文件",
+      "mtime": "全部文件最新 mtime=2026-04-10 15:37~15:38 (最旧 2005-07-08)",
+      "probe": "15 只代码中 14 只存在 (sz301583.day 在 tck0/tck1 均缺失); 文件头为 OHLC 日线结构, 非当日逐笔",
+      "status": "stale (止于 2026-04-10, 7 个月前)",
+      "impact_on_V27_micro": "仅为陈旧日线, 不是微观逐笔; 对今日 V27 无可用微观贡献",
+      "recovery": "需 TDX 盘后自动更新恢复写入 (当前自 2026-04-10 起未再更新)"
+    },
+    {
+      "name": "TDX vipdoc 分钟线 minline (.lc1 一分线 / .01) 15 只代码",
+      "path": "E:/new_tdx64/vipdoc/{sh,sz}/minline/{code}.lc1|.01",
+      "size": "15 只 .lc1 均存在 (sz301583 仅 .lc1 无 .01); .lc1 约 1.08MB/只 (33840 根 x 32B), .01=53760B",
+      "mtime": "15 只 .lc1 mtime 均为 2026-11-04 22:09~22:19; 全市场 minline 最新 mtime=2026-11-04 22:19:40 (sh000001.lc1), 无任何 2026-11-05 之后写入; .01 mtime=2026-04-11",
+      "probe": ".lc1 末根 32B 记录解析: 时间字段 hi16=900 (15:00 收盘), 日期字段 lo16=46160 (与 sh000001/sz399001 一致, 对应 2026-11-04); 内部最后交易日 = 2026-11-04, 缺 11-05/11-06/11-09/11-10/11-11 共 5 个交易日",
+      "status": "stale (止于 2026-11-04 收盘)",
+      "impact_on_V27_micro": "V27 分时波形/V22 板前形态本地分钟线停在 11-04, 今日 T 日分钟线不可用; T-1(11-10) 分时亦缺失",
+      "recovery": "TDX 盘中/盘后自动下载分钟线恢复 (11-04 22:xx 批量写入后至今未再更新); 或云端补数"
+    },
+    {
+      "name": "TDX vipdoc fzline (.lc5 五分线 / .5 分时)",
+      "path": "E:/new_tdx64/vipdoc/{sh,sz}/fzline/",
+      "size": "sh=30208, sz=25696 文件",
+      "mtime": ".lc5 最新 2026-11-04 22:19~22:29; .5 文件 2026-04-11",
+      "probe": "15 只 .lc5 均止于 2026-11-04; 与 minline 一致",
+      "status": "stale (止于 2026-11-04)",
+      "impact_on_V27_micro": "五分线同样缺 5 个交易日",
+      "recovery": "同上"
+    },
+    {
+      "name": "TDX vipdoc 日线 lday 15 只代码 + 全市场 2026-11 记录",
+      "path": "E:/new_tdx64/vipdoc/{sh,sz}/lday/{code}.day",
+      "size": "15 只均存在, 每只约 2.2万B (约 692 根 x 32B)",
+      "mtime": "15 只 mtime=2026-11-10 22:05~22:06; 全市场 lday 最大末根日期=20261110 (sh000001.day)",
+      "probe": "末根 32B 记录 date 字段=20261110 (yyyymmdd), 前一根=20261109; 价格为 uint32*100 (如 sz300413 11-10: 3488/3738/3455/3555 -> 34.88/37.38/34.55/35.55); 含 2026-11 记录但最新止于 2026-11-10 (T-1), 无今日 2026-11-11 (盘中正常, 收盘后 ~15:50 更新)",
+      "status": "available (日线当前至 T-1=2026-11-10; 今日待收盘更新)",
+      "impact_on_V27_micro": "日线(非微观)可用至 11-10; 微观分钟线仍缺 11-05 起数据",
+      "recovery": "今日日线待 15:50 盘后更新自动补 2026-11-11"
+    },
+    {
+      "name": "DFCF STOCK/TickData (逐笔)",
+      "path": "E:/eastmoney/dfcf/data/STOCK/TickData/",
+      "size": "181 文件",
+      "mtime": "mtime 范围 2026-04-09 13:38 ~ 2026-10-23 15:11 (最新 0_002421/0_002475/0_003006)",
+      "probe": "文件头 uint32 日期字段: 最新=20261023, 含 20260617 等; 15 只代码 (0_300413.dat 等) 全部 ABSENT",
+      "status": "stale (止于 2026-10-23; 15 只标的不在其中)",
+      "impact_on_V27_micro": "东财本地逐笔缓存过期且不含审计标的; V27 逐笔因子不可用",
+      "recovery": "需 DFCF 客户端开启 L2 并下载当日 TickData; 当前未运行写入"
+    },
+    {
+      "name": "DFCF STOCK/BidMatch_v1 (逐笔成交) 与 EndBidMatch_v1",
+      "path": "E:/eastmoney/dfcf/data/STOCK/{BidMatch_v1,EndBidMatch_v1}/",
+      "size": "BidMatch_v1=145 文件; EndBidMatch_v1=121 文件",
+      "mtime": "最新 mtime=2026-06-11 01:01 (1_600568.dat 等)",
+      "probe": "文件头 uint32 日期=20260610; 15 只代码全部 ABSENT",
+      "status": "stale (止于 2026-06-10, 5 个月前)",
+      "impact_on_V27_micro": "逐笔成交缓存过期且不含标的",
+      "recovery": "同上"
+    },
+    {
+      "name": "DFCF data/storage.dat 及 STOCK 其他微观相关目录",
+      "path": "E:/eastmoney/dfcf/data/storage.dat; E:/eastmoney/dfcf/data/STOCK/{MoneyKlineFile,StockMinTickDataEx,TrendLine_Level1,RtlineCfsFile,...}",
+      "size": "storage.dat=3221225472 (3.2GB); MoneyKlineFile 为空; StockMinTickDataEx 仅 1 文件 (1_588000.dat, 2026-04-08); TrendLine_Level1=234 文件最新 2026-10-29; RtlineCfsFile=38 文件最新 2026-10-28",
+      "mtime": "storage.dat mtime=2026-05-09 08:49",
+      "probe": "storage.dat 5 个月未写入; 分时/资金K线目录均止于 10 月底前; 仅 LIST_MSGTIP_V2 有今日 12:06 写入 (消息列表, 非行情微观)",
+      "status": "stale",
+      "impact_on_V27_micro": "东财 PC 端无当日微观数据落盘",
+      "recovery": "需客户端实时运行并开启相应缓存"
+    },
+    {
+      "name": "THS l2-system 脚本与采集痕迹",
+      "path": "E:/THS/l2-system/ (crack_tickdata.py, extract_ticks*.py, l2_ultimate.py 等约 40 个脚本); .last_l2_result.txt; L2_DONE.md",
+      "size": ".last_l2_result.txt=42B: '1782182319.6873477|1229.48|0|8164|65929216'",
+      "mtime": "脚本 mtime 2026-06-22~2026-08-05; .last_l2_result.txt mtime=2026-06-23 10:38",
+      "probe": "last_result 时间戳 1782182319.69 = 2026-06-23 10:38:39 (价格 1229.48 对应 600519 茅台); l2_log.csv 不存在 (gap); L2_DONE.md 为 6 月自述 ('已经全部可用'), 按规则自述不等于当前可用",
+      "status": "stale (末次成功提取 2026-06-23; l2_log.csv 缺失=gap)",
+      "impact_on_V27_micro": "THS L2 逐笔/委托/撤单仅存在于进程内存 (脚本破解内存 tickdata), 磁盘无落地; 今日无当日 L2 证据",
+      "recovery": "需 hexin.exe 运行中重新执行内存破解采集并落盘 l2_log.csv; 当前无 2026-11 落盘"
+    },
+    {
+      "name": "THS 实时快照 realtime/*/stocknow.dat (hexin.exe 运行中)",
+      "path": "E:/THS/同花顺/同花顺/realtime/{sznse,shase,...}/stocknow.dat",
+      "size": "sznse/stocknow.dat=13444686; shase/stocknow.dat=14563986",
+      "mtime": "2026-11-11 12:07:14 (今日实时写入; 市场 12:06:53)",
+      "probe": "文件头 'hd1.0'; 记录含股票代码 ASCII + GBK 名称 (检出 '300413' + 芒果超媒); 为 Level-1 全市场快照缓存, 非 L2 逐笔/委托/撤单; history/ 基本为空 (仅 sznse/day/002171.day 一根且全 0xFF, 15 只代码在 history 中 ABSENT); 磁盘无 level2/depth/mingxi 文件",
+      "status": "available (Level-1 快照今日实时; L2 微观不可用)",
+      "impact_on_V27_micro": "今日唯一实时落盘的 PC 端行情缓存, 但档位为快照级 (非百档订单簿, 无逐笔/撤单); V27 的 L2 订单流/竞价三因子仍不可用",
+      "recovery": "L2 部分需内存破解采集落盘 (见上条)"
+    },
+    {
+      "name": "本机历史tick本地库 /e/历史tick",
+      "path": "E:/历史tick/ (data/storage.dat, basic_data/day_bar/{SHSE,SZSE}_2026.dat, meta/*.sst)",
+      "size": "storage.dat=5368709120 (5.4GB); SHSE_2026.dat=191430656; SZSE_2026.dat=221143040; 共 62 文件",
+      "mtime": "最新写入=data/storage.dat 2026-10-31 00:38; SHSE_2026.dat=2026-10-30 20:29; SZSE_2026.dat=2026-10-30 17:18",
+      "probe": "day_bar 末尾日期字符串='2026-10-30' (SHSE/SZSE 均含股票代码记录, 如 600345/603893/300413/000559 可检出); 无任何 2026-11 数据; 期货品种 (BK/CFFEX/CZCE/DCE/INE/GFEX/SHFE) 为主",
+      "status": "stale (止于 2026-10-30/31, 11 天前)",
+      "impact_on_V27_micro": "历史 tick 库无 11 月数据, 今日不可用",
+      "recovery": "需该库的采集进程恢复写入 (10-31 后未再写)"
+    },
+    {
+      "name": "全盘补充搜索 (*.th2 / *.htc / *tickdata*)",
+      "path": "find /e -maxdepth 6",
+      "size": "仅 3 个 .th2 (均 TDX hq_cache, 全零) + 1 个只读冻结样本 (知名游资.../samples/l2_tdx_pc_th2_sample.th2, 非实时数据); *.htc = 0; *tickdata* 仅脚本文件 (crack_tickdata.py/_parse_tickdata.py)",
+      "mtime": "2026-11-11 12:2x 执行搜索",
+      "probe": "全盘无其他微观缓存文件",
+      "status": "gap (无其他微观源)",
+      "impact_on_V27_micro": "确认除上述来源外, 本机不存在其他 PC 端微观数据缓存",
+      "recovery": "n/a"
+    }
+  ],
+  "conclusion": "今日(2026-11-11)真实可用的 PC 端微观源 = 无。L2 逐笔/委托/撤单/百档盘口在三端磁盘上均无当日数据: TDX 的 sh/sz/bj.th2 为全零空文件、broker_data 的 tic_v3/tic_v4/bar_v3/bar_v4 为空目录、day_v4_tck 止于 2026-04-10; DFCF 的 TickData 止于 2026-10-23、BidMatch_v1/EndBidMatch_v1 止于 2026-06-10、storage.dat 止于 2026-05-09, 且 15 只标的均不在其中; THS 磁盘只有今日 12:07 实时写入的 Level-1 快照 stocknow.dat (非 L2), L2 仅在进程内存且末次落盘为 2026-06-23, l2_log.csv 缺失; /e/历史tick 库止于 2026-10-31。可用于今日判断的本地盘数据: TDX 日线 lday 至 T-1=2026-11-10 (15 只齐全), TDX 分钟线/minline 与 fzline 止于 2026-11-04 (缺 5 个交易日, stale), THS stocknow.dat 今日实时 (Level-1 快照)。因此 V27 微观因子 (L2 订单流不平衡、09:25 竞价三因子、百档盘口) 今日不能依赖 PC 本地文件, 只能依赖实时网络采集 (腾讯/东财云端接口今日 12:05 实测可用, 15 只名称双源一致); 缺口不零填, 标 gap。",
+  "gaps": [
+    "TDX .th2 百档盘口缓存全零 (empty)",
+    "TDX broker_data tic_v3/tic_v4/bar_v3/bar_v4 空目录; day_v4_tck 止于 2026-04-10 且缺 sz301583",
+    "TDX minline/fzline 分钟线止于 2026-11-04, 缺 2026-11-05..11-11",
+    "DFCF TickData/BidMatch_v1/EndBidMatch_v1 过期且不含 15 只标的; storage.dat 止于 2026-05-09",
+    "THS l2_log.csv 不存在 (gap); .last_l2_result.txt 止于 2026-06-23; 磁盘无 L2 tickdata 文件",
+    "/e/历史tick 库止于 2026-10-31, 无 11 月数据",
+    "全盘无 *.htc; 仅有的 .th2 均为全零空文件"
+  ]
+}

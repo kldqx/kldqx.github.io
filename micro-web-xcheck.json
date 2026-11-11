@@ -1,0 +1,4003 @@
+{
+ "schema": "micro-web-xcheck/v1",
+ "signal_boundary": "not_a_trading_signal",
+ "generated_at": "2026-11-11T12:30:59+08:00",
+ "collector_role": "web端微观因子交叉验证子代理(只读采集, 厂商推导指标仅交叉验证不做主因子)",
+ "collection_order": [
+  "DFCF/eastmoney",
+  "TENCENT",
+  "THS/10jqka"
+ ],
+ "single_source_timeout_sec": 30,
+ "t_day_codes_20261111": [
+  "300413.SZ",
+  "000559.SZ",
+  "300493.SZ",
+  "600345.SH",
+  "301583.SZ"
+ ],
+ "t_day_source": "web_monitor/sniper-feed.json stocks[].phase==T-1_POSTMARKET (seed_date=2026-11-10 => T=2026-11-11)",
+ "date_20261110": {
+  "300413.SZ": {
+   "name": "芒果超媒",
+   "auction_open": {
+    "eastmoney_day_kline_open": 34.88,
+    "tencent_fqkline_day_open": 34.88,
+    "ths_line_day_open": 34.88
+   },
+   "prev_close_20261109": {
+    "eastmoney": 35.8,
+    "tencent": 35.8,
+    "ths": 35.8
+   },
+   "chg_pct_20261110": -0.7,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 34.88,
+     "vol_hand": 154838,
+     "amount_yuan": 546141070.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 34.88,
+    "close": 35.55,
+    "high": 37.38,
+    "low": 34.55,
+    "vol_hand": 1318613,
+    "amount_yuan": 4760581825.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": -9965136.0,
+     "small_net_yuan": 32280640.0,
+     "medium_net_yuan": -22315472.0,
+     "large_net_yuan": 2398720.0,
+     "super_large_net_yuan": -12363856.0,
+     "main_net_pct": -0.2,
+     "close": 35.8,
+     "chg_pct": 2.78,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": -99257456.0,
+     "small_net_yuan": 124544128.0,
+     "medium_net_yuan": -25286688.0,
+     "large_net_yuan": -76216176.0,
+     "super_large_net_yuan": -23041280.0,
+     "main_net_pct": -2.08,
+     "close": 35.55,
+     "chg_pct": -0.7,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 34.88,
+      "close": 35.85,
+      "high": 35.88,
+      "low": 34.55,
+      "vol_hand": 154838,
+      "amount_yuan": 546141070.0
+     },
+     {
+      "t": "09:40",
+      "open": 35.89,
+      "close": 36.41,
+      "high": 36.98,
+      "low": 35.78,
+      "vol_hand": 152909,
+      "amount_yuan": 556261346.0
+     },
+     {
+      "t": "09:45",
+      "open": 36.4,
+      "close": 36.12,
+      "high": 36.53,
+      "low": 35.81,
+      "vol_hand": 67544,
+      "amount_yuan": 243857351.0
+     },
+     {
+      "t": "09:50",
+      "open": 36.12,
+      "close": 35.49,
+      "high": 36.12,
+      "low": 35.41,
+      "vol_hand": 53106,
+      "amount_yuan": 189474975.0
+     },
+     {
+      "t": "09:55",
+      "open": 35.58,
+      "close": 35.8,
+      "high": 35.89,
+      "low": 35.36,
+      "vol_hand": 30656,
+      "amount_yuan": 109228044.0
+     },
+     {
+      "t": "10:00",
+      "open": 35.8,
+      "close": 35.5,
+      "high": 35.8,
+      "low": 35.08,
+      "vol_hand": 33933,
+      "amount_yuan": 120151300.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 36.18,
+      "close": 36.4,
+      "high": 36.4,
+      "low": 36.16,
+      "vol_hand": 10704,
+      "amount_yuan": 38767296.0
+     },
+     {
+      "t": "14:35",
+      "open": 36.41,
+      "close": 35.92,
+      "high": 36.49,
+      "low": 35.92,
+      "vol_hand": 18694,
+      "amount_yuan": 67591675.0
+     },
+     {
+      "t": "14:40",
+      "open": 35.92,
+      "close": 36.0,
+      "high": 36.16,
+      "low": 35.85,
+      "vol_hand": 23891,
+      "amount_yuan": 85929537.0
+     },
+     {
+      "t": "14:45",
+      "open": 36.01,
+      "close": 35.7,
+      "high": 36.09,
+      "low": 35.46,
+      "vol_hand": 32235,
+      "amount_yuan": 115177103.0
+     },
+     {
+      "t": "14:50",
+      "open": 35.69,
+      "close": 35.5,
+      "high": 35.69,
+      "low": 35.2,
+      "vol_hand": 46127,
+      "amount_yuan": 163721677.0
+     },
+     {
+      "t": "14:55",
+      "open": 35.46,
+      "close": 35.7,
+      "high": 35.87,
+      "low": 35.39,
+      "vol_hand": 32373,
+      "amount_yuan": 115493762.0
+     },
+     {
+      "t": "15:00",
+      "open": 35.68,
+      "close": 35.55,
+      "high": 35.68,
+      "low": 35.36,
+      "vol_hand": 53496,
+      "amount_yuan": 190111542.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300413&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300413&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=0.300413&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300413,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_300413/01/last.js"
+   ]
+  },
+  "000559.SZ": {
+   "name": "万向钱潮",
+   "auction_open": {
+    "eastmoney_day_kline_open": 12.92,
+    "tencent_fqkline_day_open": 12.92,
+    "ths_line_day_open": 12.92
+   },
+   "prev_close_20261109": {
+    "eastmoney": 12.83,
+    "tencent": 12.83,
+    "ths": 12.83
+   },
+   "chg_pct_20261110": 2.88,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 12.92,
+     "vol_hand": 89001,
+     "amount_yuan": 116379542.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 12.92,
+    "close": 13.2,
+    "high": 13.71,
+    "low": 12.88,
+    "vol_hand": 1256806,
+    "amount_yuan": 1670491180.7
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 41360342.0,
+     "small_net_yuan": -25315520.0,
+     "medium_net_yuan": -16044816.0,
+     "large_net_yuan": 33566481.0,
+     "super_large_net_yuan": 7793861.0,
+     "main_net_pct": 3.38,
+     "close": 12.83,
+     "chg_pct": 2.72,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 40006514.0,
+     "small_net_yuan": -31124992.0,
+     "medium_net_yuan": -8881520.0,
+     "large_net_yuan": -57129424.0,
+     "super_large_net_yuan": 97135938.0,
+     "main_net_pct": 2.39,
+     "close": 13.2,
+     "chg_pct": 2.88,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 12.92,
+      "close": 13.09,
+      "high": 13.19,
+      "low": 12.88,
+      "vol_hand": 89001,
+      "amount_yuan": 116379542.0
+     },
+     {
+      "t": "09:40",
+      "open": 13.09,
+      "close": 13.15,
+      "high": 13.22,
+      "low": 13.06,
+      "vol_hand": 56860,
+      "amount_yuan": 74737459.0
+     },
+     {
+      "t": "09:45",
+      "open": 13.13,
+      "close": 13.02,
+      "high": 13.17,
+      "low": 13.02,
+      "vol_hand": 50678,
+      "amount_yuan": 66356351.0
+     },
+     {
+      "t": "09:50",
+      "open": 13.01,
+      "close": 13.4,
+      "high": 13.43,
+      "low": 13.01,
+      "vol_hand": 129712,
+      "amount_yuan": 172675593.0
+     },
+     {
+      "t": "09:55",
+      "open": 13.4,
+      "close": 13.52,
+      "high": 13.58,
+      "low": 13.38,
+      "vol_hand": 114438,
+      "amount_yuan": 154043692.0
+     },
+     {
+      "t": "10:00",
+      "open": 13.52,
+      "close": 13.6,
+      "high": 13.71,
+      "low": 13.52,
+      "vol_hand": 106739,
+      "amount_yuan": 145393387.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 13.12,
+      "close": 13.14,
+      "high": 13.15,
+      "low": 13.12,
+      "vol_hand": 7273,
+      "amount_yuan": 9552708.0
+     },
+     {
+      "t": "14:35",
+      "open": 13.14,
+      "close": 13.13,
+      "high": 13.14,
+      "low": 13.12,
+      "vol_hand": 10967,
+      "amount_yuan": 14396261.0
+     },
+     {
+      "t": "14:40",
+      "open": 13.13,
+      "close": 13.13,
+      "high": 13.15,
+      "low": 13.12,
+      "vol_hand": 16172,
+      "amount_yuan": 21233084.0
+     },
+     {
+      "t": "14:45",
+      "open": 13.13,
+      "close": 13.15,
+      "high": 13.17,
+      "low": 13.12,
+      "vol_hand": 24272,
+      "amount_yuan": 31911837.0
+     },
+     {
+      "t": "14:50",
+      "open": 13.15,
+      "close": 13.14,
+      "high": 13.15,
+      "low": 13.12,
+      "vol_hand": 30600,
+      "amount_yuan": 40192771.0
+     },
+     {
+      "t": "14:55",
+      "open": 13.14,
+      "close": 13.15,
+      "high": 13.16,
+      "low": 13.13,
+      "vol_hand": 50403,
+      "amount_yuan": 66289706.0
+     },
+     {
+      "t": "15:00",
+      "open": 13.15,
+      "close": 13.2,
+      "high": 13.2,
+      "low": 13.14,
+      "vol_hand": 50438,
+      "amount_yuan": 66461428.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.000559&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.000559&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=0.000559&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz000559,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_000559/01/last.js"
+   ]
+  },
+  "300493.SZ": {
+   "name": "润欣科技",
+   "auction_open": {
+    "eastmoney_day_kline_open": 13.58,
+    "tencent_fqkline_day_open": 13.58,
+    "ths_line_day_open": 13.58
+   },
+   "prev_close_20261109": {
+    "eastmoney": 13.49,
+    "tencent": 13.49,
+    "ths": 13.49
+   },
+   "chg_pct_20261110": 6.15,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 13.58,
+     "vol_hand": 38905,
+     "amount_yuan": 52926126.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 13.58,
+    "close": 14.32,
+    "high": 14.9,
+    "low": 13.4,
+    "vol_hand": 701387,
+    "amount_yuan": 991432705.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": -71973617.0,
+     "small_net_yuan": 53460985.0,
+     "medium_net_yuan": 18512626.0,
+     "large_net_yuan": -22368281.0,
+     "super_large_net_yuan": -49605336.0,
+     "main_net_pct": -11.54,
+     "close": 13.49,
+     "chg_pct": -1.68,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 56575201.0,
+     "small_net_yuan": -76897408.0,
+     "medium_net_yuan": 20322208.0,
+     "large_net_yuan": 950108.0,
+     "super_large_net_yuan": 55625093.0,
+     "main_net_pct": 5.71,
+     "close": 14.32,
+     "chg_pct": 6.15,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 13.58,
+      "close": 13.57,
+      "high": 13.75,
+      "low": 13.51,
+      "vol_hand": 38905,
+      "amount_yuan": 52926126.0
+     },
+     {
+      "t": "09:40",
+      "open": 13.57,
+      "close": 13.58,
+      "high": 13.68,
+      "low": 13.57,
+      "vol_hand": 16797,
+      "amount_yuan": 22868663.0
+     },
+     {
+      "t": "09:45",
+      "open": 13.59,
+      "close": 13.46,
+      "high": 13.59,
+      "low": 13.4,
+      "vol_hand": 22920,
+      "amount_yuan": 30911601.0
+     },
+     {
+      "t": "09:50",
+      "open": 13.45,
+      "close": 13.48,
+      "high": 13.52,
+      "low": 13.42,
+      "vol_hand": 11030,
+      "amount_yuan": 14851696.0
+     },
+     {
+      "t": "09:55",
+      "open": 13.48,
+      "close": 13.45,
+      "high": 13.49,
+      "low": 13.44,
+      "vol_hand": 9042,
+      "amount_yuan": 12171581.0
+     },
+     {
+      "t": "10:00",
+      "open": 13.45,
+      "close": 13.57,
+      "high": 13.58,
+      "low": 13.42,
+      "vol_hand": 12269,
+      "amount_yuan": 16561616.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 14.4,
+      "close": 14.43,
+      "high": 14.5,
+      "low": 14.4,
+      "vol_hand": 6030,
+      "amount_yuan": 8713028.0
+     },
+     {
+      "t": "14:35",
+      "open": 14.44,
+      "close": 14.37,
+      "high": 14.44,
+      "low": 14.36,
+      "vol_hand": 6921,
+      "amount_yuan": 9954116.0
+     },
+     {
+      "t": "14:40",
+      "open": 14.37,
+      "close": 14.35,
+      "high": 14.37,
+      "low": 14.33,
+      "vol_hand": 5697,
+      "amount_yuan": 8173748.0
+     },
+     {
+      "t": "14:45",
+      "open": 14.34,
+      "close": 14.3,
+      "high": 14.36,
+      "low": 14.3,
+      "vol_hand": 7905,
+      "amount_yuan": 11325671.0
+     },
+     {
+      "t": "14:50",
+      "open": 14.31,
+      "close": 14.3,
+      "high": 14.32,
+      "low": 14.26,
+      "vol_hand": 14811,
+      "amount_yuan": 21165018.0
+     },
+     {
+      "t": "14:55",
+      "open": 14.28,
+      "close": 14.35,
+      "high": 14.35,
+      "low": 14.28,
+      "vol_hand": 15846,
+      "amount_yuan": 22711687.0
+     },
+     {
+      "t": "15:00",
+      "open": 14.35,
+      "close": 14.32,
+      "high": 14.36,
+      "low": 14.31,
+      "vol_hand": 19210,
+      "amount_yuan": 27531265.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300493&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300493&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=0.300493&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300493,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_300493/01/last.js"
+   ]
+  },
+  "600345.SH": {
+   "name": "长江通信",
+   "auction_open": {
+    "eastmoney_day_kline_open": 41.36,
+    "tencent_fqkline_day_open": 41.36,
+    "ths_line_day_open": 41.36
+   },
+   "prev_close_20261109": {
+    "eastmoney": 40.02,
+    "tencent": 40.02,
+    "ths": 40.02
+   },
+   "chg_pct_20261110": 1.42,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 41.36,
+     "vol_hand": 22776,
+     "amount_yuan": 93187784.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 41.36,
+    "close": 40.59,
+    "high": 41.36,
+    "low": 40.39,
+    "vol_hand": 136782,
+    "amount_yuan": 557235947.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 124677981.0,
+     "small_net_yuan": -65981389.0,
+     "medium_net_yuan": -58696592.0,
+     "large_net_yuan": 36200781.0,
+     "super_large_net_yuan": 88477200.0,
+     "main_net_pct": 18.07,
+     "close": 40.02,
+     "chg_pct": 7.21,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 6246469.0,
+     "small_net_yuan": -11057217.0,
+     "medium_net_yuan": 4810749.0,
+     "large_net_yuan": -9501426.0,
+     "super_large_net_yuan": 15747895.0,
+     "main_net_pct": 1.12,
+     "close": 40.59,
+     "chg_pct": 1.42,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 41.36,
+      "close": 40.53,
+      "high": 41.36,
+      "low": 40.42,
+      "vol_hand": 22776,
+      "amount_yuan": 93187784.0
+     },
+     {
+      "t": "09:40",
+      "open": 40.5,
+      "close": 40.69,
+      "high": 40.69,
+      "low": 40.39,
+      "vol_hand": 11011,
+      "amount_yuan": 44628943.0
+     },
+     {
+      "t": "09:45",
+      "open": 40.67,
+      "close": 41.09,
+      "high": 41.16,
+      "low": 40.5,
+      "vol_hand": 9425,
+      "amount_yuan": 38516922.0
+     },
+     {
+      "t": "09:50",
+      "open": 41.06,
+      "close": 41.02,
+      "high": 41.18,
+      "low": 40.83,
+      "vol_hand": 7771,
+      "amount_yuan": 31826569.0
+     },
+     {
+      "t": "09:55",
+      "open": 41.01,
+      "close": 40.69,
+      "high": 41.25,
+      "low": 40.69,
+      "vol_hand": 5643,
+      "amount_yuan": 23156580.0
+     },
+     {
+      "t": "10:00",
+      "open": 40.69,
+      "close": 40.69,
+      "high": 40.9,
+      "low": 40.56,
+      "vol_hand": 5348,
+      "amount_yuan": 21742420.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 40.69,
+      "close": 40.76,
+      "high": 40.76,
+      "low": 40.66,
+      "vol_hand": 1268,
+      "amount_yuan": 5162979.0
+     },
+     {
+      "t": "14:35",
+      "open": 40.75,
+      "close": 40.63,
+      "high": 40.75,
+      "low": 40.62,
+      "vol_hand": 1043,
+      "amount_yuan": 4241229.0
+     },
+     {
+      "t": "14:40",
+      "open": 40.62,
+      "close": 40.59,
+      "high": 40.63,
+      "low": 40.57,
+      "vol_hand": 1328,
+      "amount_yuan": 5391189.0
+     },
+     {
+      "t": "14:45",
+      "open": 40.59,
+      "close": 40.57,
+      "high": 40.61,
+      "low": 40.57,
+      "vol_hand": 1496,
+      "amount_yuan": 6071446.0
+     },
+     {
+      "t": "14:50",
+      "open": 40.56,
+      "close": 40.46,
+      "high": 40.6,
+      "low": 40.45,
+      "vol_hand": 4277,
+      "amount_yuan": 17327858.0
+     },
+     {
+      "t": "14:55",
+      "open": 40.45,
+      "close": 40.53,
+      "high": 40.53,
+      "low": 40.45,
+      "vol_hand": 4343,
+      "amount_yuan": 17586898.0
+     },
+     {
+      "t": "15:00",
+      "open": 40.52,
+      "close": 40.59,
+      "high": 40.62,
+      "low": 40.52,
+      "vol_hand": 2561,
+      "amount_yuan": 10392629.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.600345&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.600345&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.600345&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600345,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_600345/01/last.js"
+   ]
+  },
+  "301583.SZ": {
+   "name": "托伦斯",
+   "auction_open": {
+    "eastmoney_day_kline_open": 110.16,
+    "tencent_fqkline_day_open": 110.16,
+    "ths_line_day_open": 110.16
+   },
+   "prev_close_20261109": {
+    "eastmoney": 104.38,
+    "tencent": 104.38,
+    "ths": 104.38
+   },
+   "chg_pct_20261110": -1.55,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 110.16,
+     "vol_hand": 22191,
+     "amount_yuan": 238906089.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 110.16,
+    "close": 102.76,
+    "high": 112.11,
+    "low": 101.8,
+    "vol_hand": 92449,
+    "amount_yuan": 965502690.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 11760953.0,
+     "small_net_yuan": -60356027.0,
+     "medium_net_yuan": 48595072.0,
+     "large_net_yuan": 22428013.0,
+     "super_large_net_yuan": -10667060.0,
+     "main_net_pct": 1.48,
+     "close": 104.38,
+     "chg_pct": 2.94,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": -54622446.0,
+     "small_net_yuan": 55473287.0,
+     "medium_net_yuan": -850832.0,
+     "large_net_yuan": -26943569.0,
+     "super_large_net_yuan": -27678877.0,
+     "main_net_pct": -5.66,
+     "close": 102.76,
+     "chg_pct": -1.55,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 110.16,
+      "close": 105.8,
+      "high": 112.11,
+      "low": 105.0,
+      "vol_hand": 22191,
+      "amount_yuan": 238906089.0
+     },
+     {
+      "t": "09:40",
+      "open": 105.5,
+      "close": 104.89,
+      "high": 105.5,
+      "low": 103.9,
+      "vol_hand": 7723,
+      "amount_yuan": 80756949.0
+     },
+     {
+      "t": "09:45",
+      "open": 104.43,
+      "close": 103.84,
+      "high": 105.11,
+      "low": 102.5,
+      "vol_hand": 6914,
+      "amount_yuan": 71939320.0
+     },
+     {
+      "t": "09:50",
+      "open": 103.8,
+      "close": 103.03,
+      "high": 103.8,
+      "low": 102.77,
+      "vol_hand": 3884,
+      "amount_yuan": 40026896.0
+     },
+     {
+      "t": "09:55",
+      "open": 103.03,
+      "close": 103.0,
+      "high": 103.68,
+      "low": 103.0,
+      "vol_hand": 2000,
+      "amount_yuan": 20637929.0
+     },
+     {
+      "t": "10:00",
+      "open": 103.0,
+      "close": 102.72,
+      "high": 103.48,
+      "low": 102.6,
+      "vol_hand": 2428,
+      "amount_yuan": 24972976.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 102.8,
+      "close": 102.8,
+      "high": 102.97,
+      "low": 102.7,
+      "vol_hand": 875,
+      "amount_yuan": 8992426.0
+     },
+     {
+      "t": "14:35",
+      "open": 102.8,
+      "close": 102.5,
+      "high": 103.03,
+      "low": 102.24,
+      "vol_hand": 1545,
+      "amount_yuan": 15843840.0
+     },
+     {
+      "t": "14:40",
+      "open": 102.5,
+      "close": 102.4,
+      "high": 102.5,
+      "low": 102.22,
+      "vol_hand": 991,
+      "amount_yuan": 10139999.0
+     },
+     {
+      "t": "14:45",
+      "open": 102.38,
+      "close": 102.23,
+      "high": 102.42,
+      "low": 102.21,
+      "vol_hand": 1584,
+      "amount_yuan": 16207057.0
+     },
+     {
+      "t": "14:50",
+      "open": 102.2,
+      "close": 102.11,
+      "high": 102.2,
+      "low": 102.03,
+      "vol_hand": 2023,
+      "amount_yuan": 20659285.0
+     },
+     {
+      "t": "14:55",
+      "open": 102.11,
+      "close": 103.0,
+      "high": 103.0,
+      "low": 102.11,
+      "vol_hand": 2234,
+      "amount_yuan": 22873516.0
+     },
+     {
+      "t": "15:00",
+      "open": 103.0,
+      "close": 102.76,
+      "high": 103.2,
+      "low": 102.76,
+      "vol_hand": 2326,
+      "amount_yuan": 23937968.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.301583&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.301583&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=0.301583&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz301583,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_301583/01/last.js"
+   ]
+  },
+  "600259.SH": {
+   "name": "中稀有色",
+   "auction_open": {
+    "eastmoney_day_kline_open": 68.13,
+    "tencent_fqkline_day_open": 68.13,
+    "ths_line_day_open": 68.13
+   },
+   "prev_close_20261109": {
+    "eastmoney": 65.97,
+    "tencent": 65.97,
+    "ths": 65.97
+   },
+   "chg_pct_20261110": 3.2,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 68.13,
+     "vol_hand": 26613,
+     "amount_yuan": 178236175.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 68.13,
+    "close": 68.08,
+    "high": 69.35,
+    "low": 65.65,
+    "vol_hand": 148897,
+    "amount_yuan": 1008847071.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 63646125.0,
+     "small_net_yuan": -51844544.0,
+     "medium_net_yuan": -11801568.0,
+     "large_net_yuan": 19939444.0,
+     "super_large_net_yuan": 43706681.0,
+     "main_net_pct": 6.13,
+     "close": 65.97,
+     "chg_pct": 6.42,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 73334463.0,
+     "small_net_yuan": -57565808.0,
+     "medium_net_yuan": -15768640.0,
+     "large_net_yuan": 38049306.0,
+     "super_large_net_yuan": 35285157.0,
+     "main_net_pct": 7.27,
+     "close": 68.08,
+     "chg_pct": 3.2,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 68.13,
+      "close": 67.12,
+      "high": 68.13,
+      "low": 65.65,
+      "vol_hand": 26613,
+      "amount_yuan": 178236175.0
+     },
+     {
+      "t": "09:40",
+      "open": 67.12,
+      "close": 67.39,
+      "high": 67.44,
+      "low": 66.78,
+      "vol_hand": 10594,
+      "amount_yuan": 71079862.0
+     },
+     {
+      "t": "09:45",
+      "open": 67.4,
+      "close": 67.5,
+      "high": 67.5,
+      "low": 67.01,
+      "vol_hand": 5823,
+      "amount_yuan": 39204631.0
+     },
+     {
+      "t": "09:50",
+      "open": 67.5,
+      "close": 67.89,
+      "high": 67.89,
+      "low": 67.2,
+      "vol_hand": 5425,
+      "amount_yuan": 36680131.0
+     },
+     {
+      "t": "09:55",
+      "open": 67.96,
+      "close": 67.4,
+      "high": 68.1,
+      "low": 67.4,
+      "vol_hand": 8555,
+      "amount_yuan": 58020673.0
+     },
+     {
+      "t": "10:00",
+      "open": 67.37,
+      "close": 67.44,
+      "high": 67.56,
+      "low": 67.31,
+      "vol_hand": 3555,
+      "amount_yuan": 23963639.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 68.27,
+      "close": 68.23,
+      "high": 68.28,
+      "low": 68.06,
+      "vol_hand": 1284,
+      "amount_yuan": 8753904.0
+     },
+     {
+      "t": "14:35",
+      "open": 68.25,
+      "close": 68.27,
+      "high": 68.32,
+      "low": 68.02,
+      "vol_hand": 1599,
+      "amount_yuan": 10896687.0
+     },
+     {
+      "t": "14:40",
+      "open": 68.24,
+      "close": 68.12,
+      "high": 68.27,
+      "low": 68.1,
+      "vol_hand": 1290,
+      "amount_yuan": 8790816.0
+     },
+     {
+      "t": "14:45",
+      "open": 68.13,
+      "close": 68.12,
+      "high": 68.16,
+      "low": 68.11,
+      "vol_hand": 2076,
+      "amount_yuan": 14144399.0
+     },
+     {
+      "t": "14:50",
+      "open": 68.13,
+      "close": 67.98,
+      "high": 68.13,
+      "low": 67.95,
+      "vol_hand": 3193,
+      "amount_yuan": 21732468.0
+     },
+     {
+      "t": "14:55",
+      "open": 67.97,
+      "close": 68.09,
+      "high": 68.11,
+      "low": 67.93,
+      "vol_hand": 3696,
+      "amount_yuan": 25142634.0
+     },
+     {
+      "t": "15:00",
+      "open": 68.08,
+      "close": 68.08,
+      "high": 68.12,
+      "low": 68.03,
+      "vol_hand": 4330,
+      "amount_yuan": 29484312.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.600259&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.600259&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.600259&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600259,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_600259/01/last.js"
+   ]
+  },
+  "688385.SH": {
+   "name": "复旦微电",
+   "auction_open": {
+    "eastmoney_day_kline_open": 51.0,
+    "tencent_fqkline_day_open": 51.0,
+    "ths_line_day_open": 51.0
+   },
+   "prev_close_20261109": {
+    "eastmoney": 49.88,
+    "tencent": 49.88,
+    "ths": 49.88
+   },
+   "chg_pct_20261110": 2.87,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 51.0,
+     "vol_hand": 16780,
+     "amount_yuan": 86050663.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 51.0,
+    "close": 51.31,
+    "high": 52.18,
+    "low": 50.6,
+    "vol_hand": 137477,
+    "amount_yuan": 706174799.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 113655.0,
+     "small_net_yuan": 24146944.0,
+     "medium_net_yuan": -24260608.0,
+     "large_net_yuan": 21813869.0,
+     "super_large_net_yuan": -21700214.0,
+     "main_net_pct": 0.01,
+     "close": 49.88,
+     "chg_pct": 6.54,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 58151564.0,
+     "small_net_yuan": -93151762.0,
+     "medium_net_yuan": 35000204.0,
+     "large_net_yuan": 27662302.0,
+     "super_large_net_yuan": 30489262.0,
+     "main_net_pct": 8.23,
+     "close": 51.31,
+     "chg_pct": 2.87,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 51.0,
+      "close": 51.08,
+      "high": 51.89,
+      "low": 51.0,
+      "vol_hand": 16780,
+      "amount_yuan": 86050663.0
+     },
+     {
+      "t": "09:40",
+      "open": 51.04,
+      "close": 51.11,
+      "high": 51.2,
+      "low": 50.72,
+      "vol_hand": 7977,
+      "amount_yuan": 40663136.0
+     },
+     {
+      "t": "09:45",
+      "open": 51.05,
+      "close": 51.02,
+      "high": 51.35,
+      "low": 50.78,
+      "vol_hand": 5311,
+      "amount_yuan": 27106800.0
+     },
+     {
+      "t": "09:50",
+      "open": 51.08,
+      "close": 50.82,
+      "high": 51.13,
+      "low": 50.71,
+      "vol_hand": 4672,
+      "amount_yuan": 23771823.0
+     },
+     {
+      "t": "09:55",
+      "open": 50.8,
+      "close": 50.72,
+      "high": 50.85,
+      "low": 50.69,
+      "vol_hand": 2910,
+      "amount_yuan": 14776065.0
+     },
+     {
+      "t": "10:00",
+      "open": 50.74,
+      "close": 50.76,
+      "high": 50.89,
+      "low": 50.6,
+      "vol_hand": 3422,
+      "amount_yuan": 17365503.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 51.53,
+      "close": 51.57,
+      "high": 51.59,
+      "low": 51.45,
+      "vol_hand": 1252,
+      "amount_yuan": 6445902.0
+     },
+     {
+      "t": "14:35",
+      "open": 51.59,
+      "close": 51.43,
+      "high": 51.6,
+      "low": 51.35,
+      "vol_hand": 2384,
+      "amount_yuan": 12273851.0
+     },
+     {
+      "t": "14:40",
+      "open": 51.43,
+      "close": 51.3,
+      "high": 51.43,
+      "low": 51.24,
+      "vol_hand": 1733,
+      "amount_yuan": 8895256.0
+     },
+     {
+      "t": "14:45",
+      "open": 51.3,
+      "close": 51.29,
+      "high": 51.38,
+      "low": 51.28,
+      "vol_hand": 2167,
+      "amount_yuan": 11120274.0
+     },
+     {
+      "t": "14:50",
+      "open": 51.28,
+      "close": 51.1,
+      "high": 51.29,
+      "low": 51.1,
+      "vol_hand": 2469,
+      "amount_yuan": 12639146.0
+     },
+     {
+      "t": "14:55",
+      "open": 51.1,
+      "close": 51.29,
+      "high": 51.35,
+      "low": 51.1,
+      "vol_hand": 3668,
+      "amount_yuan": 18801143.0
+     },
+     {
+      "t": "15:00",
+      "open": 51.29,
+      "close": 51.31,
+      "high": 51.32,
+      "low": 51.26,
+      "vol_hand": 3177,
+      "amount_yuan": 16298325.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.688385&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.688385&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.688385&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688385,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_688385/01/last.js"
+   ]
+  },
+  "688035.SH": {
+   "name": "德邦科技",
+   "auction_open": {
+    "eastmoney_day_kline_open": 60.82,
+    "tencent_fqkline_day_open": 60.82,
+    "ths_line_day_open": 60.82
+   },
+   "prev_close_20261109": {
+    "eastmoney": 59.65,
+    "tencent": 59.65,
+    "ths": 59.65
+   },
+   "chg_pct_20261110": 0.72,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 60.82,
+     "vol_hand": 8550,
+     "amount_yuan": 51288977.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 60.82,
+    "close": 60.08,
+    "high": 61.28,
+    "low": 59.12,
+    "vol_hand": 45564,
+    "amount_yuan": 274007426.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 59637178.0,
+     "small_net_yuan": -28044205.0,
+     "medium_net_yuan": -31592973.0,
+     "large_net_yuan": 16043371.0,
+     "super_large_net_yuan": 43593807.0,
+     "main_net_pct": 15.34,
+     "close": 59.65,
+     "chg_pct": 8.61,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 15685077.0,
+     "small_net_yuan": -21647657.0,
+     "medium_net_yuan": 5962581.0,
+     "large_net_yuan": 18719055.0,
+     "super_large_net_yuan": -3033978.0,
+     "main_net_pct": 5.72,
+     "close": 60.08,
+     "chg_pct": 0.72,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 60.82,
+      "close": 59.5,
+      "high": 60.82,
+      "low": 59.28,
+      "vol_hand": 8550,
+      "amount_yuan": 51288977.0
+     },
+     {
+      "t": "09:40",
+      "open": 59.54,
+      "close": 59.66,
+      "high": 59.86,
+      "low": 59.12,
+      "vol_hand": 2765,
+      "amount_yuan": 16444363.0
+     },
+     {
+      "t": "09:45",
+      "open": 59.66,
+      "close": 60.12,
+      "high": 60.12,
+      "low": 59.6,
+      "vol_hand": 2458,
+      "amount_yuan": 14705139.0
+     },
+     {
+      "t": "09:50",
+      "open": 60.12,
+      "close": 59.88,
+      "high": 60.13,
+      "low": 59.71,
+      "vol_hand": 1035,
+      "amount_yuan": 6204575.0
+     },
+     {
+      "t": "09:55",
+      "open": 59.88,
+      "close": 59.68,
+      "high": 59.89,
+      "low": 59.67,
+      "vol_hand": 1043,
+      "amount_yuan": 6236764.0
+     },
+     {
+      "t": "10:00",
+      "open": 59.67,
+      "close": 59.77,
+      "high": 59.79,
+      "low": 59.6,
+      "vol_hand": 841,
+      "amount_yuan": 5018708.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 60.4,
+      "close": 60.3,
+      "high": 60.44,
+      "low": 60.0,
+      "vol_hand": 1159,
+      "amount_yuan": 6978492.0
+     },
+     {
+      "t": "14:35",
+      "open": 60.39,
+      "close": 60.15,
+      "high": 60.39,
+      "low": 60.01,
+      "vol_hand": 448,
+      "amount_yuan": 2692700.0
+     },
+     {
+      "t": "14:40",
+      "open": 60.11,
+      "close": 60.08,
+      "high": 60.18,
+      "low": 59.9,
+      "vol_hand": 826,
+      "amount_yuan": 4959353.0
+     },
+     {
+      "t": "14:45",
+      "open": 59.98,
+      "close": 59.99,
+      "high": 60.08,
+      "low": 59.94,
+      "vol_hand": 495,
+      "amount_yuan": 2968816.0
+     },
+     {
+      "t": "14:50",
+      "open": 59.98,
+      "close": 59.82,
+      "high": 60.03,
+      "low": 59.71,
+      "vol_hand": 1186,
+      "amount_yuan": 7085073.0
+     },
+     {
+      "t": "14:55",
+      "open": 59.8,
+      "close": 59.96,
+      "high": 59.97,
+      "low": 59.73,
+      "vol_hand": 877,
+      "amount_yuan": 5253443.0
+     },
+     {
+      "t": "15:00",
+      "open": 59.99,
+      "close": 60.08,
+      "high": 60.36,
+      "low": 59.94,
+      "vol_hand": 654,
+      "amount_yuan": 3929625.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.688035&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.688035&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.688035&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh688035,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_688035/01/last.js"
+   ]
+  },
+  "002141.SZ": {
+   "name": "贤丰控股",
+   "auction_open": {
+    "eastmoney_day_kline_open": 5.15,
+    "tencent_fqkline_day_open": 5.15,
+    "ths_line_day_open": 5.15
+   },
+   "prev_close_20261109": {
+    "eastmoney": 5.05,
+    "tencent": 5.05,
+    "ths": 5.05
+   },
+   "chg_pct_20261110": 0.2,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 5.15,
+     "vol_hand": 132324,
+     "amount_yuan": 67543812.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 5.15,
+    "close": 5.06,
+    "high": 5.18,
+    "low": 5.01,
+    "vol_hand": 784276,
+    "amount_yuan": 396873069.08
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 110870088.0,
+     "small_net_yuan": -77897904.0,
+     "medium_net_yuan": -32972184.0,
+     "large_net_yuan": 15023167.0,
+     "super_large_net_yuan": 95846921.0,
+     "main_net_pct": 21.9,
+     "close": 5.05,
+     "chg_pct": 5.21,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": -30956419.0,
+     "small_net_yuan": 30766100.0,
+     "medium_net_yuan": 190319.0,
+     "large_net_yuan": -10495658.0,
+     "super_large_net_yuan": -20460761.0,
+     "main_net_pct": -7.8,
+     "close": 5.06,
+     "chg_pct": 0.2,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 5.15,
+      "close": 5.04,
+      "high": 5.18,
+      "low": 5.04,
+      "vol_hand": 132324,
+      "amount_yuan": 67543812.0
+     },
+     {
+      "t": "09:40",
+      "open": 5.03,
+      "close": 5.09,
+      "high": 5.09,
+      "low": 5.02,
+      "vol_hand": 47057,
+      "amount_yuan": 23745409.0
+     },
+     {
+      "t": "09:45",
+      "open": 5.09,
+      "close": 5.07,
+      "high": 5.09,
+      "low": 5.05,
+      "vol_hand": 30929,
+      "amount_yuan": 15685527.0
+     },
+     {
+      "t": "09:50",
+      "open": 5.06,
+      "close": 5.03,
+      "high": 5.06,
+      "low": 5.03,
+      "vol_hand": 22055,
+      "amount_yuan": 11135290.0
+     },
+     {
+      "t": "09:55",
+      "open": 5.03,
+      "close": 5.05,
+      "high": 5.05,
+      "low": 5.03,
+      "vol_hand": 18907,
+      "amount_yuan": 9522982.0
+     },
+     {
+      "t": "10:00",
+      "open": 5.05,
+      "close": 5.04,
+      "high": 5.05,
+      "low": 5.03,
+      "vol_hand": 15192,
+      "amount_yuan": 7651564.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 5.06,
+      "close": 5.05,
+      "high": 5.06,
+      "low": 5.05,
+      "vol_hand": 12144,
+      "amount_yuan": 6136147.0
+     },
+     {
+      "t": "14:35",
+      "open": 5.05,
+      "close": 5.04,
+      "high": 5.06,
+      "low": 5.04,
+      "vol_hand": 7738,
+      "amount_yuan": 3907301.0
+     },
+     {
+      "t": "14:40",
+      "open": 5.05,
+      "close": 5.04,
+      "high": 5.05,
+      "low": 5.04,
+      "vol_hand": 5770,
+      "amount_yuan": 2910528.0
+     },
+     {
+      "t": "14:45",
+      "open": 5.05,
+      "close": 5.05,
+      "high": 5.05,
+      "low": 5.04,
+      "vol_hand": 12392,
+      "amount_yuan": 6248092.0
+     },
+     {
+      "t": "14:50",
+      "open": 5.04,
+      "close": 5.05,
+      "high": 5.05,
+      "low": 5.04,
+      "vol_hand": 19326,
+      "amount_yuan": 9749456.0
+     },
+     {
+      "t": "14:55",
+      "open": 5.05,
+      "close": 5.05,
+      "high": 5.06,
+      "low": 5.04,
+      "vol_hand": 38662,
+      "amount_yuan": 19527394.0
+     },
+     {
+      "t": "15:00",
+      "open": 5.05,
+      "close": 5.06,
+      "high": 5.06,
+      "low": 5.05,
+      "vol_hand": 38366,
+      "amount_yuan": 19396552.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.002141&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.002141&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=0.002141&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz002141,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_002141/01/last.js"
+   ]
+  },
+  "300739.SZ": {
+   "name": "明阳电路",
+   "auction_open": {
+    "eastmoney_day_kline_open": 23.01,
+    "tencent_fqkline_day_open": 23.01,
+    "ths_line_day_open": 23.01
+   },
+   "prev_close_20261109": {
+    "eastmoney": 22.41,
+    "tencent": 22.41,
+    "ths": 22.41
+   },
+   "chg_pct_20261110": 2.28,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 23.01,
+     "vol_hand": 29069,
+     "amount_yuan": 66747208.0
+    },
+    "local_gate_20261110": null
+   },
+   "day_20261110": {
+    "open": 23.01,
+    "close": 22.92,
+    "high": 23.35,
+    "low": 22.68,
+    "vol_hand": 210853,
+    "amount_yuan": 484412463.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 14598593.0,
+     "small_net_yuan": -26998907.0,
+     "medium_net_yuan": 12400314.0,
+     "large_net_yuan": 13958089.0,
+     "super_large_net_yuan": 640504.0,
+     "main_net_pct": 2.72,
+     "close": 22.41,
+     "chg_pct": 2.14,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": -5384186.0,
+     "small_net_yuan": 37080679.0,
+     "medium_net_yuan": -31696493.0,
+     "large_net_yuan": -5396898.0,
+     "super_large_net_yuan": 12712.0,
+     "main_net_pct": -1.11,
+     "close": 22.92,
+     "chg_pct": 2.28,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 23.01,
+      "close": 22.83,
+      "high": 23.2,
+      "low": 22.68,
+      "vol_hand": 29069,
+      "amount_yuan": 66747208.0
+     },
+     {
+      "t": "09:40",
+      "open": 22.8,
+      "close": 22.92,
+      "high": 22.93,
+      "low": 22.73,
+      "vol_hand": 9383,
+      "amount_yuan": 21406649.0
+     },
+     {
+      "t": "09:45",
+      "open": 22.92,
+      "close": 23.0,
+      "high": 23.04,
+      "low": 22.87,
+      "vol_hand": 8416,
+      "amount_yuan": 19317338.0
+     },
+     {
+      "t": "09:50",
+      "open": 22.97,
+      "close": 22.77,
+      "high": 23.03,
+      "low": 22.73,
+      "vol_hand": 7523,
+      "amount_yuan": 17196684.0
+     },
+     {
+      "t": "09:55",
+      "open": 22.77,
+      "close": 22.76,
+      "high": 22.85,
+      "low": 22.71,
+      "vol_hand": 5982,
+      "amount_yuan": 13626069.0
+     },
+     {
+      "t": "10:00",
+      "open": 22.76,
+      "close": 22.99,
+      "high": 22.99,
+      "low": 22.71,
+      "vol_hand": 6705,
+      "amount_yuan": 15294458.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 22.96,
+      "close": 22.98,
+      "high": 22.99,
+      "low": 22.96,
+      "vol_hand": 2220,
+      "amount_yuan": 5100620.0
+     },
+     {
+      "t": "14:35",
+      "open": 22.98,
+      "close": 22.95,
+      "high": 22.99,
+      "low": 22.94,
+      "vol_hand": 3000,
+      "amount_yuan": 6886769.0
+     },
+     {
+      "t": "14:40",
+      "open": 22.95,
+      "close": 22.93,
+      "high": 22.96,
+      "low": 22.91,
+      "vol_hand": 2735,
+      "amount_yuan": 6270582.0
+     },
+     {
+      "t": "14:45",
+      "open": 22.93,
+      "close": 22.93,
+      "high": 22.95,
+      "low": 22.91,
+      "vol_hand": 4463,
+      "amount_yuan": 10231026.0
+     },
+     {
+      "t": "14:50",
+      "open": 22.93,
+      "close": 22.88,
+      "high": 22.93,
+      "low": 22.87,
+      "vol_hand": 6531,
+      "amount_yuan": 14952477.0
+     },
+     {
+      "t": "14:55",
+      "open": 22.87,
+      "close": 22.91,
+      "high": 22.93,
+      "low": 22.87,
+      "vol_hand": 6835,
+      "amount_yuan": 15656507.0
+     },
+     {
+      "t": "15:00",
+      "open": 22.9,
+      "close": 22.92,
+      "high": 22.92,
+      "low": 22.87,
+      "vol_hand": 8352,
+      "amount_yuan": 19130009.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300739&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300739&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=0.300739&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz300739,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_300739/01/last.js"
+   ]
+  },
+  "603728.SH": {
+   "name": "鸣志电器",
+   "auction_open": {
+    "eastmoney_day_kline_open": 59.55,
+    "tencent_fqkline_day_open": 59.55,
+    "ths_line_day_open": 59.55
+   },
+   "prev_close_20261109": {
+    "eastmoney": 59.24,
+    "tencent": 59.24,
+    "ths": 59.24
+   },
+   "chg_pct_20261110": 1.87,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 59.55,
+     "vol_hand": 10191,
+     "amount_yuan": 61994629.0
+    },
+    "local_gate_20261110": {
+     "auction_vol_hand": 408,
+     "auction_amt_wan": 243.0,
+     "source": "runtime/runs/20261109-postmarket-v26/auction_gate_20261110.json"
+    }
+   },
+   "day_20261110": {
+    "open": 59.55,
+    "close": 60.35,
+    "high": 61.48,
+    "low": 59.55,
+    "vol_hand": 107808,
+    "amount_yuan": 654935464.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 8095495.0,
+     "small_net_yuan": 10646327.0,
+     "medium_net_yuan": -18741821.0,
+     "large_net_yuan": -2496981.0,
+     "super_large_net_yuan": 10592476.0,
+     "main_net_pct": 1.59,
+     "close": 59.24,
+     "chg_pct": 0.68,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 8929560.0,
+     "small_net_yuan": 21463603.0,
+     "medium_net_yuan": -30393163.0,
+     "large_net_yuan": 6310942.0,
+     "super_large_net_yuan": 2618618.0,
+     "main_net_pct": 1.36,
+     "close": 60.35,
+     "chg_pct": 1.87,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 59.55,
+      "close": 60.79,
+      "high": 61.3,
+      "low": 59.55,
+      "vol_hand": 10191,
+      "amount_yuan": 61994629.0
+     },
+     {
+      "t": "09:40",
+      "open": 60.79,
+      "close": 61.03,
+      "high": 61.26,
+      "low": 60.5,
+      "vol_hand": 7214,
+      "amount_yuan": 43957522.0
+     },
+     {
+      "t": "09:45",
+      "open": 61.01,
+      "close": 60.13,
+      "high": 61.04,
+      "low": 60.13,
+      "vol_hand": 4631,
+      "amount_yuan": 28061429.0
+     },
+     {
+      "t": "09:50",
+      "open": 60.09,
+      "close": 60.8,
+      "high": 61.1,
+      "low": 60.01,
+      "vol_hand": 4726,
+      "amount_yuan": 28657349.0
+     },
+     {
+      "t": "09:55",
+      "open": 60.95,
+      "close": 60.76,
+      "high": 61.05,
+      "low": 60.45,
+      "vol_hand": 3262,
+      "amount_yuan": 19842717.0
+     },
+     {
+      "t": "10:00",
+      "open": 60.68,
+      "close": 61.17,
+      "high": 61.17,
+      "low": 60.66,
+      "vol_hand": 5038,
+      "amount_yuan": 30718456.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 60.49,
+      "close": 60.52,
+      "high": 60.53,
+      "low": 60.46,
+      "vol_hand": 600,
+      "amount_yuan": 3629551.0
+     },
+     {
+      "t": "14:35",
+      "open": 60.53,
+      "close": 60.38,
+      "high": 60.53,
+      "low": 60.38,
+      "vol_hand": 1161,
+      "amount_yuan": 7015329.0
+     },
+     {
+      "t": "14:40",
+      "open": 60.38,
+      "close": 60.29,
+      "high": 60.38,
+      "low": 60.28,
+      "vol_hand": 1162,
+      "amount_yuan": 7009644.0
+     },
+     {
+      "t": "14:45",
+      "open": 60.28,
+      "close": 60.32,
+      "high": 60.37,
+      "low": 60.28,
+      "vol_hand": 2018,
+      "amount_yuan": 12173227.0
+     },
+     {
+      "t": "14:50",
+      "open": 60.32,
+      "close": 60.23,
+      "high": 60.33,
+      "low": 60.22,
+      "vol_hand": 1858,
+      "amount_yuan": 11198022.0
+     },
+     {
+      "t": "14:55",
+      "open": 60.23,
+      "close": 60.36,
+      "high": 60.37,
+      "low": 60.21,
+      "vol_hand": 2207,
+      "amount_yuan": 13309572.0
+     },
+     {
+      "t": "15:00",
+      "open": 60.36,
+      "close": 60.35,
+      "high": 60.38,
+      "low": 60.3,
+      "vol_hand": 2019,
+      "amount_yuan": 12184160.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603728&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603728&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.603728&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603728,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_603728/01/last.js"
+   ]
+  },
+  "603667.SH": {
+   "name": "五洲新春",
+   "auction_open": {
+    "eastmoney_day_kline_open": 54.0,
+    "tencent_fqkline_day_open": 54.0,
+    "ths_line_day_open": 54.0
+   },
+   "prev_close_20261109": {
+    "eastmoney": 53.71,
+    "tencent": 53.71,
+    "ths": 53.71
+   },
+   "chg_pct_20261110": 4.58,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 54.0,
+     "vol_hand": 33478,
+     "amount_yuan": 183729958.0
+    },
+    "local_gate_20261110": {
+     "auction_vol_hand": 2959,
+     "auction_amt_wan": 1597.9,
+     "source": "runtime/runs/20261109-postmarket-v26/auction_gate_20261110.json"
+    }
+   },
+   "day_20261110": {
+    "open": 54.0,
+    "close": 56.17,
+    "high": 57.4,
+    "low": 54.0,
+    "vol_hand": 369117,
+    "amount_yuan": 2066710341.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 15794707.0,
+     "small_net_yuan": -50159296.0,
+     "medium_net_yuan": 34364592.0,
+     "large_net_yuan": 18684192.0,
+     "super_large_net_yuan": -2889485.0,
+     "main_net_pct": 1.08,
+     "close": 53.71,
+     "chg_pct": 0.92,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 133402329.0,
+     "small_net_yuan": -93088880.0,
+     "medium_net_yuan": -40313440.0,
+     "large_net_yuan": 88948784.0,
+     "super_large_net_yuan": 44453545.0,
+     "main_net_pct": 6.45,
+     "close": 56.17,
+     "chg_pct": 4.58,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 54.0,
+      "close": 54.88,
+      "high": 55.37,
+      "low": 54.0,
+      "vol_hand": 33478,
+      "amount_yuan": 183729958.0
+     },
+     {
+      "t": "09:40",
+      "open": 54.85,
+      "close": 55.37,
+      "high": 55.59,
+      "low": 54.75,
+      "vol_hand": 26534,
+      "amount_yuan": 146490486.0
+     },
+     {
+      "t": "09:45",
+      "open": 55.36,
+      "close": 55.07,
+      "high": 55.63,
+      "low": 54.89,
+      "vol_hand": 20242,
+      "amount_yuan": 112033657.0
+     },
+     {
+      "t": "09:50",
+      "open": 55.02,
+      "close": 56.12,
+      "high": 56.38,
+      "low": 54.89,
+      "vol_hand": 35764,
+      "amount_yuan": 199649482.0
+     },
+     {
+      "t": "09:55",
+      "open": 56.07,
+      "close": 55.84,
+      "high": 56.2,
+      "low": 55.76,
+      "vol_hand": 16470,
+      "amount_yuan": 92078023.0
+     },
+     {
+      "t": "10:00",
+      "open": 55.8,
+      "close": 56.24,
+      "high": 56.38,
+      "low": 55.71,
+      "vol_hand": 18396,
+      "amount_yuan": 103182917.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 56.09,
+      "close": 56.24,
+      "high": 56.25,
+      "low": 56.07,
+      "vol_hand": 2358,
+      "amount_yuan": 13231514.0
+     },
+     {
+      "t": "14:35",
+      "open": 56.22,
+      "close": 56.02,
+      "high": 56.22,
+      "low": 56.02,
+      "vol_hand": 4181,
+      "amount_yuan": 23450406.0
+     },
+     {
+      "t": "14:40",
+      "open": 56.02,
+      "close": 55.81,
+      "high": 56.02,
+      "low": 55.78,
+      "vol_hand": 6912,
+      "amount_yuan": 38622665.0
+     },
+     {
+      "t": "14:45",
+      "open": 55.82,
+      "close": 55.82,
+      "high": 56.02,
+      "low": 55.8,
+      "vol_hand": 5294,
+      "amount_yuan": 29593245.0
+     },
+     {
+      "t": "14:50",
+      "open": 55.83,
+      "close": 55.86,
+      "high": 55.89,
+      "low": 55.83,
+      "vol_hand": 4822,
+      "amount_yuan": 26930040.0
+     },
+     {
+      "t": "14:55",
+      "open": 55.84,
+      "close": 56.05,
+      "high": 56.05,
+      "low": 55.84,
+      "vol_hand": 7929,
+      "amount_yuan": 44389127.0
+     },
+     {
+      "t": "15:00",
+      "open": 56.04,
+      "close": 56.17,
+      "high": 56.17,
+      "low": 56.02,
+      "vol_hand": 8551,
+      "amount_yuan": 47978045.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603667&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603667&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.603667&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603667,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_603667/01/last.js"
+   ]
+  },
+  "603893.SH": {
+   "name": "瑞芯微",
+   "auction_open": {
+    "eastmoney_day_kline_open": 218.99,
+    "tencent_fqkline_day_open": 218.99,
+    "ths_line_day_open": 218.99
+   },
+   "prev_close_20261109": {
+    "eastmoney": 212.0,
+    "tencent": 212.0,
+    "ths": 212.0
+   },
+   "chg_pct_20261110": 10.0,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 218.99,
+     "vol_hand": 13307,
+     "amount_yuan": 287122700.0
+    },
+    "local_gate_20261110": {
+     "auction_vol_hand": 1750,
+     "auction_amt_wan": 3832.3,
+     "source": "runtime/runs/20261109-postmarket-v26/auction_gate_20261110.json"
+    }
+   },
+   "day_20261110": {
+    "open": 218.99,
+    "close": 233.2,
+    "high": 233.2,
+    "low": 211.0,
+    "vol_hand": 185183,
+    "amount_yuan": 4144798552.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 10785664.0,
+     "small_net_yuan": 40154480.0,
+     "medium_net_yuan": -50940160.0,
+     "large_net_yuan": 49234176.0,
+     "super_large_net_yuan": -38448512.0,
+     "main_net_pct": 0.35,
+     "close": 212.0,
+     "chg_pct": -0.32,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 619045984.0,
+     "small_net_yuan": -352966672.0,
+     "medium_net_yuan": -266079312.0,
+     "large_net_yuan": 70468032.0,
+     "super_large_net_yuan": 548577952.0,
+     "main_net_pct": 14.94,
+     "close": 233.2,
+     "chg_pct": 10.0,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 218.99,
+      "close": 215.49,
+      "high": 218.99,
+      "low": 212.4,
+      "vol_hand": 13307,
+      "amount_yuan": 287122700.0
+     },
+     {
+      "t": "09:40",
+      "open": 215.33,
+      "close": 217.07,
+      "high": 218.0,
+      "low": 215.3,
+      "vol_hand": 7674,
+      "amount_yuan": 166399878.0
+     },
+     {
+      "t": "09:45",
+      "open": 217.06,
+      "close": 212.44,
+      "high": 217.06,
+      "low": 212.0,
+      "vol_hand": 6265,
+      "amount_yuan": 134438788.0
+     },
+     {
+      "t": "09:50",
+      "open": 212.36,
+      "close": 212.84,
+      "high": 213.35,
+      "low": 211.0,
+      "vol_hand": 6055,
+      "amount_yuan": 128599116.0
+     },
+     {
+      "t": "09:55",
+      "open": 212.8,
+      "close": 213.97,
+      "high": 213.97,
+      "low": 212.3,
+      "vol_hand": 4038,
+      "amount_yuan": 85978163.0
+     },
+     {
+      "t": "10:00",
+      "open": 214.0,
+      "close": 214.0,
+      "high": 214.45,
+      "low": 213.68,
+      "vol_hand": 3484,
+      "amount_yuan": 74626575.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 233.2,
+      "close": 233.2,
+      "high": 233.2,
+      "low": 233.2,
+      "vol_hand": 623,
+      "amount_yuan": 14528360.0
+     },
+     {
+      "t": "14:35",
+      "open": 233.2,
+      "close": 233.2,
+      "high": 233.2,
+      "low": 233.2,
+      "vol_hand": 562,
+      "amount_yuan": 13105840.0
+     },
+     {
+      "t": "14:40",
+      "open": 233.2,
+      "close": 233.2,
+      "high": 233.2,
+      "low": 233.2,
+      "vol_hand": 331,
+      "amount_yuan": 7723584.0
+     },
+     {
+      "t": "14:45",
+      "open": 233.2,
+      "close": 233.2,
+      "high": 233.2,
+      "low": 233.2,
+      "vol_hand": 474,
+      "amount_yuan": 11053680.0
+     },
+     {
+      "t": "14:50",
+      "open": 233.2,
+      "close": 233.2,
+      "high": 233.2,
+      "low": 233.2,
+      "vol_hand": 4255,
+      "amount_yuan": 99226600.0
+     },
+     {
+      "t": "14:55",
+      "open": 233.2,
+      "close": 233.2,
+      "high": 233.2,
+      "low": 233.2,
+      "vol_hand": 1119,
+      "amount_yuan": 26095080.0
+     },
+     {
+      "t": "15:00",
+      "open": 233.2,
+      "close": 233.2,
+      "high": 233.2,
+      "low": 233.2,
+      "vol_hand": 491,
+      "amount_yuan": 11455484.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603893&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603893&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.603893&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603893,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_603893/01/last.js"
+   ]
+  },
+  "603341.SH": {
+   "name": "龙旗科技",
+   "auction_open": {
+    "eastmoney_day_kline_open": 38.35,
+    "tencent_fqkline_day_open": 38.35,
+    "ths_line_day_open": 38.35
+   },
+   "prev_close_20261109": {
+    "eastmoney": 37.83,
+    "tencent": 37.83,
+    "ths": 37.83
+   },
+   "chg_pct_20261110": 6.05,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 38.35,
+     "vol_hand": 12609,
+     "amount_yuan": 48709456.0
+    },
+    "local_gate_20261110": {
+     "auction_vol_hand": 248,
+     "auction_amt_wan": 95.1,
+     "source": "runtime/runs/20261109-postmarket-v26/auction_gate_20261110.json"
+    }
+   },
+   "day_20261110": {
+    "open": 38.35,
+    "close": 40.12,
+    "high": 40.58,
+    "low": 38.1,
+    "vol_hand": 189348,
+    "amount_yuan": 748155722.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 14054549.0,
+     "small_net_yuan": -21232301.0,
+     "medium_net_yuan": 7177752.0,
+     "large_net_yuan": 6003929.0,
+     "super_large_net_yuan": 8050620.0,
+     "main_net_pct": 3.4,
+     "close": 37.83,
+     "chg_pct": 0.72,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 50302843.0,
+     "small_net_yuan": -57909035.0,
+     "medium_net_yuan": 7606191.0,
+     "large_net_yuan": 29002454.0,
+     "super_large_net_yuan": 21300389.0,
+     "main_net_pct": 6.72,
+     "close": 40.12,
+     "chg_pct": 6.05,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 38.35,
+      "close": 38.56,
+      "high": 39.05,
+      "low": 38.27,
+      "vol_hand": 12609,
+      "amount_yuan": 48709456.0
+     },
+     {
+      "t": "09:40",
+      "open": 38.55,
+      "close": 38.66,
+      "high": 38.87,
+      "low": 38.55,
+      "vol_hand": 4175,
+      "amount_yuan": 16163868.0
+     },
+     {
+      "t": "09:45",
+      "open": 38.64,
+      "close": 38.25,
+      "high": 38.64,
+      "low": 38.1,
+      "vol_hand": 3923,
+      "amount_yuan": 15053095.0
+     },
+     {
+      "t": "09:50",
+      "open": 38.21,
+      "close": 38.36,
+      "high": 38.45,
+      "low": 38.15,
+      "vol_hand": 3927,
+      "amount_yuan": 15038871.0
+     },
+     {
+      "t": "09:55",
+      "open": 38.35,
+      "close": 38.28,
+      "high": 38.35,
+      "low": 38.2,
+      "vol_hand": 2201,
+      "amount_yuan": 8425440.0
+     },
+     {
+      "t": "10:00",
+      "open": 38.3,
+      "close": 38.44,
+      "high": 38.57,
+      "low": 38.28,
+      "vol_hand": 2829,
+      "amount_yuan": 10871915.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 40.36,
+      "close": 40.42,
+      "high": 40.45,
+      "low": 40.34,
+      "vol_hand": 2898,
+      "amount_yuan": 11706171.0
+     },
+     {
+      "t": "14:35",
+      "open": 40.43,
+      "close": 40.17,
+      "high": 40.43,
+      "low": 40.12,
+      "vol_hand": 5469,
+      "amount_yuan": 22034284.0
+     },
+     {
+      "t": "14:40",
+      "open": 40.18,
+      "close": 40.17,
+      "high": 40.18,
+      "low": 40.07,
+      "vol_hand": 2805,
+      "amount_yuan": 11255775.0
+     },
+     {
+      "t": "14:45",
+      "open": 40.15,
+      "close": 40.21,
+      "high": 40.22,
+      "low": 40.15,
+      "vol_hand": 3314,
+      "amount_yuan": 13315426.0
+     },
+     {
+      "t": "14:50",
+      "open": 40.22,
+      "close": 40.14,
+      "high": 40.28,
+      "low": 40.12,
+      "vol_hand": 4161,
+      "amount_yuan": 16720719.0
+     },
+     {
+      "t": "14:55",
+      "open": 40.15,
+      "close": 40.18,
+      "high": 40.22,
+      "low": 40.13,
+      "vol_hand": 3531,
+      "amount_yuan": 14191380.0
+     },
+     {
+      "t": "15:00",
+      "open": 40.16,
+      "close": 40.12,
+      "high": 40.18,
+      "low": 40.1,
+      "vol_hand": 4468,
+      "amount_yuan": 17933441.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603341&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603341&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.603341&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh603341,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_603341/01/last.js"
+   ]
+  },
+  "605188.SH": {
+   "name": "国光连锁",
+   "auction_open": {
+    "eastmoney_day_kline_open": 11.98,
+    "tencent_fqkline_day_open": 11.98,
+    "ths_line_day_open": 11.98
+   },
+   "prev_close_20261109": {
+    "eastmoney": 12.03,
+    "tencent": 12.03,
+    "ths": 12.03
+   },
+   "chg_pct_20261110": 1.33,
+   "auction_vol_amt": {
+    "note": "web源不暴露历史日竞价单独量; 东财5分钟首根(09:35)含集合竞价; 本地闸门原件仅覆盖5只",
+    "em_5min_first_bar_0935_contains_auction": {
+     "time": "2026-11-10 09:35",
+     "open": 11.98,
+     "vol_hand": 20988,
+     "amount_yuan": 25197137.0
+    },
+    "local_gate_20261110": {
+     "auction_vol_hand": 2798,
+     "auction_amt_wan": 335.2,
+     "source": "runtime/runs/20261109-postmarket-v26/auction_gate_20261110.json"
+    }
+   },
+   "day_20261110": {
+    "open": 11.98,
+    "close": 12.19,
+    "high": 12.2,
+    "low": 11.82,
+    "vol_hand": 144754,
+    "amount_yuan": 175441522.0
+   },
+   "fflow_samples": [
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-09",
+     "main_net_yuan": 1143727.0,
+     "small_net_yuan": -13685577.0,
+     "medium_net_yuan": 12541850.0,
+     "large_net_yuan": -1872137.0,
+     "super_large_net_yuan": 3015864.0,
+     "main_net_pct": 0.46,
+     "close": 12.03,
+     "chg_pct": 1.09,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    },
+    {
+     "vendor_derived": true,
+     "label": "厂商推导指标(主力/大单/超大单净流入), 仅交叉验证不做主因子",
+     "date": "2026-11-10",
+     "main_net_yuan": 3022858.0,
+     "small_net_yuan": 7298.0,
+     "medium_net_yuan": -3030156.0,
+     "large_net_yuan": 2424941.0,
+     "super_large_net_yuan": 597917.0,
+     "main_net_pct": 1.72,
+     "close": 12.19,
+     "chg_pct": 1.33,
+     "source": "push2his fflow/daykline/get (eastmoney)"
+    }
+   ],
+   "intraday_5min_keypoints_20261110": {
+    "open_30min_0935_1000": [
+     {
+      "t": "09:35",
+      "open": 11.98,
+      "close": 12.09,
+      "high": 12.14,
+      "low": 11.82,
+      "vol_hand": 20988,
+      "amount_yuan": 25197137.0
+     },
+     {
+      "t": "09:40",
+      "open": 12.1,
+      "close": 12.11,
+      "high": 12.12,
+      "low": 12.0,
+      "vol_hand": 6923,
+      "amount_yuan": 8356096.0
+     },
+     {
+      "t": "09:45",
+      "open": 12.11,
+      "close": 12.11,
+      "high": 12.18,
+      "low": 12.11,
+      "vol_hand": 6636,
+      "amount_yuan": 8057432.0
+     },
+     {
+      "t": "09:50",
+      "open": 12.12,
+      "close": 12.11,
+      "high": 12.2,
+      "low": 12.11,
+      "vol_hand": 6034,
+      "amount_yuan": 7338953.0
+     },
+     {
+      "t": "09:55",
+      "open": 12.12,
+      "close": 12.16,
+      "high": 12.19,
+      "low": 12.1,
+      "vol_hand": 3911,
+      "amount_yuan": 4754600.0
+     },
+     {
+      "t": "10:00",
+      "open": 12.18,
+      "close": 12.15,
+      "high": 12.18,
+      "low": 12.14,
+      "vol_hand": 3529,
+      "amount_yuan": 4291931.0
+     }
+    ],
+    "close_30min_1430_1500": [
+     {
+      "t": "14:30",
+      "open": 12.18,
+      "close": 12.19,
+      "high": 12.19,
+      "low": 12.18,
+      "vol_hand": 1270,
+      "amount_yuan": 1547487.0
+     },
+     {
+      "t": "14:35",
+      "open": 12.19,
+      "close": 12.16,
+      "high": 12.19,
+      "low": 12.16,
+      "vol_hand": 2791,
+      "amount_yuan": 3398182.0
+     },
+     {
+      "t": "14:40",
+      "open": 12.17,
+      "close": 12.18,
+      "high": 12.18,
+      "low": 12.16,
+      "vol_hand": 2156,
+      "amount_yuan": 2623878.0
+     },
+     {
+      "t": "14:45",
+      "open": 12.18,
+      "close": 12.18,
+      "high": 12.18,
+      "low": 12.16,
+      "vol_hand": 3189,
+      "amount_yuan": 3882531.0
+     },
+     {
+      "t": "14:50",
+      "open": 12.18,
+      "close": 12.16,
+      "high": 12.18,
+      "low": 12.16,
+      "vol_hand": 5729,
+      "amount_yuan": 6973374.0
+     },
+     {
+      "t": "14:55",
+      "open": 12.16,
+      "close": 12.18,
+      "high": 12.18,
+      "low": 12.16,
+      "vol_hand": 6160,
+      "amount_yuan": 7498682.0
+     },
+     {
+      "t": "15:00",
+      "open": 12.18,
+      "close": 12.19,
+      "high": 12.2,
+      "low": 12.18,
+      "vol_hand": 10184,
+      "amount_yuan": 12413918.0
+     }
+    ],
+    "bar_count": 48
+   },
+   "source_urls": [
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.605188&klt=101&beg=20261108&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.605188&klt=5&beg=20261109&end=20261111",
+    "https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?secid=1.605188&klt=101&beg=20261108&end=20261111",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh605188,day,,,10,qfq",
+    "https://d.10jqka.com.cn/v6/line/hs_605188/01/last.js"
+   ]
+  }
+ },
+ "date_20261111": {
+  "300413.SZ": {
+   "name": "芒果超媒",
+   "is_T_day_20261111": true,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 35.52,
+    "tencent_quote_open": 35.52,
+    "tencent_minute_0930_price": 35.52,
+    "ths_realhead_open": 35.52,
+    "eastmoney_stock_get_open": 35.52
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 14985,
+     "amount_yuan": 53226720.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 1498500.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 35.55,
+    "tencent": 35.55,
+    "ths": 35.55
+   },
+   "chg_pct_at_0925": -0.0844,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 36.95,
+     "pct": 1.4,
+     "time": "",
+     "vol_hand": "885525",
+     "amount_wan": "885525"
+    },
+    "ths_realhead": {
+     "price": 36.95,
+     "vol_stock": "88552494.00",
+     "amount_yuan": "3163775600.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 36.95,
+     "vol_hand": 885525,
+     "amount_yuan": 3163775569.27
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sz300413",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sz300413",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=0.300413&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_300413/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300413&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "000559.SZ": {
+   "name": "万向钱潮",
+   "is_T_day_20261111": true,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 12.86,
+    "tencent_quote_open": 12.86,
+    "tencent_minute_0930_price": 12.86,
+    "ths_realhead_open": 12.86,
+    "eastmoney_stock_get_open": 12.86
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 11629,
+     "amount_yuan": 14954894.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 1162900.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 13.2,
+    "tencent": 13.2,
+    "ths": 13.2
+   },
+   "chg_pct_at_0925": -2.5758,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 13.49,
+     "pct": 0.29,
+     "time": "",
+     "vol_hand": "848623",
+     "amount_wan": "848623"
+    },
+    "ths_realhead": {
+     "price": 13.49,
+     "vol_stock": "84862323.00",
+     "amount_yuan": "1128113850.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 13.49,
+     "vol_hand": 848623,
+     "amount_yuan": 1128113846.54
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sz000559",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sz000559",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=0.000559&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_000559/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.000559&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "300493.SZ": {
+   "name": "润欣科技",
+   "is_T_day_20261111": true,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 14.16,
+    "tencent_quote_open": 14.16,
+    "tencent_minute_0930_price": 14.16,
+    "ths_realhead_open": 14.16,
+    "eastmoney_stock_get_open": 14.16
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 8250,
+     "amount_yuan": 11682000.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 825000.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 14.32,
+    "tencent": 14.32,
+    "ths": 14.32
+   },
+   "chg_pct_at_0925": -1.1173,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 14.03,
+     "pct": -0.29,
+     "time": "",
+     "vol_hand": "290354",
+     "amount_wan": "290354"
+    },
+    "ths_realhead": {
+     "price": 14.03,
+     "vol_stock": "29035425.00",
+     "amount_yuan": "408854640.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 14.03,
+     "vol_hand": 290354,
+     "amount_yuan": 408854637.27
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sz300493",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sz300493",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=0.300493&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_300493/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300493&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "600345.SH": {
+   "name": "长江通信",
+   "is_T_day_20261111": true,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 40.46,
+    "tencent_quote_open": 40.46,
+    "tencent_minute_0930_price": 40.46,
+    "ths_realhead_open": 40.46,
+    "eastmoney_stock_get_open": 40.46
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 890,
+     "amount_yuan": 3600940.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 89000.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 40.59,
+    "tencent": 40.59,
+    "ths": 40.59
+   },
+   "chg_pct_at_0925": -0.3203,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 40.96,
+     "pct": 0.37,
+     "time": "",
+     "vol_hand": "74369",
+     "amount_wan": "74369"
+    },
+    "ths_realhead": {
+     "price": 40.96,
+     "vol_stock": "7436906.00",
+     "amount_yuan": "303046800.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 40.96,
+     "vol_hand": 74369,
+     "amount_yuan": 303046802.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh600345",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh600345",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.600345&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_600345/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.600345&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "301583.SZ": {
+   "name": "托伦斯",
+   "is_T_day_20261111": true,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 101.11,
+    "tencent_quote_open": 101.11,
+    "tencent_minute_0930_price": 101.11,
+    "ths_realhead_open": 101.11,
+    "eastmoney_stock_get_open": 101.11
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 1552,
+     "amount_yuan": 15692272.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 155200.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 102.76,
+    "tencent": 102.76,
+    "ths": 102.76
+   },
+   "chg_pct_at_0925": -1.6057,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 101.4,
+     "pct": -1.36,
+     "time": "",
+     "vol_hand": "43178",
+     "amount_wan": "43178"
+    },
+    "ths_realhead": {
+     "price": 101.4,
+     "vol_stock": "4317806.00",
+     "amount_yuan": "437788710.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 101.4,
+     "vol_hand": 43178,
+     "amount_yuan": 437788706.94
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sz301583",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sz301583",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=0.301583&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_301583/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.301583&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "600259.SH": {
+   "name": "中稀有色",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 67.39,
+    "tencent_quote_open": 67.39,
+    "tencent_minute_0930_price": 67.39,
+    "ths_realhead_open": 67.39,
+    "eastmoney_stock_get_open": 67.39
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 653,
+     "amount_yuan": 4400567.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 65300.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 68.08,
+    "tencent": 68.08,
+    "ths": 68.08
+   },
+   "chg_pct_at_0925": -1.0135,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 69.83,
+     "pct": 1.75,
+     "time": "",
+     "vol_hand": "83261",
+     "amount_wan": "83261"
+    },
+    "ths_realhead": {
+     "price": 69.83,
+     "vol_stock": "8326064.00",
+     "amount_yuan": "575277630.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 69.83,
+     "vol_hand": 83261,
+     "amount_yuan": 575277625.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh600259",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh600259",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.600259&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_600259/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.600259&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "688385.SH": {
+   "name": "复旦微电",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 51.31,
+    "tencent_quote_open": 51.31,
+    "tencent_minute_0930_price": 51.31,
+    "ths_realhead_open": 51.31,
+    "eastmoney_stock_get_open": 51.31
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 38971,
+     "amount_yuan": 1999602.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 38971.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 51.31,
+    "tencent": 51.31,
+    "ths": 51.31
+   },
+   "chg_pct_at_0925": 0.0,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 51.95,
+     "pct": 0.64,
+     "time": "",
+     "vol_hand": "11610321",
+     "amount_wan": "11610321"
+    },
+    "ths_realhead": {
+     "price": 51.95,
+     "vol_stock": "11610321.00",
+     "amount_yuan": "608558070.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 51.95,
+     "vol_hand": 116103,
+     "amount_yuan": 608558073.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh688385",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh688385",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.688385&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_688385/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.688385&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "688035.SH": {
+   "name": "德邦科技",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 59.5,
+    "tencent_quote_open": 59.5,
+    "tencent_minute_0930_price": 59.5,
+    "ths_realhead_open": 59.5,
+    "eastmoney_stock_get_open": 59.5
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 26107,
+     "amount_yuan": 1553367.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 26107.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 60.08,
+    "tencent": 60.08,
+    "ths": 60.08
+   },
+   "chg_pct_at_0925": -0.9654,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 61.03,
+     "pct": 0.95,
+     "time": "",
+     "vol_hand": "2139156",
+     "amount_wan": "2139156"
+    },
+    "ths_realhead": {
+     "price": 61.03,
+     "vol_stock": "2139156.00",
+     "amount_yuan": "129725154.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 61.03,
+     "vol_hand": 21392,
+     "amount_yuan": 129725154.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh688035",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh688035",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.688035&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_688035/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.688035&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "002141.SZ": {
+   "name": "贤丰控股",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 5.01,
+    "tencent_quote_open": 5.01,
+    "tencent_minute_0930_price": 5.01,
+    "ths_realhead_open": 5.01,
+    "eastmoney_stock_get_open": 5.01
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 6121,
+     "amount_yuan": 3066621.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 612100.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 5.06,
+    "tencent": 5.06,
+    "ths": 5.06
+   },
+   "chg_pct_at_0925": -0.9881,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 5.04,
+     "pct": -0.02,
+     "time": "",
+     "vol_hand": "389261",
+     "amount_wan": "389261"
+    },
+    "ths_realhead": {
+     "price": 5.04,
+     "vol_stock": "38926120.00",
+     "amount_yuan": "195269240.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 5.04,
+     "vol_hand": 389261,
+     "amount_yuan": 195269236.4
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sz002141",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sz002141",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=0.002141&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_002141/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.002141&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "300739.SZ": {
+   "name": "明阳电路",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 22.8,
+    "tencent_quote_open": 22.8,
+    "tencent_minute_0930_price": 22.8,
+    "ths_realhead_open": 22.8,
+    "eastmoney_stock_get_open": 22.8
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 1646,
+     "amount_yuan": 3752880.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 164600.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 22.92,
+    "tencent": 22.92,
+    "ths": 22.92
+   },
+   "chg_pct_at_0925": -0.5236,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 23.34,
+     "pct": 0.42,
+     "time": "",
+     "vol_hand": "152234",
+     "amount_wan": "152234"
+    },
+    "ths_realhead": {
+     "price": 23.34,
+     "vol_stock": "15223397.00",
+     "amount_yuan": "355283830.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 23.34,
+     "vol_hand": 152234,
+     "amount_yuan": 355283826.06
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sz300739",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sz300739",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=0.300739&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_300739/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=0.300739&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "603728.SH": {
+   "name": "鸣志电器",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 60.0,
+    "tencent_quote_open": 60.0,
+    "tencent_minute_0930_price": 60.0,
+    "ths_realhead_open": 60.0,
+    "eastmoney_stock_get_open": 60.0
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 330,
+     "amount_yuan": 1980000.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 33000.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 60.35,
+    "tencent": 60.35,
+    "ths": 60.35
+   },
+   "chg_pct_at_0925": -0.58,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 60.6,
+     "pct": 0.25,
+     "time": "",
+     "vol_hand": "61630",
+     "amount_wan": "61630"
+    },
+    "ths_realhead": {
+     "price": 60.6,
+     "vol_stock": "6162975.00",
+     "amount_yuan": "373730140.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 60.6,
+     "vol_hand": 61630,
+     "amount_yuan": 373730135.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh603728",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh603728",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.603728&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_603728/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603728&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "603667.SH": {
+   "name": "五洲新春",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 55.45,
+    "tencent_quote_open": 55.45,
+    "tencent_minute_0930_price": 55.45,
+    "ths_realhead_open": 55.45,
+    "eastmoney_stock_get_open": 55.45
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 2487,
+     "amount_yuan": 13790415.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 248700.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 56.17,
+    "tencent": 56.17,
+    "ths": 56.17
+   },
+   "chg_pct_at_0925": -1.2818,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 55.87,
+     "pct": -0.3,
+     "time": "",
+     "vol_hand": "183146",
+     "amount_wan": "183146"
+    },
+    "ths_realhead": {
+     "price": 55.87,
+     "vol_stock": "18314562.00",
+     "amount_yuan": "1023162480.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 55.87,
+     "vol_hand": 183146,
+     "amount_yuan": 1023162484.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh603667",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh603667",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.603667&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_603667/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603667&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "603893.SH": {
+   "name": "瑞芯微",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 233.19,
+    "tencent_quote_open": 233.19,
+    "tencent_minute_0930_price": 233.19,
+    "ths_realhead_open": 233.19,
+    "eastmoney_stock_get_open": 233.19
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 3392,
+     "amount_yuan": 79098048.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 339200.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 233.2,
+    "tencent": 233.2,
+    "ths": 233.2
+   },
+   "chg_pct_at_0925": -0.0043,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 231.1,
+     "pct": -2.1,
+     "time": "",
+     "vol_hand": "136563",
+     "amount_wan": "136563"
+    },
+    "ths_realhead": {
+     "price": 231.1,
+     "vol_stock": "13656316.00",
+     "amount_yuan": "3189847100.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 231.1,
+     "vol_hand": 136563,
+     "amount_yuan": 3189847059.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh603893",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh603893",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.603893&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_603893/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603893&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "603341.SH": {
+   "name": "龙旗科技",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 40.0,
+    "tencent_quote_open": 40.0,
+    "tencent_minute_0930_price": 40.0,
+    "ths_realhead_open": 40.0,
+    "eastmoney_stock_get_open": 40.0
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 882,
+     "amount_yuan": 3528000.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 88200.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 40.12,
+    "tencent": 40.12,
+    "ths": 40.12
+   },
+   "chg_pct_at_0925": -0.2991,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 39.24,
+     "pct": -0.88,
+     "time": "",
+     "vol_hand": "91549",
+     "amount_wan": "91549"
+    },
+    "ths_realhead": {
+     "price": 39.24,
+     "vol_stock": "9154900.00",
+     "amount_yuan": "362191630.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 39.24,
+     "vol_hand": 91549,
+     "amount_yuan": 362191625.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh603341",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh603341",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.603341&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_603341/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.603341&klt=101&beg=20261108&end=20261111"
+   ]
+  },
+  "605188.SH": {
+   "name": "国光连锁",
+   "is_T_day_20261111": false,
+   "auction_open_0925": {
+    "eastmoney_day_kline_open_20261111": 12.2,
+    "tencent_quote_open": 12.2,
+    "tencent_minute_0930_price": 12.2,
+    "ths_realhead_open": 12.2,
+    "eastmoney_stock_get_open": 12.2
+   },
+   "auction_vol_amt_0925": {
+    "tencent_minute_0930": {
+     "vol_hand": 693,
+     "amount_yuan": 845460.0
+    },
+    "ths_realhead": {
+     "auction_vol_stock": 69300.0
+    },
+    "local_gate_20261111": null
+   },
+   "prev_close_20261110": {
+    "eastmoney": 12.19,
+    "tencent": 12.19,
+    "ths": 12.19
+   },
+   "chg_pct_at_0925": 0.082,
+   "snapshot_now": {
+    "tencent_quote": {
+     "price": 12.11,
+     "pct": -0.08,
+     "time": "",
+     "vol_hand": "96246",
+     "amount_wan": "96246"
+    },
+    "ths_realhead": {
+     "price": 12.11,
+     "vol_stock": "9624600.00",
+     "amount_yuan": "117128092.00"
+    },
+    "eastmoney_stock_get": {
+     "price": 12.11,
+     "vol_hand": 96246,
+     "amount_yuan": 117128092.0
+    },
+    "read_at": "2026-11-11T12:30:59+08:00"
+   },
+   "source_urls": [
+    "https://qt.gtimg.cn/q=sh605188",
+    "https://web.ifzq.gtimg.cn/appstock/app/minute/query?code=sh605188",
+    "https://82.push2.eastmoney.com/api/qt/stock/get?secid=1.605188&fields=f43,f44,f45,f46,f47,f48,f57,f58,f60",
+    "https://d.10jqka.com.cn/v2/realhead/hs_605188/last.js",
+    "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=1.605188&klt=101&beg=20261108&end=20261111"
+   ]
+  }
+ },
+ "binding": {
+  "300413.SZ": {
+   "tencent_name": "芒果超媒",
+   "eastmoney_name": "芒果超媒",
+   "eastmoney_html_title": "芒果超媒(300413)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "芒果超媒",
+   "ths_name": "芒果超媒",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "000559.SZ": {
+   "tencent_name": "万向钱潮",
+   "eastmoney_name": "万向钱潮",
+   "eastmoney_html_title": "万向钱潮(000559)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "万向钱潮",
+   "ths_name": "万向钱潮",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "300493.SZ": {
+   "tencent_name": "润欣科技",
+   "eastmoney_name": "润欣科技",
+   "eastmoney_html_title": "润欣科技(300493)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "润欣科技",
+   "ths_name": "润欣科技",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "600345.SH": {
+   "tencent_name": "长江通信",
+   "eastmoney_name": "长江通信",
+   "eastmoney_html_title": "长江通信(600345)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "长江通信",
+   "ths_name": "长江通信",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "301583.SZ": {
+   "tencent_name": "托伦斯",
+   "eastmoney_name": "托伦斯",
+   "eastmoney_html_title": "托伦斯(301583)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "托伦斯",
+   "ths_name": "托伦斯",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "600259.SH": {
+   "tencent_name": "中稀有色",
+   "eastmoney_name": "中稀有色",
+   "eastmoney_html_title": "中稀有色(600259)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "中稀有色",
+   "ths_name": "中稀有色",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "688385.SH": {
+   "tencent_name": "复旦微电",
+   "eastmoney_name": "复旦微电",
+   "eastmoney_html_title": "复旦微电(688385)_股票行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "复旦微电",
+   "ths_name": "复旦微电",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "688035.SH": {
+   "tencent_name": "德邦科技",
+   "eastmoney_name": "德邦科技",
+   "eastmoney_html_title": "德邦科技(688035)_股票行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "德邦科技",
+   "ths_name": "德邦科技",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "002141.SZ": {
+   "tencent_name": "贤丰控股",
+   "eastmoney_name": "贤丰控股",
+   "eastmoney_html_title": "贤丰控股(002141)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "贤丰控股",
+   "ths_name": "贤丰控股",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "300739.SZ": {
+   "tencent_name": "明阳电路",
+   "eastmoney_name": "明阳电路",
+   "eastmoney_html_title": "明阳电路(300739)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "明阳电路",
+   "ths_name": "明阳电路",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "603728.SH": {
+   "tencent_name": "鸣志电器",
+   "eastmoney_name": "鸣志电器",
+   "eastmoney_html_title": "鸣志电器(603728)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "鸣志电器",
+   "ths_name": "鸣志电器",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "603667.SH": {
+   "tencent_name": "五洲新春",
+   "eastmoney_name": "五洲新春",
+   "eastmoney_html_title": "五洲新春(603667)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "五洲新春",
+   "ths_name": "五洲新春",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "603893.SH": {
+   "tencent_name": "瑞芯微",
+   "eastmoney_name": "瑞芯微",
+   "eastmoney_html_title": "瑞芯微(603893)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "瑞芯微",
+   "ths_name": "瑞芯微",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "603341.SH": {
+   "tencent_name": "龙旗科技",
+   "eastmoney_name": "龙旗科技",
+   "eastmoney_html_title": "龙旗科技(603341)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "龙旗科技",
+   "ths_name": "龙旗科技",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  },
+  "605188.SH": {
+   "tencent_name": "国光连锁",
+   "eastmoney_name": "国光连锁",
+   "eastmoney_html_title": "国光连锁(605188)_最新价格_行情_走势图—东方财富网",
+   "eastmoney_html_title_name": "国光连锁",
+   "ths_name": "国光连锁",
+   "name_match_tx_em": true,
+   "name_match_tx_ths": true,
+   "name_match_em_html": true
+  }
+ },
+ "gaps": [
+  "2026-11-10 集合竞价单独成交量/额: web三源均不暴露历史日竞价单独量(东财push2his klt=1仅返回最新交易日, klt=5首根含竞价; 腾讯minute/query仅最新日且忽略date参数; THS日线附加字段口径未核未采用) -> 仅5只(603728/603341/603667/603893/605188)有本地闸门原件auction_vol_hand, 其余10只该字段留空未零填",
+  "2026-11-10 分时(分钟级)主力/大单净流入曲线: 东财 fflow/kline/get 历史分时返回 klines=[] (klt=5亦rc=102), push2 fflow/get 空 -> 仅取得日级 fflow daykline + 5分钟价量关键点, 分钟级资金流曲线为缺口",
+  "push2his klt=1 历史分钟不可用(恒返回最新交易日120根), 2026-11-10 分钟级改用 klt=5 (48根)",
+  "connector open_url 对 push2/push2his/82.push2/d.10jqka 均拒绝(无Referer) -> 换源为本机直接HTTP并携带 Referer 头, 全部成功",
+  "82.push2 stock/get 批量15只 secid 返回 rc=102 -> 改为逐只请求, 15/15 成功",
+  "腾讯 fqkline 不支持 m1/m5 (bad params) -> 历史分钟仅日级 qfqday 可用",
+  "THS 历史分钟接口路径未觅得可用形式(v6/line/.../01/YYYYMMDD.js 与 YYYY-MM-DD.js 均空) -> THS 侧仅日线+实时盘口",
+  "quote.eastmoney.com 个股页行情字段为JS渲染('-'), 仅取 <title> 做东财名称绑定; 名称主来源为 82.push2 stock/get f58"
+ ],
+ "cross_check": [
+  {
+   "code": "300413.SZ",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "000559.SZ",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "300493.SZ",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "600345.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "301583.SZ",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "600259.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "688385.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "688035.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "002141.SZ",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "300739.SZ",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "603728.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "603667.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "603893.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "603341.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  },
+  {
+   "code": "605188.SH",
+   "open_20261110_max_abs_diff": 0.0,
+   "prev_close_20261109_max_abs_diff": 0.0,
+   "open_20261111_max_abs_diff": 0.0
+  }
+ ]
+}
