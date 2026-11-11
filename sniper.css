@@ -1235,7 +1235,7 @@ footer {
 
 
 /* Professional terminal palette shared visually with the lifecycle views. */
-:root{--bg:#181b1f;--panel:#242a31;--panel-raised:#303944;--line:#4a5664;--text:#f4f6f9;--muted:#bdc7d4;--subtle:#adb9c8;--cyan:#5ed9ff;--red:#ff9999;--green:#65e4a1;--yellow:#ffd16b;--accent:#ffa62b;--radius:2px}
+:root{--bg:#181b1f;--panel:#242a31;--panel-raised:#303944;--line:#4a5664;--text:#f4f6f9;--muted:#bdc7d4;--subtle:#adb9c8;--cyan:#5ed9ff;--red:#ff3030;--green:#65e4a1;--yellow:#ffd16b;--accent:#ffa62b;--radius:2px}
 body{background:var(--bg)}
 .page-header{border-bottom:2px solid var(--accent)!important;min-height:56px!important;height:auto!important;padding:8px 0!important}
 .brand-mark{background:var(--accent);border-color:var(--accent);color:#171b20;border-radius:2px!important}.brand{letter-spacing:1px}.brand small{color:var(--muted)}
@@ -1249,9 +1249,9 @@ body{background:var(--bg)}
 .stock-card.positive:not(.defense-alarm-active):not(.conviction-surge):not(.conviction-strengthening):not(.auction-confirmed):not(.conviction-auction),.stock-card.negative:not(.defense-alarm-active):not(.conviction-surge):not(.conviction-strengthening):not(.auction-confirmed):not(.conviction-auction){box-shadow:none!important}
 .stock-name{color:#f5f7fa}.stock-code{color:#bdc7d4}.stock-status{border-radius:2px;background:#303944;border-color:#536171}
 .stock-price{font-family:Consolas,monospace;letter-spacing:0}.stock-price.positive{color:var(--red)!important;text-shadow:none!important}.stock-price.negative{color:var(--green)!important;text-shadow:none!important}
-.stock-change.positive{background:var(--red)!important;color:#20242a!important;border-radius:2px!important;box-shadow:none!important}.stock-change.negative{background:var(--green)!important;color:#20242a!important;border-radius:2px!important;box-shadow:none!important}
+.stock-change.positive{background:var(--red)!important;color:#080a0d!important;border-radius:2px!important;box-shadow:none!important}.stock-change.negative{background:var(--green)!important;color:#20242a!important;border-radius:2px!important;box-shadow:none!important}
 .metric strong{font-family:Consolas,monospace}.metric span,.chart-legend,.price-label{color:#bdc7d4}.chart-grid{stroke:#536171}.vwap-path{stroke:#b8a2f0}.chart-legend-items .vwap-key{border-color:#b8a2f0}
-.kline-energy-widget{background:#171d24;border-color:#465260;border-radius:2px}.energy-bar-header .buy-label{color:var(--red)}.energy-bar-header .sell-label{color:var(--green)}.energy-bar-footer,.energy-bar-footer .quote-b1a1{color:#bdc7d4}.energy-bar-track{border-radius:2px;box-shadow:none}.energy-bar-buy{background:#ee7881;box-shadow:none}.energy-bar-sell{background:#49c78e;box-shadow:none}
+.kline-energy-widget{background:#171d24;border-color:#465260;border-radius:2px}.energy-bar-header .buy-label{color:var(--red)}.energy-bar-header .sell-label{color:var(--green)}.energy-bar-footer,.energy-bar-footer .quote-b1a1{color:#bdc7d4}.energy-bar-track{border-radius:2px;box-shadow:none}.energy-bar-buy{background:var(--red);box-shadow:none}.energy-bar-sell{background:#49c78e;box-shadow:none}
 .mini-kline-svg [fill="#ff334b"]{fill:var(--red)}.mini-kline-svg [fill="#00d072"]{fill:var(--green)}.mini-kline-svg [stroke="#ff334b"]{stroke:var(--red)}.mini-kline-svg [stroke="#00d072"]{stroke:var(--green)}
 .condition-chip{background:#303944;border-color:#536171;border-radius:2px}.condition-chip strong{color:#eff3f8}.conditions,.auction-box{border-top-color:#465260}.auction-box h3{color:var(--accent)}
 .auction-evidence-table{background:#202730;border-color:#536171;border-radius:2px}.auction-evidence-columns{background:#303944;color:#ffd16b}.auction-evidence-row{border-top-color:#465260}.auction-evidence-row:nth-child(odd){background:#2b333d}.auction-result,.auction-row-status{border-radius:2px}
