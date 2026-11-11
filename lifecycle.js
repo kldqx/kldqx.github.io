@@ -10,7 +10,8 @@
   const n = (value, digits=2) => M.numeric(value) ? value.toFixed(digits) : '—';
   const pct = value => M.numeric(value) ? `${value > 0 ? '+' : ''}${value.toFixed(2)}%` : '—';
   const tone = value => M.numeric(value) ? value > 0 ? 'up' : value < 0 ? 'down' : '' : '';
-  const dayLabel = value => value === 0 ? 'T' : value > 0 ? `T+${value}` : `T−${-value}`;
+  const dayLabel = value => value === 0 ? '目标日' : value > 0 ? `目标日后 ${value} 日` : `目标日前 ${-value} 日`;
+  let cohortFilter = 'all';
   const briefTime = value => value ? String(value).replace('T',' ').slice(0,19) : '未记录';
   const group = record => `${record.t_date}|${record.batch_id}`;
   let data = null, batch = '', selected = '', scope = 'all', search = '', loading = false;
@@ -33,24 +34,36 @@
     if (before) return {label:r.calendar_available?'已存依据待对照':'交易日历缺口',cls:''};
     if(M.defense(r).conflict) return {label:'原规则日期待核对',cls:'warn'};
     if(r.exit?.reported) return {label:'原记录已离场',cls:'done'};
-    if(M.defense(r).touched) return {label:'T+1 价位触及 · 复核',cls:'warn'};
+    if(M.defense(r).touched) return {label:'原协议价位触及 · 复核',cls:'warn'};
     return {label:'持续观察',cls:''};
   }
   function metric(label,value,note,cls='') {return `<div class="stat"><span class="label">${esc(label)}</span><strong class="${cls}">${esc(value)}</strong><small>${esc(note)}</small></div>`;}
   function render() {
-    const available = M.recordsForView(data.records, before ? 'before' : 'after');
+    const asOf=M.today(), ref=M.referenceDate(asOf), dates=M.cohortDates(asOf);
+    const allAvailable=M.recordsForView(data.records,before?'before':'after',asOf);
+    const buckets=before?[-1,-2,-3]:[1,2,3];
+    $('cohorts').innerHTML=`<button data-cohort="all" class="${cohortFilter==='all'?'active':''}">全部${before?'未来':'往日'}票</button>`+buckets.map(c=>`<button data-cohort="${c}" class="${cohortFilter===String(c)?'active':''}">${M.cohortLabel(c)} · ${esc(dates[c]||'日期待确认')} · ${allAvailable.filter(r=>M.cohort(r,asOf)===c).length}只</button>`).join('');
+    $('cohorts').querySelectorAll('[data-cohort]').forEach(b=>b.onclick=()=>{cohortFilter=b.dataset.cohort;batch='';selected='';scope='all';render();});
+    $('date-basis').textContent=`T = ${ref||'日历未覆盖'}${ref&&ref!==asOf?'（休市，沿用最近交易日）':'（今天）'}；T− 为未来目标日的票，T+ 为过去目标日的票。`;
+    const warnings=[];
+    if(!ref)warnings.push('交易日历未覆盖今天，暂不推算分组');
+    if(data.quote_error)warnings.push('最新行情暂未取得，保留已存记录');
+    if(data.unbound?.length)warnings.push(`${data.unbound.length} 条记录缺少目标交易日，未混入分组`);
+    if(data.generated_at && data.generated_at.slice(0,10)!==asOf)warnings.push('名单按今天重新分组，行情仍保留原日期，请留意数据时点');
+    $('notice').hidden=!warnings.length;$('notice').textContent=warnings.join('；');
+    const available=cohortFilter==='all'?allAvailable:allAvailable.filter(r=>M.cohort(r,asOf)===Number(cohortFilter));
     const groups = [...new Set(available.map(group))];
     if(!groups.includes(batch)) {
       batch = groups[0] || '';
-      if(!before) batch = groups.find(g => available.some(r=>group(r)===g && r.exit?.reported)) || batch;
+
     }
-    $('batch').innerHTML = groups.map(g=>{const r=available.find(r=>group(r)===g);return `<option value="${esc(g)}">T = ${esc(r.t_date)} · ${esc(r.batch_id)} · ${available.filter(x=>group(x)===g).length}只</option>`;}).join('');
+    $('batch').innerHTML = groups.map(g=>{const r=available.find(r=>group(r)===g);return `<option value="${esc(g)}">${M.cohortLabel(M.cohort(r))} · 目标日 ${esc(r.t_date)} · ${esc(r.batch_id)} · ${available.filter(x=>group(x)===g).length}只</option>`;}).join('');
     $('batch').value=batch;
     const rows = available.filter(r=>group(r)===batch);
     const coverage = rows.reduce((s,r)=>s+offsets.filter(o=>r.days?.[o]?.state==='有数据').length,0);
     $('stats').innerHTML = before
-      ? metric('T− 候选观察票',rows.length,'仅候选观察组 · 不含当日 T 票') + metric('前序数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日') + metric('已存依据',rows.filter(r=>r.original?.hypothesis).length,'首次观察时保存，不覆盖') + metric('T 日已有行情',rows.filter(r=>r.days?.['0']?.state==='有数据').length,'与入选前依据并列对照')
-      : metric('T+ 离场跟踪票',rows.length,'离场后仍保留至 T+3') + metric('T+1 确认价位触及',rows.filter(r=>M.defense(r).touched).length,`${rows.filter(r=>M.defense(r).touched===null).length} 只尚无法判断`,'up') + metric('原记录已离场',rows.filter(r=>r.exit?.reported).length,'不把收盘价当作离场价') + metric('后续数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日');
+      ? metric('T− 未来候选票',rows.length,'目标日为未来 1～3 个交易日') + metric('前序数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日') + metric('已存依据',rows.filter(r=>r.original?.hypothesis).length,'首次观察时保存，不覆盖') + metric('目标日已有行情',rows.filter(r=>r.days?.['0']?.state==='有数据').length,'与入选前依据并列对照')
+      : metric('T+ 往日跟踪票',rows.length,'过去 1～3 个交易日的票，含未离场') + metric('原协议价位触及',rows.filter(r=>M.defense(r).touched).length,`${rows.filter(r=>M.defense(r).touched===null).length} 只尚无法判断`,'up') + metric('原记录已离场',rows.filter(r=>r.exit?.reported).length,'不把收盘价当作离场价') + metric('后续数据覆盖',`${coverage}/${rows.length*3}`,'有数据的股票 × 交易日');
     const filtered = rows.filter(r=>(r.name+' '+r.code).toLowerCase().includes(search.toLowerCase()));
     if(!filtered.some(r=>r.code===selected)) selected=filtered[0]?.code || '';
     $('stock-count').textContent=`${filtered.length} 只`;
@@ -58,7 +71,7 @@
     $('stocks').querySelectorAll('[data-code]').forEach(b=>b.onclick=()=>{selected=b.dataset.code;render();});
     const r=filtered.find(x=>x.code===selected);
     if(!r){
-      $('detail').innerHTML=`<div class="panel empty">${rows.length?'没有匹配的股票':before?'暂无 T− 候选观察票':'暂无 T+ 离场跟踪票'}<br>本页只显示对应阶段的名单。</div>`;
+      $('detail').innerHTML=`<div class="panel empty">${rows.length?'没有匹配的股票':before?'暂无对应未来目标日的候选票':'暂无对应往日目标日的跟踪票'}<br>本页按目标交易日分组；没有名单时不从其他日期挪票。</div>`;
       $('source-time').textContent='暂无匹配行情';
       $('refresh-time').textContent='数据生成 '+briefTime(data.generated_at);
       if(!available.length){history.replaceState(null,'',location.pathname);document.querySelectorAll('[data-cross]').forEach(a=>a.href=a.dataset.cross);}
@@ -68,10 +81,7 @@
     const times=rows.flatMap(r=>offsets.map(o=>r.days?.[o]?.source_at)).filter(Boolean).sort();
     $('source-time').textContent='行情资料截至 '+briefTime(times.at(-1))+' · 日期均为上海时间';
     $('refresh-time').textContent='页面刷新 '+new Date().toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false})+' · 数据生成 '+briefTime(data.generated_at);
-    const warnings=[];
-    if(data.quote_error)warnings.push('最新行情暂未取得，保留已存记录');
-    if(data.unbound?.length)warnings.push(`${data.unbound.length} 条记录缺少可确认 T 日，未混入批次`);
-    $('notice').hidden=!warnings.length;$('notice').textContent=warnings.join('；');
+
   }
   function renderDetail(r) {
     const d=currentDay(r),price=latest(r),change=M.percent(price,r.baseline?.price),def=M.defense(r),status=recordStatus(r);
@@ -79,35 +89,35 @@
     const selectedDay = scope==='all'?d:r.days?.[scope];
     const value=M.value(selectedDay);
     const pullback=M.percent(value,selectedDay?.high);
-    const headings = before ? ['前序价格与成交量','按实际交易日对齐 · 日线与分钟记录分开展示'] : ['离场后的价格路径','原离场协议保持不变 · T+2 / T+3 只作后续验证'];
+    const headings = before ? ['候选票已有走势','按目标日前的实际日期展示；未来行情不预填'] : ['目标日后的价格路径','已离场与尚未离场分开标注 · 原协议保持不变'];
     $('detail').innerHTML=`
-      <section class="panel"><div class="detail-head"><div><span class="eyebrow">${before?'BEFORE THE SIGNAL':'AFTER THE EXIT'}</span><h2>${esc(r.name)}<small>${esc(r.code)}</small></h2><span class="pill ${status.cls}">${esc(status.label)}</span> <span class="sub">T = ${esc(r.t_date)}</span></div><div class="price"><strong>${n(price)}</strong><small class="${tone(change)}">${pct(change)}</small> <small class="muted">相对 T 收盘</small></div></div>
+      <section class="panel"><div class="detail-head"><div><span class="eyebrow">${before?'UPCOMING CANDIDATES':'PREVIOUS PICKS'}</span><h2>${esc(r.name)}<small>${esc(r.code)}</small></h2><span class="pill ${status.cls}">${esc(status.label)}</span> <span class="sub">${M.cohortLabel(M.cohort(r))} · 目标日 ${esc(r.t_date)}</span></div><div class="price"><strong>${n(price)}</strong><small class="${tone(change)}">${pct(change)}</small> <small class="muted">相对目标日收盘</small></div></div>
       <div class="tabs" role="group" aria-label="观察交易日"><button data-scope="all" class="${scope==='all'?'active':''}" aria-pressed="${scope==='all'}">三日总览</button>${offsets.map(o=>`<button data-scope="${o}" class="${scope===String(o)?'active':''}" aria-pressed="${scope===String(o)}">${dayLabel(o)} <span>${esc(r.days?.[o]?.date?.slice(5)||'待确认')}</span></button>`).join('')}</div>
       <div class="chart-title"><span>${headings[0]}</span><span>${headings[1]}</span></div><div class="chart-wrap">${chart(r,daily)}</div>
       <div class="chart-foot">${scope==='all'?'柱线为日内高低与开收盘；不连接缺失日期。':'有分钟记录时显示实际采样路径，否则仅展示日线。'} 未复权价格；除权等价格跳变需结合原始资料核对。</div>
-      <div class="detail-metrics"><div><small>T 日收盘基准</small><strong>${n(r.baseline?.price)}</strong></div><div><small>${before?'选中日成交额':'T+1 防守参考价'}</small><strong>${before?(M.numeric(selectedDay?.amount)?n(selectedDay.amount/1e8)+' 亿':'—'):n(def.line)}</strong></div><div><small>选中日距日高</small><strong class="${tone(pullback)}">${pct(pullback)}</strong></div><div><small>${before?'原依据版本':'相对记录离场价'}</small><strong>${before?1+(r.revisions?.length||0):pct(M.afterExit(r,selectedDay))}</strong></div></div></section>
+      <div class="detail-metrics"><div><small>目标日收盘基准</small><strong>${n(r.baseline?.price)}</strong></div><div><small>${before?'选中日成交额':'原协议防守参考价'}</small><strong>${before?(M.numeric(selectedDay?.amount)?n(selectedDay.amount/1e8)+' 亿':'—'):n(def.line)}</strong></div><div><small>选中日距日高</small><strong class="${tone(pullback)}">${pct(pullback)}</strong></div><div><small>${before?'原依据版本':'相对记录离场价'}</small><strong>${before?1+(r.revisions?.length||0):pct(M.afterExit(r,selectedDay))}</strong></div></div></section>
       <section class="panel"><div class="section-head"><h3>${before?'三日证据对照':'逐日跟踪记录'}</h3><small>${before?'价格和成交量是事实；不自动推导资金主体或洗盘结论':'涨跌为基准对比，非账户收益；事后高点不代表可成交机会'}</small></div><div class="table-scroll">${dayTable(r)}</div></section>
-      <div class="evidence-grid"><section class="panel"><div class="section-head"><h3>${before?'已存依据与记录':'原离场协议与记录'}</h3><small>原文保留</small></div><div class="copy">${before?originalBlock(r):exitBlock(r,def)}</div></section><section class="panel"><div class="section-head"><h3>${before?'与 T 日实际表现对照':'事件与后续验证'}</h3><small>按已取得的记录展示</small></div><div class="copy">${before?tDayBlock(r):eventsBlock(r,def)}</div></section></div>
-      <section class="panel"><details><summary>数据来源、时间口径与后续修订 (${r.revisions?.length||0})</summary><p>T 日归属：${esc(r.date_basis)}\n原依据首次保存：${esc(briefTime(r.first_observed_at))}（采集保存时间，不代替研究发布时间）\n批次：${esc(r.batch_id)}\n日线：本地工程日线缓存；当前采样：腾讯行情；分钟回填：保留原 feed 来源。\n${esc(r.calendar_available?'交易日历覆盖本观察窗口。':'交易日历未覆盖完整窗口，未推算未知日期。')}\n数据生成时间不代表行情实时；缺少日期的资金、板块与异常因子不拆分填入每日。</p>${(r.revisions||[]).map(v=>`<p>后续版本 · ${esc(briefTime(v.observed_at))}\n${esc(text(v.hypothesis))}</p>`).join('')}</details></section>`;
+      <div class="evidence-grid"><section class="panel"><div class="section-head"><h3>${before?'已存依据与记录':'原离场协议与记录'}</h3><small>原文保留</small></div><div class="copy">${before?originalBlock(r):exitBlock(r,def)}</div></section><section class="panel"><div class="section-head"><h3>${before?'目标日状态与实际表现':'事件与后续验证'}</h3><small>按已取得的记录展示</small></div><div class="copy">${before?tDayBlock(r):eventsBlock(r,def)}</div></section></div>
+      <section class="panel"><details><summary>数据来源、时间口径与后续修订 (${r.revisions?.length||0})</summary><p>目标日归属：${esc(r.date_basis)}\n原依据首次保存：${esc(briefTime(r.first_observed_at))}（采集保存时间，不代替研究发布时间）\n批次：${esc(r.batch_id)}\n日线：本地工程日线缓存；当前采样：腾讯行情；分钟回填：保留原 feed 来源。\n${esc(r.calendar_available?'交易日历覆盖本观察窗口。':'交易日历未覆盖完整窗口，未推算未知日期。')}\n数据生成时间不代表行情实时；缺少日期的资金、板块与异常因子不拆分填入每日。</p>${(r.revisions||[]).map(v=>`<p>后续版本 · ${esc(briefTime(v.observed_at))}\n${esc(text(v.hypothesis))}</p>`).join('')}</details></section>`;
     $('detail').querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{scope=b.dataset.scope;renderDetail(r);});
   }
   function originalBlock(r) {
     const o=r.original||{};
-    return `<p class="sub">以下为首次采集的原 feed 快照，未确认其在 T 日前已可得；可能包含后续更新，不作为已验证的前序证据。</p><p>${esc(text(o.hypothesis))}</p><dl><dt>所属板块（原记录）</dt><dd>${esc(text(o.sectors))}</dd><dt>原进入条件</dt><dd>${esc(text(o.original_conditions))}</dd><dt>原失效 / 风险依据</dt><dd>${esc(text(o.risk_reason))}</dd><dt>审核状态（原文）</dt><dd>${esc(text(o.qa_verdict))}</dd></dl>`;
+    return `<p class="sub">以下为首次采集的原 feed 快照，未确认其在 目标日前已可得；可能包含后续更新，不作为已验证的前序证据。</p><p>${esc(text(o.hypothesis))}</p><dl><dt>所属板块（原记录）</dt><dd>${esc(text(o.sectors))}</dd><dt>原进入条件</dt><dd>${esc(text(o.original_conditions))}</dd><dt>原失效 / 风险依据</dt><dd>${esc(text(o.risk_reason))}</dd><dt>审核状态（原文）</dt><dd>${esc(text(o.qa_verdict))}</dd></dl>`;
   }
   function exitBlock(r,def) {
-    return `<p class="rule">${esc(r.rule_text || '未取得原离场规则。页面不会补造规则或触发判断。')}</p><dl><dt>原记录离场状态</dt><dd>${r.exit?.reported?'已报告离场；不代表已取得成交凭证':'未取得明确离场记录'}</dd><dt>记录离场时间 / 价格</dt><dd>${esc(briefTime(r.exit?.at))} / ${n(r.exit?.price)}</dd><dt>T+1 防守价观察</dt><dd>${def.conflict?'原规则日期与批次 T+1 日期不一致，待核对；暂停价位判断':def.touched===true?'价格曾低于防守参考价，请结合原协议复核':def.touched===false?'已有日内高低数据未见跌破参考价':'数据或规则不足，无法确认'}</dd></dl><p class="sub">T+2、T+3 继续记录后续走势；不延长原持有期，不修改离场条件。</p>`;
+    return `<p class="rule">${esc(r.rule_text || '未取得原离场规则。页面不会补造规则或触发判断。')}</p><dl><dt>原记录离场状态</dt><dd>${r.exit?.reported?'已报告离场；不代表已取得成交凭证':'未取得明确离场记录'}</dd><dt>记录离场时间 / 价格</dt><dd>${esc(briefTime(r.exit?.at))} / ${n(r.exit?.price)}</dd><dt>原协议防守价观察</dt><dd>${def.conflict?'原规则日期与目标日后第 1 个交易日不一致，待核对；暂停价位判断':def.touched===true?'价格曾低于防守参考价，请结合原协议复核':def.touched===false?'已有日内高低数据未见跌破参考价':'数据或规则不足，无法确认'}</dd></dl><p class="sub">原协议中的 T 指该票目标日；本页 T 固定指今天。离场后继续记录目标日后第 2、3 日走势，原离场条件不变。</p>`;
   }
   function tDayBlock(r) {
     const d=r.days?.['0']||{};
-    return `<dl><dt>T 日 / 行情日期</dt><dd>${esc(r.t_date)} / ${esc(d.date||'缺数据')}</dd><dt>开盘 / 最新或收盘</dt><dd>${n(d.open)} / ${n(M.value(d))}</dd><dt>日内最高 / 最低</dt><dd>${n(d.high)} / ${n(d.low)}</dd><dt>竞价与条件记录（原文）</dt><dd>${esc(text(r.original?.auction_reason))}</dd></dl><p>个股资金、板块每日变化和异常特征，需要带日期的原始证据；现有三日汇总不冒充逐日验证。</p>`;
+    return `<dl><dt>目标日 / 行情日期</dt><dd>${esc(r.t_date)} / ${esc(d.date||'缺数据')}</dd><dt>开盘 / 最新或收盘</dt><dd>${n(d.open)} / ${n(M.value(d))}</dd><dt>日内最高 / 最低</dt><dd>${n(d.high)} / ${n(d.low)}</dd><dt>竞价与条件记录（原文）</dt><dd>${esc(text(r.original?.auction_reason))}</dd></dl><p>个股资金、板块每日变化和异常特征，需要带日期的原始证据；现有三日汇总不冒充逐日验证。</p>`;
   }
   function eventsBlock(r,def) {
-    return `<ol class="timeline"><li><strong>T 日 ${esc(r.t_date)}</strong><br>收盘基准 ${n(r.baseline?.price)}，未用作实际入场价。</li><li><strong>T+1 原条件观察</strong><br>${def.at?'首次记录价位触及 '+esc(briefTime(def.at)):'未取得可定位的首次触发时间。'}<br>${r.exit?.reported?esc(r.exit.note || '原记录已报告离场'):'尚无明确离场记录。'}</li><li><strong>T+2 → T+3 后续验证</strong><br>${r.exit?.price?'对照记录离场价观察后续变化。':'缺少记录离场价，暂不计算“卖早 / 避开回撤”的幅度。'}<br>行情缺失或未到观察日时保持空白。</li></ol>`;
+    return `<ol class="timeline"><li><strong>目标日 ${esc(r.t_date)}</strong><br>收盘基准 ${n(r.baseline?.price)}，未用作实际入场价。</li><li><strong>目标日后第 1 日 · 原条件观察</strong><br>${def.at?'首次记录价位触及 '+esc(briefTime(def.at)):'未取得可定位的首次触发时间。'}<br>${r.exit?.reported?esc(r.exit.note || '原记录已报告离场'):'尚无明确离场记录。'}</li><li><strong>目标日后第 2～3 日 · 后续验证</strong><br>${r.exit?.price?'对照记录离场价观察后续变化。':'缺少记录离场价，暂不计算“卖早 / 避开回撤”的幅度。'}<br>行情缺失或未到观察日时保持空白。</li></ol>`;
   }
   function dayTable(r) {
-    const rows = offsets.map(o=>{const d=r.days?.[o]||{},value=M.value(d),p=M.percent(value,r.baseline?.price),ret=M.percent(value,d.open);return `<tr><td><strong>${dayLabel(o)}</strong><span class="cells-note">${esc(d.date||'日历未覆盖')}</span></td><td>${n(d.open)}</td><td>${n(value)}<span class="cells-note">${d.complete?'收盘':M.numeric(value)?'采样价':'—'}</span></td><td>${n(d.high)} / ${n(d.low)}</td><td class="${tone(p)}">${pct(p)}<span class="cells-note">${before?'T 收盘回看基准':'非持仓收益'}</span></td><td>${before?(M.numeric(d.volume)?n(d.volume/10000)+' 万股':'—'):`<span class="${tone(ret)}">${pct(ret)}</span>`}</td><td><span class="pill">${esc(d.state||'缺数据')}</span><span class="cells-note">${esc(briefTime(d.source_at))}</span></td></tr>`;}).join('');
-    return `<table><thead><tr><th>交易日</th><th>开盘</th><th>最新 / 收盘</th><th>日内最高 / 最低</th><th>相对 T 收盘</th><th>${before?'成交量':'相对当日开盘'}</th><th>数据状态 / 时点</th></tr></thead><tbody>${rows}</tbody></table>`;
+    const rows = offsets.map(o=>{const d=r.days?.[o]||{},value=M.value(d),p=M.percent(value,r.baseline?.price),ret=M.percent(value,d.open);return `<tr><td><strong>${dayLabel(o)}</strong><span class="cells-note">${esc(d.date||'日历未覆盖')}</span></td><td>${n(d.open)}</td><td>${n(value)}<span class="cells-note">${d.complete?'收盘':M.numeric(value)?'采样价':'—'}</span></td><td>${n(d.high)} / ${n(d.low)}</td><td class="${tone(p)}">${pct(p)}<span class="cells-note">${before?'目标日收盘回看基准':'非持仓收益'}</span></td><td>${before?(M.numeric(d.volume)?n(d.volume/10000)+' 万股':'—'):`<span class="${tone(ret)}">${pct(ret)}</span>`}</td><td><span class="pill">${esc(d.state||'缺数据')}</span><span class="cells-note">${esc(briefTime(d.source_at))}</span></td></tr>`;}).join('');
+    return `<table><thead><tr><th>交易日</th><th>开盘</th><th>最新 / 收盘</th><th>日内最高 / 最低</th><th>相对目标日收盘</th><th>${before?'成交量':'相对当日开盘'}</th><th>数据状态 / 时点</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
   function chart(r,chosen) {
     const days=chosen.map(o=>({offset:o,...(r.days?.[o]||{})}));
@@ -116,8 +126,8 @@
     const vals=intraday?points.map(p=>p.price):days.flatMap(d=>[d.open,d.high,d.low,d.close,d.last]).filter(M.numeric);
     if(!vals.length)return '<div class="chart-empty"><div>这个观察窗口尚无可绘制行情<br><small>未到交易日或缺数据时，不生成走势</small></div></div>';
     const baseline=r.baseline?.price, defense=M.defense(r).line;
-    const refs=[{value:baseline,label:'T 收盘',color:'var(--muted)'}];
-    if(!before && chosen.includes(1))refs.push({value:defense,label:'T+1 防守参考',color:'var(--amber)'});
+    const refs=[{value:baseline,label:'目标日收盘',color:'var(--muted)'}];
+    if(!before && chosen.includes(1))refs.push({value:defense,label:'原协议防守参考',color:'var(--amber)'});
     const all=vals.concat(refs.map(v=>v.value).filter(M.numeric));
     let lo=Math.min(...all),hi=Math.max(...all),pad=Math.max((hi-lo)*.18,hi*.003);lo-=pad;hi+=pad;
     const W=900,H=260,L=65,R=760,top=20,bottom=220;

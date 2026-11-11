@@ -3,8 +3,8 @@
 (() => {
   const BOUNDARY = "not_a_trading_signal";
   let lastStocksData = []; // L4: latest stocks for export
-  // 战役时段分页: 默认 T 页只显示刚推的 T 候选(T-1_POSTMARKET);
-  // t-minus1.html / t-plus1.html 通过 window.PHASE_FILTER 或 ?phase= 指定自己的组
+  // T is today. Legacy filter names are URL aliases, never data-classification rules.
+  // Future/past cohorts are derived from target trading dates using LifecycleModel.
   let phaseFilter = (window.PHASE_FILTER || new URLSearchParams(location.search).get("phase") || "T-1_POSTMARKET");
   let audioAlarmEnabled = true;
   const lastAlarmTimeByCode = new Map(); // code -> timestamp
@@ -668,7 +668,9 @@
     const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
-    const cp = stock.cycle_position && typeof stock.cycle_position === "object" ? stock.cycle_position : null;
+    const originalCycle = stock.cycle_position && typeof stock.cycle_position === 'object' ? stock.cycle_position : null;
+    const relativeDay = window.LifecycleModel.cohort(stock,window.LifecycleModel.today(),feed.handoff?.target_trade_date);
+    const cp = relativeDay===null ? null : {...(originalCycle||{}),label:window.LifecycleModel.cohortLabel(relativeDay)};
     const rec = typeof stock.recommendation === "string" ? stock.recommendation : "";
     if (cp && cp.label) {
       ref.cycleBadge.hidden = false;
@@ -1194,7 +1196,8 @@
     }
     if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;
     }
-    const stocks = phaseFilter === "all" ? feed.stocks : feed.stocks.filter(st => st.phase === phaseFilter);
+    const dateView = phaseFilter === 'T-1_PM_WATCH' ? 'before' : phaseFilter === 'T+1_EXIT_DONE' ? 'after' : 'today';
+    const stocks = mode === 'demo' ? feed.stocks : window.LifecycleModel.recordsForView(feed.stocks,dateView,window.LifecycleModel.today(),feed.handoff?.target_trade_date);
     // 权威保护：将最新的直通行情合并进 feed.stocks，绝对禁止旧文件倒退覆盖
     for (const stock of stocks) {
       const cached = realtimeQuoteCache.get(stock.code);
@@ -1218,8 +1221,8 @@
     highlightPhaseTabs();
     for (const tab of document.querySelectorAll(".phase-tab")) {
       const f = tab.dataset.phaseFilter;
-      const n = feed.stocks.filter(st => st.phase === f).length;
-      const label = f === "T-1_POSTMARKET" ? "狙击台(T)" : f === "T-1_PM_WATCH" ? "T-1观察" : "T+1出场";
+      const n = window.LifecycleModel.recordsForView(feed.stocks,f==='T-1_PM_WATCH'?'before':f==='T+1_EXIT_DONE'?'after':'today',window.LifecycleModel.today(),feed.handoff?.target_trade_date).length;
+      const label = f === "T-1_POSTMARKET" ? "今日(T)" : f === "T-1_PM_WATCH" ? "未来(T−)" : "往日(T+)";
       tab.textContent = label + " " + n;
     }
     const holdingCount=feed.holding_summary?.holding_count ?? stocks.filter(s=>s.manual_label === "bought").length;
@@ -1260,8 +1263,8 @@
     byId("feed-notice").hidden=!feed.error && !handoffMessage;byId("feed-notice").textContent=handoffMessage ? handoffMessage.join(" · ") : feed.error ? "当前数据暂时不可用，页面会自动重试。" : "";
     byId("empty-state").hidden=stocks.length>0;
     if (!stocks.length) {
-      byId("empty-state").querySelector("h3").textContent=handoffMessage ? handoffMessage[0] : "本批次暂无观察标的";
-      byId("empty-state").querySelector("p").textContent=handoffMessage ? handoffMessage[1] : "新的 QA 交接到达后，卡片会自动更新。";
+      byId("empty-state").querySelector("h3").textContent=handoffMessage ? handoffMessage[0] : "当前日期组暂无观察标的";
+      byId("empty-state").querySelector("p").textContent=handoffMessage ? handoffMessage[1] : "按目标交易日分组；旧票不会留在今天，日期不明确的票等待核对。";
     }
     byId("stock-grid").className=`stock-grid ${stocks.length === 2 ? "two-cards" : stocks.length === 3 || stocks.length === 6 ? "three-columns" : ""}`;
     const currentCodes=new Set(stocks.map(stock=>stock.code));

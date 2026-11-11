@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark"><title>前序观察 T−3 → T−1 · FUND FLOW</title>
+<meta name="color-scheme" content="dark"><title>未来候选 T−1 → T−3 · FUND FLOW</title>
 <link rel="icon" href="data:,"><link rel="stylesheet" href="./lifecycle.css?v=20261111_4">
-<script defer src="./lifecycle-model.js?v=20261111_3"></script><script defer src="./lifecycle.js?v=20261111_3"></script></head>
+<script defer src="./lifecycle-model.js?v=20261111_cohort1"></script><script defer src="./lifecycle.js?v=20261111_cohort1"></script></head>
 <body data-view="before" data-signal-boundary="not_a_trading_signal"><div class="shell">
 <header class="topbar"><a class="brand" href="./sniper.html" aria-label="返回当日监控"><span class="brand-icon">⌁</span><span>FUND FLOW<small>资金流向 · 观察与验证</small></span></a>
-<nav class="nav" aria-label="观察阶段"><a data-cross="./sector-watch.html" href="./sector-watch.html" class="active">前序观察 T−3～T−1</a><a href="./sniper.html">当日监控 T</a><a data-cross="./exit-watch.html" href="./exit-watch.html" class="">离场跟踪 T+1～T+3</a></nav></header>
-<main><section class="hero"><div><div class="eyebrow">PRE-SIGNAL CONTEXT / 生命周期观察</div><h1>前序观察<span>T−3 → T−1</span></h1><p>仅显示 T− 候选观察票；与当日 T 票、T+ 离场跟踪票分开。</p></div>
-<div class="controls"><label for="batch">T 日与推荐批次<select id="batch" aria-label="T 日与推荐批次"><option>加载批次…</option></select></label><button class="quiet" id="refresh" type="button" aria-label="刷新观察数据">↻ 刷新</button></div></section>
-<div class="statusline"><span id="source-time"><span class="dot">●</span> 正在读取已存行情</span><span id="refresh-time">每 60 秒检查更新</span></div>
+<nav class="nav" aria-label="观察阶段"><a data-cross="./sector-watch.html" href="./sector-watch.html" class="active">未来候选 T−1～T−3</a><a href="./sniper.html">当日监控 T</a><a data-cross="./exit-watch.html" href="./exit-watch.html" class="">往日跟踪 T+1～T+3</a></nav></header>
+<main><section class="hero"><div><div class="eyebrow">UPCOMING CANDIDATES / 生命周期观察</div><h1>未来候选<span>T−1 → T−3</span></h1><p>T−1 是明天的票，T−2、T−3 是后续两个交易日的候选票。</p></div>
+<div class="controls"><label for="batch">目标交易日与批次<select id="batch" aria-label="目标交易日与批次"><option>加载批次…</option></select></label><button class="quiet" id="refresh" type="button" aria-label="刷新观察数据">↻ 刷新</button></div></section>
+<p class="sub" id="date-basis"></p><div class="tabs" id="cohorts" role="group" aria-label="相对今天的股票分组"></div><div class="statusline"><span id="source-time"><span class="dot">●</span> 正在读取已存行情</span><span id="refresh-time">每 60 秒检查更新</span></div>
 <div class="alert" id="notice" role="status" hidden></div><div class="stats" id="stats" aria-label="批次概况"></div>
 <div class="workspace"><aside class="panel"><div class="list-head"><h2>观察列表 <span id="stock-count" class="mobile-count"></span></h2><input id="search" type="search" aria-label="搜索股票名称或代码" placeholder="搜索名称 / 代码"></div><div class="stock-list" id="stocks" aria-label="股票选择"></div></aside><div class="detail" id="detail"><div class="panel empty">正在读取观察记录…</div></div></div></main>
 <footer><span>FUND FLOW / 同一批次 · 同一股票 · 前后对照</span><span>观察与复核，不执行交易。缺失数据不作零值；原离场规则不变。</span></footer></div></body></html>
