@@ -116,27 +116,27 @@
     const vals=intraday?points.map(p=>p.price):days.flatMap(d=>[d.open,d.high,d.low,d.close,d.last]).filter(M.numeric);
     if(!vals.length)return '<div class="chart-empty"><div>这个观察窗口尚无可绘制行情<br><small>未到交易日或缺数据时，不生成走势</small></div></div>';
     const baseline=r.baseline?.price, defense=M.defense(r).line;
-    const refs=[{value:baseline,label:'T 收盘',color:'#8292ab'}];
-    if(!before && chosen.includes(1))refs.push({value:defense,label:'T+1 防守参考',color:'#e4b975'});
+    const refs=[{value:baseline,label:'T 收盘',color:'var(--muted)'}];
+    if(!before && chosen.includes(1))refs.push({value:defense,label:'T+1 防守参考',color:'var(--amber)'});
     const all=vals.concat(refs.map(v=>v.value).filter(M.numeric));
     let lo=Math.min(...all),hi=Math.max(...all),pad=Math.max((hi-lo)*.18,hi*.003);lo-=pad;hi+=pad;
     const W=900,H=260,L=65,R=760,top=20,bottom=220;
     const y=v=>bottom-(v-lo)/(hi-lo)*(bottom-top);
     let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${intraday?'实际分钟采样价格':'三个交易日的高低与开收盘价格'}">`;
-    for(let i=0;i<5;i++){const value=lo+(hi-lo)*i/4,yy=y(value);s+=`<line x1="${L}" y1="${yy}" x2="${R}" y2="${yy}" stroke="#253345"/><text x="${L-10}" y="${yy+4}" text-anchor="end">${n(value)}</text>`;}
+    for(let i=0;i<5;i++){const value=lo+(hi-lo)*i/4,yy=y(value);s+=`<line x1="${L}" y1="${yy}" x2="${R}" y2="${yy}" stroke="var(--line)"/><text x="${L-10}" y="${yy+4}" text-anchor="end">${n(value)}</text>`;}
     refs.filter(v=>M.numeric(v.value)).forEach(v=>{s+=`<line x1="${L}" y1="${y(v.value)}" x2="${R}" y2="${y(v.value)}" stroke="${v.color}" stroke-dasharray="5 6"/><text x="${R+9}" y="${y(v.value)+4}">${v.label}</text>`;});
     if(intraday){
       const x=i=>L+i/Math.max(1,points.length-1)*(R-L);
-      s+=`<polyline points="${points.map((p,i)=>`${x(i)},${y(p.price)}`).join(' ')}" fill="none" stroke="#75e4db" stroke-width="2.2"/>`;
+      s+=`<polyline points="${points.map((p,i)=>`${x(i)},${y(p.price)}`).join(' ')}" fill="none" stroke="var(--cyan)" stroke-width="2.2"/>`;
       for(const i of [...new Set([0,Math.floor(points.length/2),points.length-1])])s+=`<text x="${x(i)}" y="245" text-anchor="middle">${esc(points[i].at.slice(11,16))}</text>`;
       const exit=r.exit;
-      if(exit?.at && M.numeric(exit.price) && exit.at.slice(0,10)===days[0].date){const i=points.findIndex(p=>p.at>=exit.at);if(i>=0 && exit.price>=lo && exit.price<=hi)s+=`<circle cx="${x(i)}" cy="${y(exit.price)}" r="5" fill="#f1c581"><title>记录离场 ${esc(exit.at)} / ${n(exit.price)}</title></circle>`;}
+      if(exit?.at && M.numeric(exit.price) && exit.at.slice(0,10)===days[0].date){const i=points.findIndex(p=>p.at>=exit.at);if(i>=0 && exit.price>=lo && exit.price<=hi)s+=`<circle cx="${x(i)}" cy="${y(exit.price)}" r="5" fill="var(--amber)"><title>记录离场 ${esc(exit.at)} / ${n(exit.price)}</title></circle>`;}
     } else days.forEach((d,i)=>{
       const x=L+(i+.5)/days.length*(R-L),value=M.value(d);
-      const color=M.numeric(value)&&M.numeric(d.open)&&value<d.open?'#79cfae':'#ff9393';
+      const color=M.numeric(value)&&M.numeric(d.open)&&value<d.open?'var(--fall)':'var(--rise)';
       if(M.numeric(d.high)&&M.numeric(d.low))s+=`<line x1="${x}" y1="${y(d.high)}" x2="${x}" y2="${y(d.low)}" stroke="${color}" stroke-width="2"/>`;
       if(M.numeric(value)&&M.numeric(d.open))s+=`<rect x="${x-17}" y="${Math.min(y(d.open),y(value))}" width="34" height="${Math.max(2,Math.abs(y(d.open)-y(value)))}" fill="${color}" opacity=".8"><title>${esc(d.date)} 开 ${n(d.open)} 收/最新 ${n(value)}</title></rect>`;
-      else if(M.numeric(value))s+=`<circle cx="${x}" cy="${y(value)}" r="4" fill="#75e4db"/>`;
+      else if(M.numeric(value))s+=`<circle cx="${x}" cy="${y(value)}" r="4" fill="var(--cyan)"/>`;
       else s+=`<text x="${x}" y="130" text-anchor="middle">${esc(d.state||'缺数据')}</text>`;
       s+=`<text x="${x}" y="245" text-anchor="middle">${dayLabel(d.offset)} · ${esc(d.date?.slice(5)||'日期未知')}</text>`;
     });

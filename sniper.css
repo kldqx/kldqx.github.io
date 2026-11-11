@@ -1232,3 +1232,30 @@ footer {
   box-shadow: 0 0 5px #ffffff;
   flex-shrink: 0;
 }
+
+
+/* Professional terminal palette shared visually with the lifecycle views. */
+:root{--bg:#181b1f;--panel:#242a31;--panel-raised:#303944;--line:#4a5664;--text:#f4f6f9;--muted:#bdc7d4;--subtle:#adb9c8;--cyan:#5ed9ff;--red:#ff9999;--green:#65e4a1;--yellow:#ffd16b;--accent:#ffa62b;--radius:2px}
+body{background:var(--bg)}
+.page-header{border-bottom:2px solid var(--accent)!important;min-height:56px!important;height:auto!important;padding:8px 0!important}
+.brand-mark{background:var(--accent);border-color:var(--accent);color:#171b20;border-radius:2px!important}.brand{letter-spacing:1px}.brand small{color:var(--muted)}
+.mode-switch{background:#20262d;border-color:#4a5664;border-radius:2px;gap:3px}.mode-button{border-radius:2px;text-decoration:none;color:#d6dfe9}.mode-button.selected{background:var(--accent);color:#171b20;box-shadow:none}.mode-button:hover:not(.selected){background:#39434f;color:#fff}
+.icon-button,.toggle-all-btn,.export-btn{border-radius:2px;background:#303944;border-color:#596775;color:#e8eef5}.icon-button:hover{background:#445262}
+.mode-label{border-radius:2px;color:#ffcf85;background:#4b3720;border-color:#9c7437}.session-description{color:#bdc7d4}
+.session-strip{background:#282f37;border-color:#536171;border-top:2px solid var(--accent);border-radius:2px!important}.session-stat{border-right-color:#536171}.session-stat strong{font-family:Consolas,monospace;color:#ffe38c}.session-stat strong.positive{color:var(--red)}.session-stat strong.negative{color:var(--green)}
+.phase-track li.active{color:var(--accent)}.phase-track li.active .step-dot{background:var(--accent);border-color:var(--accent)}.phase-track li:not(:last-child):after{background:#536171}
+.section-heading h2{color:var(--accent)}
+.stock-card,.stock-card.positive,.stock-card.negative{background:#242a31!important;border-radius:2px!important}
+.stock-card.positive:not(.defense-alarm-active):not(.conviction-surge):not(.conviction-strengthening):not(.auction-confirmed):not(.conviction-auction),.stock-card.negative:not(.defense-alarm-active):not(.conviction-surge):not(.conviction-strengthening):not(.auction-confirmed):not(.conviction-auction){box-shadow:none!important}
+.stock-name{color:#f5f7fa}.stock-code{color:#bdc7d4}.stock-status{border-radius:2px;background:#303944;border-color:#536171}
+.stock-price{font-family:Consolas,monospace;letter-spacing:0}.stock-price.positive{color:var(--red)!important;text-shadow:none!important}.stock-price.negative{color:var(--green)!important;text-shadow:none!important}
+.stock-change.positive{background:var(--red)!important;color:#20242a!important;border-radius:2px!important;box-shadow:none!important}.stock-change.negative{background:var(--green)!important;color:#20242a!important;border-radius:2px!important;box-shadow:none!important}
+.metric strong{font-family:Consolas,monospace}.metric span,.chart-legend,.price-label{color:#bdc7d4}.chart-grid{stroke:#536171}.vwap-path{stroke:#b8a2f0}.chart-legend-items .vwap-key{border-color:#b8a2f0}
+.kline-energy-widget{background:#171d24;border-color:#465260;border-radius:2px}.energy-bar-header .buy-label{color:var(--red)}.energy-bar-header .sell-label{color:var(--green)}.energy-bar-footer,.energy-bar-footer .quote-b1a1{color:#bdc7d4}.energy-bar-track{border-radius:2px;box-shadow:none}.energy-bar-buy{background:#ee7881;box-shadow:none}.energy-bar-sell{background:#49c78e;box-shadow:none}
+.mini-kline-svg [fill="#ff334b"]{fill:var(--red)}.mini-kline-svg [fill="#00d072"]{fill:var(--green)}.mini-kline-svg [stroke="#ff334b"]{stroke:var(--red)}.mini-kline-svg [stroke="#00d072"]{stroke:var(--green)}
+.condition-chip{background:#303944;border-color:#536171;border-radius:2px}.condition-chip strong{color:#eff3f8}.conditions,.auction-box{border-top-color:#465260}.auction-box h3{color:var(--accent)}
+.auction-evidence-table{background:#202730;border-color:#536171;border-radius:2px}.auction-evidence-columns{background:#303944;color:#ffd16b}.auction-evidence-row{border-top-color:#465260}.auction-evidence-row:nth-child(odd){background:#2b333d}.auction-result,.auction-row-status{border-radius:2px}
+.hypothesis-preview,.review-state{background:#303944;color:#d6dfe9;border-radius:2px}.card-details{background:#202730;border-top-color:#536171}.card-details summary{color:#d0dae6}.event-list li{border-top-color:#465260}
+.manual-controls button{border-radius:2px}.manual-controls .entry-button:disabled,.manual-controls .exit-button:disabled{background:#252c34}.alarm-sound-btn{border-radius:2px}.alarm-sound-btn.enabled{background:#4a2930;color:#ffb4b4;box-shadow:none}
+.feed-notice{border-radius:2px;background:#403321;color:#ffda8c}.empty-state{border-radius:2px}footer,footer>span:first-child{color:#adb9c8}
+@media(max-width:720px){.header-actions{width:100%;flex-wrap:wrap}.header-actions .mode-switch{order:3;flex:1 0 100%;justify-content:space-between}.header-actions .mode-button{font-size:11px;padding:7px 6px}.header-actions .icon-button{margin-left:auto}.section-heading{flex-wrap:wrap;gap:8px}.section-heading>span{min-width:0;max-width:100%;flex-wrap:wrap}.phase-track{overflow-x:auto}.kline-mini-col{width:95px}.kline-energy-widget{gap:6px}}
