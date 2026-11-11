@@ -1,0 +1,2845 @@
+{
+  "signal_boundary": "not_a_trading_signal",
+  "read_at": "2026-11-11T14:49:15.858225",
+  "task_date": "2026-11-11",
+  "producer_role": "pc-live-source-wiring sub-agent (read-only on E:/THS, E:/new_tdx64, E:/eastmoney, 三端路径/)",
+  "sources": {
+    "ths_stocknow": {
+      "files": {
+        "sznse": {
+          "path": "E:/THS/同花顺/同花顺/realtime/sznse/stocknow.dat",
+          "size": 13444686,
+          "mtime": "2026-11-11T14:48:36.426333",
+          "record_count": 24623,
+          "header_bytes": 528,
+          "record_size": 546,
+          "dict_entries": 126,
+          "exact_size_check": true,
+          "records_with_data": 1
+        },
+        "shase": {
+          "path": "E:/THS/同花顺/同花顺/realtime/shase/stocknow.dat",
+          "size": 14563986,
+          "mtime": "2026-11-11T14:48:36.426333",
+          "record_count": 26673,
+          "header_bytes": 528,
+          "record_size": 546,
+          "dict_entries": 126,
+          "exact_size_check": true,
+          "records_with_data": 1
+        },
+        "stb": {
+          "path": "E:/THS/同花顺/同花顺/realtime/stb/stocknow.dat",
+          "size": 3760830,
+          "mtime": "2026-11-11T12:06:40.803545",
+          "record_count": 6887,
+          "header_bytes": 528,
+          "record_size": 546,
+          "dict_entries": 126,
+          "exact_size_check": true,
+          "records_with_data": 0
+        }
+      },
+      "layout": {
+        "magic": "hd1.0\\x00 (6B)",
+        "u32_at_6": "record_count (uint32 LE)",
+        "bytes_10_to_0x18": "fixed 14B header",
+        "dict_at_0x18": "126 entries x 4B, each tag u16 BE + len u16 BE (all len=4; values are uint32 LE in each record)",
+        "record_size": 546,
+        "record_header": "marker(1B: 0x21=sznse A股, 0x22..0x25=sznse 其他, 0x11=shase, 0x91=stb) + code(6B ASCII) + pad(3B) + name(GBK null-terminated, fixed field rel 10..42)",
+        "data_area": "rel 42..546 = 504B = 126 x uint32 LE in dict tag order; 0xFFFFFFFF = no value",
+        "price_encoding": "compressed float: high nibble 0xC => value = (v & 0x0FFFFFFF) / 10^4; else raw uint32",
+        "tag_semantics_verified": {
+          "0x670": "prev_close",
+          "0x770": "open",
+          "0x870": "high",
+          "0x970": "low",
+          "0xa70": "last",
+          "0xd70": "vol_shares",
+          "0x1370": "amount_cny",
+          "0x1170": "last_trade_shares",
+          "0x1270": "trade_count",
+          "0xc30": "unknown_0c30",
+          "0xe70": "outer_vol",
+          "0xf70": "inner_vol",
+          "0x1870": "bid1_px",
+          "0x1970": "bid1_vol",
+          "0x1e70": "ask1_px",
+          "0x1f70": "ask1_vol",
+          "0x3170": "unknown_3170",
+          "0x2d70": "unknown_2d70",
+          "0x3070": "unknown_3070"
+        }
+      },
+      "anchor_decode": {
+        "sznse_002171": {
+          "name": "楚江新材",
+          "record_index": 693,
+          "record_offset": "0x5c81a",
+          "marker": "0x21",
+          "fields": {
+            "prev_close": {
+              "raw": "0xc0015ba8",
+              "value": 8.9
+            },
+            "open": {
+              "raw": "0xc0015888",
+              "value": 8.82
+            },
+            "high": {
+              "raw": "0xc0015e64",
+              "value": 8.97
+            },
+            "low": {
+              "raw": "0xc00157c0",
+              "value": 8.8
+            },
+            "last": {
+              "raw": "0xc0015cd4",
+              "value": 8.93
+            },
+            "last_trade_shares": {
+              "raw": "0x0000a8c0",
+              "value": 43200
+            },
+            "vol_shares": {
+              "raw": "0x00dee989",
+              "value": 14608777
+            },
+            "amount_cny": {
+              "raw": "0x07bf4d47",
+              "value": 129977671
+            },
+            "trade_count": {
+              "raw": "0x00004f15",
+              "value": 20245
+            },
+            "unknown_0c30": {
+              "raw": "0x00000005",
+              "value": 5
+            },
+            "outer_vol": {
+              "raw": "0x007912c9",
+              "value": 7934665
+            },
+            "bid1_px": {
+              "raw": "0xc0015c70",
+              "value": 8.92
+            },
+            "bid1_vol": {
+              "raw": "0x00016378",
+              "value": 91000
+            },
+            "ask1_px": {
+              "raw": "0xc0015cd4",
+              "value": 8.93
+            },
+            "ask1_vol": {
+              "raw": "0x000023f0",
+              "value": 9200
+            },
+            "unknown_3170": {
+              "raw": "0x0001048c",
+              "value": 66700
+            },
+            "unknown_2d70": {
+              "raw": "0x063451a5",
+              "value": 104092069
+            },
+            "unknown_3070": {
+              "raw": "0x00000000",
+              "value": 0
+            }
+          }
+        },
+        "shase_601168": {
+          "name": "西部矿业",
+          "record_index": 767,
+          "record_offset": "0x665ee",
+          "marker": "0x11",
+          "fields": {
+            "prev_close": {
+              "raw": "0xc0044f84",
+              "value": 28.25
+            },
+            "open": {
+              "raw": "0xc0044048",
+              "value": 27.86
+            },
+            "high": {
+              "raw": "0xc0045c68",
+              "value": 28.58
+            },
+            "low": {
+              "raw": "0xc0042748",
+              "value": 27.22
+            },
+            "last": {
+              "raw": "0xc004568c",
+              "value": 28.43
+            },
+            "last_trade_shares": {
+              "raw": "0x00048ecc",
+              "value": 298700
+            },
+            "vol_shares": {
+              "raw": "0x02201965",
+              "value": 35658085
+            },
+            "amount_cny": {
+              "raw": "0x15eeb54b",
+              "value": 367965515
+            },
+            "trade_count": {
+              "raw": "0x0001114b",
+              "value": 69963
+            },
+            "unknown_0c30": {
+              "raw": "0x00000005",
+              "value": 5
+            },
+            "outer_vol": {
+              "raw": "0x010e98bd",
+              "value": 17733821
+            },
+            "bid1_px": {
+              "raw": "0xc0045628",
+              "value": 28.42
+            },
+            "bid1_vol": {
+              "raw": "0x000000c8",
+              "value": 200
+            },
+            "ask1_px": {
+              "raw": "0xc004568c",
+              "value": 28.43
+            },
+            "ask1_vol": {
+              "raw": "0x000073a0",
+              "value": 29600
+            },
+            "unknown_3170": {
+              "raw": "0x00006c98",
+              "value": 27800
+            },
+            "unknown_2d70": {
+              "raw": "0x1183d02e",
+              "value": 293851182
+            },
+            "unknown_3070": {
+              "raw": "0xb8000046",
+              "value": 3087007814
+            }
+          }
+        }
+      },
+      "stocks": {
+        "300413.SZ": {
+          "name": "芒果超媒",
+          "ths_record": {
+            "sub": "sznse",
+            "record_index": 1868,
+            "record_offset": "0xf9228",
+            "marker": "0x21",
+            "name": "芒果超媒",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "21 33 30 30 34 31 33 00 00 00 c3 a2 b9 fb b3 ac c3 bd 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "000559.SZ": {
+          "name": "万向钱潮",
+          "ths_record": {
+            "sub": "sznse",
+            "record_index": 133,
+            "record_offset": "0x11dba",
+            "marker": "0x21",
+            "name": "万向钱潮",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "21 30 30 30 35 35 39 00 00 00 cd f2 cf f2 c7 ae b3 b1 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "300493.SZ": {
+          "name": "润欣科技",
+          "ths_record": {
+            "sub": "sznse",
+            "record_index": 1947,
+            "record_offset": "0x103aa6",
+            "marker": "0x21",
+            "name": "润欣科技",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "21 33 30 30 34 39 33 00 00 00 c8 f3 d0 c0 bf c6 bc bc 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "600345.SH": {
+          "name": "长江通信",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 236,
+            "record_offset": "0x1f968",
+            "marker": "0x11",
+            "name": "长江通信",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 30 30 33 34 35 00 00 00 b3 a4 bd ad cd a8 d0 c5 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "301583.SZ": {
+          "name": "托伦斯",
+          "ths_record": {
+            "sub": "sznse",
+            "record_index": 2841,
+            "record_offset": "0x17ad62",
+            "marker": "0x21",
+            "name": "托伦斯",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "21 33 30 31 35 38 33 00 00 00 cd d0 c2 d7 cb b9 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "600259.SH": {
+          "name": "中稀有色",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 179,
+            "record_offset": "0x17fd6",
+            "marker": "0x11",
+            "name": "中稀有色",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 30 30 32 35 39 00 00 00 d6 d0 cf a1 d3 d0 c9 ab 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "688385.SH": {
+          "name": "复旦微电",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 1955,
+            "record_offset": "0x104bb6",
+            "marker": "0x11",
+            "name": "复旦微电",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 38 38 33 38 35 00 00 00 b8 b4 b5 a9 ce a2 b5 e7 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "688035.SH": {
+          "name": "德邦科技",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 1661,
+            "record_offset": "0xdd8aa",
+            "marker": "0x11",
+            "name": "德邦科技",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 38 38 30 33 35 00 00 00 b5 c2 b0 ee bf c6 bc bc 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "002141.SZ": {
+          "name": "贤丰控股",
+          "ths_record": {
+            "sub": "sznse",
+            "record_index": 665,
+            "record_offset": "0x58c62",
+            "marker": "0x21",
+            "name": "贤丰控股",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "21 30 30 32 31 34 31 00 00 00 cf cd b7 e1 bf d8 b9 c9 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "300739.SZ": {
+          "name": "明阳电路",
+          "ths_record": {
+            "sub": "sznse",
+            "record_index": 2182,
+            "record_offset": "0x122fdc",
+            "marker": "0x21",
+            "name": "明阳电路",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "21 33 30 30 37 33 39 00 00 00 c3 f7 d1 f4 b5 e7 c2 b7 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "603728.SH": {
+          "name": "鸣志电器",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 1389,
+            "record_offset": "0xb948a",
+            "marker": "0x11",
+            "name": "鸣志电器",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 30 33 37 32 38 00 00 00 c3 f9 d6 be b5 e7 c6 f7 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "603667.SH": {
+          "name": "五洲新春",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 1349,
+            "record_offset": "0xb3f3a",
+            "marker": "0x11",
+            "name": "五洲新春",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 30 33 36 36 37 00 00 00 ce e5 d6 de d0 c2 b4 ba 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "603893.SH": {
+          "name": "瑞芯微",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 1461,
+            "record_offset": "0xc2e1a",
+            "marker": "0x11",
+            "name": "瑞芯微",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 30 33 38 39 33 00 00 00 c8 f0 d0 be ce a2 00 00 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "603341.SH": {
+          "name": "龙旗科技",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 1203,
+            "record_offset": "0xa07d6",
+            "marker": "0x11",
+            "name": "龙旗科技",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 30 33 33 34 31 00 00 00 c1 fa c6 ec bf c6 bc bc 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        },
+        "605188.SH": {
+          "name": "国光连锁",
+          "ths_record": {
+            "sub": "shase",
+            "record_index": 1577,
+            "record_offset": "0xd2582",
+            "marker": "0x11",
+            "name": "国光连锁",
+            "data_area_all_0xff": true,
+            "hex_head_48B": "11 36 30 35 31 38 38 00 00 00 b9 fa b9 e2 c1 ac cb f8 00 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+          },
+          "price": null,
+          "pct": null,
+          "vol": null,
+          "amt": null,
+          "bid1": null,
+          "bid2": null,
+          "bid3": null,
+          "bid4": null,
+          "bid5": null,
+          "bid6": null,
+          "bid7": null,
+          "bid8": null,
+          "bid9": null,
+          "bid10": null,
+          "ask1": null,
+          "ask2": null,
+          "ask3": null,
+          "ask4": null,
+          "ask5": null,
+          "ask6": null,
+          "ask7": null,
+          "ask8": null,
+          "ask9": null,
+          "ask10": null,
+          "quote_time": null,
+          "disk_quote_status": "gap: data area all 0xFF (only the currently displayed stock gets a populated slot on disk)"
+        }
+      }
+    },
+    "tdx_lday": {
+      "stocks": {
+        "300413.SZ": {
+          "name": "芒果超媒",
+          "path": "E:/new_tdx64/vipdoc/sz/lday/sz300413.day",
+          "mtime": "2026-11-10T22:05:31.274425",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 32.41,
+              "high": 35.76,
+              "low": 31.78,
+              "close": 34.83,
+              "amount": 1334604022
+            },
+            {
+              "date": 20261107,
+              "open": 32.41,
+              "high": 35.76,
+              "low": 31.78,
+              "close": 34.83,
+              "amount": 1334604022
+            },
+            {
+              "date": 20261108,
+              "open": 32.41,
+              "high": 35.76,
+              "low": 31.78,
+              "close": 34.83,
+              "amount": 1334604022
+            },
+            {
+              "date": 20261109,
+              "open": 34.13,
+              "high": 36.98,
+              "low": 33.3,
+              "close": 35.8,
+              "amount": 1334945159
+            },
+            {
+              "date": 20261110,
+              "open": 34.88,
+              "high": 37.38,
+              "low": 34.55,
+              "close": 35.55,
+              "amount": 1334698075
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 35.55,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "000559.SZ": {
+          "name": "万向钱潮",
+          "path": "E:/new_tdx64/vipdoc/sz/lday/sz000559.day",
+          "mtime": "2026-11-10T22:05:10.366462",
+          "bars_total": 682,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 12.49,
+              "high": 12.95,
+              "low": 12.45,
+              "close": 12.49,
+              "amount": 1315854278
+            },
+            {
+              "date": 20261107,
+              "open": 12.49,
+              "high": 12.95,
+              "low": 12.45,
+              "close": 12.49,
+              "amount": 1315854278
+            },
+            {
+              "date": 20261108,
+              "open": 12.49,
+              "high": 12.95,
+              "low": 12.45,
+              "close": 12.49,
+              "amount": 1315854278
+            },
+            {
+              "date": 20261109,
+              "open": 12.7,
+              "high": 13.2,
+              "low": 12.64,
+              "close": 12.83,
+              "amount": 1318176178
+            },
+            {
+              "date": 20261110,
+              "open": 12.92,
+              "high": 13.71,
+              "low": 12.88,
+              "close": 13.2,
+              "amount": 1321673560
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 13.2,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "300493.SZ": {
+          "name": "润欣科技",
+          "path": "E:/new_tdx64/vipdoc/sz/lday/sz300493.day",
+          "mtime": "2026-11-10T22:05:32.049520",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 13.61,
+              "high": 14.66,
+              "low": 13.52,
+              "close": 13.72,
+              "amount": 1317542653
+            },
+            {
+              "date": 20261107,
+              "open": 13.61,
+              "high": 14.66,
+              "low": 13.52,
+              "close": 13.72,
+              "amount": 1317542653
+            },
+            {
+              "date": 20261108,
+              "open": 13.61,
+              "high": 14.66,
+              "low": 13.52,
+              "close": 13.72,
+              "amount": 1317542653
+            },
+            {
+              "date": 20261109,
+              "open": 13.92,
+              "high": 14.01,
+              "low": 13.45,
+              "close": 13.49,
+              "amount": 1309982375
+            },
+            {
+              "date": 20261110,
+              "open": 13.58,
+              "high": 14.9,
+              "low": 13.4,
+              "close": 14.32,
+              "amount": 1315725376
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 14.32,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "600345.SH": {
+          "name": "长江通信",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh600345.day",
+          "mtime": "2026-11-10T22:05:50.378468",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 37.5,
+              "high": 38.26,
+              "low": 37.05,
+              "close": 37.33,
+              "amount": 1303461398
+            },
+            {
+              "date": 20261107,
+              "open": 37.5,
+              "high": 38.26,
+              "low": 37.05,
+              "close": 37.33,
+              "amount": 1303461398
+            },
+            {
+              "date": 20261108,
+              "open": 37.5,
+              "high": 38.26,
+              "low": 37.05,
+              "close": 37.33,
+              "amount": 1303461398
+            },
+            {
+              "date": 20261109,
+              "open": 38.17,
+              "high": 41.06,
+              "low": 38.02,
+              "close": 40.02,
+              "amount": 1311012516
+            },
+            {
+              "date": 20261110,
+              "open": 41.36,
+              "high": 41.36,
+              "low": 40.39,
+              "close": 40.59,
+              "amount": 1308941052
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 40.59,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "301583.SZ": {
+          "name": "托伦斯",
+          "path": "E:/new_tdx64/vipdoc/sz/lday/sz301583.day",
+          "mtime": "2026-11-10T22:05:41.857419",
+          "bars_total": 84,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 98.8,
+              "high": 106.58,
+              "low": 98.8,
+              "close": 101.4,
+              "amount": 1315397900
+            },
+            {
+              "date": 20261107,
+              "open": 98.8,
+              "high": 106.58,
+              "low": 98.8,
+              "close": 101.4,
+              "amount": 1315397900
+            },
+            {
+              "date": 20261108,
+              "open": 98.8,
+              "high": 106.58,
+              "low": 98.8,
+              "close": 101.4,
+              "amount": 1315397900
+            },
+            {
+              "date": 20261109,
+              "open": 102.18,
+              "high": 104.5,
+              "low": 99.5,
+              "close": 104.38,
+              "amount": 1312675774
+            },
+            {
+              "date": 20261110,
+              "open": 110.16,
+              "high": 112.11,
+              "low": 101.8,
+              "close": 102.76,
+              "amount": 1315320220
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 102.76,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "600259.SH": {
+          "name": "中稀有色",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh600259.day",
+          "mtime": "2026-11-10T22:05:49.703228",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 59.19,
+              "high": 63.0,
+              "low": 59.19,
+              "close": 61.99,
+              "amount": 1310504664
+            },
+            {
+              "date": 20261107,
+              "open": 59.19,
+              "high": 63.0,
+              "low": 59.19,
+              "close": 61.99,
+              "amount": 1310504664
+            },
+            {
+              "date": 20261108,
+              "open": 59.19,
+              "high": 63.0,
+              "low": 59.19,
+              "close": 61.99,
+              "amount": 1310504664
+            },
+            {
+              "date": 20261109,
+              "open": 63.5,
+              "high": 67.52,
+              "low": 63.5,
+              "close": 65.97,
+              "amount": 1316460831
+            },
+            {
+              "date": 20261110,
+              "open": 68.13,
+              "high": 69.35,
+              "low": 65.65,
+              "close": 68.08,
+              "amount": 1315997475
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 68.08,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "688385.SH": {
+          "name": "复旦微电",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh688385.day",
+          "mtime": "2026-11-10T22:06:08.559711",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 46.75,
+              "high": 48.36,
+              "low": 46.3,
+              "close": 46.82,
+              "amount": 1307617527
+            },
+            {
+              "date": 20261107,
+              "open": 46.75,
+              "high": 48.36,
+              "low": 46.3,
+              "close": 46.82,
+              "amount": 1307617527
+            },
+            {
+              "date": 20261108,
+              "open": 46.75,
+              "high": 48.36,
+              "low": 46.3,
+              "close": 46.82,
+              "amount": 1307617527
+            },
+            {
+              "date": 20261109,
+              "open": 47.88,
+              "high": 51.58,
+              "low": 47.5,
+              "close": 49.88,
+              "amount": 1315028495
+            },
+            {
+              "date": 20261110,
+              "open": 51.0,
+              "high": 52.18,
+              "low": 50.6,
+              "close": 51.31,
+              "amount": 1311268221
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 51.31,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "688035.SH": {
+          "name": "德邦科技",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh688035.day",
+          "mtime": "2026-11-10T22:06:05.775069",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 53.03,
+              "high": 56.44,
+              "low": 53.03,
+              "close": 54.92,
+              "amount": 1296868719
+            },
+            {
+              "date": 20261107,
+              "open": 53.03,
+              "high": 56.44,
+              "low": 53.03,
+              "close": 54.92,
+              "amount": 1296868720
+            },
+            {
+              "date": 20261108,
+              "open": 53.03,
+              "high": 56.44,
+              "low": 53.03,
+              "close": 54.92,
+              "amount": 1296868720
+            },
+            {
+              "date": 20261109,
+              "open": 56.15,
+              "high": 60.43,
+              "low": 54.51,
+              "close": 59.65,
+              "amount": 1303996947
+            },
+            {
+              "date": 20261110,
+              "open": 60.82,
+              "high": 61.28,
+              "low": 59.12,
+              "close": 60.08,
+              "amount": 1300408364
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 60.08,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "002141.SZ": {
+          "name": "贤丰控股",
+          "path": "E:/new_tdx64/vipdoc/sz/lday/sz002141.day",
+          "mtime": "2026-11-10T22:05:15.852546",
+          "bars_total": 690,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 4.75,
+              "high": 4.92,
+              "low": 4.75,
+              "close": 4.8,
+              "amount": 1300785245
+            },
+            {
+              "date": 20261107,
+              "open": 4.75,
+              "high": 4.92,
+              "low": 4.75,
+              "close": 4.8,
+              "amount": 1300785245
+            },
+            {
+              "date": 20261108,
+              "open": 4.75,
+              "high": 4.92,
+              "low": 4.75,
+              "close": 4.8,
+              "amount": 1300785245
+            },
+            {
+              "date": 20261109,
+              "open": 4.86,
+              "high": 5.08,
+              "low": 4.82,
+              "close": 5.05,
+              "amount": 1307666466
+            },
+            {
+              "date": 20261110,
+              "open": 5.15,
+              "high": 5.18,
+              "low": 5.01,
+              "close": 5.06,
+              "amount": 1304247915
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 5.06,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "300739.SZ": {
+          "name": "明阳电路",
+          "path": "E:/new_tdx64/vipdoc/sz/lday/sz300739.day",
+          "mtime": "2026-11-10T22:05:34.471444",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 22.2,
+              "high": 22.96,
+              "low": 21.8,
+              "close": 21.94,
+              "amount": 1309689015
+            },
+            {
+              "date": 20261107,
+              "open": 22.2,
+              "high": 22.96,
+              "low": 21.8,
+              "close": 21.94,
+              "amount": 1309689015
+            },
+            {
+              "date": 20261108,
+              "open": 22.2,
+              "high": 22.96,
+              "low": 21.8,
+              "close": 21.94,
+              "amount": 1309689015
+            },
+            {
+              "date": 20261109,
+              "open": 22.21,
+              "high": 23.19,
+              "low": 21.92,
+              "close": 22.41,
+              "amount": 1308615933
+            },
+            {
+              "date": 20261110,
+              "open": 23.01,
+              "high": 23.35,
+              "low": 22.68,
+              "close": 22.92,
+              "amount": 1306983521
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 22.92,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "603728.SH": {
+          "name": "鸣志电器",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh603728.day",
+          "mtime": "2026-11-10T22:06:03.072804",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 58.29,
+              "high": 59.9,
+              "low": 57.82,
+              "close": 58.84,
+              "amount": 1307402056
+            },
+            {
+              "date": 20261107,
+              "open": 58.29,
+              "high": 59.9,
+              "low": 57.82,
+              "close": 58.84,
+              "amount": 1307402056
+            },
+            {
+              "date": 20261108,
+              "open": 58.29,
+              "high": 59.9,
+              "low": 57.82,
+              "close": 58.84,
+              "amount": 1307402056
+            },
+            {
+              "date": 20261109,
+              "open": 59.46,
+              "high": 61.35,
+              "low": 58.7,
+              "close": 59.24,
+              "amount": 1307792973
+            },
+            {
+              "date": 20261110,
+              "open": 59.55,
+              "high": 61.48,
+              "low": 59.55,
+              "close": 60.35,
+              "amount": 1310467607
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 60.35,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "603667.SH": {
+          "name": "五洲新春",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh603667.day",
+          "mtime": "2026-11-10T22:06:02.634253",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 51.22,
+              "high": 55.43,
+              "low": 51.03,
+              "close": 53.22,
+              "amount": 1319869927
+            },
+            {
+              "date": 20261107,
+              "open": 51.22,
+              "high": 55.43,
+              "low": 51.03,
+              "close": 53.22,
+              "amount": 1319869927
+            },
+            {
+              "date": 20261108,
+              "open": 51.22,
+              "high": 55.43,
+              "low": 51.03,
+              "close": 53.22,
+              "amount": 1319869927
+            },
+            {
+              "date": 20261109,
+              "open": 53.55,
+              "high": 55.74,
+              "low": 53.0,
+              "close": 53.71,
+              "amount": 1320097251
+            },
+            {
+              "date": 20261110,
+              "open": 54.0,
+              "high": 57.4,
+              "low": 54.0,
+              "close": 56.17,
+              "amount": 1324769023
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 56.17,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "603893.SH": {
+          "name": "瑞芯微",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh603893.day",
+          "mtime": "2026-11-10T22:06:03.782556",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 217.81,
+              "high": 221.5,
+              "low": 211.28,
+              "close": 212.68,
+              "amount": 1332591872
+            },
+            {
+              "date": 20261107,
+              "open": 217.81,
+              "high": 221.5,
+              "low": 211.28,
+              "close": 212.68,
+              "amount": 1332591872
+            },
+            {
+              "date": 20261108,
+              "open": 217.81,
+              "high": 221.5,
+              "low": 211.28,
+              "close": 212.68,
+              "amount": 1332591872
+            },
+            {
+              "date": 20261109,
+              "open": 216.78,
+              "high": 221.0,
+              "low": 208.0,
+              "close": 212.0,
+              "amount": 1329037786
+            },
+            {
+              "date": 20261110,
+              "open": 218.99,
+              "high": 233.2,
+              "low": 211.0,
+              "close": 233.2,
+              "amount": 1333202075
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 233.2,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "603341.SH": {
+          "name": "龙旗科技",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh603341.day",
+          "mtime": "2026-11-10T22:06:01.048494",
+          "bars_total": 655,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 37.52,
+              "high": 38.55,
+              "low": 37.4,
+              "close": 37.56,
+              "amount": 1306371282
+            },
+            {
+              "date": 20261107,
+              "open": 37.52,
+              "high": 38.55,
+              "low": 37.4,
+              "close": 37.56,
+              "amount": 1306371282
+            },
+            {
+              "date": 20261108,
+              "open": 37.52,
+              "high": 38.55,
+              "low": 37.4,
+              "close": 37.56,
+              "amount": 1306371282
+            },
+            {
+              "date": 20261109,
+              "open": 38.0,
+              "high": 39.17,
+              "low": 37.07,
+              "close": 37.83,
+              "amount": 1304750627
+            },
+            {
+              "date": 20261110,
+              "open": 38.35,
+              "high": 40.58,
+              "low": 38.1,
+              "close": 40.12,
+              "amount": 1311924173
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 40.12,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        },
+        "605188.SH": {
+          "name": "国光连锁",
+          "path": "E:/new_tdx64/vipdoc/sh/lday/sh605188.day",
+          "mtime": "2026-11-10T22:06:04.886976",
+          "bars_total": 692,
+          "last5": [
+            {
+              "date": 20261106,
+              "open": 12.94,
+              "high": 13.6,
+              "low": 11.85,
+              "close": 11.9,
+              "amount": 1303007619
+            },
+            {
+              "date": 20261107,
+              "open": 12.94,
+              "high": 13.6,
+              "low": 11.85,
+              "close": 11.9,
+              "amount": 1303007619
+            },
+            {
+              "date": 20261108,
+              "open": 12.94,
+              "high": 13.6,
+              "low": 11.85,
+              "close": 11.9,
+              "amount": 1303007619
+            },
+            {
+              "date": 20261109,
+              "open": 12.08,
+              "high": 12.27,
+              "low": 11.8,
+              "close": 12.03,
+              "amount": 1298939482
+            },
+            {
+              "date": 20261110,
+              "open": 11.98,
+              "high": 12.2,
+              "low": 11.82,
+              "close": 12.19,
+              "amount": 1294422119
+            }
+          ],
+          "last_date": 20261110,
+          "last_date_ok_20261110": true,
+          "cross_check_em_close_20261110": 12.19,
+          "cross_check_em_close_diff": 0.0,
+          "cross_check_tx_prevclose_diff": 0.0
+        }
+      }
+    },
+    "tdx_seats": {
+      "speclhbyzyc": {
+        "path": "E:/new_tdx64/T0002/hq_cache/speclhbyzyc.txt",
+        "mtime": "2026-11-11T09:16:57.992505",
+        "size": 598,
+        "format": "flag|code|type|start_date|end_date (GBK, CRLF)",
+        "entries": [
+          {
+            "flag": "1",
+            "code": "513100",
+            "type": "1",
+            "start": "20261029",
+            "end": "20261111"
+          },
+          {
+            "flag": "1",
+            "code": "513110",
+            "type": "1",
+            "start": "20261029",
+            "end": "20261111"
+          },
+          {
+            "flag": "1",
+            "code": "513390",
+            "type": "1",
+            "start": "20261029",
+            "end": "20261111"
+          },
+          {
+            "flag": "1",
+            "code": "513500",
+            "type": "1",
+            "start": "20261029",
+            "end": "20261111"
+          },
+          {
+            "flag": "1",
+            "code": "600825",
+            "type": "1",
+            "start": "20261030",
+            "end": "20261112"
+          },
+          {
+            "flag": "1",
+            "code": "603843",
+            "type": "1",
+            "start": "20261030",
+            "end": "20261112"
+          },
+          {
+            "flag": "1",
+            "code": "605255",
+            "type": "1",
+            "start": "20261030",
+            "end": "20261112"
+          },
+          {
+            "flag": "0",
+            "code": "002724",
+            "type": "1",
+            "start": "20261102",
+            "end": "20261113"
+          },
+          {
+            "flag": "1",
+            "code": "603278",
+            "type": "1",
+            "start": "20261102",
+            "end": "20261113"
+          },
+          {
+            "flag": "1",
+            "code": "513850",
+            "type": "1",
+            "start": "20261103",
+            "end": "20261116"
+          },
+          {
+            "flag": "0",
+            "code": "159509",
+            "type": "1",
+            "start": "20261104",
+            "end": "20261117"
+          },
+          {
+            "flag": "1",
+            "code": "513310",
+            "type": "1",
+            "start": "20261105",
+            "end": "20261118"
+          },
+          {
+            "flag": "1",
+            "code": "688613",
+            "type": "1",
+            "start": "20261105",
+            "end": "20261118"
+          },
+          {
+            "flag": "1",
+            "code": "501225",
+            "type": "1",
+            "start": "20261109",
+            "end": "20261120"
+          },
+          {
+            "flag": "1",
+            "code": "513300",
+            "type": "1",
+            "start": "20261109",
+            "end": "20261120"
+          },
+          {
+            "flag": "2",
+            "code": "920023",
+            "type": "1",
+            "start": "20261109",
+            "end": "20261120"
+          },
+          {
+            "flag": "2",
+            "code": "920090",
+            "type": "1",
+            "start": "20261109",
+            "end": "20261120"
+          },
+          {
+            "flag": "2",
+            "code": "920575",
+            "type": "1",
+            "start": "20261109",
+            "end": "20261120"
+          },
+          {
+            "flag": "1",
+            "code": "513870",
+            "type": "1",
+            "start": "20261110",
+            "end": "20261123"
+          },
+          {
+            "flag": "0",
+            "code": "159501",
+            "type": "1",
+            "start": "20261111",
+            "end": "20261124"
+          }
+        ],
+        "matched_to_15_codes": []
+      },
+      "brkseat": {
+        "path": "E:/new_tdx64/T0002/hq_cache/brkseat.dat",
+        "mtime": "2026-11-10T17:20:50",
+        "size": 32790,
+        "format": "seat_id|seat_type|branch_id (GBK, CRLF)",
+        "total_seats": 2782,
+        "sample": [
+          {
+            "seat_id": "21",
+            "seat_type": "2",
+            "branch_id": "0014"
+          },
+          {
+            "seat_id": "21",
+            "seat_type": "2",
+            "branch_id": "0015"
+          },
+          {
+            "seat_id": "21",
+            "seat_type": "2",
+            "branch_id": "0016"
+          },
+          {
+            "seat_id": "21",
+            "seat_type": "2",
+            "branch_id": "0017"
+          },
+          {
+            "seat_id": "21",
+            "seat_type": "2",
+            "branch_id": "0018"
+          },
+          {
+            "seat_id": "21",
+            "seat_type": "2",
+            "branch_id": "0019"
+          },
+          {
+            "seat_id": "176",
+            "seat_type": "1",
+            "branch_id": "0025"
+          },
+          {
+            "seat_id": "176",
+            "seat_type": "1",
+            "branch_id": "0026"
+          },
+          {
+            "seat_id": "176",
+            "seat_type": "1",
+            "branch_id": "0027"
+          },
+          {
+            "seat_id": "176",
+            "seat_type": "1",
+            "branch_id": "0028"
+          }
+        ],
+        "related_to_15_codes": "gap: brkseat.dat is only seat_id->branch_id; per-code LHB detail is not cached on disk (needs online 龙虎榜 pull); branch_id->营业部名称 table not present locally"
+      }
+    }
+  },
+  "code_name_binding": {
+    "300413.SZ": {
+      "ths_stocknow_name": "芒果超媒",
+      "tencent_name": "芒果超媒",
+      "eastmoney_name": "芒果超媒",
+      "consistent": true
+    },
+    "000559.SZ": {
+      "ths_stocknow_name": "万向钱潮",
+      "tencent_name": "万向钱潮",
+      "eastmoney_name": "万向钱潮",
+      "consistent": true
+    },
+    "300493.SZ": {
+      "ths_stocknow_name": "润欣科技",
+      "tencent_name": "润欣科技",
+      "eastmoney_name": "润欣科技",
+      "consistent": true
+    },
+    "600345.SH": {
+      "ths_stocknow_name": "长江通信",
+      "tencent_name": "长江通信",
+      "eastmoney_name": "长江通信",
+      "consistent": true
+    },
+    "301583.SZ": {
+      "ths_stocknow_name": "托伦斯",
+      "tencent_name": "托伦斯",
+      "eastmoney_name": "托伦斯",
+      "consistent": true
+    },
+    "600259.SH": {
+      "ths_stocknow_name": "中稀有色",
+      "tencent_name": "中稀有色",
+      "eastmoney_name": "中稀有色",
+      "consistent": true
+    },
+    "688385.SH": {
+      "ths_stocknow_name": "复旦微电",
+      "tencent_name": "复旦微电",
+      "eastmoney_name": "复旦微电",
+      "consistent": true
+    },
+    "688035.SH": {
+      "ths_stocknow_name": "德邦科技",
+      "tencent_name": "德邦科技",
+      "eastmoney_name": "德邦科技",
+      "consistent": true
+    },
+    "002141.SZ": {
+      "ths_stocknow_name": "贤丰控股",
+      "tencent_name": "贤丰控股",
+      "eastmoney_name": "贤丰控股",
+      "consistent": true
+    },
+    "300739.SZ": {
+      "ths_stocknow_name": "明阳电路",
+      "tencent_name": "明阳电路",
+      "eastmoney_name": "明阳电路",
+      "consistent": true
+    },
+    "603728.SH": {
+      "ths_stocknow_name": "鸣志电器",
+      "tencent_name": "鸣志电器",
+      "eastmoney_name": "鸣志电器",
+      "consistent": true
+    },
+    "603667.SH": {
+      "ths_stocknow_name": "五洲新春",
+      "tencent_name": "五洲新春",
+      "eastmoney_name": "五洲新春",
+      "consistent": true
+    },
+    "603893.SH": {
+      "ths_stocknow_name": "瑞芯微",
+      "tencent_name": "瑞芯微",
+      "eastmoney_name": "瑞芯微",
+      "consistent": true
+    },
+    "603341.SH": {
+      "ths_stocknow_name": "龙旗科技",
+      "tencent_name": "龙旗科技",
+      "eastmoney_name": "龙旗科技",
+      "consistent": true
+    },
+    "605188.SH": {
+      "ths_stocknow_name": "国光连锁",
+      "tencent_name": "国光连锁",
+      "eastmoney_name": "国光连锁",
+      "consistent": true
+    }
+  },
+  "web_cross_check": {
+    "note": "web quotes used ONLY to cross-check names and 20261110 closes; not a PC-local source",
+    "fetched_at": "2026-11-11T14:49:15.858225",
+    "stocks": {
+      "300413.SZ": {
+        "tx_name": "芒果超媒",
+        "tx_price": "36.52",
+        "tx_prev_close": "35.55",
+        "tx_open": "35.52",
+        "tx_vol_hand": "1323830",
+        "tx_amount_cny": "4793228964",
+        "tx_bid1_5": [
+          {
+            "px": "36.50",
+            "vol": "1251"
+          },
+          {
+            "px": "36.49",
+            "vol": "9"
+          },
+          {
+            "px": "36.48",
+            "vol": "147"
+          },
+          {
+            "px": "36.47",
+            "vol": "507"
+          },
+          {
+            "px": "36.46",
+            "vol": "16"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "36.52",
+            "vol": "127"
+          },
+          {
+            "px": "36.53",
+            "vol": "79"
+          },
+          {
+            "px": "36.54",
+            "vol": "114"
+          },
+          {
+            "px": "36.55",
+            "vol": "50"
+          },
+          {
+            "px": "36.56",
+            "vol": "120"
+          }
+        ],
+        "tx_quote_time": "20261111144718",
+        "tx_pct": "2.73",
+        "em_name": "芒果超媒",
+        "em_last_x100": 3651,
+        "em_prev_x100": 3555,
+        "em_pct_x100": 270,
+        "em_vol": 1326199,
+        "em_amount": 4801877692.38
+      },
+      "000559.SZ": {
+        "tx_name": "万向钱潮",
+        "tx_price": "13.42",
+        "tx_prev_close": "13.20",
+        "tx_open": "12.86",
+        "tx_vol_hand": "1179105",
+        "tx_amount_cny": "1571448925",
+        "tx_bid1_5": [
+          {
+            "px": "13.41",
+            "vol": "6173"
+          },
+          {
+            "px": "13.40",
+            "vol": "4245"
+          },
+          {
+            "px": "13.39",
+            "vol": "851"
+          },
+          {
+            "px": "13.38",
+            "vol": "1570"
+          },
+          {
+            "px": "13.37",
+            "vol": "378"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "13.42",
+            "vol": "1401"
+          },
+          {
+            "px": "13.43",
+            "vol": "1673"
+          },
+          {
+            "px": "13.44",
+            "vol": "2285"
+          },
+          {
+            "px": "13.45",
+            "vol": "5005"
+          },
+          {
+            "px": "13.46",
+            "vol": "1573"
+          }
+        ],
+        "tx_quote_time": "20261111144721",
+        "tx_pct": "1.67",
+        "em_name": "万向钱潮",
+        "em_last_x100": 1341,
+        "em_prev_x100": 1320,
+        "em_pct_x100": 159,
+        "em_vol": 1179779,
+        "em_amount": 1572353080.75
+      },
+      "300493.SZ": {
+        "tx_name": "润欣科技",
+        "tx_price": "14.24",
+        "tx_prev_close": "14.32",
+        "tx_open": "14.16",
+        "tx_vol_hand": "467695",
+        "tx_amount_cny": "661018843",
+        "tx_bid1_5": [
+          {
+            "px": "14.24",
+            "vol": "186"
+          },
+          {
+            "px": "14.23",
+            "vol": "481"
+          },
+          {
+            "px": "14.22",
+            "vol": "247"
+          },
+          {
+            "px": "14.21",
+            "vol": "528"
+          },
+          {
+            "px": "14.20",
+            "vol": "1075"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "14.25",
+            "vol": "411"
+          },
+          {
+            "px": "14.26",
+            "vol": "1332"
+          },
+          {
+            "px": "14.27",
+            "vol": "385"
+          },
+          {
+            "px": "14.28",
+            "vol": "307"
+          },
+          {
+            "px": "14.29",
+            "vol": "127"
+          }
+        ],
+        "tx_quote_time": "20261111144718",
+        "tx_pct": "-0.56",
+        "em_name": "润欣科技",
+        "em_last_x100": 1425,
+        "em_prev_x100": 1432,
+        "em_pct_x100": -49,
+        "em_vol": 468249,
+        "em_amount": 661808115.03
+      },
+      "600345.SH": {
+        "tx_name": "长江通信",
+        "tx_price": "42.11",
+        "tx_prev_close": "40.59",
+        "tx_open": "40.46",
+        "tx_vol_hand": "144071",
+        "tx_amount_cny": "594279306",
+        "tx_bid1_5": [
+          {
+            "px": "42.11",
+            "vol": "47"
+          },
+          {
+            "px": "42.10",
+            "vol": "4"
+          },
+          {
+            "px": "42.09",
+            "vol": "54"
+          },
+          {
+            "px": "42.08",
+            "vol": "29"
+          },
+          {
+            "px": "42.06",
+            "vol": "13"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "42.12",
+            "vol": "8"
+          },
+          {
+            "px": "42.13",
+            "vol": "38"
+          },
+          {
+            "px": "42.14",
+            "vol": "33"
+          },
+          {
+            "px": "42.15",
+            "vol": "76"
+          },
+          {
+            "px": "42.16",
+            "vol": "8"
+          }
+        ],
+        "tx_quote_time": "20261111144718",
+        "tx_pct": "3.74",
+        "em_name": "长江通信",
+        "em_last_x100": 4210,
+        "em_prev_x100": 4059,
+        "em_pct_x100": 372,
+        "em_vol": 144176,
+        "em_amount": 594721508.0
+      },
+      "301583.SZ": {
+        "tx_name": "托伦斯",
+        "tx_price": "105.47",
+        "tx_prev_close": "102.76",
+        "tx_open": "101.11",
+        "tx_vol_hand": "87982",
+        "tx_amount_cny": "909902230",
+        "tx_bid1_5": [
+          {
+            "px": "105.46",
+            "vol": "245"
+          },
+          {
+            "px": "105.45",
+            "vol": "101"
+          },
+          {
+            "px": "105.44",
+            "vol": "1"
+          },
+          {
+            "px": "105.42",
+            "vol": "3"
+          },
+          {
+            "px": "105.40",
+            "vol": "7"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "105.47",
+            "vol": "1"
+          },
+          {
+            "px": "105.49",
+            "vol": "2"
+          },
+          {
+            "px": "105.50",
+            "vol": "16"
+          },
+          {
+            "px": "105.57",
+            "vol": "2"
+          },
+          {
+            "px": "105.58",
+            "vol": "4"
+          }
+        ],
+        "tx_quote_time": "20261111144718",
+        "tx_pct": "2.64",
+        "em_name": "托伦斯",
+        "em_last_x100": 10550,
+        "em_prev_x100": 10276,
+        "em_pct_x100": 267,
+        "em_vol": 88176,
+        "em_amount": 911948338.77
+      },
+      "600259.SH": {
+        "tx_name": "中稀有色",
+        "tx_price": "69.90",
+        "tx_prev_close": "68.08",
+        "tx_open": "67.39",
+        "tx_vol_hand": "118766",
+        "tx_amount_cny": "824228253",
+        "tx_bid1_5": [
+          {
+            "px": "69.88",
+            "vol": "39"
+          },
+          {
+            "px": "69.87",
+            "vol": "76"
+          },
+          {
+            "px": "69.86",
+            "vol": "10"
+          },
+          {
+            "px": "69.85",
+            "vol": "32"
+          },
+          {
+            "px": "69.84",
+            "vol": "29"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "69.90",
+            "vol": "45"
+          },
+          {
+            "px": "69.94",
+            "vol": "4"
+          },
+          {
+            "px": "69.95",
+            "vol": "2"
+          },
+          {
+            "px": "69.96",
+            "vol": "6"
+          },
+          {
+            "px": "69.97",
+            "vol": "2"
+          }
+        ],
+        "tx_quote_time": "20261111144719",
+        "tx_pct": "2.67",
+        "em_name": "中稀有色",
+        "em_last_x100": 6989,
+        "em_prev_x100": 6808,
+        "em_pct_x100": 266,
+        "em_vol": 118932,
+        "em_amount": 825388578.0
+      },
+      "688385.SH": {
+        "tx_name": "复旦微电",
+        "tx_price": "52.83",
+        "tx_prev_close": "51.31",
+        "tx_open": "51.31",
+        "tx_vol_hand": "16576984",
+        "tx_amount_cny": "870585617",
+        "tx_bid1_5": [
+          {
+            "px": "52.84",
+            "vol": "2"
+          },
+          {
+            "px": "52.83",
+            "vol": "15"
+          },
+          {
+            "px": "52.80",
+            "vol": "4"
+          },
+          {
+            "px": "52.79",
+            "vol": "6"
+          },
+          {
+            "px": "52.78",
+            "vol": "9"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "52.87",
+            "vol": "3"
+          },
+          {
+            "px": "52.88",
+            "vol": "17"
+          },
+          {
+            "px": "52.89",
+            "vol": "6"
+          },
+          {
+            "px": "52.90",
+            "vol": "15"
+          },
+          {
+            "px": "52.91",
+            "vol": "13"
+          }
+        ],
+        "tx_quote_time": "20261111144720",
+        "tx_pct": "2.96",
+        "em_name": "复旦微电",
+        "em_last_x100": 5285,
+        "em_prev_x100": 5131,
+        "em_pct_x100": 300,
+        "em_vol": 165874,
+        "em_amount": 871137257.0
+      },
+      "688035.SH": {
+        "tx_name": "德邦科技",
+        "tx_price": "63.15",
+        "tx_prev_close": "60.08",
+        "tx_open": "59.50",
+        "tx_vol_hand": "4644579",
+        "tx_amount_cny": "287185558",
+        "tx_bid1_5": [
+          {
+            "px": "63.16",
+            "vol": "4"
+          },
+          {
+            "px": "63.14",
+            "vol": "10"
+          },
+          {
+            "px": "63.12",
+            "vol": "2"
+          },
+          {
+            "px": "63.11",
+            "vol": "18"
+          },
+          {
+            "px": "63.10",
+            "vol": "3"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "63.21",
+            "vol": "8"
+          },
+          {
+            "px": "63.29",
+            "vol": "11"
+          },
+          {
+            "px": "63.33",
+            "vol": "11"
+          },
+          {
+            "px": "63.36",
+            "vol": "20"
+          },
+          {
+            "px": "63.40",
+            "vol": "52"
+          }
+        ],
+        "tx_quote_time": "20261111144718",
+        "tx_pct": "5.11",
+        "em_name": "德邦科技",
+        "em_last_x100": 6320,
+        "em_prev_x100": 6008,
+        "em_pct_x100": 519,
+        "em_vol": 46530,
+        "em_amount": 287715322.0
+      },
+      "002141.SZ": {
+        "tx_name": "贤丰控股",
+        "tx_price": "5.14",
+        "tx_prev_close": "5.06",
+        "tx_open": "5.01",
+        "tx_vol_hand": "900216",
+        "tx_amount_cny": "456827970",
+        "tx_bid1_5": [
+          {
+            "px": "5.13",
+            "vol": "6474"
+          },
+          {
+            "px": "5.12",
+            "vol": "4484"
+          },
+          {
+            "px": "5.11",
+            "vol": "2822"
+          },
+          {
+            "px": "5.10",
+            "vol": "3828"
+          },
+          {
+            "px": "5.09",
+            "vol": "4179"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "5.14",
+            "vol": "6761"
+          },
+          {
+            "px": "5.15",
+            "vol": "10580"
+          },
+          {
+            "px": "5.16",
+            "vol": "3694"
+          },
+          {
+            "px": "5.17",
+            "vol": "2760"
+          },
+          {
+            "px": "5.18",
+            "vol": "5296"
+          }
+        ],
+        "tx_quote_time": "20261111144721",
+        "tx_pct": "1.58",
+        "em_name": "贤丰控股",
+        "em_last_x100": 513,
+        "em_prev_x100": 506,
+        "em_pct_x100": 138,
+        "em_vol": 900688,
+        "em_amount": 457070269.94
+      },
+      "300739.SZ": {
+        "tx_name": "明阳电路",
+        "tx_price": "23.66",
+        "tx_prev_close": "22.92",
+        "tx_open": "22.80",
+        "tx_vol_hand": "242887",
+        "tx_amount_cny": "569688812",
+        "tx_bid1_5": [
+          {
+            "px": "23.67",
+            "vol": "19"
+          },
+          {
+            "px": "23.66",
+            "vol": "45"
+          },
+          {
+            "px": "23.65",
+            "vol": "116"
+          },
+          {
+            "px": "23.64",
+            "vol": "27"
+          },
+          {
+            "px": "23.63",
+            "vol": "93"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "23.68",
+            "vol": "34"
+          },
+          {
+            "px": "23.69",
+            "vol": "51"
+          },
+          {
+            "px": "23.70",
+            "vol": "278"
+          },
+          {
+            "px": "23.71",
+            "vol": "425"
+          },
+          {
+            "px": "23.72",
+            "vol": "94"
+          }
+        ],
+        "tx_quote_time": "20261111144718",
+        "tx_pct": "3.23",
+        "em_name": "明阳电路",
+        "em_last_x100": 2368,
+        "em_prev_x100": 2292,
+        "em_pct_x100": 332,
+        "em_vol": 243117,
+        "em_amount": 570233460.17
+      },
+      "603728.SH": {
+        "tx_name": "鸣志电器",
+        "tx_price": "60.34",
+        "tx_prev_close": "60.35",
+        "tx_open": "60.00",
+        "tx_vol_hand": "82224",
+        "tx_amount_cny": "498312120",
+        "tx_bid1_5": [
+          {
+            "px": "60.35",
+            "vol": "2"
+          },
+          {
+            "px": "60.34",
+            "vol": "18"
+          },
+          {
+            "px": "60.33",
+            "vol": "13"
+          },
+          {
+            "px": "60.32",
+            "vol": "11"
+          },
+          {
+            "px": "60.31",
+            "vol": "22"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "60.36",
+            "vol": "3"
+          },
+          {
+            "px": "60.37",
+            "vol": "10"
+          },
+          {
+            "px": "60.38",
+            "vol": "21"
+          },
+          {
+            "px": "60.39",
+            "vol": "6"
+          },
+          {
+            "px": "60.40",
+            "vol": "53"
+          }
+        ],
+        "tx_quote_time": "20261111144719",
+        "tx_pct": "-0.02",
+        "em_name": "鸣志电器",
+        "em_last_x100": 6037,
+        "em_prev_x100": 6035,
+        "em_pct_x100": 3,
+        "em_vol": 82321,
+        "em_amount": 498897640.0
+      },
+      "603667.SH": {
+        "tx_name": "五洲新春",
+        "tx_price": "55.57",
+        "tx_prev_close": "56.17",
+        "tx_open": "55.45",
+        "tx_vol_hand": "257183",
+        "tx_amount_cny": "1435681526",
+        "tx_bid1_5": [
+          {
+            "px": "55.56",
+            "vol": "223"
+          },
+          {
+            "px": "55.55",
+            "vol": "919"
+          },
+          {
+            "px": "55.54",
+            "vol": "42"
+          },
+          {
+            "px": "55.53",
+            "vol": "153"
+          },
+          {
+            "px": "55.52",
+            "vol": "45"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "55.57",
+            "vol": "297"
+          },
+          {
+            "px": "55.58",
+            "vol": "204"
+          },
+          {
+            "px": "55.59",
+            "vol": "7"
+          },
+          {
+            "px": "55.60",
+            "vol": "221"
+          },
+          {
+            "px": "55.61",
+            "vol": "30"
+          }
+        ],
+        "tx_quote_time": "20261111144719",
+        "tx_pct": "-1.07",
+        "em_name": "五洲新春",
+        "em_last_x100": 5556,
+        "em_prev_x100": 5617,
+        "em_pct_x100": -109,
+        "em_vol": 257535,
+        "em_amount": 1437637329.0
+      },
+      "603893.SH": {
+        "tx_name": "瑞芯微",
+        "tx_price": "233.02",
+        "tx_prev_close": "233.20",
+        "tx_open": "233.19",
+        "tx_vol_hand": "178133",
+        "tx_amount_cny": "4159387777",
+        "tx_bid1_5": [
+          {
+            "px": "233.04",
+            "vol": "6"
+          },
+          {
+            "px": "233.03",
+            "vol": "19"
+          },
+          {
+            "px": "233.02",
+            "vol": "1"
+          },
+          {
+            "px": "233.01",
+            "vol": "40"
+          },
+          {
+            "px": "233.00",
+            "vol": "25"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "233.07",
+            "vol": "1"
+          },
+          {
+            "px": "233.08",
+            "vol": "1"
+          },
+          {
+            "px": "233.09",
+            "vol": "8"
+          },
+          {
+            "px": "233.10",
+            "vol": "5"
+          },
+          {
+            "px": "233.17",
+            "vol": "1"
+          }
+        ],
+        "tx_quote_time": "20261111144720",
+        "tx_pct": "-0.08",
+        "em_name": "瑞芯微",
+        "em_last_x100": 23312,
+        "em_prev_x100": 23320,
+        "em_pct_x100": -3,
+        "em_vol": 178246,
+        "em_amount": 4162021573.0
+      },
+      "603341.SH": {
+        "tx_name": "龙旗科技",
+        "tx_price": "39.32",
+        "tx_prev_close": "40.12",
+        "tx_open": "40.00",
+        "tx_vol_hand": "133398",
+        "tx_amount_cny": "526840472",
+        "tx_bid1_5": [
+          {
+            "px": "39.31",
+            "vol": "36"
+          },
+          {
+            "px": "39.30",
+            "vol": "111"
+          },
+          {
+            "px": "39.29",
+            "vol": "3"
+          },
+          {
+            "px": "39.28",
+            "vol": "42"
+          },
+          {
+            "px": "39.27",
+            "vol": "17"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "39.32",
+            "vol": "98"
+          },
+          {
+            "px": "39.33",
+            "vol": "59"
+          },
+          {
+            "px": "39.34",
+            "vol": "3"
+          },
+          {
+            "px": "39.35",
+            "vol": "75"
+          },
+          {
+            "px": "39.36",
+            "vol": "38"
+          }
+        ],
+        "tx_quote_time": "20261111144719",
+        "tx_pct": "-1.99",
+        "em_name": "龙旗科技",
+        "em_last_x100": 3935,
+        "em_prev_x100": 4012,
+        "em_pct_x100": -192,
+        "em_vol": 133644,
+        "em_amount": 527807971.0
+      },
+      "605188.SH": {
+        "tx_name": "国光连锁",
+        "tx_price": "12.03",
+        "tx_prev_close": "12.19",
+        "tx_open": "12.20",
+        "tx_vol_hand": "126388",
+        "tx_amount_cny": "153415572",
+        "tx_bid1_5": [
+          {
+            "px": "12.03",
+            "vol": "41"
+          },
+          {
+            "px": "12.02",
+            "vol": "784"
+          },
+          {
+            "px": "12.01",
+            "vol": "962"
+          },
+          {
+            "px": "12.00",
+            "vol": "1146"
+          },
+          {
+            "px": "11.99",
+            "vol": "901"
+          }
+        ],
+        "tx_ask1_5": [
+          {
+            "px": "12.04",
+            "vol": "208"
+          },
+          {
+            "px": "12.05",
+            "vol": "343"
+          },
+          {
+            "px": "12.06",
+            "vol": "423"
+          },
+          {
+            "px": "12.07",
+            "vol": "140"
+          },
+          {
+            "px": "12.08",
+            "vol": "71"
+          }
+        ],
+        "tx_quote_time": "20261111144718",
+        "tx_pct": "-1.31",
+        "em_name": "国光连锁",
+        "em_last_x100": 1203,
+        "em_prev_x100": 1219,
+        "em_pct_x100": -131,
+        "em_vol": 126617,
+        "em_amount": 153691158.0
+      }
+    }
+  },
+  "gaps": [
+    {
+      "item": "ths_stocknow quotes (price/pct/vol/amt/十档) for the 15 codes",
+      "reason": "stocknow.dat on disk is a symbol table (code+GBK name) plus one 504B data slot per record; only the currently displayed stock is populated (sznse: 002171, shase: 601168 at read time; stb: none). All 15 target records have data area = all 0xFF. L2 十档/百档 tags exist in the dict but are 0xFF on disk (L2 lives in HxDataService memory / IPC 8701).",
+      "recovery": "read the active slot when a target is displayed, or read HxDataService IPC 127.0.0.1:8701 / shared memory; web fallback (Tencent/EM) used for cross-check only"
+    },
+    {
+      "item": "ths_stocknow quote_time on disk",
+      "reason": "no explicit quote-time field populated in the 504B slot (tags 0x2d70/0x3070 unidentified); file mtime is the read/write time and is kept separate",
+      "recovery": "use file mtime + web quote time"
+    },
+    {
+      "item": "speclhbyzyc 游资预测 entries matching the 15 codes",
+      "reason": "file has 20 entries (513100, 513110, 513390, 513500, 600825, 603843, 605255, 002724, 603278, 513850, 159509, 513310, 688613, 501225, 513300, 920023, 920090, 920575, 513870, 159501); none of the 15 target codes present",
+      "recovery": "empty result kept empty (not zero-filled); pull updated 游资预测 online"
+    },
+    {
+      "item": "brkseat seat->营业部名称 and per-code seat linkage",
+      "reason": "brkseat.dat maps seat_id->branch_id only; branch name table not cached locally; 龙虎榜 per-code detail not on disk",
+      "recovery": "map branch_id via 东财/交易所席位名录 online; pull LHB detail online"
+    },
+    {
+      "item": "stb (三板) coverage of the 15 codes",
+      "reason": "all 15 codes are sznse(6)/shase(9); stb/stocknow.dat has 0 populated data slots and none of the 15 codes",
+      "recovery": "n/a"
+    }
+  ]
+}
