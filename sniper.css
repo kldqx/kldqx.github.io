@@ -1259,3 +1259,14 @@ body{background:var(--bg)}
 .manual-controls button{border-radius:2px}.manual-controls .entry-button:disabled,.manual-controls .exit-button:disabled{background:#252c34}.alarm-sound-btn{border-radius:2px}.alarm-sound-btn.enabled{background:#4a2930;color:#ffb4b4;box-shadow:none}
 .feed-notice{border-radius:2px;background:#403321;color:#ffda8c}.empty-state{border-radius:2px}footer,footer>span:first-child{color:#adb9c8}
 @media(max-width:720px){.header-actions{width:100%;flex-wrap:wrap}.header-actions .mode-switch{order:3;flex:1 0 100%;justify-content:space-between}.header-actions .mode-button{font-size:11px;padding:7px 6px}.header-actions .icon-button{margin-left:auto}.section-heading{flex-wrap:wrap;gap:8px}.section-heading>span{min-width:0;max-width:100%;flex-wrap:wrap}.phase-track{overflow-x:auto}.kline-mini-col{width:95px}.kline-energy-widget{gap:6px}}
+
+/* T-1/T+1 分页补充样式 (2026-11-11) */
+.sector-watch{margin:26px 0;padding:18px 20px;border:1px solid #2b3c5280;border-radius:14px;background:#101c2b66}
+.sector-watch h2{font-size:15px;margin:0 0 12px;color:var(--cyan,#65d6de)}
+.sector-table{width:100%;border-collapse:collapse;font-size:12px}
+.sector-table th,.sector-table td{padding:6px 10px;text-align:left;border-bottom:1px solid #2b3c5240;white-space:nowrap}
+.sector-table th{color:var(--subtle,#8b9bb0);font-weight:600}
+.gap-note,.boundary-note{font-size:11px;color:var(--subtle,#8b9bb0);margin:6px 0 0}
+.boundary-note{letter-spacing:.5px}
+.chart-empty{font-size:11px;color:var(--subtle,#8b9bb0)}
+.stock-chart{width:100%;height:64px;display:block}

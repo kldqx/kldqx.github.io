@@ -1,1 +1,73 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=./exit-watch.html"><title>往日跟踪</title><p><a href="./exit-watch.html">打开往日跟踪页面</a></p></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>T+1 出场页 · A股资金监控台</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./sniper.css?v=20261111_v15">
+  <script src="./lifecycle-model.js?v=20261111_v15" defer></script>
+  <script>window.PHASE_FILTER="T+1_EXIT_DONE";</script>
+  <script src="./sniper.js?v=20261111_v15" defer></script>
+</head>
+<body data-signal-boundary="not_a_trading_signal">
+  <div class="page-shell">
+    <header class="page-header">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">⌁</span><span>FUND FLOW<small>A股资金流向观察</small></span></div>
+      <div class="header-actions">
+        <button id="alarm-sound-toggle" class="alarm-sound-btn enabled" type="button" title="点击切换破位警报音">🚨 破位声警: 开启</button>
+        <div class="mode-switch" role="group" aria-label="查看模式">
+          <button id="live-mode" class="mode-button selected" type="button" aria-pressed="true">当前监控</button>
+          <a class="mode-button" href="./exit-watch.html">出场监控(T+1)</a>
+          <a class="mode-button" href="./sector-watch.html">板块观察(T-3)</a>
+          </div>
+        <button id="refresh-button" class="icon-button" type="button" aria-label="刷新当前监控" title="刷新当前监控"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M19 11a7 7 0 0 0-12-4L4 10m16 4-3 3A7 7 0 0 1 5 13"/></svg></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="overview" aria-labelledby="page-title">
+        <div class="overview-heading">
+          <div><h1 id="page-title">T+1 出场台<span id="mode-label" class="mode-label">当前监控</span></h1><p id="session-description" class="session-description">加载中：展示上一战役 T+1 出场战绩（冲高兑现 / 止损 / 尾盘清仓）。</p></div>
+          </div>
+        <div class="session-strip">
+          <div class="session-stat"><span>观察标的</span><strong id="stock-count">—</strong><small>只</small></div>
+          <div class="session-stat"><span>持仓中</span><strong id="holding-count">—</strong><small>只</small></div>
+          <div class="session-stat"><span>持仓浮盈亏</span><strong id="pnl-summary">—</strong></div>
+          <div class="session-stat gold-stat"><span>竞价达标</span><strong id="auction-confirmed-count" class="gold-text">—</strong><small>只</small></div>
+          <div class="session-stat surge-stat"><span>走强确立</span><strong id="surge-confirmed-count" class="surge-text">—</strong><small>只</small></div>
+          <div class="session-stat"><span>条件触发</span><strong id="event-count">—</strong><small>条</small></div>
+          <div class="session-stat"><button id="export-holdings-btn" class="export-btn" type="button" title="导出持仓报告 (JSON)">📥 导出持仓</button></div>
+          <div class="session-stat time-stat"><span>最新行情时点</span><strong id="quote-time">—</strong></div>
+          <div class="session-source"><span id="source-label">行情来源待确认</span><span id="seed-date"></span></div>
+        </div>
+        <ol class="phase-track" aria-label="观察时段">
+          <li data-step="0"><span class="step-dot"></span><span>竞价申报<small>09:15</small></span></li>
+          <li data-step="1"><span class="step-dot"></span><span>竞价锁定<small>09:20</small></span></li>
+          <li data-step="2"><span class="step-dot"></span><span>竞价结果<small>09:25</small></span></li>
+          <li data-step="3"><span class="step-dot"></span><span>开盘观察<small>09:30—09:33</small></span></li>
+          <li data-step="4"><span class="step-dot"></span><span>上午盘中<small>至 11:30</small></span></li>
+          <li data-step="5"><span class="step-dot"></span><span>午休<small>11:30—13:00</small></span></li>
+          <li data-step="6"><span class="step-dot"></span><span>下午盘中<small>13:00—14:57</small></span></li>
+          <li data-step="7"><span class="step-dot"></span><span>收盘竞价<small>14:57—15:00</small></span></li>
+          <li data-step="8"><span class="step-dot"></span><span>盘后复核<small>15:00—15:30</small></span></li>
+          <li data-step="9"><span class="step-dot"></span><span>观察结束<small>15:30</small></span></li>
+        </ol>
+      </section>
+
+      <section class="watchlist" aria-labelledby="watchlist-title">
+        <div class="section-heading"><h2 id="watchlist-title">股票观察卡</h2><span style="display:flex;gap:10px;align-items:center"><span class="mode-switch" role="group" aria-label="战役时段页面"><a class="mode-button phase-tab" data-phase-filter="T-1_POSTMARKET" href="./sniper.html">狙击台(T)</a><a class="mode-button phase-tab" data-phase-filter="T-1_PM_WATCH" href="./t-minus1.html">T-1观察</a><a class="mode-button phase-tab" data-phase-filter="T+1_EXIT_DONE" href="./t-plus1.html">T+1出场</a></span><button id="toggle-all-details" class="toggle-all-btn" type="button" title="展开/折叠全部详情">展开全部</button><span id="list-caption">一股一卡 · 独立跟踪</span></span></div>
+        <p id="feed-notice" class="feed-notice" role="status" hidden></p>
+        <div id="stock-grid" class="stock-grid" aria-label="股票观察卡片"></div>
+        <div id="empty-state" class="empty-state"><span class="empty-orbit" aria-hidden="true">◎</span><h3>正在载入观察名单</h3><p>QA 交接到达后，行情与原始观察条件会显示在每只股票的卡片里。</p></div>
+      </section>
+    </main>
+    <footer><span>FUND FLOW</span><span id="footer-status">A股资金流向观察</span><span class="footer-hint">窗口缩放时，卡片自动排列</span><span class="kbd-hint"><kbd>R</kbd>刷新 <kbd>B</kbd>进场 <kbd>S</kbd>出场 <kbd>↑↓</kbd>切换 <kbd>Esc</kbd>取消</span></footer>
+  </div>
+<div style="display:none" hidden aria-hidden="true"><span id="connection-dot"></span><span id="connection-text"></span><button id="demo-mode"></button></div>
+</body>
+</html>
