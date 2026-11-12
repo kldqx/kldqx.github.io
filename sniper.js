@@ -6,6 +6,21 @@
   // T is today. Legacy filter names are URL aliases, never data-classification rules.
   // Future/past cohorts are derived from target trading dates using LifecycleModel.
   let phaseFilter = (window.PHASE_FILTER || new URLSearchParams(location.search).get("phase") || "T-1_POSTMARKET");
+  const LIFECYCLE_PHASE_RE = /^T[+-]/;
+  const hasLifecyclePhases = feed => Array.isArray(feed?.stocks) && feed.stocks.some(st => LIFECYCLE_PHASE_RE.test(st?.phase || ""));
+  // T-1 观察页展示全部 T-* 观察票(T-3/T-2/T-1_PM_WATCH), 不含今日(T)页的 T-1_POSTMARKET 锁定候选
+  function stockMatchesPhase(st, filter) {
+    const phase = st?.phase || "";
+    if (filter === "T-1_PM_WATCH") return /^T-/.test(phase) && phase !== "T-1_POSTMARKET";
+    return phase === filter;
+  }
+  function phaseFilteredStocks(feed, filter) {
+    const stocks = Array.isArray(feed?.stocks) ? feed.stocks : [];
+    if (filter === "all") return stocks;
+    // 运行时快照(本地 8765)只带时钟 phase、不含生命周期 phase 时分页过滤不适用, 退回全量避免空列表
+    if (LIFECYCLE_PHASE_RE.test(filter || "") && !hasLifecyclePhases(feed)) return stocks;
+    return stocks.filter(st => stockMatchesPhase(st, filter));
+  }
   let audioAlarmEnabled = true;
   const lastAlarmTimeByCode = new Map(); // code -> timestamp
 
@@ -259,9 +274,18 @@
     }
     async function live(expectedGeneration) {
       try {
-        const feed = await request("./sniper-feed.json", expectedGeneration);
+        let feed = await request("./sniper-feed.json", expectedGeneration);
         if (expectedGeneration !== generation) return;
         if (!validFeed(feed, "live")) throw Error("feed_invalid");
+        // 本地 8765 会把 /sniper-feed.json 拦截为运行时时钟快照(无生命周期 phase, 分页会滤空);
+        // 战役分页页优先读取静态盘后导出: 百分号编码路径绕过该拦截路由, 静态托管站点解码后仍是同一文件
+        if (LIFECYCLE_PHASE_RE.test(phaseFilter || "") && !hasLifecyclePhases(feed)) {
+          try {
+            const staticFeed = await request("./%73niper-feed.json", expectedGeneration);
+            if (expectedGeneration !== generation) return;
+            if (validFeed(staticFeed, "live") && hasLifecyclePhases(staticFeed)) feed = staticFeed;
+          } catch (aliasError) { /* 静态别名不可用时保留运行时快照 */ }
+        }
         if (lastQuotes?.run_id === feed.run_id
           && timeValue(feed.generated_at) !== null && timeValue(lastQuotes.generated_at) !== null
           && timeValue(feed.generated_at) < timeValue(lastQuotes.generated_at)) throw Error("feed_older");
@@ -1196,7 +1220,7 @@
     }
     if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;
     }
-    const stocks = mode === 'demo' || phaseFilter === 'all' ? feed.stocks : feed.stocks.filter(st => phaseFilter === 'T-1_PM_WATCH' ? /^T-/.test(st.phase || '') : st.phase === phaseFilter);
+    const stocks = mode === 'demo' ? feed.stocks : phaseFilteredStocks(feed, phaseFilter);
     // 权威保护：将最新的直通行情合并进 feed.stocks，绝对禁止旧文件倒退覆盖
     for (const stock of stocks) {
       const cached = realtimeQuoteCache.get(stock.code);
@@ -1220,7 +1244,7 @@
     highlightPhaseTabs();
     for (const tab of document.querySelectorAll(".phase-tab")) {
       const f = tab.dataset.phaseFilter;
-      const n = f === 'T-1_PM_WATCH' ? feed.stocks.filter(st => /^T-/.test(st.phase || '')).length : feed.stocks.filter(st => st.phase === f).length;
+      const n = phaseFilteredStocks(feed, f).length;
       const label = f === "T-1_POSTMARKET" ? "今日(T)" : f === "T-1_PM_WATCH" ? "未来(T−)" : "往日(T+)";
       tab.textContent = label + " " + n;
     }
