@@ -48,6 +48,10 @@
     const match=/(?<![\w+\-])T\s*=\s*(\d{4}-\d{2}-\d{2})/.exec(typeof record.cycle_position==='string'?record.cycle_position:'');
     if(match)return isoDay(match[1]);
     const seed=isoDay(record.seed_trade_date);
+    // An abbreviated explicit T date is usable only when the full seed date anchors it.
+    // Conflicting shorthand stays unknown instead of being silently shifted by phase.
+    const shortTarget=/(?<![\w+\-])T\s*=\s*(\d{2}-\d{2})(?![\d-])/.exec(typeof record.cycle_position==='string'?record.cycle_position:'');
+    if(shortTarget)return seed && seed.slice(5)===shortTarget[1] ? seed : null;
     const phaseOffset=/^T-(\d)/.exec(String(record.phase||''));
     if(seed && phaseOffset){
       let day=trading(seed)?seed:null;

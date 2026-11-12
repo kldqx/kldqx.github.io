@@ -5,21 +5,15 @@
   let lastStocksData = []; // L4: latest stocks for export
   // T is today. Legacy filter names are URL aliases, never data-classification rules.
   // Future/past cohorts are derived from target trading dates using LifecycleModel.
-  let phaseFilter = (window.PHASE_FILTER || new URLSearchParams(location.search).get("phase") || "T-1_POSTMARKET");
+  let phaseFilter = (typeof window !== "undefined" && window.PHASE_FILTER) ||
+    (typeof location !== "undefined" && new URLSearchParams(location.search).get("phase")) || "T-1_POSTMARKET";
   const LIFECYCLE_PHASE_RE = /^T[+-]/;
   const hasLifecyclePhases = feed => Array.isArray(feed?.stocks) && feed.stocks.some(st => LIFECYCLE_PHASE_RE.test(st?.phase || ""));
-  // T-1 观察页展示全部 T-* 观察票(T-3/T-2/T-1_PM_WATCH), 不含今日(T)页的 T-1_POSTMARKET 锁定候选
-  function stockMatchesPhase(st, filter) {
-    const phase = st?.phase || "";
-    if (filter === "T-1_PM_WATCH") return /^T-/.test(phase) && phase !== "T-1_POSTMARKET";
-    return phase === filter;
-  }
-  function phaseFilteredStocks(feed, filter) {
+  // Page aliases are retained for old bookmarks; only target trading dates group rows.
+  function phaseFilteredStocks(feed, filter, asOf = window.LifecycleModel.today()) {
     const stocks = Array.isArray(feed?.stocks) ? feed.stocks : [];
-    if (filter === "all") return stocks;
-    // 运行时快照(本地 8765)只带时钟 phase、不含生命周期 phase 时分页过滤不适用, 退回全量避免空列表
-    if (LIFECYCLE_PHASE_RE.test(filter || "") && !hasLifecyclePhases(feed)) return stocks;
-    return stocks.filter(st => stockMatchesPhase(st, filter));
+    const view = filter === "T-1_PM_WATCH" ? "before" : filter === "T+1_EXIT_DONE" ? "after" : "today";
+    return window.LifecycleModel.recordsForView(stocks, view, asOf, feed.handoff?.target_trade_date);
   }
   let audioAlarmEnabled = true;
   const lastAlarmTimeByCode = new Map(); // code -> timestamp
@@ -78,7 +72,7 @@
   const cycleClass = (label, rec) => {
     if (rec === "avoid") return "cycle-avoid";
     if (rec === "observe_only" || rec === "watch_only") return "cycle-observe";
-    if (label === "T" || label === "T-1" || label === "T-2" || label === "T-3") return "cycle-pre";
+    if (label === "T" || /^T[-−][123]$/.test(label)) return "cycle-pre";
     if (label === "T+1") return "cycle-t1";
     return "cycle-high";
   };
@@ -678,7 +672,7 @@
     container.replaceChildren(heading,sourceLine,meta,counts,reason,note);
   }
 
-  function updateCard(ref, stock, feed) {
+  function updateCard(ref, stock, feed, asOf = window.LifecycleModel.today()) {
     const events = Array.isArray(stock.events) ? stock.events.filter(event => event && typeof event.type === "string") : [];
     const latest = events[events.length - 1];
     const gaps = Array.isArray(stock.gaps) ? stock.gaps.filter(gap => typeof gap === "string") : [];
@@ -692,19 +686,15 @@
     const statusTone = latest?.type === "REVERSAL_TRIGGERED" ? "purple" : latest?.type === "AUCTION_ENTRY_CONFIRMED" ? "positive" : latest?.type === "VWAP_DEFENSE_TRIGGERED" ? "negative" : gaps.length || latest?.type === "BOOK_BID1_VOLUME_DROP" ? "warning" : "";
     ref.card.className = `stock-card ${original ? "conditional" : ""} ${tone(stock.change_pct)}`;
     ref.name.textContent = stock.name || stock.code; ref.code.textContent = stock.code;
-    const originalCycle = stock.cycle_position && typeof stock.cycle_position === 'object' ? stock.cycle_position : null;
-    const relativeDay = window.LifecycleModel.cohort(stock,window.LifecycleModel.today(),feed.handoff?.target_trade_date);
-    const cp = relativeDay===null ? null : {...(originalCycle||{}),label:window.LifecycleModel.cohortLabel(relativeDay)};
+    const relativeDay = window.LifecycleModel.cohort(stock,asOf,feed.handoff?.target_trade_date);
     const rec = typeof stock.recommendation === "string" ? stock.recommendation : "";
-    const phaseTag = /^T[+-]\d/.exec(String(stock.phase || ""));
-    let badgeLabel = phaseTag && phaseTag[0][1] === "-" ? phaseTag[0] : (cp && cp.label) || "";
+    const badgeLabel = window.LifecycleModel.cohortLabel(relativeDay);
     if (badgeLabel) {
       ref.cycleBadge.hidden = false;
       const suffix = rec === "avoid" ? " · 回避" : rec === "exit" ? " · 出场" : rec === "observe_only" ? " · 仅观察" : rec === "watch_only" ? " · 仅看" : rec === "watch_cautious" ? " · 谨慎" : "";
       let label = badgeLabel;
-      if (relativeDay === 0) label = "T";
       ref.cycleBadge.textContent = `${label}${suffix}`;
-      ref.cycleBadge.title = (cp.role || label).replace("T-1", "T");
+      ref.cycleBadge.title = `目标交易日：${window.LifecycleModel.targetDate(stock,feed.handoff?.target_trade_date) || "待核对"} · 以 ${asOf} 为今日`;
       ref.cycleBadge.className = `cycle-badge ${cycleClass(label, rec)}`;
     } else {
       ref.cycleBadge.hidden = true;
@@ -1218,7 +1208,8 @@
     }
     if (lastRun !== feed.run_id) {cards.clear();byId("stock-grid").replaceChildren();lastRun=feed.run_id;
     }
-    const stocks = mode === 'demo' ? feed.stocks : phaseFilteredStocks(feed, phaseFilter);
+    const asOf = window.LifecycleModel.today();
+    const stocks = mode === 'demo' ? feed.stocks : phaseFilteredStocks(feed, phaseFilter, asOf);
     // 权威保护：将最新的直通行情合并进 feed.stocks，绝对禁止旧文件倒退覆盖
     for (const stock of stocks) {
       const cached = realtimeQuoteCache.get(stock.code);
@@ -1242,7 +1233,7 @@
     highlightPhaseTabs();
     for (const tab of document.querySelectorAll(".phase-tab")) {
       const f = tab.dataset.phaseFilter;
-      const n = phaseFilteredStocks(feed, f).length;
+      const n = phaseFilteredStocks(feed, f, asOf).length;
       const label = f === "T-1_POSTMARKET" ? "今日(T)" : f === "T-1_PM_WATCH" ? "未来(T−)" : "往日(T+)";
       tab.textContent = label + " " + n;
     }
@@ -1320,7 +1311,7 @@
     for (const stock of sortedStocks) {
       let ref=cards.get(stock.code);
       if(!ref){ref=createCard();cards.set(stock.code,ref);}
-      updateCard(ref,stock,feed);
+      updateCard(ref,stock,feed,asOf);
       byId("stock-grid").append(ref.card);
     }
     // 启动毫秒级实时行情引擎
