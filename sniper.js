@@ -702,11 +702,7 @@
       ref.cycleBadge.hidden = false;
       const suffix = rec === "avoid" ? " · 回避" : rec === "exit" ? " · 出场" : rec === "observe_only" ? " · 仅观察" : rec === "watch_only" ? " · 仅看" : rec === "watch_cautious" ? " · 谨慎" : "";
       let label = badgeLabel;
-      const targetDate = stock.original_conditions?.trade_date || feed?.target_trade_date;
-      const todayIso = new Date().toISOString().slice(0, 10);
-      if (label === "T-1" && targetDate && (targetDate === todayIso || targetDate <= todayIso)) {
-        label = "T";
-      }
+      if (relativeDay === 0) label = "T";
       ref.cycleBadge.textContent = `${label}${suffix}`;
       ref.cycleBadge.title = (cp.role || label).replace("T-1", "T");
       ref.cycleBadge.className = `cycle-badge ${cycleClass(label, rec)}`;
