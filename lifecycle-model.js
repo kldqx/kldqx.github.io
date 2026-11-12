@@ -48,7 +48,12 @@
     const match=/(?<![\w+\-])T\s*=\s*(\d{4}-\d{2}-\d{2})/.exec(typeof record.cycle_position==='string'?record.cycle_position:'');
     if(match)return isoDay(match[1]);
     const seed=isoDay(record.seed_trade_date);
-    if(seed && /^T-1/.test(record.phase||''))return trading(seed) ? shiftDay(seed,1) : null;
+    const phaseOffset=/^T-(\d)/.exec(String(record.phase||''));
+    if(seed && phaseOffset){
+      let day=trading(seed)?seed:null;
+      if(day){for(let i=0;i<Number(phaseOffset[1]);i++){day=shiftDay(day,1);if(!day)break;}}
+      return day;
+    }
     if(seed && record.phase==='T+1_EXIT_DONE')return seed;
     // A current handoff date applies only to rows without a legacy lifecycle identity.
     return !/^T[+-]/.test(record.phase||'') ? isoDay(fallback) : null;

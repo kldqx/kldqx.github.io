@@ -696,10 +696,12 @@
     const relativeDay = window.LifecycleModel.cohort(stock,window.LifecycleModel.today(),feed.handoff?.target_trade_date);
     const cp = relativeDay===null ? null : {...(originalCycle||{}),label:window.LifecycleModel.cohortLabel(relativeDay)};
     const rec = typeof stock.recommendation === "string" ? stock.recommendation : "";
-    if (cp && cp.label) {
+    const phaseTag = /^T[+-]\d/.exec(String(stock.phase || ""));
+    let badgeLabel = phaseTag && phaseTag[0][1] === "-" ? phaseTag[0] : (cp && cp.label) || "";
+    if (badgeLabel) {
       ref.cycleBadge.hidden = false;
       const suffix = rec === "avoid" ? " · 回避" : rec === "exit" ? " · 出场" : rec === "observe_only" ? " · 仅观察" : rec === "watch_only" ? " · 仅看" : rec === "watch_cautious" ? " · 谨慎" : "";
-      let label = cp.label;
+      let label = badgeLabel;
       const targetDate = stock.original_conditions?.trade_date || feed?.target_trade_date;
       const todayIso = new Date().toISOString().slice(0, 10);
       if (label === "T-1" && targetDate && (targetDate === todayIso || targetDate <= todayIso)) {
