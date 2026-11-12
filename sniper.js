@@ -1330,7 +1330,8 @@
   }
 
   const controller=createController({fetcher:(...args)=>fetch(...args),draw,connection:setConnection});
-  byId("live-mode").addEventListener("click",()=>controller.select("live"));
+  const liveBtnInit = byId("live-mode");
+  if (liveBtnInit) liveBtnInit.addEventListener("click",()=>controller.select("live"));
   // 页签为页面导航链接(<a href>), 这里只做当前页高亮
   function highlightPhaseTabs() {
     for (const tab of document.querySelectorAll(".phase-tab")) {
