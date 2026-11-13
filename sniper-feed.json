@@ -3,9 +3,9 @@
  "signal_boundary": "not_a_trading_signal",
  "workspace_id": "01c9c9660c33cf342a49a83a7c76311f2afa1a00a4fed72b827d9db7c027beaf",
  "mode": "live",
- "status": "ready",
+ "status": "return_for_research",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-13T08:46:45.844408+08:00",
+ "generated_at": "2026-11-13T09:57:53.367259+08:00",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-12",
  "handoff": "runtime/runs/20261112-postmarket-v27",
@@ -1684,111 +1684,6 @@
    "main_net_yi": null,
    "sectors": [],
    "alpha_v28": null
-  },
-  {
-   "code": "688012.SH",
-   "name": "中微公司",
-   "price": 252.55,
-   "change_pct": 1.02,
-   "turnover_yi": 67.049,
-   "main_net_yi": 1.561,
-   "vol_ratio": 0.996,
-   "pullback_pct": -17.11,
-   "sectors": [
-    "pt01801081"
-   ],
-   "v29_rank": 1,
-   "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T08:46:45.844408+08:00",
-   "phase": "T-1_POSTMARKET",
-   "target_trade_date": "2026-11-13",
-   "benchmark": {
-    "desc": "V29 L1-L11 AND 漏斗通过（用户指令豁免 L4 普跌日硬闸）; 主板块net3d降序 -> main_net降序 -> 成交额降序"
-   },
-   "gaps": [
-    "L4 普跌日硬闸被用户明确豁免",
-    "L2/分时/V22 微观原件缺失"
-   ],
-   "events": [],
-   "points": [],
-   "original_conditions": "非交易信号；T+1 出场纪律：盘中跌破开盘价3%止损，14:55尾盘无动能市价清仓",
-   "hypothesis": "V29 硬筛漏斗通过标的（L4 豁免）",
-   "risk_reason": "普跌日背景（T-1 median -1.60%，跌>=3%占18.83%），L4 已被用户豁免，风险自担",
-   "name_binding": {
-    "tencent": "中微公司",
-    "eastmoney": "中微公司",
-    "match": true
-   }
-  },
-  {
-   "code": "601229.SH",
-   "name": "上海银行",
-   "price": 8.33,
-   "change_pct": 0.73,
-   "turnover_yi": 4.881,
-   "main_net_yi": 0.681,
-   "vol_ratio": 0.7254,
-   "pullback_pct": -14.12,
-   "sectors": [
-    "pt01801784"
-   ],
-   "v29_rank": 2,
-   "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T08:46:45.844408+08:00",
-   "phase": "T-1_POSTMARKET",
-   "target_trade_date": "2026-11-13",
-   "benchmark": {
-    "desc": "V29 L1-L11 AND 漏斗通过（用户指令豁免 L4 普跌日硬闸）; 主板块net3d降序 -> main_net降序 -> 成交额降序"
-   },
-   "gaps": [
-    "L4 普跌日硬闸被用户明确豁免",
-    "L2/分时/V22 微观原件缺失"
-   ],
-   "events": [],
-   "points": [],
-   "original_conditions": "非交易信号；T+1 出场纪律：盘中跌破开盘价3%止损，14:55尾盘无动能市价清仓",
-   "hypothesis": "V29 硬筛漏斗通过标的（L4 豁免）",
-   "risk_reason": "普跌日背景（T-1 median -1.60%，跌>=3%占18.83%），L4 已被用户豁免，风险自担",
-   "name_binding": {
-    "tencent": "上海银行",
-    "eastmoney": "上海银行",
-    "match": true
-   }
-  },
-  {
-   "code": "601665.SH",
-   "name": "齐鲁银行",
-   "price": 6.63,
-   "change_pct": -1.19,
-   "turnover_yi": 3.234,
-   "main_net_yi": 0.101,
-   "vol_ratio": 0.7904,
-   "pullback_pct": -5.56,
-   "sectors": [
-    "pt01801784"
-   ],
-   "v29_rank": 3,
-   "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T08:46:45.844408+08:00",
-   "phase": "T-1_POSTMARKET",
-   "target_trade_date": "2026-11-13",
-   "benchmark": {
-    "desc": "V29 L1-L11 AND 漏斗通过（用户指令豁免 L4 普跌日硬闸）; 主板块net3d降序 -> main_net降序 -> 成交额降序"
-   },
-   "gaps": [
-    "L4 普跌日硬闸被用户明确豁免",
-    "L2/分时/V22 微观原件缺失"
-   ],
-   "events": [],
-   "points": [],
-   "original_conditions": "非交易信号；T+1 出场纪律：盘中跌破开盘价3%止损，14:55尾盘无动能市价清仓",
-   "hypothesis": "V29 硬筛漏斗通过标的（L4 豁免）",
-   "risk_reason": "普跌日背景（T-1 median -1.60%，跌>=3%占18.83%），L4 已被用户豁免，风险自担",
-   "name_binding": {
-    "tencent": "齐鲁银行",
-    "eastmoney": "齐鲁银行",
-    "match": true
-   }
   }
  ],
  "manual_watch_revision": 1,
