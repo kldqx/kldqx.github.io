@@ -5,7 +5,7 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-13T13:46:46.060197+08:00",
+ "generated_at": "2026-11-13T16:50:55.144254+08:00",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-12",
  "handoff": "runtime/runs/20261112-postmarket-v27",
@@ -1736,26 +1736,26 @@
    }
   },
   {
-   "code": "002172.SZ",
-   "name": "澳洋健康",
+   "code": "601929.SH",
+   "name": "吉视传媒",
    "price": null,
-   "change_pct": 10.08,
-   "turnover_yi": 14.6103,
+   "change_pct": 10.2,
+   "turnover_yi": 19.2893,
    "vol_ratio": null,
-   "turnover_rate": 29.27,
-   "main_net": 449118876.0,
-   "sector": "pt01801156",
+   "turnover_rate": 20.26,
+   "main_net": 590910686.0,
+   "sector": "pt01801995",
    "scores": {
-    "lhb_seat": 0.2860887871719959,
-    "seal_ratio": 0.034746617112584956,
-    "sector_resonance": 0,
-    "turnover_health": 0
+    "lhb_seat": 0.09627299006525347,
+    "seal_ratio": 0.025116397173562545,
+    "sector_resonance": 1,
+    "turnover_health": 1
    },
    "lhb_factor_pack": {
     "on_lhb": true,
-    "net_ratio": 0.45362929057331947,
-    "inst_seat_balance": 1.0,
-    "buy_concentration": 0.45362929057331947,
+    "net_ratio": 0.32090996688417817,
+    "inst_seat_balance": 0.0,
+    "buy_concentration": 0.3209099668841782,
     "seat_net_spread": null,
     "self_trade_ratio": null,
     "lhasa_ratio": null,
@@ -1771,17 +1771,21 @@
      "syndicate_bonus"
     ]
    },
+   "reference_only": {
+    "lhb_net_ratio": 0.32090996688417817,
+    "main_net_1112_vendor_derived": 590910686.0,
+    "note": "东财/THS推导指标，非交易所权威披露，仅供参考不作排序依据"
+   },
    "lhb_dates": [
-    "20261110",
     "20261112"
    ],
    "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T13:46:46.060197+08:00",
+   "observed_at": "2026-11-13T16:50:55.144254+08:00",
    "phase": "T_FIRST_BOARD",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
+    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
    },
    "gaps": [
     "seat_net_spread",
@@ -1794,30 +1798,70 @@
    "events": [],
    "points": [],
    "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "龙虎榜大因子加持的首板/强势票",
-   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
+   "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
   },
   {
-   "code": "301660.SZ",
-   "name": "粤芯半导体-U",
+   "code": "300058.SZ",
+   "name": "蓝色光标",
    "price": null,
-   "change_pct": 7.28,
-   "turnover_yi": 28.3018,
+   "change_pct": 10.89,
+   "turnover_yi": 116.1506,
    "vol_ratio": null,
-   "turnover_rate": 38.27,
-   "main_net": 96720996.0,
+   "turnover_rate": 22.51,
+   "main_net": 2345910819.0,
+   "sector": "pt01801765",
+   "scores": {
+    "lhb_seat": 0.0,
+    "seal_ratio": 0.0010751934126900765,
+    "sector_resonance": 1,
+    "turnover_health": 1
+   },
+   "lhb_factor_pack": {
+    "on_lhb": false
+   },
+   "reference_only": {
+    "lhb_net_ratio": null,
+    "main_net_1112_vendor_derived": 2345910819.0,
+    "note": "东财/THS推导指标，非交易所权威披露，仅供参考不作排序依据"
+   },
+   "lhb_dates": [],
+   "source_data_at": "2026-11-12 15:00:00",
+   "observed_at": "2026-11-13T16:50:55.144254+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-13",
+   "line": "first_board",
+   "benchmark": {
+    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
+  },
+  {
+   "code": "688801.SH",
+   "name": "燧原科技-U",
+   "price": null,
+   "change_pct": 13.13,
+   "turnover_yi": 21.8765,
+   "vol_ratio": null,
+   "turnover_rate": 22.61,
+   "main_net": 135976456.0,
    "sector": "pt01801081",
    "scores": {
-    "lhb_seat": 0.2661003527634109,
-    "seal_ratio": 0.0,
+    "lhb_seat": 0.18530888168593843,
+    "seal_ratio": 5.364880122505885e-06,
     "sector_resonance": 1,
-    "turnover_health": 0
+    "turnover_health": 1
    },
    "lhb_factor_pack": {
     "on_lhb": true,
-    "net_ratio": 0.3870011758780363,
+    "net_ratio": 0.11769627228646146,
     "inst_seat_balance": 1.0,
-    "buy_concentration": 0.3870011758780363,
+    "buy_concentration": 0.11769627228646146,
     "seat_net_spread": null,
     "self_trade_ratio": null,
     "lhasa_ratio": null,
@@ -1833,16 +1877,21 @@
      "syndicate_bonus"
     ]
    },
+   "reference_only": {
+    "lhb_net_ratio": 0.11769627228646146,
+    "main_net_1112_vendor_derived": 135976456.0,
+    "note": "东财/THS推导指标，非交易所权威披露，仅供参考不作排序依据"
+   },
    "lhb_dates": [
-    "20261112"
+    "20261111"
    ],
    "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T13:46:46.060197+08:00",
+   "observed_at": "2026-11-13T16:50:55.144254+08:00",
    "phase": "T_FIRST_BOARD",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
+    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
    },
    "gaps": [
     "seat_net_spread",
@@ -1855,8 +1904,8 @@
    "events": [],
    "points": [],
    "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "龙虎榜大因子加持的首板/强势票",
-   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
+   "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
   },
   {
    "code": "300613.SZ",
@@ -1894,16 +1943,21 @@
      "syndicate_bonus"
     ]
    },
+   "reference_only": {
+    "lhb_net_ratio": 0.3614920282120853,
+    "main_net_1112_vendor_derived": -102576623.0,
+    "note": "东财/THS推导指标，非交易所权威披露，仅供参考不作排序依据"
+   },
    "lhb_dates": [
     "20261110"
    ],
    "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T13:46:46.060197+08:00",
+   "observed_at": "2026-11-13T16:50:55.144254+08:00",
    "phase": "T_FIRST_BOARD",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
+    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
    },
    "gaps": [
     "seat_net_spread",
@@ -1916,69 +1970,8 @@
    "events": [],
    "points": [],
    "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "龙虎榜大因子加持的首板/强势票",
-   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
-  },
-  {
-   "code": "300264.SZ",
-   "name": "佳创视讯",
-   "price": null,
-   "change_pct": -4.98,
-   "turnover_yi": 2.5716,
-   "vol_ratio": null,
-   "turnover_rate": 10.87,
-   "main_net": -2053340.0,
-   "sector": null,
-   "scores": {
-    "lhb_seat": 0.25393784445642265,
-    "seal_ratio": 0.0,
-    "sector_resonance": 0,
-    "turnover_health": 0
-   },
-   "lhb_factor_pack": {
-    "on_lhb": true,
-    "net_ratio": 0.3464594815214087,
-    "inst_seat_balance": 1.0,
-    "buy_concentration": 0.3464594815214087,
-    "seat_net_spread": null,
-    "self_trade_ratio": null,
-    "lhasa_ratio": null,
-    "north_seat": null,
-    "seat_winrate": null,
-    "syndicate_hit": null,
-    "gaps": [
-     "seat_net_spread",
-     "self_trade_penalty",
-     "lhasa_penalty",
-     "north_bonus",
-     "seat_winrate",
-     "syndicate_bonus"
-    ]
-   },
-   "lhb_dates": [
-    "20261110"
-   ],
-   "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T13:46:46.060197+08:00",
-   "phase": "T_FIRST_BOARD",
-   "target_trade_date": "2026-11-13",
-   "line": "first_board",
-   "benchmark": {
-    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
-   },
-   "gaps": [
-    "seat_net_spread",
-    "self_trade_penalty",
-    "lhasa_penalty",
-    "north_bonus",
-    "seat_winrate",
-    "syndicate_bonus"
-   ],
-   "events": [],
-   "points": [],
-   "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "龙虎榜大因子加持的首板/强势票",
-   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
+   "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
   }
  ],
  "manual_watch_revision": 1,
