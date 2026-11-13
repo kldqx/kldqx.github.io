@@ -14,9 +14,8 @@
     const stocks = Array.isArray(feed?.stocks) ? feed.stocks : [];
     const view = filter === "T-1_PM_WATCH" ? "before" : filter === "T+1_EXIT_DONE" ? "after" : "today";
     const rows = window.LifecycleModel.recordsForView(stocks, view, asOf, feed.handoff?.target_trade_date);
-    // 2026-11-13 用户授权解冻改动：今日(T) 只显示正式推出记录（目标日=今天的 T-1 阶段票）；
-    // T-2/T-3 候选即使目标日轮转到今天也不再进入今日页，仍留在候选观察页（lifecycle-feed）。
-    if (view === "today" && hasLifecyclePhases(feed)) return rows.filter(st => /^T-1/.test(st?.phase || ""));
+    // 2026-11-13 V32 双线：今日(T) 显示 T-1 推出记录 + 首板线 T_FIRST_BOARD（目标日=今天的两线都进今日页）。
+    if (view === "today" && hasLifecyclePhases(feed)) return rows.filter(st => /^(T-1|T_FIRST_BOARD)/.test(st?.phase || ""));
     // 2026-11-13 用户授权：T−/T+ 页卡片按与 T 日距离排序，近的在前（|cohort| 升序，稳定排序保持同组内原顺序）。
     if (view === "before" || view === "after") {
       const fb = feed.handoff?.target_trade_date;
