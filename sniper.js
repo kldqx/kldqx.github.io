@@ -17,6 +17,11 @@
     // 2026-11-13 用户授权解冻改动：今日(T) 只显示正式推出记录（目标日=今天的 T-1 阶段票）；
     // T-2/T-3 候选即使目标日轮转到今天也不再进入今日页，仍留在候选观察页（lifecycle-feed）。
     if (view === "today" && hasLifecyclePhases(feed)) return rows.filter(st => /^T-1/.test(st?.phase || ""));
+    // 2026-11-13 用户授权：T−/T+ 页卡片按与 T 日距离排序，近的在前（|cohort| 升序，稳定排序保持同组内原顺序）。
+    if (view === "before" || view === "after") {
+      const fb = feed.handoff?.target_trade_date;
+      return rows.slice().sort((a, b) => Math.abs(window.LifecycleModel.cohort(a, asOf, fb)) - Math.abs(window.LifecycleModel.cohort(b, asOf, fb)));
+    }
     return rows;
   }
   let audioAlarmEnabled = true;
