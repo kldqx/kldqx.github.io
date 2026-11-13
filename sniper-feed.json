@@ -5,7 +5,7 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-13T10:02:27.412909+08:00",
+ "generated_at": "2026-11-13T11:09:21.380974+08:00",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-12",
  "handoff": "runtime/runs/20261112-postmarket-v27",
@@ -1420,14 +1420,14 @@
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-11 15:00:00",
    "observed_at": "2026-11-11T21:05:46.714600+08:00",
-   "phase": "T-3_SECTOR_WATCH",
+   "phase": "T_FIRST_BOARD",
    "benchmark": {
-    "desc": "T-3 试盘探压观察: 当日首板 10.02%, 成交 34.51亿, 主线板块共振=True, 20日涨停基因=False (当日涨停仅观察, 不参与 T 日进场)"
+    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
    },
    "gaps": [],
    "events": [],
    "points": [],
-   "original_conditions": "观察票(非进场信号): T 日 09:25 硬闸门裁决才决定是否进场",
+   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
    "hypothesis": "T-3 试盘探压观察: 当日首板 10.02%, 成交 34.51亿, 主线板块共振=True, 20日涨停基因=False (当日涨停仅观察, 不参与 T 日进场)",
    "risk_reason": "T- 观察层, 不参与当日进场; 缺数据记 gap 不零填",
    "qa_verdict": "观察中(非出票)",
@@ -1463,7 +1463,20 @@
    "vol_ratio": null,
    "main_net_yi": null,
    "sectors": [],
-   "alpha_v28": null
+   "alpha_v28": null,
+   "target_trade_date": "2026-11-13",
+   "line": "first_board",
+   "scores": {
+    "lhb_seat": 5,
+    "board_strength": 0,
+    "sector_resonance": 0,
+    "turnover_health": 0
+   },
+   "lhb_dates": [
+    "20261111",
+    "20261112"
+   ],
+   "main_net": 155118742.0
   },
   {
    "code": "002916.SZ",
@@ -1787,6 +1800,132 @@
    "name_binding": {
     "tencent": null,
     "eastmoney": "齐鲁银行",
+    "match": true
+   }
+  },
+  {
+   "code": "603706.SH",
+   "name": "东方环宇",
+   "price": null,
+   "change_pct": 9.99,
+   "turnover_yi": 4.2611,
+   "vol_ratio": null,
+   "turnover_rate": 8.81,
+   "main_net": 17845179.0,
+   "sector": null,
+   "scores": {
+    "lhb_seat": 3,
+    "board_strength": 1,
+    "sector_resonance": 0,
+    "turnover_health": 1
+   },
+   "lhb_dates": [
+    "20261110",
+    "20261111",
+    "20261112"
+   ],
+   "source_data_at": "2026-11-12 15:00:00",
+   "observed_at": "2026-11-13T11:08:31.752551+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-13",
+   "line": "first_board",
+   "benchmark": {
+    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
+   },
+   "gaps": [
+    "封单占比/分时原件缺失(gap不给分)",
+    "机构净买额占比原件未带(gap)"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "龙虎榜机构席位+首板/涨停强势",
+   "risk_reason": "普跌日背景; 首板次日溢价博弈",
+   "name_binding": {
+    "eastmoney": null,
+    "match": true
+   }
+  },
+  {
+   "code": "000995.SZ",
+   "name": "皇台酒业",
+   "price": null,
+   "change_pct": 10.03,
+   "turnover_yi": 11.682,
+   "vol_ratio": null,
+   "turnover_rate": 38.2,
+   "main_net": 98272091.0,
+   "sector": null,
+   "scores": {
+    "lhb_seat": 3,
+    "board_strength": 1,
+    "sector_resonance": 0,
+    "turnover_health": 0
+   },
+   "lhb_dates": [
+    "20261112"
+   ],
+   "source_data_at": "2026-11-12 15:00:00",
+   "observed_at": "2026-11-13T11:08:31.752551+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-13",
+   "line": "first_board",
+   "benchmark": {
+    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
+   },
+   "gaps": [
+    "封单占比/分时原件缺失(gap不给分)",
+    "机构净买额占比原件未带(gap)"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "龙虎榜机构席位+首板/涨停强势",
+   "risk_reason": "普跌日背景; 首板次日溢价博弈",
+   "name_binding": {
+    "eastmoney": null,
+    "match": true
+   }
+  },
+  {
+   "code": "603536.SH",
+   "name": "惠发食品",
+   "price": null,
+   "change_pct": 10.04,
+   "turnover_yi": 6.9156,
+   "vol_ratio": null,
+   "turnover_rate": 24.03,
+   "main_net": -23960640.0,
+   "sector": null,
+   "scores": {
+    "lhb_seat": 3,
+    "board_strength": 1,
+    "sector_resonance": 0,
+    "turnover_health": 0
+   },
+   "lhb_dates": [
+    "20261111",
+    "20261112"
+   ],
+   "source_data_at": "2026-11-12 15:00:00",
+   "observed_at": "2026-11-13T11:08:31.752551+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-13",
+   "line": "first_board",
+   "benchmark": {
+    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
+   },
+   "gaps": [
+    "封单占比/分时原件缺失(gap不给分)",
+    "机构净买额占比原件未带(gap)"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "龙虎榜机构席位+首板/涨停强势",
+   "risk_reason": "普跌日背景; 首板次日溢价博弈",
+   "name_binding": {
+    "eastmoney": null,
     "match": true
    }
   }
