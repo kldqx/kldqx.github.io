@@ -5,7 +5,7 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-13T11:09:21.380974+08:00",
+ "generated_at": "2026-11-13T13:46:46.060197+08:00",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-12",
  "handoff": "runtime/runs/20261112-postmarket-v27",
@@ -1411,74 +1411,6 @@
    "alpha_v28": null
   },
   {
-   "code": "000678.SZ",
-   "name": "襄阳轴承",
-   "price": null,
-   "change_pct": 10.02,
-   "turnover_yi": 34.51,
-   "vwap": null,
-   "vwap_deviation_pct": null,
-   "source_data_at": "2026-11-11 15:00:00",
-   "observed_at": "2026-11-11T21:05:46.714600+08:00",
-   "phase": "T_FIRST_BOARD",
-   "benchmark": {
-    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
-   },
-   "gaps": [],
-   "events": [],
-   "points": [],
-   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "T-3 试盘探压观察: 当日首板 10.02%, 成交 34.51亿, 主线板块共振=True, 20日涨停基因=False (当日涨停仅观察, 不参与 T 日进场)",
-   "risk_reason": "T- 观察层, 不参与当日进场; 缺数据记 gap 不零填",
-   "qa_verdict": "观察中(非出票)",
-   "seed_trade_date": "2026-11-11",
-   "monitoring_eligible": true,
-   "monitoring_status": "t_minus_watch",
-   "original_condition_status": "t_minus_watch",
-   "observation_eligible": true,
-   "observation_status": "watch",
-   "manual_label": "T-3_SECTOR_WATCH",
-   "origin_batch_id": "20261111-postmarket-v28",
-   "origin_source_refs": [
-    "runtime/runs/20261112-postmarket-v27/ranked_pool_partial.json",
-    "runtime/runs/20261112-postmarket-v27/ztpool_20261111_realtime.json"
-   ],
-   "cycle_position": "T-3 首板/主线共振观察 -> T-2 回踩缩量 -> T-1 定案",
-   "recommendation": "观察",
-   "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
-   "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "N/A(T-观察)",
-   "auction_badge": "T-3_SECTOR_WATCH",
-   "auction_reason": "T- 观察票, 待后续战役日闸门裁决",
-   "buy_permission": "not_a_trading_signal",
-   "exit_rule_T1": "未进场无出场; 若后续入场则 T+1 破开盘3%止损 | 14:55清仓",
-   "tier": "WATCH",
-   "open": null,
-   "open_pct": null,
-   "stop_line": null,
-   "stop_hit": false,
-   "pullback_pct": null,
-   "vol_ratio": null,
-   "main_net_yi": null,
-   "sectors": [],
-   "alpha_v28": null,
-   "target_trade_date": "2026-11-13",
-   "line": "first_board",
-   "scores": {
-    "lhb_seat": 5,
-    "board_strength": 0,
-    "sector_resonance": 0,
-    "turnover_health": 0
-   },
-   "lhb_dates": [
-    "20261111",
-    "20261112"
-   ],
-   "main_net": 155118742.0
-  },
-  {
    "code": "002916.SZ",
    "name": "深南电路",
    "price": null,
@@ -1804,130 +1736,249 @@
    }
   },
   {
-   "code": "603706.SH",
-   "name": "东方环宇",
+   "code": "002172.SZ",
+   "name": "澳洋健康",
    "price": null,
-   "change_pct": 9.99,
-   "turnover_yi": 4.2611,
+   "change_pct": 10.08,
+   "turnover_yi": 14.6103,
    "vol_ratio": null,
-   "turnover_rate": 8.81,
-   "main_net": 17845179.0,
-   "sector": null,
+   "turnover_rate": 29.27,
+   "main_net": 449118876.0,
+   "sector": "pt01801156",
    "scores": {
-    "lhb_seat": 3,
-    "board_strength": 1,
+    "lhb_seat": 0.2860887871719959,
+    "seal_ratio": 0.034746617112584956,
     "sector_resonance": 0,
-    "turnover_health": 1
+    "turnover_health": 0
+   },
+   "lhb_factor_pack": {
+    "on_lhb": true,
+    "net_ratio": 0.45362929057331947,
+    "inst_seat_balance": 1.0,
+    "buy_concentration": 0.45362929057331947,
+    "seat_net_spread": null,
+    "self_trade_ratio": null,
+    "lhasa_ratio": null,
+    "north_seat": null,
+    "seat_winrate": null,
+    "syndicate_hit": null,
+    "gaps": [
+     "seat_net_spread",
+     "self_trade_penalty",
+     "lhasa_penalty",
+     "north_bonus",
+     "seat_winrate",
+     "syndicate_bonus"
+    ]
    },
    "lhb_dates": [
     "20261110",
-    "20261111",
     "20261112"
    ],
    "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T11:08:31.752551+08:00",
+   "observed_at": "2026-11-13T13:46:46.060197+08:00",
    "phase": "T_FIRST_BOARD",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
+    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
    },
    "gaps": [
-    "封单占比/分时原件缺失(gap不给分)",
-    "机构净买额占比原件未带(gap)"
+    "seat_net_spread",
+    "self_trade_penalty",
+    "lhasa_penalty",
+    "north_bonus",
+    "seat_winrate",
+    "syndicate_bonus"
    ],
    "events": [],
    "points": [],
-   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "龙虎榜机构席位+首板/涨停强势",
-   "risk_reason": "普跌日背景; 首板次日溢价博弈",
-   "name_binding": {
-    "eastmoney": null,
-    "match": true
-   }
+   "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "龙虎榜大因子加持的首板/强势票",
+   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
   },
   {
-   "code": "000995.SZ",
-   "name": "皇台酒业",
+   "code": "301660.SZ",
+   "name": "粤芯半导体-U",
    "price": null,
-   "change_pct": 10.03,
-   "turnover_yi": 11.682,
+   "change_pct": 7.28,
+   "turnover_yi": 28.3018,
    "vol_ratio": null,
-   "turnover_rate": 38.2,
-   "main_net": 98272091.0,
-   "sector": null,
+   "turnover_rate": 38.27,
+   "main_net": 96720996.0,
+   "sector": "pt01801081",
    "scores": {
-    "lhb_seat": 3,
-    "board_strength": 1,
-    "sector_resonance": 0,
+    "lhb_seat": 0.2661003527634109,
+    "seal_ratio": 0.0,
+    "sector_resonance": 1,
     "turnover_health": 0
+   },
+   "lhb_factor_pack": {
+    "on_lhb": true,
+    "net_ratio": 0.3870011758780363,
+    "inst_seat_balance": 1.0,
+    "buy_concentration": 0.3870011758780363,
+    "seat_net_spread": null,
+    "self_trade_ratio": null,
+    "lhasa_ratio": null,
+    "north_seat": null,
+    "seat_winrate": null,
+    "syndicate_hit": null,
+    "gaps": [
+     "seat_net_spread",
+     "self_trade_penalty",
+     "lhasa_penalty",
+     "north_bonus",
+     "seat_winrate",
+     "syndicate_bonus"
+    ]
    },
    "lhb_dates": [
     "20261112"
    ],
    "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T11:08:31.752551+08:00",
+   "observed_at": "2026-11-13T13:46:46.060197+08:00",
    "phase": "T_FIRST_BOARD",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
+    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
    },
    "gaps": [
-    "封单占比/分时原件缺失(gap不给分)",
-    "机构净买额占比原件未带(gap)"
+    "seat_net_spread",
+    "self_trade_penalty",
+    "lhasa_penalty",
+    "north_bonus",
+    "seat_winrate",
+    "syndicate_bonus"
    ],
    "events": [],
    "points": [],
-   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "龙虎榜机构席位+首板/涨停强势",
-   "risk_reason": "普跌日背景; 首板次日溢价博弈",
-   "name_binding": {
-    "eastmoney": null,
-    "match": true
-   }
+   "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "龙虎榜大因子加持的首板/强势票",
+   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
   },
   {
-   "code": "603536.SH",
-   "name": "惠发食品",
+   "code": "300613.SZ",
+   "name": "富瀚微",
    "price": null,
-   "change_pct": 10.04,
-   "turnover_yi": 6.9156,
+   "change_pct": -3.12,
+   "turnover_yi": 24.6112,
    "vol_ratio": null,
-   "turnover_rate": 24.03,
-   "main_net": -23960640.0,
+   "turnover_rate": 13.27,
+   "main_net": -102576623.0,
+   "sector": "pt01801081",
+   "scores": {
+    "lhb_seat": 0.2584476084636256,
+    "seal_ratio": 0.0,
+    "sector_resonance": 1,
+    "turnover_health": 1
+   },
+   "lhb_factor_pack": {
+    "on_lhb": true,
+    "net_ratio": 0.3614920282120853,
+    "inst_seat_balance": 1.0,
+    "buy_concentration": 0.3614920282120853,
+    "seat_net_spread": null,
+    "self_trade_ratio": null,
+    "lhasa_ratio": null,
+    "north_seat": null,
+    "seat_winrate": null,
+    "syndicate_hit": null,
+    "gaps": [
+     "seat_net_spread",
+     "self_trade_penalty",
+     "lhasa_penalty",
+     "north_bonus",
+     "seat_winrate",
+     "syndicate_bonus"
+    ]
+   },
+   "lhb_dates": [
+    "20261110"
+   ],
+   "source_data_at": "2026-11-12 15:00:00",
+   "observed_at": "2026-11-13T13:46:46.060197+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-13",
+   "line": "first_board",
+   "benchmark": {
+    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
+   },
+   "gaps": [
+    "seat_net_spread",
+    "self_trade_penalty",
+    "lhasa_penalty",
+    "north_bonus",
+    "seat_winrate",
+    "syndicate_bonus"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "龙虎榜大因子加持的首板/强势票",
+   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
+  },
+  {
+   "code": "300264.SZ",
+   "name": "佳创视讯",
+   "price": null,
+   "change_pct": -4.98,
+   "turnover_yi": 2.5716,
+   "vol_ratio": null,
+   "turnover_rate": 10.87,
+   "main_net": -2053340.0,
    "sector": null,
    "scores": {
-    "lhb_seat": 3,
-    "board_strength": 1,
+    "lhb_seat": 0.25393784445642265,
+    "seal_ratio": 0.0,
     "sector_resonance": 0,
     "turnover_health": 0
    },
+   "lhb_factor_pack": {
+    "on_lhb": true,
+    "net_ratio": 0.3464594815214087,
+    "inst_seat_balance": 1.0,
+    "buy_concentration": 0.3464594815214087,
+    "seat_net_spread": null,
+    "self_trade_ratio": null,
+    "lhasa_ratio": null,
+    "north_seat": null,
+    "seat_winrate": null,
+    "syndicate_hit": null,
+    "gaps": [
+     "seat_net_spread",
+     "self_trade_penalty",
+     "lhasa_penalty",
+     "north_bonus",
+     "seat_winrate",
+     "syndicate_bonus"
+    ]
+   },
    "lhb_dates": [
-    "20261111",
-    "20261112"
+    "20261110"
    ],
    "source_data_at": "2026-11-12 15:00:00",
-   "observed_at": "2026-11-13T11:08:31.752551+08:00",
+   "observed_at": "2026-11-13T13:46:46.060197+08:00",
    "phase": "T_FIRST_BOARD",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V31首板线: 龙虎榜席位含金量>封板强度>主线共振>换手健康度"
+    "desc": "V31首板线: lhb_factor_pack(13细小因子) > 封单占比 > 主线共振 > 换手健康度"
    },
    "gaps": [
-    "封单占比/分时原件缺失(gap不给分)",
-    "机构净买额占比原件未带(gap)"
+    "seat_net_spread",
+    "self_trade_penalty",
+    "lhasa_penalty",
+    "north_bonus",
+    "seat_winrate",
+    "syndicate_bonus"
    ],
    "events": [],
    "points": [],
-   "original_conditions": "非交易信号；首板线生命周期 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "龙虎榜机构席位+首板/涨停强势",
-   "risk_reason": "普跌日背景; 首板次日溢价博弈",
-   "name_binding": {
-    "eastmoney": null,
-    "match": true
-   }
+   "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
+   "hypothesis": "龙虎榜大因子加持的首板/强势票",
+   "risk_reason": "普跌日背景; T+2~T+4 再板博弈"
   }
  ],
  "manual_watch_revision": 1,
