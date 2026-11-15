@@ -1,9 +1,9 @@
 {
  "signal_boundary": "not_a_trading_signal",
- "generated_at": "2026-11-11T19:50:34.532059+08:00",
+ "generated_at": "2026-11-12T20:44:24.793777+08:00",
  "generated_at_utc": "2026-11-11T03:40:00Z",
  "collector_role": "Gemini 3.8 采集子代理",
- "task_date": "2026-11-11",
+ "task_date": "2026-11-12",
  "note": "当日2026-11-11大宗交易DFCF盘中未发布(源返回空), 本文件为最新完整日2026-11-10; 机构专用标记=买/卖方营业部含'机构专用'",
  "schema": "macro-blocktrade/v1",
  "category": "大宗交易",
@@ -14,13 +14,13 @@
    "page": "https://data.eastmoney.com/dzjy/dzjy_mrmx.html"
   }
  ],
- "trade_date": "2026-11-11",
- "count": 112,
+ "trade_date": "2026-11-12",
+ "count": 85,
  "total_count_source": 90,
  "rows": [
   {
-   "trade_date": "2026-11-11",
-   "code": "002493",
+   "trade_date": "2026-11-12",
+   "code": "159981",
    "name": null,
    "price": null,
    "vol": null,
@@ -29,8 +29,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "002493",
+   "trade_date": "2026-11-12",
+   "code": "600299",
    "name": null,
    "price": null,
    "vol": null,
@@ -39,27 +39,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "002493",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "300285",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "603296",
    "name": null,
    "price": null,
@@ -69,8 +49,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "123269",
+   "trade_date": "2026-11-12",
+   "code": "159352",
    "name": null,
    "price": null,
    "vol": null,
@@ -79,8 +59,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "603893",
+   "trade_date": "2026-11-12",
+   "code": "159352",
    "name": null,
    "price": null,
    "vol": null,
@@ -89,8 +69,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688301",
+   "trade_date": "2026-11-12",
+   "code": "002273",
    "name": null,
    "price": null,
    "vol": null,
@@ -99,8 +79,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688220",
+   "trade_date": "2026-11-12",
+   "code": "002831",
    "name": null,
    "price": null,
    "vol": null,
@@ -109,8 +89,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688213",
+   "trade_date": "2026-11-12",
+   "code": "600547",
    "name": null,
    "price": null,
    "vol": null,
@@ -119,8 +99,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688256",
+   "trade_date": "2026-11-12",
+   "code": "603259",
    "name": null,
    "price": null,
    "vol": null,
@@ -129,8 +109,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "123269",
+   "trade_date": "2026-11-12",
+   "code": "300054",
    "name": null,
    "price": null,
    "vol": null,
@@ -139,8 +119,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300347",
+   "trade_date": "2026-11-12",
+   "code": "603031",
    "name": null,
    "price": null,
    "vol": null,
@@ -149,8 +129,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600596",
+   "trade_date": "2026-11-12",
+   "code": "300308",
    "name": null,
    "price": null,
    "vol": null,
@@ -159,8 +139,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688208",
+   "trade_date": "2026-11-12",
+   "code": "605589",
    "name": null,
    "price": null,
    "vol": null,
@@ -169,8 +149,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688536",
+   "trade_date": "2026-11-12",
+   "code": "603228",
    "name": null,
    "price": null,
    "vol": null,
@@ -179,8 +159,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "603341",
+   "trade_date": "2026-11-12",
+   "code": "600519",
    "name": null,
    "price": null,
    "vol": null,
@@ -189,97 +169,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "000725",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "688165",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "600908",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "603389",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "688692",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "301395",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "603389",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "600908",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "301188",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "123260",
    "name": null,
    "price": null,
@@ -289,8 +179,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300983",
+   "trade_date": "2026-11-12",
+   "code": "300666",
    "name": null,
    "price": null,
    "vol": null,
@@ -299,8 +189,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600908",
+   "trade_date": "2026-11-12",
+   "code": "300413",
    "name": null,
    "price": null,
    "vol": null,
@@ -309,8 +199,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600908",
+   "trade_date": "2026-11-12",
+   "code": "508605",
    "name": null,
    "price": null,
    "vol": null,
@@ -319,8 +209,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600908",
+   "trade_date": "2026-11-12",
+   "code": "600299",
    "name": null,
    "price": null,
    "vol": null,
@@ -329,27 +219,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688783",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "600908",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "123267",
    "name": null,
    "price": null,
@@ -359,8 +229,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "123267",
+   "trade_date": "2026-11-12",
+   "code": "300331",
    "name": null,
    "price": null,
    "vol": null,
@@ -369,8 +239,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600908",
+   "trade_date": "2026-11-12",
+   "code": "603135",
    "name": null,
    "price": null,
    "vol": null,
@@ -379,8 +249,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600908",
+   "trade_date": "2026-11-12",
+   "code": "603135",
    "name": null,
    "price": null,
    "vol": null,
@@ -389,8 +259,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600908",
+   "trade_date": "2026-11-12",
+   "code": "301051",
    "name": null,
    "price": null,
    "vol": null,
@@ -399,8 +269,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "123267",
+   "trade_date": "2026-11-12",
+   "code": "002923",
    "name": null,
    "price": null,
    "vol": null,
@@ -409,8 +279,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600908",
+   "trade_date": "2026-11-12",
+   "code": "301262",
    "name": null,
    "price": null,
    "vol": null,
@@ -419,57 +289,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "123267",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "600908",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "300308",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "688669",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "600908",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "301395",
    "name": null,
    "price": null,
@@ -479,8 +299,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600395",
+   "trade_date": "2026-11-12",
+   "code": "300331",
    "name": null,
    "price": null,
    "vol": null,
@@ -489,7 +309,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "300308",
    "name": null,
    "price": null,
@@ -499,8 +319,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "180307",
+   "trade_date": "2026-11-12",
+   "code": "300308",
    "name": null,
    "price": null,
    "vol": null,
@@ -509,8 +329,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "002971",
+   "trade_date": "2026-11-12",
+   "code": "688208",
    "name": null,
    "price": null,
    "vol": null,
@@ -519,27 +339,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "516260",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "516260",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "603271",
    "name": null,
    "price": null,
@@ -549,8 +349,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "508078",
+   "trade_date": "2026-11-12",
+   "code": "300983",
    "name": null,
    "price": null,
    "vol": null,
@@ -559,8 +359,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "601899",
+   "trade_date": "2026-11-12",
+   "code": "000807",
    "name": null,
    "price": null,
    "vol": null,
@@ -569,8 +369,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "600234",
+   "trade_date": "2026-11-12",
+   "code": "688208",
    "name": null,
    "price": null,
    "vol": null,
@@ -579,67 +379,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "002738",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "300849",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "600908",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "301571",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "301188",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "159866",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "688293",
    "name": null,
    "price": null,
@@ -649,8 +389,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "002430",
+   "trade_date": "2026-11-12",
+   "code": "301051",
    "name": null,
    "price": null,
    "vol": null,
@@ -659,8 +399,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "601168",
+   "trade_date": "2026-11-12",
+   "code": "301571",
    "name": null,
    "price": null,
    "vol": null,
@@ -669,8 +409,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301188",
+   "trade_date": "2026-11-12",
+   "code": "301395",
    "name": null,
    "price": null,
    "vol": null,
@@ -679,8 +419,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "002713",
+   "trade_date": "2026-11-12",
+   "code": "601328",
    "name": null,
    "price": null,
    "vol": null,
@@ -689,8 +429,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "603799",
+   "trade_date": "2026-11-12",
+   "code": "603135",
    "name": null,
    "price": null,
    "vol": null,
@@ -699,8 +439,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "920059",
+   "trade_date": "2026-11-12",
+   "code": "301395",
    "name": null,
    "price": null,
    "vol": null,
@@ -709,8 +449,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "159866",
+   "trade_date": "2026-11-12",
+   "code": "508031",
    "name": null,
    "price": null,
    "vol": null,
@@ -719,8 +459,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "601899",
+   "trade_date": "2026-11-12",
+   "code": "300331",
    "name": null,
    "price": null,
    "vol": null,
@@ -729,8 +469,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "603110",
+   "trade_date": "2026-11-12",
+   "code": "600436",
    "name": null,
    "price": null,
    "vol": null,
@@ -739,8 +479,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "508607",
+   "trade_date": "2026-11-12",
+   "code": "601318",
    "name": null,
    "price": null,
    "vol": null,
@@ -749,8 +489,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "508607",
+   "trade_date": "2026-11-12",
+   "code": "601318",
    "name": null,
    "price": null,
    "vol": null,
@@ -759,8 +499,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "603906",
+   "trade_date": "2026-11-12",
+   "code": "300331",
    "name": null,
    "price": null,
    "vol": null,
@@ -769,7 +509,37 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
+   "code": "301395",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "508081",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "688729",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
    "code": "127112",
    "name": null,
    "price": null,
@@ -779,7 +549,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "127112",
    "name": null,
    "price": null,
@@ -789,8 +559,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300927",
+   "trade_date": "2026-11-12",
+   "code": "002683",
    "name": null,
    "price": null,
    "vol": null,
@@ -799,7 +569,17 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
+   "code": "002683",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
    "code": "000656",
    "name": null,
    "price": null,
@@ -809,8 +589,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301188",
+   "trade_date": "2026-11-12",
+   "code": "688293",
    "name": null,
    "price": null,
    "vol": null,
@@ -819,8 +599,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300927",
+   "trade_date": "2026-11-12",
+   "code": "688293",
    "name": null,
    "price": null,
    "vol": null,
@@ -829,8 +609,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "127112",
+   "trade_date": "2026-11-12",
+   "code": "688293",
    "name": null,
    "price": null,
    "vol": null,
@@ -839,8 +619,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688825",
+   "trade_date": "2026-11-12",
+   "code": "688293",
    "name": null,
    "price": null,
    "vol": null,
@@ -849,8 +629,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301188",
+   "trade_date": "2026-11-12",
+   "code": "688293",
    "name": null,
    "price": null,
    "vol": null,
@@ -859,8 +639,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "688071",
+   "trade_date": "2026-11-12",
+   "code": "601318",
    "name": null,
    "price": null,
    "vol": null,
@@ -869,8 +649,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301001",
+   "trade_date": "2026-11-12",
+   "code": "002947",
    "name": null,
    "price": null,
    "vol": null,
@@ -879,8 +659,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301001",
+   "trade_date": "2026-11-12",
+   "code": "002840",
    "name": null,
    "price": null,
    "vol": null,
@@ -889,8 +669,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301001",
+   "trade_date": "2026-11-12",
+   "code": "301011",
    "name": null,
    "price": null,
    "vol": null,
@@ -899,8 +679,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301001",
+   "trade_date": "2026-11-12",
+   "code": "301011",
    "name": null,
    "price": null,
    "vol": null,
@@ -909,8 +689,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "301188",
+   "trade_date": "2026-11-12",
+   "code": "601377",
    "name": null,
    "price": null,
    "vol": null,
@@ -919,8 +699,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300927",
+   "trade_date": "2026-11-12",
+   "code": "603733",
    "name": null,
    "price": null,
    "vol": null,
@@ -929,8 +709,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300927",
+   "trade_date": "2026-11-12",
+   "code": "688293",
    "name": null,
    "price": null,
    "vol": null,
@@ -939,8 +719,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300927",
+   "trade_date": "2026-11-12",
+   "code": "688293",
    "name": null,
    "price": null,
    "vol": null,
@@ -949,67 +729,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "300927",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "920375",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "180303",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "301188",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "603370",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "128138",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "508029",
    "name": null,
    "price": null,
@@ -1019,8 +739,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "127044",
+   "trade_date": "2026-11-12",
+   "code": "603370",
    "name": null,
    "price": null,
    "vol": null,
@@ -1029,8 +749,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "123107",
+   "trade_date": "2026-11-12",
+   "code": "508605",
    "name": null,
    "price": null,
    "vol": null,
@@ -1039,7 +759,47 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
+   "code": "123154",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "920375",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "508029",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "127062",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
    "code": "600568",
    "name": null,
    "price": null,
@@ -1049,8 +809,8 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "128138",
+   "trade_date": "2026-11-12",
+   "code": "127110",
    "name": null,
    "price": null,
    "vol": null,
@@ -1059,67 +819,7 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "127027",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "128138",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "128138",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "128138",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "127108",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
-   "code": "123107",
-   "name": null,
-   "price": null,
-   "vol": null,
-   "amt": null,
-   "buyer": null,
-   "seller": null
-  },
-  {
-   "trade_date": "2026-11-11",
+   "trade_date": "2026-11-12",
    "code": "123088",
    "name": null,
    "price": null,
@@ -1129,8 +829,38 @@
    "seller": null
   },
   {
-   "trade_date": "2026-11-11",
-   "code": "920964",
+   "trade_date": "2026-11-12",
+   "code": "127083",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "508029",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "508029",
+   "name": null,
+   "price": null,
+   "vol": null,
+   "amt": null,
+   "buyer": null,
+   "seller": null
+  },
+  {
+   "trade_date": "2026-11-12",
+   "code": "508029",
    "name": null,
    "price": null,
    "vol": null,

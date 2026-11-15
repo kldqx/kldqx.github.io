@@ -5,30 +5,25 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-13T16:50:55.144254+08:00",
+ "generated_at": "2026-11-16T05:00:00+08:00",
  "source_label": "腾讯一级行情",
- "seed_date": "2026-11-12",
+ "seed_date": "2026-11-13",
  "handoff": "runtime/runs/20261112-postmarket-v27",
- "run_id": "20261112-postmarket-v27",
+ "run_id": "20261113-postmarket-v34",
  "stocks": [
   {
    "code": "000559.SZ",
    "name": "万向钱潮",
-   "price": 13.42,
-   "change_pct": 1.67,
+   "price": 12.42,
+   "change_pct": -2.89,
    "turnover_yi": 16.731,
    "vwap": null,
    "vwap_deviation_pct": null,
-   "source_data_at": "2026-11-11 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-11T18:49:57.801276+08:00",
-   "phase": "T-1_POSTMARKET",
+   "phase": "T+1_EXIT_DONE",
    "benchmark": {
-    "desc": "V26五日战役研判 alpha=None；板块 BK1526；vol_ratio=1.3556 回踩=-7.16%；20日涨停基因=True；v23=0.625；抓手=0.1；L2=goldminer_l2[goldminer_ticks]:20261111；名称双源一致=True；PE=42.71",
-    "target_open_pct": [
-     1.5,
-     7.0
-    ],
-    "min_turnover_yi": 0.3346
+    "desc": "T+1兑现 2026-11-13: 收盘 12.42(-2.89%)"
    },
    "gaps": [
     "goldminer 20261111 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
@@ -40,13 +35,13 @@
    "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
    "hypothesis": "V26五日战役研判 alpha=None；板块 BK1526；vol_ratio=1.3556 回踩=-7.16%；20日涨停基因=True；v23=0.625；抓手=0.1；L2=goldminer_l2[goldminer_ticks]:20261111；名称双源一致=True；PE=42.71; verify_anomaly_factor_integrity --target-date 2026-11-12 EXIT=0; 名称腾讯+东财双源一致",
    "risk_reason": "goldminer 20261111 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
-   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
    "seed_trade_date": "2026-11-11",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
-   "original_condition_status": "t_minus1_postmarket",
+   "monitoring_status": "exit_done",
+   "original_condition_status": "t_plus1_exit_done",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "done",
    "manual_label": "t_minus1_v26_B级",
    "origin_batch_id": "20261112-postmarket-v27",
    "origin_source_refs": [
@@ -63,7 +58,7 @@
    "auction_confirmed": false,
    "auction_rejected": false,
    "auction_verdict": "PENDING(2026-11-12 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V26_B",
+   "auction_badge": "T+1_DONE",
    "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
    "buy_permission": "not_a_trading_signal",
    "exit_rule_T1": "T+1=2026-11-12: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
@@ -79,21 +74,16 @@
   {
    "code": "002284.SZ",
    "name": "亚太股份",
-   "price": 9.9,
-   "change_pct": 2.91,
+   "price": 9.44,
+   "change_pct": -0.21,
    "turnover_yi": 2.459,
    "vwap": null,
    "vwap_deviation_pct": null,
-   "source_data_at": "2026-11-11 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-11T18:49:57.801276+08:00",
-   "phase": "T-1_POSTMARKET",
+   "phase": "T+1_EXIT_DONE",
    "benchmark": {
-    "desc": "V26五日战役研判 alpha=None；板块 BK0481,BK1211；vol_ratio=0.9484 回踩=-7.96%；20日涨停基因=True；v23=0.0；抓手=0.4；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=12.36",
-    "target_open_pct": [
-     1.5,
-     7.0
-    ],
-    "min_turnover_yi": 0.0492
+    "desc": "T+1兑现 2026-11-13: 收盘 9.44(-0.21%)"
    },
    "gaps": [
     "goldminer 20261111 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
@@ -105,13 +95,13 @@
    "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
    "hypothesis": "V26五日战役研判 alpha=None；板块 BK0481,BK1211；vol_ratio=0.9484 回踩=-7.96%；20日涨停基因=True；v23=0.0；抓手=0.4；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=12.36; verify_anomaly_factor_integrity --target-date 2026-11-12 EXIT=0; 名称腾讯+东财双源一致",
    "risk_reason": "goldminer 20261111 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
-   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
    "seed_trade_date": "2026-11-11",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
-   "original_condition_status": "t_minus1_postmarket",
+   "monitoring_status": "exit_done",
+   "original_condition_status": "t_plus1_exit_done",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "done",
    "manual_label": "t_minus1_v26_B级",
    "origin_batch_id": "20261112-postmarket-v27",
    "origin_source_refs": [
@@ -128,7 +118,7 @@
    "auction_confirmed": false,
    "auction_rejected": false,
    "auction_verdict": "PENDING(2026-11-12 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V26_B",
+   "auction_badge": "T+1_DONE",
    "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
    "buy_permission": "not_a_trading_signal",
    "exit_rule_T1": "T+1=2026-11-12: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
@@ -146,21 +136,16 @@
   {
    "code": "600699.SH",
    "name": "均胜电子",
-   "price": 22.92,
-   "change_pct": 4.23,
+   "price": 21.58,
+   "change_pct": 0.09,
    "turnover_yi": 16.903,
    "vwap": null,
    "vwap_deviation_pct": null,
-   "source_data_at": "2026-11-11 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-11T18:49:57.801276+08:00",
-   "phase": "T-1_POSTMARKET",
+   "phase": "T+1_EXIT_DONE",
    "benchmark": {
-    "desc": "V26五日战役研判 alpha=None；板块 BK0481,BK1211；vol_ratio=1.4769 回踩=-7.37%；20日涨停基因=True；v23=0.15；抓手=0.1；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=30.29",
-    "target_open_pct": [
-     1.5,
-     7.0
-    ],
-    "min_turnover_yi": 0.3381
+    "desc": "T+1兑现 2026-11-13: 收盘 21.58(0.09%)"
    },
    "gaps": [
     "goldminer 20261111 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
@@ -172,13 +157,13 @@
    "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
    "hypothesis": "V26五日战役研判 alpha=None；板块 BK0481,BK1211；vol_ratio=1.4769 回踩=-7.37%；20日涨停基因=True；v23=0.15；抓手=0.1；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=30.29; verify_anomaly_factor_integrity --target-date 2026-11-12 EXIT=0; 名称腾讯+东财双源一致",
    "risk_reason": "goldminer 20261111 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
-   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
    "seed_trade_date": "2026-11-11",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
-   "original_condition_status": "t_minus1_postmarket",
+   "monitoring_status": "exit_done",
+   "original_condition_status": "t_plus1_exit_done",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "done",
    "manual_label": "t_minus1_v26_B级",
    "origin_batch_id": "20261112-postmarket-v27",
    "origin_source_refs": [
@@ -195,7 +180,7 @@
    "auction_confirmed": false,
    "auction_rejected": false,
    "auction_verdict": "PENDING(2026-11-12 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V26_B",
+   "auction_badge": "T+1_DONE",
    "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
    "buy_permission": "not_a_trading_signal",
    "exit_rule_T1": "T+1=2026-11-12: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
@@ -212,21 +197,16 @@
   {
    "code": "002636.SZ",
    "name": "金安国纪",
-   "price": 68.97,
-   "change_pct": 5.31,
+   "price": 59.76,
+   "change_pct": -8.32,
    "turnover_yi": 46.465,
    "vwap": null,
    "vwap_deviation_pct": null,
-   "source_data_at": "2026-11-11 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-11T18:49:57.801276+08:00",
-   "phase": "T-1_POSTMARKET",
+   "phase": "T+1_EXIT_DONE",
    "benchmark": {
-    "desc": "V26五日战役研判 alpha=None；板块 BK1201,BK0459；vol_ratio=0.9857 回踩=-9.3%；20日涨停基因=True；v23=0.0；抓手=0.4；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=24.47",
-    "target_open_pct": [
-     1.5,
-     7.0
-    ],
-    "min_turnover_yi": 0.9293
+    "desc": "T+1兑现 2026-11-13: 收盘 59.76(-8.32%)"
    },
    "gaps": [
     "goldminer 20261111 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
@@ -238,13 +218,13 @@
    "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
    "hypothesis": "V26五日战役研判 alpha=None；板块 BK1201,BK0459；vol_ratio=0.9857 回踩=-9.3%；20日涨停基因=True；v23=0.0；抓手=0.4；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=24.47; verify_anomaly_factor_integrity --target-date 2026-11-12 EXIT=0; 名称腾讯+东财双源一致",
    "risk_reason": "goldminer 20261111 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
-   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
    "seed_trade_date": "2026-11-11",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
-   "original_condition_status": "t_minus1_postmarket",
+   "monitoring_status": "exit_done",
+   "original_condition_status": "t_plus1_exit_done",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "done",
    "manual_label": "t_minus1_v26_B级",
    "origin_batch_id": "20261112-postmarket-v27",
    "origin_source_refs": [
@@ -261,7 +241,7 @@
    "auction_confirmed": false,
    "auction_rejected": false,
    "auction_verdict": "PENDING(2026-11-12 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V26_B",
+   "auction_badge": "T+1_DONE",
    "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
    "buy_permission": "not_a_trading_signal",
    "exit_rule_T1": "T+1=2026-11-12: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
@@ -279,21 +259,16 @@
   {
    "code": "603629.SH",
    "name": "利通电子",
-   "price": 67.6,
-   "change_pct": 5.97,
+   "price": 62.18,
+   "change_pct": -6.1,
    "turnover_yi": 15.803,
    "vwap": null,
    "vwap_deviation_pct": null,
-   "source_data_at": "2026-11-11 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-11T18:49:57.801276+08:00",
-   "phase": "T-1_POSTMARKET",
+   "phase": "T+1_EXIT_DONE",
    "benchmark": {
-    "desc": "V26五日战役研判 alpha=None；板块 BK1201,BK1338；vol_ratio=0.9107 回踩=-33.73%；20日涨停基因=True；v23=0.2；抓手=0.4；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=23.67",
-    "target_open_pct": [
-     1.5,
-     7.0
-    ],
-    "min_turnover_yi": 0.3161
+    "desc": "T+1兑现 2026-11-13: 收盘 62.18(-6.1%)"
    },
    "gaps": [
     "goldminer 20261111 逐笔未落盘(cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门)",
@@ -305,13 +280,13 @@
    "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=前日全天2%",
    "hypothesis": "V26五日战役研判 alpha=None；板块 BK1201,BK1338；vol_ratio=0.9107 回踩=-33.73%；20日涨停基因=True；v23=0.2；抓手=0.4；L2=goldminer_l2[goldminer_ticks]_missing:20261111；名称双源一致=True；PE=23.67; verify_anomaly_factor_integrity --target-date 2026-11-12 EXIT=0; 名称腾讯+东财双源一致",
    "risk_reason": "goldminer 20261111 实时逐笔未落盘，cancel/hard_commit/surge 依赖 11-11 09:25 实时闸门；L2 缺失标的已标注不零填；板块资金为厂商推导口径；11-10 龙虎榜 17:00 后补拉校验剔除",
-   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
    "seed_trade_date": "2026-11-11",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
-   "original_condition_status": "t_minus1_postmarket",
+   "monitoring_status": "exit_done",
+   "original_condition_status": "t_plus1_exit_done",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "done",
    "manual_label": "t_minus1_v26_B级",
    "origin_batch_id": "20261112-postmarket-v27",
    "origin_source_refs": [
@@ -328,7 +303,7 @@
    "auction_confirmed": false,
    "auction_rejected": false,
    "auction_verdict": "PENDING(2026-11-12 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V26_B",
+   "auction_badge": "T+1_DONE",
    "auction_reason": "V26 五日战役 T-1 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
    "buy_permission": "not_a_trading_signal",
    "exit_rule_T1": "T+1=2026-11-12: 盘中跌破开盘价3%强制止损 | 14:55尾盘无动能市价清仓 | 绝不留隔夜风险",
@@ -1738,8 +1713,8 @@
   {
    "code": "601929.SH",
    "name": "吉视传媒",
-   "price": null,
-   "change_pct": 10.2,
+   "price": 2.69,
+   "change_pct": -4.27,
    "turnover_yi": 19.2893,
    "vol_ratio": null,
    "turnover_rate": 20.26,
@@ -1779,13 +1754,13 @@
    "lhb_dates": [
     "20261112"
    ],
-   "source_data_at": "2026-11-12 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-13T16:50:55.144254+08:00",
-   "phase": "T_FIRST_BOARD",
+   "phase": "T+1_EXIT_DONE",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
+    "desc": "T+1兑现 2026-11-13: 收盘 2.69(-4.27%)"
    },
    "gaps": [
     "seat_net_spread",
@@ -1799,13 +1774,18 @@
    "points": [],
    "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
    "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
-   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)",
+   "monitoring_status": "exit_done",
+   "observation_status": "done",
+   "original_condition_status": "t_plus1_exit_done",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
+   "auction_badge": "T+1_DONE"
   },
   {
    "code": "300058.SZ",
    "name": "蓝色光标",
-   "price": null,
-   "change_pct": 10.89,
+   "price": 13.63,
+   "change_pct": -7.66,
    "turnover_yi": 116.1506,
    "vol_ratio": null,
    "turnover_rate": 22.51,
@@ -1826,26 +1806,31 @@
     "note": "东财/THS推导指标，非交易所权威披露，仅供参考不作排序依据"
    },
    "lhb_dates": [],
-   "source_data_at": "2026-11-12 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-13T16:50:55.144254+08:00",
-   "phase": "T_FIRST_BOARD",
+   "phase": "T+1_EXIT_DONE",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
+    "desc": "T+1兑现 2026-11-13: 收盘 13.63(-7.66%)"
    },
    "gaps": [],
    "events": [],
    "points": [],
    "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
    "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
-   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)",
+   "monitoring_status": "exit_done",
+   "observation_status": "done",
+   "original_condition_status": "t_plus1_exit_done",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
+   "auction_badge": "T+1_DONE"
   },
   {
    "code": "688801.SH",
    "name": "燧原科技-U",
-   "price": null,
-   "change_pct": 13.13,
+   "price": 570.7,
+   "change_pct": 2.11,
    "turnover_yi": 21.8765,
    "vol_ratio": null,
    "turnover_rate": 22.61,
@@ -1885,13 +1870,13 @@
    "lhb_dates": [
     "20261111"
    ],
-   "source_data_at": "2026-11-12 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-13T16:50:55.144254+08:00",
-   "phase": "T_FIRST_BOARD",
+   "phase": "T+1_EXIT_DONE",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
+    "desc": "T+1兑现 2026-11-13: 收盘 570.7(2.11%)"
    },
    "gaps": [
     "seat_net_spread",
@@ -1905,13 +1890,18 @@
    "points": [],
    "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
    "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
-   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)",
+   "monitoring_status": "exit_done",
+   "observation_status": "done",
+   "original_condition_status": "t_plus1_exit_done",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
+   "auction_badge": "T+1_DONE"
   },
   {
    "code": "300613.SZ",
    "name": "富瀚微",
-   "price": null,
-   "change_pct": -3.12,
+   "price": 79.48,
+   "change_pct": -4.0,
    "turnover_yi": 24.6112,
    "vol_ratio": null,
    "turnover_rate": 13.27,
@@ -1951,13 +1941,13 @@
    "lhb_dates": [
     "20261110"
    ],
-   "source_data_at": "2026-11-12 15:00:00",
+   "source_data_at": "2026-11-13 15:00:00",
    "observed_at": "2026-11-13T16:50:55.144254+08:00",
-   "phase": "T_FIRST_BOARD",
+   "phase": "T+1_EXIT_DONE",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
    "benchmark": {
-    "desc": "V32先宏观后微观: sector_resonance>turnover_health(宏观筛) > seal_ratio>lhb参考(微观验); 第三方推导指标仅参考"
+    "desc": "T+1兑现 2026-11-13: 收盘 79.48(-4.0%)"
    },
    "gaps": [
     "seat_net_spread",
@@ -1971,7 +1961,444 @@
    "points": [],
    "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
    "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
-   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)"
+   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)",
+   "monitoring_status": "exit_done",
+   "observation_status": "done",
+   "original_condition_status": "t_plus1_exit_done",
+   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
+   "auction_badge": "T+1_DONE"
+  },
+  {
+   "code": "603893.SH",
+   "name": "瑞芯微",
+   "price": 217.8,
+   "change_pct": -1.32,
+   "turnover_yi": 36.066,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V34 Line A: v34_line_a_score=5.765; vol_ratio=None; pullback=-7.32; ret_20=27.36; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.7213
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line A: v34_line_a_score=5.765; vol_ratio=None; pullback=-7.32; ret_20=27.36; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "300458.SZ",
+   "name": "全志科技",
+   "price": 28.35,
+   "change_pct": -1.9,
+   "turnover_yi": 10.954,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V34 Line A: v34_line_a_score=4.685; vol_ratio=None; pullback=-4.58; ret_20=8.91; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.2191
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line A: v34_line_a_score=4.685; vol_ratio=None; pullback=-4.58; ret_20=8.91; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "002238.SZ",
+   "name": "天威视讯",
+   "price": 7.07,
+   "change_pct": 0.0,
+   "turnover_yi": 2.379,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V34 Line A: v34_line_a_score=3.331; vol_ratio=None; pullback=-4.59; ret_20=0.14; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.0476
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line A: v34_line_a_score=3.331; vol_ratio=None; pullback=-4.59; ret_20=0.14; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "300770.SZ",
+   "name": "新媒股份",
+   "price": 39.48,
+   "change_pct": 0.36,
+   "turnover_yi": 2.237,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T-1_POSTMARKET",
+   "benchmark": {
+    "desc": "V34 Line A: v34_line_a_score=2.364; vol_ratio=None; pullback=-5.16; ret_20=7.87; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.0447
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line A: v34_line_a_score=2.364; vol_ratio=None; pullback=-5.16; ret_20=7.87; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_minus1_postmarket",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "t_minus1_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "knife_candidate",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "T-1_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "300237.SZ",
+   "name": "美晨科技",
+   "price": 3.26,
+   "change_pct": 19.85,
+   "turnover_yi": 6.339,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T_FIRST_BOARD",
+   "benchmark": {
+    "desc": "V34 Line B: v34_line_b=1.68; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.49732684821767625; lhb_dates=['20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.1268
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line B: v34_line_b=1.68; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.49732684821767625; lhb_dates=['20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_first_board",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "first_board_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "first_board",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "FB_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "301697.SZ",
+   "name": "贝特利",
+   "price": 29.8,
+   "change_pct": -11.23,
+   "turnover_yi": 7.1,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T_FIRST_BOARD",
+   "benchmark": {
+    "desc": "V34 Line B: v34_line_b=1.673; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.4939536142129318; lhb_dates=['20261111', '20261112', '20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.142
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line B: v34_line_b=1.673; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.4939536142129318; lhb_dates=['20261111', '20261112', '20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_first_board",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "first_board_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "first_board",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "FB_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "688801.SH",
+   "name": "燧原科技-U",
+   "price": 570.7,
+   "change_pct": 2.11,
+   "turnover_yi": 22.55,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T_FIRST_BOARD",
+   "benchmark": {
+    "desc": "V34 Line B: v34_line_b=1.666; f3_top_youzi_buy1_hit=None; lhb_buy1_share=None; lhb_dates=['20261111']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.451
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line B: v34_line_b=1.666; f3_top_youzi_buy1_hit=None; lhb_buy1_share=None; lhb_dates=['20261111']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_first_board",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "first_board_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "first_board",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "FB_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "600892.SH",
+   "name": "大晟文化",
+   "price": 5.63,
+   "change_pct": 3.3,
+   "turnover_yi": 9.41,
+   "vwap": null,
+   "vwap_deviation_pct": null,
+   "source_data_at": "2026-11-13 15:00:00",
+   "observed_at": "2026-11-16T05:00:00+08:00",
+   "phase": "T_FIRST_BOARD",
+   "benchmark": {
+    "desc": "V34 Line B: v34_line_b=1.601; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.45801591088261584; lhb_dates=['20261111', '20261112', '20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+    "target_open_pct": [
+     1.5,
+     7.0
+    ],
+    "min_turnover_yi": 0.1882
+   },
+   "gaps": [
+    "bid1盘口缺失(seal_ratio gap)",
+    "ma_gap_40/60窗口不足gap",
+    "竞价闸门三因子待09:25实时"
+   ],
+   "events": [],
+   "points": [],
+   "original_conditions": "T日 09:25 硬闸门: 开盘竞价涨幅 +1.5%~+7.0% | 09:15-09:20 Cancel_Ratio<20% | 09:20-09:25 Hard_Commit>70% 且单笔均量>500股 | 09:24-09:25 Surge_Ratio>2.0 | 09:25 竞价成交额>=11-13全天2%",
+   "hypothesis": "V34 Line B: v34_line_b=1.601; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.45801591088261584; lhb_dates=['20261111', '20261112', '20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
+   "risk_reason": "数据日2026-11-13收盘快照; 板块资金为腾讯厂商推导口径; 竞价闸门因子盘中实时计算",
+   "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
+   "seed_trade_date": "2026-11-13",
+   "monitoring_eligible": true,
+   "monitoring_status": "ready",
+   "original_condition_status": "t_first_board",
+   "observation_eligible": true,
+   "observation_status": "pre_auction_watch",
+   "manual_label": "first_board_v34",
+   "origin_batch_id": "20261113-postmarket-v34",
+   "origin_source_refs": [
+    "runtime/runs/20261113-postmarket-v34/v34_feed.json",
+    "runtime/runs/20261113-postmarket-v34/manifest.json",
+    "data/daily_picks_ledger.csv"
+   ],
+   "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
+   "recommendation": "first_board",
+   "adversarial_verdict": "not_a_trading_signal",
+   "auction_evaluation": null,
+   "auction_confirmed": false,
+   "auction_rejected": false,
+   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
+   "auction_badge": "FB_V34",
+   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "buy_permission": "not_a_trading_signal"
   }
  ],
  "manual_watch_revision": 1,
