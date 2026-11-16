@@ -3,13 +3,13 @@
  "signal_boundary": "not_a_trading_signal",
  "workspace_id": "01c9c9660c33cf342a49a83a7c76311f2afa1a00a4fed72b827d9db7c027beaf",
  "mode": "live",
- "status": "ready",
- "phase": "T_GATE_DONE_20261116",
- "generated_at": "2026-11-16T09:47:39",
+ "status": "return_for_research",
+ "phase": "T-1_POSTMARKET_20261117",
+ "generated_at": "2026-11-17T05:26:13+08:00",
  "source_label": "腾讯一级行情",
- "seed_date": "2026-11-13",
- "handoff": "runtime/runs/20261112-postmarket-v27",
- "run_id": "20261113-postmarket-v34",
+ "seed_date": "2026-11-16",
+ "handoff": "runtime/runs/20261116-postmarket-v35",
+ "run_id": "20261116-postmarket-v35",
  "stocks": [
   {
    "code": "000559.SZ",
@@ -2845,5 +2845,6 @@
  "points_note": "分时走势为东财分钟线(klt=1)回填, vwap 为累计推导指标; signal_boundary=not_a_trading_signal",
  "page": "T",
  "page_note": "T 页仅展示当次盘后新推候选（T-1 定案，待次日 09:25 硬闸门裁决）；T-1 观察票见 t-minus1.html，T+1 出场票见 t-plus1.html",
- "split_at": "2026-11-11T18:36:07.577991+08:00"
+ "split_at": "2026-11-11T18:36:07.577991+08:00",
+ "run_note": "V35 三层全评真实空池(不凑票): L0 spoon=0.1079 tier=low(可评非gap); L1 板块 pos_share@T-2=2026-11-13 全 4388 只未过同板块 q80(3266 阈值未过+1122 板块gap); L2 微观 T-1 全 3994 只未过 amt_ratio_t1>=1.2 & excess_ret_t1>0(2870 未过+1124 字段gap); n_passed=0 -> return_for_research. 机器前检 verify EXIT=0; 独立QA pass (runtime/qa/20261117-v35-postclose-qa.json); v35_feed.json sha256=70fc075edc41b586b7e2707a3826b10cc81293dfc75f0340130adfb930698c97. stocks 保持 43 条历史记录, 本轮无新增出票. signal_boundary=not_a_trading_signal"
 }

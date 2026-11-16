@@ -826,6 +826,10 @@
   {
    "gap": "2026-11-12 盘后两融数据未发布(datacenter 最新 None), 保留为前一交易日",
    "affected": "margin 全量"
+  },
+  {
+   "gap": "2026-11-16 盘后两融数据未发布(datacenter 最新 None), 保留为前一交易日",
+   "affected": "margin 全量"
   }
  ],
  "raw_files": [
