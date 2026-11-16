@@ -5,7 +5,7 @@
  "mode": "live",
  "status": "ready",
  "phase": "T_GATE_DONE_20261116",
- "generated_at": "2026-11-16T09:28:25",
+ "generated_at": "2026-11-16T09:41:02",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-13",
  "handoff": "runtime/runs/20261112-postmarket-v27",
@@ -1827,77 +1827,6 @@
    "auction_badge": "T+1_DONE"
   },
   {
-   "code": "688801.SH",
-   "name": "燧原科技-U",
-   "price": 570.7,
-   "change_pct": 2.11,
-   "turnover_yi": 21.8765,
-   "vol_ratio": null,
-   "turnover_rate": 22.61,
-   "main_net": 135976456.0,
-   "sector": "pt01801081",
-   "scores": {
-    "lhb_seat": 0.18530888168593843,
-    "seal_ratio": 5.364880122505885e-06,
-    "sector_resonance": 1,
-    "turnover_health": 1
-   },
-   "lhb_factor_pack": {
-    "on_lhb": true,
-    "net_ratio": 0.11769627228646146,
-    "inst_seat_balance": 1.0,
-    "buy_concentration": 0.11769627228646146,
-    "seat_net_spread": null,
-    "self_trade_ratio": null,
-    "lhasa_ratio": null,
-    "north_seat": null,
-    "seat_winrate": null,
-    "syndicate_hit": null,
-    "gaps": [
-     "seat_net_spread",
-     "self_trade_penalty",
-     "lhasa_penalty",
-     "north_bonus",
-     "seat_winrate",
-     "syndicate_bonus"
-    ]
-   },
-   "reference_only": {
-    "lhb_net_ratio": 0.11769627228646146,
-    "main_net_1112_vendor_derived": 135976456.0,
-    "note": "东财/THS推导指标，非交易所权威披露，仅供参考不作排序依据"
-   },
-   "lhb_dates": [
-    "20261111"
-   ],
-   "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T09:28:25",
-   "phase": "T+1_EXIT_DONE",
-   "target_trade_date": "2026-11-13",
-   "line": "first_board",
-   "benchmark": {
-    "desc": "T+1兑现 2026-11-13: 收盘 570.7(2.11%)"
-   },
-   "gaps": [
-    "seat_net_spread",
-    "self_trade_penalty",
-    "lhasa_penalty",
-    "north_bonus",
-    "seat_winrate",
-    "syndicate_bonus"
-   ],
-   "events": [],
-   "points": [],
-   "original_conditions": "非交易信号；首板线 T进 -> T+1/T+2/T+3出",
-   "hypothesis": "宏观主线共振+微观封单/换手验证的强势票",
-   "risk_reason": "普跌日背景; T+2~T+4再板博弈(龙虎榜首板41%)",
-   "monitoring_status": "exit_done",
-   "observation_status": "done",
-   "original_condition_status": "t_plus1_exit_done",
-   "qa_verdict": "已兑现(2026-11-13收盘快照回填)",
-   "auction_badge": "T+1_DONE"
-  },
-  {
    "code": "300613.SZ",
    "name": "富瀚微",
    "price": 79.48,
@@ -2491,7 +2420,18 @@
    "auction_verdict": "NO_ENTRY",
    "auction_badge": "T_GATE_NO_ENTRY_20261116",
    "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: price_gap_1.5_to_7.0,auction_amt_ge_2pct_prev",
-   "buy_permission": "not_a_trading_signal"
+   "buy_permission": "not_a_trading_signal",
+   "exit_history": [
+    {
+     "phase": "T+1_EXIT_DONE",
+     "monitoring_status": "exit_done",
+     "observation_status": "done",
+     "auction_badge": "T+1_DONE",
+     "points": [],
+     "events": []
+    }
+   ],
+   "note_prev_cycle": "同一代码上一战役(旧批次)已T+1_EXIT_DONE, 记录并入exit_history"
   },
   {
    "code": "600892.SH",
