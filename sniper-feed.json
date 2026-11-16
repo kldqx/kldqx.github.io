@@ -4,8 +4,8 @@
  "workspace_id": "01c9c9660c33cf342a49a83a7c76311f2afa1a00a4fed72b827d9db7c027beaf",
  "mode": "live",
  "status": "ready",
- "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-16T05:00:00+08:00",
+ "phase": "T_GATE_DONE_20261116",
+ "generated_at": "2026-11-16T09:28:25",
  "source_label": "腾讯一级行情",
  "seed_date": "2026-11-13",
  "handoff": "runtime/runs/20261112-postmarket-v27",
@@ -1871,7 +1871,7 @@
     "20261111"
    ],
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-13T16:50:55.144254+08:00",
+   "observed_at": "2026-11-16T09:28:25",
    "phase": "T+1_EXIT_DONE",
    "target_trade_date": "2026-11-13",
    "line": "first_board",
@@ -1977,8 +1977,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T-1_POSTMARKET",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line A: v34_line_a_score=5.765; vol_ratio=None; pullback=-7.32; ret_20=27.36; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -1990,7 +1990,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2000,10 +2000,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_minus1_postmarket",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "t_minus1_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2014,12 +2014,33 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "knife_candidate",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 217.0,
+    "gap_pct": -0.367,
+    "auction_amt_ratio_pct_of_prev": 0.675,
+    "cancel_proxy_0915_0920": 0.2523,
+    "hard_commit_proxy_0920_0925": 9.3583,
+    "surge_proxy_0924_0925": 33.3925,
+    "avg_trade_vol": 112200.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": false,
+     "auction_amt_ge_2pct_prev": false,
+     "cancel_proxy_lt_20pct": false,
+     "hard_commit_proxy_gt_70pct": true,
+     "surge_proxy_gt_2.0": true,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: price_gap_1.5_to_7.0,auction_amt_ge_2pct_prev,cancel_proxy_lt_20pct",
    "buy_permission": "not_a_trading_signal"
   },
   {
@@ -2031,8 +2052,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T-1_POSTMARKET",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line A: v34_line_a_score=4.685; vol_ratio=None; pullback=-4.58; ret_20=8.91; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -2044,7 +2065,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2054,10 +2075,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_minus1_postmarket",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "t_minus1_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2068,12 +2089,33 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "knife_candidate",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 28.12,
+    "gap_pct": -0.811,
+    "auction_amt_ratio_pct_of_prev": 0.391,
+    "cancel_proxy_0915_0920": -0.5519,
+    "hard_commit_proxy_0920_0925": 0.4288,
+    "surge_proxy_0924_0925": -19.8428,
+    "avg_trade_vol": 152147.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": false,
+     "auction_amt_ge_2pct_prev": false,
+     "cancel_proxy_lt_20pct": true,
+     "hard_commit_proxy_gt_70pct": false,
+     "surge_proxy_gt_2.0": false,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: price_gap_1.5_to_7.0,auction_amt_ge_2pct_prev,hard_commit_proxy_gt_70pct,surge_proxy_gt_2.0",
    "buy_permission": "not_a_trading_signal"
   },
   {
@@ -2085,8 +2127,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T-1_POSTMARKET",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line A: v34_line_a_score=3.331; vol_ratio=None; pullback=-4.59; ret_20=0.14; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -2098,7 +2140,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2108,10 +2150,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_minus1_postmarket",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "t_minus1_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2122,12 +2164,33 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "knife_candidate",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 7.01,
+    "gap_pct": -0.849,
+    "auction_amt_ratio_pct_of_prev": 0.567,
+    "cancel_proxy_0915_0920": 0.8807,
+    "hard_commit_proxy_0920_0925": 0.9282,
+    "surge_proxy_0924_0925": -0.6925,
+    "avg_trade_vol": 192400.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": false,
+     "auction_amt_ge_2pct_prev": false,
+     "cancel_proxy_lt_20pct": false,
+     "hard_commit_proxy_gt_70pct": true,
+     "surge_proxy_gt_2.0": false,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: price_gap_1.5_to_7.0,auction_amt_ge_2pct_prev,cancel_proxy_lt_20pct,surge_proxy_gt_2.0",
    "buy_permission": "not_a_trading_signal"
   },
   {
@@ -2139,8 +2202,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T-1_POSTMARKET",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line A: v34_line_a_score=2.364; vol_ratio=None; pullback=-5.16; ret_20=7.87; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -2152,7 +2215,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2162,10 +2225,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_minus1_postmarket",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "t_minus1_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2176,12 +2239,33 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "knife_candidate",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 39.38,
+    "gap_pct": -0.253,
+    "auction_amt_ratio_pct_of_prev": 0.275,
+    "cancel_proxy_0915_0920": -5.5,
+    "hard_commit_proxy_0920_0925": 3.4615,
+    "surge_proxy_0924_0925": -33.75,
+    "avg_trade_vol": 15600.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": false,
+     "auction_amt_ge_2pct_prev": false,
+     "cancel_proxy_lt_20pct": true,
+     "hard_commit_proxy_gt_70pct": true,
+     "surge_proxy_gt_2.0": false,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "T-1_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: price_gap_1.5_to_7.0,auction_amt_ge_2pct_prev,surge_proxy_gt_2.0",
    "buy_permission": "not_a_trading_signal"
   },
   {
@@ -2193,8 +2277,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T_FIRST_BOARD",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line B: v34_line_b=1.68; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.49732684821767625; lhb_dates=['20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -2206,7 +2290,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2216,10 +2300,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_first_board",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "first_board_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2230,12 +2314,33 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "first_board",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 3.32,
+    "gap_pct": 1.84,
+    "auction_amt_ratio_pct_of_prev": 2.625,
+    "cancel_proxy_0915_0920": -0.1789,
+    "hard_commit_proxy_0920_0925": 0.2449,
+    "surge_proxy_0924_0925": -17.2713,
+    "avg_trade_vol": 5012500.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": true,
+     "auction_amt_ge_2pct_prev": true,
+     "cancel_proxy_lt_20pct": true,
+     "hard_commit_proxy_gt_70pct": false,
+     "surge_proxy_gt_2.0": false,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "FB_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: hard_commit_proxy_gt_70pct,surge_proxy_gt_2.0",
    "buy_permission": "not_a_trading_signal"
   },
   {
@@ -2247,8 +2352,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T_FIRST_BOARD",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line B: v34_line_b=1.673; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.4939536142129318; lhb_dates=['20261111', '20261112', '20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -2260,7 +2365,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2270,10 +2375,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_first_board",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "first_board_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2284,12 +2389,33 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "first_board",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 29.61,
+    "gap_pct": -0.638,
+    "auction_amt_ratio_pct_of_prev": 0.829,
+    "cancel_proxy_0915_0920": -1.1358,
+    "hard_commit_proxy_0920_0925": 0.3123,
+    "surge_proxy_0924_0925": -34.8847,
+    "avg_trade_vol": 198750.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": false,
+     "auction_amt_ge_2pct_prev": false,
+     "cancel_proxy_lt_20pct": true,
+     "hard_commit_proxy_gt_70pct": false,
+     "surge_proxy_gt_2.0": false,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "FB_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: price_gap_1.5_to_7.0,auction_amt_ge_2pct_prev,hard_commit_proxy_gt_70pct,surge_proxy_gt_2.0",
    "buy_permission": "not_a_trading_signal"
   },
   {
@@ -2301,8 +2427,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T_FIRST_BOARD",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line B: v34_line_b=1.666; f3_top_youzi_buy1_hit=None; lhb_buy1_share=None; lhb_dates=['20261111']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -2314,7 +2440,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2324,10 +2450,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_first_board",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "first_board_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2338,12 +2464,33 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "first_board",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 540.0,
+    "gap_pct": -5.379,
+    "auction_amt_ratio_pct_of_prev": 0.708,
+    "cancel_proxy_0915_0920": -0.2201,
+    "hard_commit_proxy_0920_0925": 7.9737,
+    "surge_proxy_0924_0925": 42.3567,
+    "avg_trade_vol": 29586.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": false,
+     "auction_amt_ge_2pct_prev": false,
+     "cancel_proxy_lt_20pct": true,
+     "hard_commit_proxy_gt_70pct": true,
+     "surge_proxy_gt_2.0": true,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "FB_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: price_gap_1.5_to_7.0,auction_amt_ge_2pct_prev",
    "buy_permission": "not_a_trading_signal"
   },
   {
@@ -2355,8 +2502,8 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": "2026-11-13 15:00:00",
-   "observed_at": "2026-11-16T05:00:00+08:00",
-   "phase": "T_FIRST_BOARD",
+   "observed_at": "2026-11-16T09:28:25",
+   "phase": "T_GATE_NO_ENTRY",
    "benchmark": {
     "desc": "V34 Line B: v34_line_b=1.601; f3_top_youzi_buy1_hit=0; lhb_buy1_share=0.45801591088261584; lhb_dates=['20261111', '20261112', '20261113']; 数据日2026-11-13; verify EXIT=0; 名称双源一致",
     "target_open_pct": [
@@ -2368,7 +2515,7 @@
    "gaps": [
     "bid1盘口缺失(seal_ratio gap)",
     "ma_gap_40/60窗口不足gap",
-    "竞价闸门三因子待09:25实时"
+    "竞价闸门已于2026-11-16 09:25用当日goldminer逐笔(ds-proxy ticks)真实裁决; 三因子为盘口代理(proxy)"
    ],
    "events": [],
    "points": [],
@@ -2378,10 +2525,10 @@
    "qa_verdict": "PASS_WITH_GAPS(机器前检EXIT=0; 本轮无独立NVIDIA QA, 非独立QA标注)",
    "seed_trade_date": "2026-11-13",
    "monitoring_eligible": true,
-   "monitoring_status": "ready",
+   "monitoring_status": "gate_rejected_20261116",
    "original_condition_status": "t_first_board",
    "observation_eligible": true,
-   "observation_status": "pre_auction_watch",
+   "observation_status": "auction_gate_done_20261116",
    "manual_label": "first_board_v34",
    "origin_batch_id": "20261113-postmarket-v34",
    "origin_source_refs": [
@@ -2392,17 +2539,38 @@
    "cycle_position": "T-1(2026-11-13盘后定案) -> T=2026-11-16 09:25竞价硬闸门裁决 -> T+1 破开盘3%止损|14:55清仓",
    "recommendation": "first_board",
    "adversarial_verdict": "not_a_trading_signal",
-   "auction_evaluation": null,
+   "auction_evaluation": {
+    "computed_at": "2026-11-16T09:27:36.425409",
+    "data_source": "goldminer ds-proxy /v3/data-history/ticks 2026-11-16 当日逐笔 (created_at UTC, 盘口5档+09:25撮合打印); 前日基准 daily_market_snapshot_20261114.json (f2=11-13收盘, f6=11-13全天成交额)",
+    "proxy_note": "公开L2无委托撤单流: cancel/hard_commit/surge 为10档挂单量代理(proxy), 已标注, 不冒充真实撤单率; 价格闸与竞价金额闸为09:25真实撮合打印",
+    "auction_price_0925": 5.84,
+    "gap_pct": 3.73,
+    "auction_amt_ratio_pct_of_prev": 2.548,
+    "cancel_proxy_0915_0920": 0.3994,
+    "hard_commit_proxy_0920_0925": 4.0813,
+    "surge_proxy_0924_0925": 11.3547,
+    "avg_trade_vol": 4105900.0,
+    "checks": {
+     "price_gap_1.5_to_7.0": true,
+     "auction_amt_ge_2pct_prev": true,
+     "cancel_proxy_lt_20pct": false,
+     "hard_commit_proxy_gt_70pct": true,
+     "surge_proxy_gt_2.0": true,
+     "avg_trade_vol_gt_500": true
+    },
+    "gate_artifact": "runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
+    "gate_sha256": "114759f09527372b629c3a4f270a6525e224cdd0c17b6dc7f72c0a8e7772274e"
+   },
    "auction_confirmed": false,
-   "auction_rejected": false,
-   "auction_verdict": "PENDING(2026-11-16 09:25 硬闸门裁决)",
-   "auction_badge": "FB_V34",
-   "auction_reason": "V34 定案; 09:25 五因子硬闸门: 涨幅+1.5%~+7.0%, Cancel_Ratio<20%, Hard_Commit>70%且单笔均量>500股, Surge_Ratio>2.0, 竞价额>=前日2%",
+   "auction_rejected": true,
+   "auction_verdict": "NO_ENTRY",
+   "auction_badge": "T_GATE_NO_ENTRY_20261116",
+   "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: cancel_proxy_lt_20pct",
    "buy_permission": "not_a_trading_signal"
   }
  ],
  "manual_watch_revision": 1,
- "holding_summary": "signal_boundary=not_a_trading_signal; V26 2026-11-12 候选5只(A级1: 300413芒果超媒; B级4: 000559万向钱潮/300493润欣科技/600345长江通信/301583托伦斯), T=2026-11-12 09:25集合竞价硬闸门裁决, T+1 破开盘3%止损/14:55清仓 | 全生命周期监控: T-3板块观察见 lifecycle_watch.T_minus3_sector_watch; T+1出场战绩见 stocks 中 T+1_EXIT_DONE | 全生命周期监控: T-3板块观察见 lifecycle_watch.T_minus3_sector_watch; T+1出场战绩见 stocks 中 T+1_EXIT_DONE",
+ "holding_summary": "signal_boundary=not_a_trading_signal; V26 2026-11-12 候选5只(A级1: 300413芒果超媒; B级4: 000559万向钱潮/300493润欣科技/600345长江通信/301583托伦斯), T=2026-11-12 09:25集合竞价硬闸门裁决, T+1 破开盘3%止损/14:55清仓 | 全生命周期监控: T-3板块观察见 lifecy | 2026-11-16 09:25闸门实时裁决: 8只全部NO_ENTRY(物理熔断未开仓), 详见 runtime/runs/20261116-auction-gate/auction_gate_20261116.json",
  "lifecycle_watch": {
   "macro_flow_sources": {
    "schema": "macro-flow-sources/v1",
