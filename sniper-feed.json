@@ -3,9 +3,9 @@
  "signal_boundary": "not_a_trading_signal",
  "workspace_id": "01c9c9660c33cf342a49a83a7c76311f2afa1a00a4fed72b827d9db7c027beaf",
  "mode": "live",
- "status": "observing",
- "phase": "PHASE_4_OPENING_REVERSAL",
- "generated_at": "2026-11-17T09:31:05.483774+08:00",
+ "status": "ready",
+ "phase": "T-1_POSTMARKET",
+ "generated_at": "2026-11-17T09:37:22.223903+08:00",
  "source_label": "腾讯一级行情 · 通达信真实数据接口",
  "seed_date": "2026-11-16",
  "handoff": "runtime/runs/20261116-postmarket-v35",
@@ -2519,7 +2519,7 @@
    "source_data_at": null,
    "observed_at": "2026-11-17T09:31:05.349088+08:00",
    "quote_age_seconds": null,
-   "phase": "PHASE_4_OPENING_REVERSAL",
+   "phase": "T-1_POSTMARKET",
    "benchmark": {
     "desc": "V35 三层全评真实出票: L0 spoon=0.1079(tier=low) -> L1 主线板块BK1222(max_pos) pos_share=0.818>=q80 0.786 -> L2 OR(amt_ratio_t1=1.549551, excess_ret_t1=2.918534)。T-1(2026-11-16) 收盘1.493%, 量比3.3058, 微观: goldminer_ticks/20261116 有真实逐笔 (main_net_yuan=204300380.89000082, n_trades=4705)"
    },
@@ -2823,7 +2823,8 @@
    },
    "recommendation": "sniper_candidate",
    "adversarial_verdict": null,
-   "seed_source": "20261116-postmarket-v35"
+   "seed_source": "20261116-postmarket-v35",
+   "target_trade_date": "2026-11-17"
   },
   {
    "code": "002343.SZ",
@@ -2836,7 +2837,7 @@
    "source_data_at": null,
    "observed_at": "2026-11-17T09:31:05.349088+08:00",
    "quote_age_seconds": null,
-   "phase": "PHASE_4_OPENING_REVERSAL",
+   "phase": "T-1_POSTMARKET",
    "benchmark": {
     "desc": "V35 三层全评真实出票: L0 spoon=0.1079(tier=low) -> L1 主线板块BK1222(max_pos) pos_share=0.818>=q80 0.786 -> L2 OR(amt_ratio_t1=1.175026, excess_ret_t1=6.842664)。T-1(2026-11-16) 收盘5.417%, 量比1.024, 微观: missing: goldminer_ticks/20261116/SZSE.002343.parquet"
    },
@@ -3140,7 +3141,8 @@
    },
    "recommendation": "sniper_candidate",
    "adversarial_verdict": null,
-   "seed_source": "20261116-postmarket-v35"
+   "seed_source": "20261116-postmarket-v35",
+   "target_trade_date": "2026-11-17"
   }
  ],
  "manual_watch_revision": 1,
