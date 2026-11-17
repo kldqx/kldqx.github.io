@@ -5,7 +5,7 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-17T09:41:59.118702+08:00",
+ "generated_at": "2026-11-17T11:10:55.342423+08:00",
  "source_label": "腾讯一级行情 · 通达信真实数据接口",
  "seed_date": "2026-11-16",
  "handoff": "runtime/runs/20261116-postmarket-v35",
@@ -2507,6 +2507,68 @@
    "auction_badge": "T_GATE_NO_ENTRY_20261116",
    "auction_reason": "09:25硬闸门熔断未开仓; 未过闸门: cancel_proxy_lt_20pct",
    "buy_permission": "not_a_trading_signal"
+  },
+  {
+   "code": "002739.SZ",
+   "name": "儒意电影",
+   "price": 10.2,
+   "change_pct": 1.493,
+   "turnover_yi": 24.162,
+   "main_net_yi": 2.043004,
+   "vol_ratio": 3.3058,
+   "pullback_pct": -3.32,
+   "sectors": [
+    "BK0486",
+    "BK1222"
+   ],
+   "amt_ratio_t1": 1.549551,
+   "excess_ret_t1": 2.918534,
+   "tier": "low",
+   "source_data_at": "2026-11-16 15:00:00",
+   "observed_at": "2026-11-17T11:10:55.342423+08:00",
+   "phase": "T-1_POSTMARKET",
+   "target_trade_date": "2026-11-17",
+   "seed_trade_date": "2026-11-16",
+   "benchmark": {
+    "desc": "V35 三层传导链: L0 漏勺分档(记录) -> L1 主线板块 max_pos pos_share>=q80 -> L2 硬化 amt_ratio_t1>=1.2 定案; 近3日龙虎榜剔除(合同 v2.5 §四)"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": {
+    "deadline_at": "2026-11-17T09:25:00+08:00",
+    "invalidation_conditions": [
+     "09:25成交额低于门槛"
+    ],
+    "support_conditions": [
+     "竞价开盘涨幅+1.5%~+7.0%",
+     "Cancel_Ratio<20%",
+     "Hard_Commit>70%",
+     "单笔均量>500股",
+     "Surge_Ratio>2.0",
+     "09:25成交额>=4832万(T日成交24.162亿×2%)"
+    ],
+    "trade_date": "2026-11-17"
+   },
+   "hypothesis": "V35 三层全评真实出票: L0 spoon=0.1079(tier=low) -> L1 主线板块BK1222(max_pos) pos_share=0.818>=q80 0.786 -> L2 硬化(amt_ratio_t1=1.549551>=1.4 高精档定案, excess_ret_t1=2.918534 佐证; excess 单腿不放行)。T-1(2026-11-16) 收盘1.493%, 量比3.3058, 微观: goldminer_ticks/20261116 有真实逐笔 (main_net_yuan=204300380.89000082, n_trades=4705)",
+   "risk_reason": "T日(2026-11-17) 09:25 集合竞价硬闸门裁决，未达标物理熔断不开仓；若入场则 T+1 破开盘价3%止损、14:55尾盘无动能市价清仓，绝不留隔夜风险",
+   "qa_verdict": "supported_as_conditional_research_hypothesis",
+   "monitoring_eligible": true,
+   "monitoring_status": null,
+   "origin_batch_id": "20261116-postmarket-v35",
+   "origin_source_refs": [
+    "runtime/runs/20261116-postmarket-v35/v35_feed.json"
+   ],
+   "cycle_position": {
+    "label": "T-1",
+    "recommendation": "sniper_candidate",
+    "role": "主线板块BK1222 max_pos 出票",
+    "stage": "T-1 定案 (T=2026-11-17 作战日)"
+   },
+   "recommendation": "sniper_candidate",
+   "adversarial_verdict": null,
+   "exit_rule_T1": "T+1 盘中跌破开盘价 3% 强制止损 | 14:55 尾盘无动能市价清仓 | 绝不留隔夜风险",
+   "signal_boundary": "not_a_trading_signal"
   }
  ],
  "manual_watch_revision": 1,
@@ -2846,5 +2908,5 @@
  "page": "T",
  "page_note": "T 页仅展示当次盘后新推候选（T-1 定案，待次日 09:25 硬闸门裁决）；T-1 观察票见 t-minus1.html，T+1 出场票见 t-plus1.html",
  "split_at": "2026-11-11T18:36:07.577991+08:00",
- "run_note": "V35 2026-11-17 出票 002739.SZ/002343.SZ 已于盘中撤回(withdrawn, 见 runtime/monitor_handoff/control.json): 002343.SZ 跌停(-9.98%), 002739.SZ -1.18%; 09:25 闸门证据缺失未达标(UNVERIFIED). 台账与 run 目录保留完整记录供盘后复盘. signal_boundary=not_a_trading_signal"
+ "run_note": "V35 2026-11-17 出票重跑(L2 硬化 + 近3日 LHB 剔除, v35_feed sha 2a59b7e0): 唯一幸存 pick 002739.SZ 已恢复上架(用户 2026-11-17 拍板恢复); 002343.SZ 仍 withdrawn — 近3日龙虎榜剔除(合同 v2.5 §四, lhb 2026-11-11/12/16) + L2 excess 单腿硬化挡, T 日跌停 -9.98%. signal_boundary=not_a_trading_signal"
 }
