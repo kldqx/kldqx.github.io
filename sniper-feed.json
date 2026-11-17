@@ -5,11 +5,11 @@
  "mode": "live",
  "status": "ready",
  "phase": "T-1_POSTMARKET",
- "generated_at": "2026-11-17T11:10:55.342423+08:00",
+ "generated_at": "2026-11-18T02:59:00.124523+08:00",
  "source_label": "腾讯一级行情 · 通达信真实数据接口",
- "seed_date": "2026-11-16",
- "handoff": "runtime/runs/20261116-postmarket-v35",
- "run_id": "20261116-postmarket-v35",
+ "seed_date": "2026-11-17",
+ "handoff": "runtime/runs/20261117-postmarket-v35",
+ "run_id": "20261117-postmarket-v35",
  "stocks": [
   {
    "code": "000559.SZ",
@@ -2569,6 +2569,273 @@
    "adversarial_verdict": null,
    "exit_rule_T1": "T+1 盘中跌破开盘价 3% 强制止损 | 14:55 尾盘无动能市价清仓 | 绝不留隔夜风险",
    "signal_boundary": "not_a_trading_signal"
+  },
+  {
+   "code": "688981.SH",
+   "name": "中芯国际",
+   "price": 113.45,
+   "change_pct": 6.586,
+   "turnover_yi": 83.849,
+   "main_net_yi": 14.006872,
+   "vol_ratio": 1.8346,
+   "pullback_pct": -2.43,
+   "sectors": [
+    "BK0917",
+    "BK0891",
+    "BK1137",
+    "BK1713",
+    "BK1201",
+    "BK1689",
+    "BK1665",
+    "BK0536",
+    "BK1036",
+    "BK0707",
+    "BK1663",
+    "BK1059"
+   ],
+   "amt_ratio_t1": 2.004072,
+   "excess_ret_t1": 6.810462,
+   "source_data_at": "2026-11-17 15:00:00",
+   "observed_at": "2026-11-18T02:59:00.124523+08:00",
+   "phase": "T-1_POSTMARKET",
+   "target_trade_date": "2026-11-18",
+   "benchmark": {
+    "desc": "V36/v2.6 sniper line: L1 macro gate (spoon tier) + L2 hard gate amt_ratio_t1>=1.2 & excess_ret_t1>0"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": "T+1 exit protocol: -3% vs open stop, 14:55 close out; signal_boundary=not_a_trading_signal",
+   "hypothesis": "L0 tier=low (spoon 0.1990, 宏观有效因子 4 个: north_net_wan,breadth_total_amount,breadth_up_ratio,zz500_pct) -> L1 主线板块BK1663 pos_share 0.658>=q80 0.641 -> L2 硬化(amt 2.004072>=1.2 定案, er 6.810462 佐证; excess 单腿不放行) -> 出票",
+   "factors_used": [
+    {
+     "layer": "L0",
+     "name": "spoon_score",
+     "value": 0.19899999999999998,
+     "tier": "low",
+     "n_macro_valid": 4
+    },
+    {
+     "layer": "L1",
+     "name": "pos_share",
+     "value": 0.6584158415841584,
+     "bk": "BK1663",
+     "threshold": 0.6410256410256411
+    },
+    {
+     "layer": "L2",
+     "name": "amt_ratio_t1",
+     "value": 2.004072,
+     "threshold": 1.2
+    },
+    {
+     "layer": "L2",
+     "name": "excess_ret_t1",
+     "value": 6.810462,
+     "threshold": ">0(佐证)"
+    }
+   ],
+   "risk_reason": "low spoon tier (0.199); macro breadth weak on 2026-11-17",
+   "name_binding": {
+    "source": "daily_market_snapshot_20261117.json(f14) 读取于2026-11-18",
+    "match": true
+   }
+  },
+  {
+   "code": "601899.SH",
+   "name": "紫金矿业",
+   "price": 25.99,
+   "change_pct": 0.116,
+   "turnover_yi": 54.812,
+   "main_net_yi": 7.498709,
+   "vol_ratio": 1.2587,
+   "pullback_pct": -13.22,
+   "sectors": [
+    "BK1749",
+    "BK1689",
+    "BK0478",
+    "BK1663",
+    "BK0535"
+   ],
+   "amt_ratio_t1": 1.221377,
+   "excess_ret_t1": 1.013328,
+   "source_data_at": "2026-11-17 15:00:00",
+   "observed_at": "2026-11-18T02:59:00.124523+08:00",
+   "phase": "T-1_POSTMARKET",
+   "target_trade_date": "2026-11-18",
+   "benchmark": {
+    "desc": "V36/v2.6 sniper line: L1 macro gate (spoon tier) + L2 hard gate amt_ratio_t1>=1.2 & excess_ret_t1>0"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": "T+1 exit protocol: -3% vs open stop, 14:55 close out; signal_boundary=not_a_trading_signal",
+   "hypothesis": "L0 tier=low (spoon 0.1990, 宏观有效因子 4 个: north_net_wan,breadth_total_amount,breadth_up_ratio,zz500_pct) -> L1 主线板块BK1663 pos_share 0.658>=q80 0.641 -> L2 硬化(amt 1.221377>=1.2 定案, er 1.013328 佐证; excess 单腿不放行) -> 出票",
+   "factors_used": [
+    {
+     "layer": "L0",
+     "name": "spoon_score",
+     "value": 0.19899999999999998,
+     "tier": "low",
+     "n_macro_valid": 4
+    },
+    {
+     "layer": "L1",
+     "name": "pos_share",
+     "value": 0.6584158415841584,
+     "bk": "BK1663",
+     "threshold": 0.6410256410256411
+    },
+    {
+     "layer": "L2",
+     "name": "amt_ratio_t1",
+     "value": 1.221377,
+     "threshold": 1.2
+    },
+    {
+     "layer": "L2",
+     "name": "excess_ret_t1",
+     "value": 1.013328,
+     "threshold": ">0(佐证)"
+    }
+   ],
+   "risk_reason": "low spoon tier (0.199); macro breadth weak on 2026-11-17",
+   "name_binding": {
+    "source": "daily_market_snapshot_20261117.json(f14) 读取于2026-11-18",
+    "match": true
+   }
+  },
+  {
+   "code": "600206.SH",
+   "name": "有研新材",
+   "price": null,
+   "change_pct": 10.014,
+   "turnover_yi": 47.50794466,
+   "main_net_yi": 2.6198757486,
+   "source_data_at": "2026-11-17 15:00:00",
+   "observed_at": "2026-11-18T02:59:00.124523+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-18",
+   "benchmark": {
+    "desc": "firstboard line v2.6 S13: T-1 first-board/top-gain/LHB union pool, observation only"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": "observation only; T-day 09:25 hard gate decides entry; signal_boundary=not_a_trading_signal",
+   "hypothesis": "普通席位买入，成功率36.17%",
+   "factors_used": [
+    {
+     "name": "lhb_seat_f1_buy1_share",
+     "value": 0.30892950728842916,
+     "threshold": "V36 Part S(GDrive核验2025-26): decile-10% lift 1.3404全样本/1.4333切片"
+    },
+    {
+     "name": "lasa_negative_mark",
+     "value": 1,
+     "threshold": "V36 Part T: lasa lift 0.8953全样本/0.8422切片, 命中为负向标记"
+    }
+   ],
+   "risk_reason": "firstboard pool member, not an entry signal"
+  },
+  {
+   "code": "600261.SH",
+   "name": "阳光照明",
+   "price": null,
+   "change_pct": 10.0386,
+   "turnover_yi": 18.91768406,
+   "main_net_yi": 2.0651403188,
+   "source_data_at": "2026-11-17 15:00:00",
+   "observed_at": "2026-11-18T02:59:00.124523+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-18",
+   "benchmark": {
+    "desc": "firstboard line v2.6 S13: T-1 first-board/top-gain/LHB union pool, observation only"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": "observation only; T-day 09:25 hard gate decides entry; signal_boundary=not_a_trading_signal",
+   "hypothesis": "普通席位买入，成功率45.77%",
+   "factors_used": [
+    {
+     "name": "lhb_seat_f1_buy1_share",
+     "value": 0.10434707535407563,
+     "threshold": "V36 Part S(GDrive核验2025-26): decile-10% lift 1.3404全样本/1.4333切片"
+    },
+    {
+     "name": "lasa_negative_mark",
+     "value": 0,
+     "threshold": "V36 Part T: lasa lift 0.8953全样本/0.8422切片, 命中为负向标记"
+    }
+   ],
+   "risk_reason": "firstboard pool member, not an entry signal"
+  },
+  {
+   "code": "002931.SZ",
+   "name": "锋龙股份",
+   "price": null,
+   "change_pct": -10.0019,
+   "turnover_yi": 12.5947857723,
+   "main_net_yi": 1.978247277,
+   "source_data_at": "2026-11-17 15:00:00",
+   "observed_at": "2026-11-18T02:59:00.124523+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-18",
+   "benchmark": {
+    "desc": "firstboard line v2.6 S13: T-1 first-board/top-gain/LHB union pool, observation only"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": "observation only; T-day 09:25 hard gate decides entry; signal_boundary=not_a_trading_signal",
+   "hypothesis": "2家机构卖出，成功率36.92%",
+   "factors_used": [
+    {
+     "name": "lhb_seat_f1_buy1_share",
+     "value": 0.46104608410132,
+     "threshold": "V36 Part S(GDrive核验2025-26): decile-10% lift 1.3404全样本/1.4333切片"
+    },
+    {
+     "name": "lasa_negative_mark",
+     "value": 1,
+     "threshold": "V36 Part T: lasa lift 0.8953全样本/0.8422切片, 命中为负向标记"
+    }
+   ],
+   "risk_reason": "firstboard pool member, not an entry signal"
+  },
+  {
+   "code": "002242.SZ",
+   "name": "九阳股份",
+   "price": null,
+   "change_pct": 10.0175,
+   "turnover_yi": 35.4407865156,
+   "main_net_yi": 1.8351380959,
+   "source_data_at": "2026-11-17 15:00:00",
+   "observed_at": "2026-11-18T02:59:00.124523+08:00",
+   "phase": "T_FIRST_BOARD",
+   "target_trade_date": "2026-11-18",
+   "benchmark": {
+    "desc": "firstboard line v2.6 S13: T-1 first-board/top-gain/LHB union pool, observation only"
+   },
+   "gaps": [],
+   "events": [],
+   "points": [],
+   "original_conditions": "observation only; T-day 09:25 hard gate decides entry; signal_boundary=not_a_trading_signal",
+   "hypothesis": "普通席位买入，成功率40.44%",
+   "factors_used": [
+    {
+     "name": "lhb_seat_f1_buy1_share",
+     "value": 0.1357343954908494,
+     "threshold": "V36 Part S(GDrive核验2025-26): decile-10% lift 1.3404全样本/1.4333切片"
+    },
+    {
+     "name": "lasa_negative_mark",
+     "value": 0,
+     "threshold": "V36 Part T: lasa lift 0.8953全样本/0.8422切片, 命中为负向标记"
+    }
+   ],
+   "risk_reason": "firstboard pool member, not an entry signal"
   }
  ],
  "manual_watch_revision": 1,
@@ -2908,5 +3175,5 @@
  "page": "T",
  "page_note": "T 页仅展示当次盘后新推候选（T-1 定案，待次日 09:25 硬闸门裁决）；T-1 观察票见 t-minus1.html，T+1 出场票见 t-plus1.html",
  "split_at": "2026-11-11T18:36:07.577991+08:00",
- "run_note": "V35 2026-11-17 出票重跑(L2 硬化 + 近3日 LHB 剔除, v35_feed sha 2a59b7e0): 唯一幸存 pick 002739.SZ 已恢复上架(用户 2026-11-17 拍板恢复); 002343.SZ 仍 withdrawn — 近3日龙虎榜剔除(合同 v2.5 §四, lhb 2026-11-11/12/16) + L2 excess 单腿硬化挡, T 日跌停 -9.98%. signal_boundary=not_a_trading_signal"
+ "run_note": "2026-11-17 postmarket chain manual rerun (scheduled task never fired): picked 2 (688981.SH, 601899.SH), QA gate EXIT=0, ledger ingested, reflection written; signal_boundary=not_a_trading_signal"
 }
