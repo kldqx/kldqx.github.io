@@ -4,8 +4,8 @@
  "workspace_id": "01c9c9660c33cf342a49a83a7c76311f2afa1a00a4fed72b827d9db7c027beaf",
  "mode": "live",
  "status": "observing",
- "phase": "PHASE_2_REAL_AUCTION",
- "generated_at": "2026-11-17T09:23:43.459091+08:00",
+ "phase": "PHASE_4_OPENING_REVERSAL",
+ "generated_at": "2026-11-17T09:31:05.483774+08:00",
  "source_label": "腾讯一级行情 · 通达信真实数据接口",
  "seed_date": "2026-11-16",
  "handoff": "runtime/runs/20261116-postmarket-v35",
@@ -2517,16 +2517,16 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": null,
-   "observed_at": "2026-11-17T09:23:42.813332+08:00",
+   "observed_at": "2026-11-17T09:31:05.349088+08:00",
    "quote_age_seconds": null,
-   "phase": "PHASE_2_REAL_AUCTION",
+   "phase": "PHASE_4_OPENING_REVERSAL",
    "benchmark": {
     "desc": "V35 三层全评真实出票: L0 spoon=0.1079(tier=low) -> L1 主线板块BK1222(max_pos) pos_share=0.818>=q80 0.786 -> L2 OR(amt_ratio_t1=1.549551, excess_ret_t1=2.918534)。T-1(2026-11-16) 收盘1.493%, 量比3.3058, 微观: goldminer_ticks/20261116 有真实逐笔 (main_net_yuan=204300380.89000082, n_trades=4705)"
    },
    "auction_evaluation": {
     "schema": "auction-rule-evaluation/v1",
     "target_trade_date": "2026-11-17",
-    "evaluated_at": "2026-11-17T09:23:42.813332+08:00",
+    "evaluated_at": "2026-11-17T09:31:05.349088+08:00",
     "rule_hash": "04cc63e08f14de5cdb6c32e1a8a534e62c5511f031bdbe2d36705235220a1d31",
     "status": "missing",
     "status_label": "待补证",
@@ -2624,10 +2624,10 @@
       "source_field": null,
       "request_started_at": null,
       "finalization_basis": null,
-      "status": "pending",
-      "reason": "auction_not_final",
-      "status_label": "待竞价定稿",
-      "reason_label": "尚无竞价定稿证据"
+      "status": "missing",
+      "reason": "value_missing",
+      "status_label": "待补证",
+      "reason_label": "缺少实际值"
      },
      {
       "id": "support:3:0",
@@ -2682,8 +2682,8 @@
      "total": 6,
      "pass": 0,
      "fail": 0,
-     "missing": 5,
-     "pending": 1
+     "missing": 6,
+     "pending": 0
     },
     "source_connection": {
      "source": "TDX_NATIVE_REAL",
@@ -2719,37 +2719,57 @@
    "events": [],
    "points": [
     {
-     "at": "2026-11-17T09:23:10.118056+08:00",
+     "at": "2026-11-17T09:30:32.884016+08:00",
      "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:09+08:00",
-     "price": 10.03,
-     "vwap": null
+     "at": "2026-11-17T09:30:30+08:00",
+     "price": 9.96,
+     "vwap": 10.10415349755419
     },
     {
-     "at": "2026-11-17T09:23:16.793624+08:00",
+     "at": "2026-11-17T09:30:39.437653+08:00",
      "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:18+08:00",
-     "price": 10.03,
-     "vwap": null
+     "at": "2026-11-17T09:30:39+08:00",
+     "price": 10.0,
+     "vwap": 10.090747253701531
     },
     {
-     "at": "2026-11-17T09:23:29.920920+08:00",
+     "at": "2026-11-17T09:30:45.880427+08:00",
      "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:27+08:00",
-     "price": 10.03,
+     "at": "2026-11-17T09:30:45+08:00",
+     "price": 9.96,
+     "vwap": 10.079951822885715
+    },
+    {
+     "at": "2026-11-17T09:30:52.289085+08:00",
+     "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:36.353174+08:00",
+     "at": "2026-11-17T09:30:51+08:00",
+     "price": 10.0,
+     "vwap": 10.062897386233754
+    },
+    {
+     "at": "2026-11-17T09:30:58.994061+08:00",
+     "price": null,
+     "vwap": null
+    },
+    {
+     "at": "2026-11-17T09:30:54+08:00",
+     "price": 10.02,
+     "vwap": 10.06180303641005
+    },
+    {
+     "at": "2026-11-17T09:31:05.349088+08:00",
      "price": null,
      "vwap": null
     }
@@ -2783,7 +2803,7 @@
    },
    "monitoring_eligible": true,
    "monitoring_status": "active",
-   "original_condition_status": "eligible",
+   "original_condition_status": "expired_unverified",
    "observation_eligible": true,
    "observation_status": "waiting",
    "manual_label": null,
@@ -2791,8 +2811,8 @@
    "origin_source_refs": {
     "completion": {
      "path": "E:\\A股资金流向自主看盘\\runtime\\runs\\20261116-postmarket-v35\\monitoring_ticket_v1.json",
-     "sha256": "ce38f3b34ea8461ea1d97f999c0573f9e6102323888375cd96db1cb945bc9c5b",
-     "bytes": 5145
+     "sha256": "89bf8361ef045d8f9455181014fc997ab423df8df6d3adfbdc6e755d4f8c786f",
+     "bytes": 5453
     }
    },
    "cycle_position": {
@@ -2814,16 +2834,16 @@
    "vwap": null,
    "vwap_deviation_pct": null,
    "source_data_at": null,
-   "observed_at": "2026-11-17T09:23:42.813332+08:00",
+   "observed_at": "2026-11-17T09:31:05.349088+08:00",
    "quote_age_seconds": null,
-   "phase": "PHASE_2_REAL_AUCTION",
+   "phase": "PHASE_4_OPENING_REVERSAL",
    "benchmark": {
     "desc": "V35 三层全评真实出票: L0 spoon=0.1079(tier=low) -> L1 主线板块BK1222(max_pos) pos_share=0.818>=q80 0.786 -> L2 OR(amt_ratio_t1=1.175026, excess_ret_t1=6.842664)。T-1(2026-11-16) 收盘5.417%, 量比1.024, 微观: missing: goldminer_ticks/20261116/SZSE.002343.parquet"
    },
    "auction_evaluation": {
     "schema": "auction-rule-evaluation/v1",
     "target_trade_date": "2026-11-17",
-    "evaluated_at": "2026-11-17T09:23:42.813332+08:00",
+    "evaluated_at": "2026-11-17T09:31:05.349088+08:00",
     "rule_hash": "04cc63e08f14de5cdb6c32e1a8a534e62c5511f031bdbe2d36705235220a1d31",
     "status": "missing",
     "status_label": "待补证",
@@ -2921,10 +2941,10 @@
       "source_field": null,
       "request_started_at": null,
       "finalization_basis": null,
-      "status": "pending",
-      "reason": "auction_not_final",
-      "status_label": "待竞价定稿",
-      "reason_label": "尚无竞价定稿证据"
+      "status": "missing",
+      "reason": "value_missing",
+      "status_label": "待补证",
+      "reason_label": "缺少实际值"
      },
      {
       "id": "support:3:0",
@@ -2979,8 +2999,8 @@
      "total": 6,
      "pass": 0,
      "fail": 0,
-     "missing": 5,
-     "pending": 1
+     "missing": 6,
+     "pending": 0
     },
     "source_connection": {
      "source": "TDX_NATIVE_REAL",
@@ -3016,37 +3036,57 @@
    "events": [],
    "points": [
     {
-     "at": "2026-11-17T09:23:10.118056+08:00",
+     "at": "2026-11-17T09:30:32.884016+08:00",
      "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:09+08:00",
-     "price": 9.72,
-     "vwap": null
+     "at": "2026-11-17T09:30:30+08:00",
+     "price": 9.21,
+     "vwap": 9.593547702430223
     },
     {
-     "at": "2026-11-17T09:23:16.793624+08:00",
+     "at": "2026-11-17T09:30:39.437653+08:00",
      "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:18+08:00",
-     "price": 9.72,
-     "vwap": null
+     "at": "2026-11-17T09:30:39+08:00",
+     "price": 9.15,
+     "vwap": 9.532999277717588
     },
     {
-     "at": "2026-11-17T09:23:29.920920+08:00",
+     "at": "2026-11-17T09:30:45.880427+08:00",
      "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:27+08:00",
-     "price": 9.72,
+     "at": "2026-11-17T09:30:45+08:00",
+     "price": 9.13,
+     "vwap": 9.484922753296752
+    },
+    {
+     "at": "2026-11-17T09:30:52.289085+08:00",
+     "price": null,
      "vwap": null
     },
     {
-     "at": "2026-11-17T09:23:36.353174+08:00",
+     "at": "2026-11-17T09:30:51+08:00",
+     "price": 9.21,
+     "vwap": 9.458098581965652
+    },
+    {
+     "at": "2026-11-17T09:30:58.994061+08:00",
+     "price": null,
+     "vwap": null
+    },
+    {
+     "at": "2026-11-17T09:30:57+08:00",
+     "price": 9.39,
+     "vwap": 9.45030809590629
+    },
+    {
+     "at": "2026-11-17T09:31:05.349088+08:00",
      "price": null,
      "vwap": null
     }
@@ -3080,7 +3120,7 @@
    },
    "monitoring_eligible": true,
    "monitoring_status": "active",
-   "original_condition_status": "eligible",
+   "original_condition_status": "expired_unverified",
    "observation_eligible": true,
    "observation_status": "waiting",
    "manual_label": null,
@@ -3088,8 +3128,8 @@
    "origin_source_refs": {
     "completion": {
      "path": "E:\\A股资金流向自主看盘\\runtime\\runs\\20261116-postmarket-v35\\monitoring_ticket_v1.json",
-     "sha256": "ce38f3b34ea8461ea1d97f999c0573f9e6102323888375cd96db1cb945bc9c5b",
-     "bytes": 5145
+     "sha256": "89bf8361ef045d8f9455181014fc997ab423df8df6d3adfbdc6e755d4f8c786f",
+     "bytes": 5453
     }
    },
    "cycle_position": {
