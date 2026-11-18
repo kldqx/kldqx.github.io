@@ -1,0 +1,98 @@
+{
+ "signal_boundary": "not_a_trading_signal",
+ "generated_at": "2026-11-11T11:40:00+08:00",
+ "generated_at_utc": "2026-11-11T03:40:00Z",
+ "collector_role": "Gemini 3.8 采集子代理",
+ "task_date": "2026-11-11",
+ "note": "采集原始数据与证据; 厂商推导指标(主力/DDE/BBD等)仅作交叉验证, 不作为真实资金主体证据; 缺口标gap不零填不脑补",
+ "schema": "macro-northbound-signal/v1",
+ "category": "北向资金信号视图(仅供研究岗位交叉验证)",
+ "as_of_realtime": "2026-11-11",
+ "today_realtime_net_buy_万元": {
+  "沪股通": 0.0,
+  "深股通": 0.0,
+  "北向合计": 0
+ },
+ "last5_trading_days": {
+  "dates": [
+   "2026-11-10",
+   "2026-11-09",
+   "2026-11-06",
+   "2026-11-05",
+   "2026-11-04"
+  ],
+  "sum_沪股通_万元": 638624.21,
+  "sum_深股通_万元": 697879.88,
+  "sum_北向合计_万元": 1336504.09,
+  "daily": [
+   {
+    "date": "2026-11-10",
+    "north_net_deal_amt": 198329.21,
+    "sh_stock_connect": 91977.61,
+    "sz_stock_connect": 106351.6,
+    "sh_lead_stock": "603366.SH",
+    "sz_lead_stock": "002310.SZ",
+    "unit": "万元(DFCF datacenter原始口径)"
+   },
+   {
+    "date": "2026-11-09",
+    "north_net_deal_amt": 216236.4,
+    "sh_stock_connect": 102043.18,
+    "sz_stock_connect": 114193.22,
+    "sh_lead_stock": "603366.SH",
+    "sz_lead_stock": "002037.SZ",
+    "unit": "万元(DFCF datacenter原始口径)"
+   },
+   {
+    "date": "2026-11-06",
+    "north_net_deal_amt": 262593.3,
+    "sh_stock_connect": 128368.26,
+    "sz_stock_connect": 134225.04,
+    "sh_lead_stock": "603381.SH",
+    "sz_lead_stock": "000595.SZ",
+    "unit": "万元(DFCF datacenter原始口径)"
+   },
+   {
+    "date": "2026-11-05",
+    "north_net_deal_amt": 320163.82,
+    "sh_stock_connect": 151997.13,
+    "sz_stock_connect": 168166.69,
+    "sh_lead_stock": "603381.SH",
+    "sz_lead_stock": "002081.SZ",
+    "unit": "万元(DFCF datacenter原始口径)"
+   },
+   {
+    "date": "2026-11-04",
+    "north_net_deal_amt": 339181.36,
+    "sh_stock_connect": 164238.03,
+    "sz_stock_connect": 174943.33,
+    "sh_lead_stock": "603598.SH",
+    "sz_lead_stock": "000096.SZ",
+    "unit": "万元(DFCF datacenter原始口径)"
+   }
+  ]
+ },
+ "derivation": "近5日取RPT_MUTUAL_DEALAMT最新5个交易日(2026-11-04~2026-11-10)原值求和; 当日取kamt实时netBuyAmt; 区间差分仅同源同口径",
+ "gaps": [
+  {
+   "gap": "当日2026-11-11日线净流入尚未发布(盘中), RPT_MUTUAL_DEALAMT最新为2026-11-10; 当日口径以kamt实时/分时为准",
+   "affected": "daily 当日行"
+  },
+  {
+   "gap": "RPT_MUTUAL_NETINFLOW_DETAILS 本次返回数据止于2024-08-16(源端滞后), 未用于近5日计算",
+   "affected": "NET_INFLOW_SH/SZ 近5日"
+  },
+  {
+   "gap": "RPT_MUTUAL_DEAL_HISTORY 中陆股通(001/003/005)的NET_DEAL_AMT/FUND_INFLOW字段返回null, 仅作结构交叉验证",
+   "affected": "交叉验证字段"
+  },
+  {
+   "gap": "kamt实时与rtmin/BBD分时本次会话北向(s2n/hk2sh)返回全0.00, 按源返回原样记录, 未脑补",
+   "affected": "当日实时北向净买入"
+  }
+ ],
+ "raw_files": [
+  "raw/kamt_realtime.json",
+  "raw/hsgt_dealamt_10d.json"
+ ]
+}
