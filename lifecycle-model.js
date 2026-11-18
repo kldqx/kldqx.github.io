@@ -90,4 +90,12 @@
   const model = {numeric, percent, value, defense, afterExit, recordsForView, cohort, cohortDates, cohortLabel, targetDate, referenceDate, today, calendar};
   if (typeof module !== 'undefined') module.exports = model;
   root.LifecycleModel = model;
+  // The shared calendar is loaded by several pages. Only today's monitor hosts this extension.
+  if (typeof document !== 'undefined' && document.currentScript && document.getElementById('stock-grid')
+      && /\/(?:sniper\.html|index\.html)?$/.test(root.location.pathname)
+      && [null, 'T-1_POSTMARKET'].includes(new URLSearchParams(root.location.search).get('phase'))) {
+    const script = document.createElement('script');
+    script.src = new URL('./auction-live-view.js', document.currentScript.src).href;
+    document.head.append(script);
+  }
 })(typeof window === 'undefined' ? globalThis : window);
