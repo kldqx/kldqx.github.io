@@ -167,12 +167,18 @@
     const y = value => 12 + (high - value) / (high - low) * 88;
     const segments = key => {
       const result = []; let current = [];
-      // 采样点可能因亚秒级时间戳抖动而乱序，先按时间排序再连线，避免线段被打碎成孤立点
+      // 采样点可能因亚秒级时间戳抖动而乱序，先按时间排序再连线，避免线段被打碎成孤立点；
+      // 时间缺失/无效的点按原始序号留在原位，作为断点参与分段
       const ordered = original
-        .filter(point => point && timeValue(point.at) !== null)
-        .sort((a, b) => timeValue(a.at) - timeValue(b.at));
-      for (const point of ordered) {
-        if (!numeric(point[key]) || point[key] <= 0) continue;
+        .map((point, index) => ({point, index, at: point && timeValue(point.at)}))
+        .sort((a, b) => a.at === null || b.at === null ? a.index - b.index : a.at - b.at || a.index - b.index);
+      for (const {point, at} of ordered) {
+        // 无效或缺失的数据点必须断开曲线，不得跨过去连线
+        if (at === null || !numeric(point[key]) || point[key] <= 0) {
+          if (current.length) result.push(current);
+          current = [];
+          continue;
+        }
         current.push([x(point.at), y(point[key])]);
       }
       if (current.length) result.push(current);

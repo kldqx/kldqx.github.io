@@ -1,0 +1,85 @@
+{
+  "batch_id": "e0b8e7961982e1b728e2ef6518e58d0aa86471eaebd0c1d548afbb8aad7f603a",
+  "generated_at": "2026-11-20T09:11:04.453693+08:00",
+  "handoff": {
+    "batch_id": "e0b8e7961982e1b728e2ef6518e58d0aa86471eaebd0c1d548afbb8aad7f603a",
+    "host_review_status": "not_recorded",
+    "independent_qa_status": "not_performed",
+    "lines": [
+      {
+        "batch_id": "e0b8e7961982e1b728e2ef6518e58d0aa86471eaebd0c1d548afbb8aad7f603a",
+        "host_review_status": "not_recorded",
+        "independent_qa_status": "not_performed",
+        "monitor_status": "error",
+        "qa_completed_at": null,
+        "reason": "monitor_control_error:timezone_aware_timestamp_required",
+        "research_date": "2026-11-17",
+        "research_line": null,
+        "research_result_sha256": null,
+        "research_status": "pending",
+        "run_id": "20261117-postmarket-v35",
+        "target_trade_date": "2026-11-18",
+        "task_id": "20261117-postmarket-v35"
+      }
+    ],
+    "monitor_status": "error",
+    "qa_completed_at": null,
+    "reason": "monitor_control_error:timezone_aware_timestamp_required",
+    "research_date": "2026-11-17",
+    "research_line": null,
+    "research_result_sha256": null,
+    "research_status": "pending",
+    "run_id": "20261117-postmarket-v35",
+    "status": "error",
+    "target_trade_date": "2026-11-18",
+    "task_id": "20261117-postmarket-v35"
+  },
+  "host_review_status": "not_recorded",
+  "independent_qa_status": "not_performed",
+  "last_valid_quote_at": null,
+  "lines": [
+    {
+      "batch_id": "e0b8e7961982e1b728e2ef6518e58d0aa86471eaebd0c1d548afbb8aad7f603a",
+      "host_review_status": "not_recorded",
+      "independent_qa_status": "not_performed",
+      "monitor_status": "error",
+      "qa_completed_at": null,
+      "reason": "monitor_control_error:timezone_aware_timestamp_required",
+      "research_date": "2026-11-17",
+      "research_line": null,
+      "research_result_sha256": null,
+      "research_status": "pending",
+      "run_id": "20261117-postmarket-v35",
+      "target_trade_date": "2026-11-18",
+      "task_id": "20261117-postmarket-v35"
+    }
+  ],
+  "mode": "live",
+  "monitor_status": "error",
+  "phase": "WAITING",
+  "projected_at": "2026-11-20T09:11:04.453693+08:00",
+  "qa_completed_at": null,
+  "reason": "monitor_control_error:timezone_aware_timestamp_required",
+  "research_date": "2026-11-17",
+  "research_line": null,
+  "research_result_sha256": null,
+  "research_status": "pending",
+  "research_version": "f77aab499fe255e6af40d87c1d59d15100f4c7ef6d73d89af2aa298d1c9ce5ac",
+  "run_id": "20261117-postmarket-v35",
+  "schema": "live-sniper-web/v1",
+  "signal_boundary": "not_a_trading_signal",
+  "source_manifest": {
+    "research": {
+      "current_input": {
+        "bytes": 3324,
+        "path": "monitoring_ticket_v1.json",
+        "sha256": "b4d501baec2ac740f9364ebceb2c4f8599e1e15337c1a6c97925d2cb9e4b874a"
+      }
+    }
+  },
+  "status": "error",
+  "stocks": [],
+  "target_trade_date": "2026-11-18",
+  "task_id": "20261117-postmarket-v35",
+  "view": "public"
+}
