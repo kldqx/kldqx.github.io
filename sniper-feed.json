@@ -6,8 +6,8 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-25T09:53:47+08:00",
-  "source_label": "11 月 25 日 QA v3 核验完成。狙击线暂扣 5 只，首板线暂扣 3 只，两线返研，放行 0 只。",
+  "generated_at": "2026-11-25T10:12:20+08:00",
+  "source_label": "11 月 25 日 QA v4 已核验。狙击线 5 只、首板线 3 只继续暂扣，放行 0 张。11 月 26 日退出观察已激活 0 张。",
   "seed_date": "2026-11-24",
   "run_id": "20261124-postmarket-v37-t1125",
   "target_trade_date": "2026-11-25",
@@ -25,10 +25,11 @@
       "research_line": "T_PULLBACK"
     },
     "qa": {
-      "path": "runtime/qa/20261125-t1125-qa-v3.json",
-      "sha256": "8beb2e17c432d58de4acf0d42978090e2acab2a14035cdde8774859a809df733",
+      "path": "runtime/qa/20261125-t1125-qa-v4.json",
+      "bytes": 67150,
+      "sha256": "1e9658679a6c9c8e3dc28e57e9f0713733ee032fc44a75e2c4594ca40c047f62",
       "status": "completed",
-      "verdict": "return_for_research_both_lines",
+      "verdict": "return_for_research",
       "decision": "return_for_research",
       "empty_release_feed_permitted": true
     },
@@ -103,7 +104,18 @@
           "observation_eligible": false,
           "reason": "全天和尾窗同为净买、收盘高于观测成交均价，但 T−2 未达到缩量参照，延续承接尚缺可检验的原条件。 同票原假设、条件及退出协议缺失，维持暂扣。"
         }
-      ]
+      ],
+      "qa": {
+        "path": "runtime/qa/20261125-t1125-qa-v4.json",
+        "bytes": 67150,
+        "sha256": "1e9658679a6c9c8e3dc28e57e9f0713733ee032fc44a75e2c4594ca40c047f62",
+        "status": "completed",
+        "verdict": "return_for_research",
+        "decision": "return_for_research",
+        "empty_release_feed_permitted": true
+      },
+      "t_plus_1_activated_count": 0,
+      "reason": "五个规则候选均缺逐票假设、支持与失效条件、复查点、截止和 T+1 协议。"
     },
     "T_FIRST_BOARD": {
       "run_id": "20261124-firstboard-v26",
@@ -129,7 +141,7 @@
           "status": "held_not_released",
           "monitoring_eligible": false,
           "observation_eligible": false,
-          "reason": "14:30 前有向净额为负，尾段净买集中，同业延续性待证。 原定案时点前的研究卡及随卡获批退出协议缺失。"
+          "reason": "14:30 前有向净额为负，尾段净买集中，同业延续性待证。 T 日窗口已于 10:00 截止，T+1 退出协议未激活。"
         },
         {
           "code": "002856.SZ",
@@ -137,7 +149,7 @@
           "status": "held_not_released",
           "monitoring_eligible": false,
           "observation_eligible": false,
-          "reason": "连续竞价净买主要发生在早段，尾段净买较小，同业20只中6只上涨。 原定案时点前的研究卡及随卡获批退出协议缺失。"
+          "reason": "连续竞价净买主要发生在早段，尾段净买较小，同业20只中6只上涨。 T 日窗口已于 10:00 截止，T+1 退出协议未激活。"
         },
         {
           "code": "300903.SZ",
@@ -145,19 +157,31 @@
           "status": "held_not_released",
           "monitoring_eligible": false,
           "observation_eligible": false,
-          "reason": "来自涨幅榜，连续竞价及尾段净买，收盘低于开盘，买方成交能否消化供给仍待证。 原定案时点前的研究卡及随卡获批退出协议缺失。"
+          "reason": "来自涨幅榜，连续竞价及尾段净买，收盘低于开盘，买方成交能否消化供给仍待证。 T 日窗口已于 10:00 截止，T+1 退出协议未激活。"
         }
       ],
-      "reason": "86 只已比较。3 张事后研究卡于 09:41 形成，缺竞价前冻结的原判断及随卡获批的退出协议。",
+      "reason": "三张原卡的 10:00 复查窗口已截止，11 月 26 日退出协议均标为 held_inactive。",
       "gdrive_synced": true,
       "gdrive_readback": {
         "verified_at": "2026-11-25T09:51:45+08:00",
         "bytes": 135955,
         "sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740"
-      }
+      },
+      "qa": {
+        "path": "runtime/qa/20261125-t1125-qa-v4.json",
+        "bytes": 67150,
+        "sha256": "1e9658679a6c9c8e3dc28e57e9f0713733ee032fc44a75e2c4594ca40c047f62",
+        "status": "completed",
+        "verdict": "return_for_research",
+        "decision": "return_for_research",
+        "empty_release_feed_permitted": true
+      },
+      "t_plus_1_activated_count": 0
     }
   },
   "released_count": 0,
   "released_cards": [],
-  "stocks": []
+  "stocks": [],
+  "held_count": 8,
+  "t_plus_1_activated_count": 0
 }
