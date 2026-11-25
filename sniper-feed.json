@@ -6,7 +6,7 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-25T02:52:52Z",
+  "generated_at": "2026-11-25T02:59:13Z",
   "source_label": "11月25日 QA v5 逐票核验8张，放行0张关注观察，暂扣8张。 海达股份、银禧科技逐卡内容通过，跨模型准入待补。",
   "seed_date": "2026-11-24",
   "run_id": "20261124-postmarket-v37-t1125",
@@ -272,7 +272,58 @@
       "card_sha256": "d7721214745f4dabd0b407cbeed2eb7b8e0b062d46a9fed36812c17cec1dcf6f"
     }
   ],
-  "stocks": [],
+  "stocks": [
+    {
+      "path": "v37_feed_20261125_name_binding.json",
+      "bytes": 7342230,
+      "sha256": "89984d09319dc205674226741f69f4444eec367178a7a2a79c6a348924f6d5dc",
+      "json_pointer": "/picked/1",
+      "code": "300320.SZ",
+      "name": "海达股份",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 7.39,
+      "change_pct": 8.2,
+      "turnover_yi": 1.6477,
+      "turnover_rate": null,
+      "source_data_at": "2026-11-24 15:00:00",
+      "observed_at": "2026-11-25T02:59:13+08:00"
+    },
+    {
+      "path": "v37_feed_20261125_name_binding.json",
+      "bytes": 7342230,
+      "sha256": "89984d09319dc205674226741f69f4444eec367178a7a2a79c6a348924f6d5dc",
+      "json_pointer": "/picked/4",
+      "code": "300221.SZ",
+      "name": "银禧科技",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 10.3,
+      "change_pct": 13.31,
+      "turnover_yi": 4.7773,
+      "turnover_rate": null,
+      "source_data_at": "2026-11-24 15:00:00",
+      "observed_at": "2026-11-25T02:59:13+08:00"
+    },
+    {
+      "code": "002856.SZ",
+      "name": "*ST美芝",
+      "phase": "T_FIRST_BOARD",
+      "line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 15.64,
+      "change_pct": 9.99,
+      "turnover_yi": 1.1258,
+      "turnover_rate": null,
+      "source_data_at": "2026-11-24 15:00:00",
+      "observed_at": "2026-11-25T02:59:13+08:00"
+    }
+  ],
   "held_count": 8,
   "t_plus_1_activated_count": 0,
   "cross_model_validation": {
