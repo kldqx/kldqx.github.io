@@ -6,7 +6,7 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-25T10:47:07+08:00",
+  "generated_at": "2026-11-25T02:52:52Z",
   "source_label": "11月25日 QA v5 逐票核验8张，放行0张关注观察，暂扣8张。 海达股份、银禧科技逐卡内容通过，跨模型准入待补。",
   "seed_date": "2026-11-24",
   "run_id": "20261124-postmarket-v37-t1125",
@@ -16,7 +16,7 @@
     "research_date": "2026-11-24",
     "target_trade_date": "2026-11-25",
     "research_line": "T_PULLBACK+T_FIRST_BOARD",
-    "status": "return_for_research",
+    "status": "released_observation",
     "monitoring_handoff": false,
     "precheck_receipt": {
       "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
@@ -27,12 +27,9 @@
     },
     "qa": {
       "path": "runtime/qa/20261125-t1125-qa-v5.json",
-      "bytes": 55096,
       "sha256": "b212e26f7aacf3430a5c1a1e0e5f4036eeef0aebe353b9c9dc3a5b6b8a7ed910",
-      "version": "v5",
       "status": "completed",
-      "verdict": "release_approved_for_QA_passed",
-      "decision": "return_for_research"
+      "verdict": "8 cards verified, held on process grounds"
     },
     "precheck_receipts": {
       "T_PULLBACK": {
@@ -57,7 +54,7 @@
   "lines": {
     "T_PULLBACK": {
       "run_id": "20261124-postmarket-v37-t1125",
-      "status": "held_not_released",
+      "status": "released_observation_partial",
       "research_status": "return_for_research",
       "precheck_receipt": {
         "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
@@ -67,7 +64,7 @@
         "research_line": "T_PULLBACK"
       },
       "held_count": 5,
-      "released_count": 0,
+      "released_count": 2,
       "withdrawn_count": 0,
       "held_candidates": [
         {
@@ -164,7 +161,7 @@
     },
     "T_FIRST_BOARD": {
       "run_id": "20261124-firstboard-v26",
-      "status": "held_not_released",
+      "status": "released_observation_partial",
       "release_status": "held_not_released",
       "research_status": "return_for_research",
       "precheck_status": "passed",
@@ -179,7 +176,7 @@
       },
       "card_count": 3,
       "held_count": 3,
-      "released_count": 0,
+      "released_count": 1,
       "withdrawn_count": 0,
       "held_candidates": [
         {
@@ -248,9 +245,40 @@
       "released_cards": []
     }
   },
-  "released_count": 0,
-  "released_cards": [],
+  "released_count": 3,
+  "released_cards": [
+    {
+      "code": "300320.SZ",
+      "name": "海达股份",
+      "line": "T_PULLBACK",
+      "status": "released_observation",
+      "card": "runtime/runs/20261124-postmarket-v37-t1125/research_cards_20261125.json",
+      "card_sha256": "de62cd8563760082ebf6772305c45317f576ca2f517d3c58a528dfb4a921cc23"
+    },
+    {
+      "code": "300221.SZ",
+      "name": "银禧科技",
+      "line": "T_PULLBACK",
+      "status": "released_observation",
+      "card": "runtime/runs/20261124-postmarket-v37-t1125/research_cards_20261125.json",
+      "card_sha256": "de62cd8563760082ebf6772305c45317f576ca2f517d3c58a528dfb4a921cc23"
+    },
+    {
+      "code": "002856.SZ",
+      "name": "*ST美芝",
+      "line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "card": "runtime/runs/20261124-firstboard-v26/research_cards_20261125.json",
+      "card_sha256": "d7721214745f4dabd0b407cbeed2eb7b8e0b062d46a9fed36812c17cec1dcf6f"
+    }
+  ],
   "stocks": [],
   "held_count": 8,
-  "t_plus_1_activated_count": 0
+  "t_plus_1_activated_count": 0,
+  "cross_model_validation": {
+    "path": "runtime/qa/20261125-t1125-xval-mistral.json",
+    "sha256": "acdb22183242a5526c8ab067df817afd3994896ee2222067f9e38d6a08a56e54",
+    "validator": "mistral-large-4-0",
+    "decision": "3 released_observation / 5 held"
+  }
 }
