@@ -6,8 +6,8 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-25T10:12:20+08:00",
-  "source_label": "11 月 25 日 QA v4 已核验。狙击线 5 只、首板线 3 只继续暂扣，放行 0 张。11 月 26 日退出观察已激活 0 张。",
+  "generated_at": "2026-11-25T10:47:07+08:00",
+  "source_label": "11月25日 QA v5 逐票核验8张，放行0张关注观察，暂扣8张。 海达股份、银禧科技逐卡内容通过，跨模型准入待补。",
   "seed_date": "2026-11-24",
   "run_id": "20261124-postmarket-v37-t1125",
   "target_trade_date": "2026-11-25",
@@ -19,36 +19,40 @@
     "status": "return_for_research",
     "monitoring_handoff": false,
     "precheck_receipt": {
-      "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt.json",
+      "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
+      "bytes": 15201,
+      "sha256": "cbee86b067f0b6dc36481038c1e11dc74a8f313ca44eafefc671ec27e1cd0241",
       "status": "passed",
-      "sha256": "cc81b5e84e892112b4c8759ec5bc9aa9df29e7d1814f3e70836f176d9232a7cc",
       "research_line": "T_PULLBACK"
     },
     "qa": {
-      "path": "runtime/qa/20261125-t1125-qa-v4.json",
-      "bytes": 67150,
-      "sha256": "1e9658679a6c9c8e3dc28e57e9f0713733ee032fc44a75e2c4594ca40c047f62",
+      "path": "runtime/qa/20261125-t1125-qa-v5.json",
+      "bytes": 55096,
+      "sha256": "b212e26f7aacf3430a5c1a1e0e5f4036eeef0aebe353b9c9dc3a5b6b8a7ed910",
+      "version": "v5",
       "status": "completed",
-      "verdict": "return_for_research",
-      "decision": "return_for_research",
-      "empty_release_feed_permitted": true
+      "verdict": "release_approved_for_QA_passed",
+      "decision": "return_for_research"
     },
     "precheck_receipts": {
       "T_PULLBACK": {
-        "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt.json",
+        "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
+        "bytes": 15201,
+        "sha256": "cbee86b067f0b6dc36481038c1e11dc74a8f313ca44eafefc671ec27e1cd0241",
         "status": "passed",
-        "sha256": "cc81b5e84e892112b4c8759ec5bc9aa9df29e7d1814f3e70836f176d9232a7cc",
         "research_line": "T_PULLBACK"
       },
       "T_FIRST_BOARD": {
-        "path": "runtime/runs/20261124-firstboard-v26/factor_integrity_receipt_20261125_research_closeout.json",
+        "path": "runtime/runs/20261124-firstboard-v26/factor_integrity_receipt_20261125_card_completion.json",
+        "bytes": 7770,
+        "sha256": "e0800e0f055a5d1941d2c485c0a595636ae2b244ee1cb7d846485b1cd25c73ec",
         "status": "passed",
-        "sha256": "fc15d5da1fef503cb55a151f028561a24339896cb1c15f8142c4ae3a9952e99a",
-        "bound_candidate": "s3://china-a-share-l2-level2/lake/factor_collections/firstboard_pool_20261124.json",
+        "research_line": "T_FIRST_BOARD",
         "pool_sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740",
-        "research_line": "T_FIRST_BOARD"
+        "bound_candidate": "G:\\我的云端硬盘\\A股量化数据湖\\factor_collections\\firstboard_pool_20261124.json"
       }
-    }
+    },
+    "qa_completed_at": "2026-11-25T10:47:07+08:00"
   },
   "lines": {
     "T_PULLBACK": {
@@ -56,9 +60,11 @@
       "status": "held_not_released",
       "research_status": "return_for_research",
       "precheck_receipt": {
-        "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt.json",
+        "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
+        "bytes": 15201,
+        "sha256": "cbee86b067f0b6dc36481038c1e11dc74a8f313ca44eafefc671ec27e1cd0241",
         "status": "passed",
-        "sha256": "cc81b5e84e892112b4c8759ec5bc9aa9df29e7d1814f3e70836f176d9232a7cc"
+        "research_line": "T_PULLBACK"
       },
       "held_count": 5,
       "released_count": 0,
@@ -67,55 +73,94 @@
         {
           "code": "301219.SZ",
           "name": "腾远钴业",
+          "research_line": "T_PULLBACK",
+          "card_id": "T1125-T_PULLBACK-301219-author-1",
+          "card_sha256": "007fee2614adaca6946f1a4f069f2bfe1a9719c5e6ffd680a8a33110e327df88",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "held_not_released",
           "observation_eligible": false,
-          "reason": "全天净买与尾窗净卖并存，尾段承接缺少支持。 同票原假设、条件及退出协议缺失，维持暂扣。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T14:55:00+08:00",
+          "reason": "11月23日回踩20.25%，量比1.219。次日全天净买，但尾窗净卖421.77万元，买方需求在最后窗口转弱。 研究建议暂扣。",
+          "signal_boundary": "not_a_trading_signal"
         },
         {
           "code": "300320.SZ",
           "name": "海达股份",
+          "research_line": "T_PULLBACK",
+          "card_id": "T1125-T_PULLBACK-300320-author-1",
+          "card_sha256": "83110ece66e310654dcff5745f8641d1bed66f7119c8eded675b16d7b51f025f",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "held_not_released",
           "observation_eligible": false,
-          "reason": "全天和尾窗净买，但收盘价低于当日观测成交均价，高位换手仍是可行解释。 同票原假设、条件及退出协议缺失，维持暂扣。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T14:55:00+08:00",
+          "reason": "11月23日和24日均净买，24日尾窗净买108.46万元，同主线超额8.46个百分点。收盘7.39元低于观测均价7.4521元，支持有条件观察能否收复均价。 同版内容核验通过；正式研究终态为空，成卡与本次复核是同模型的两个会话，缺跨模型准入原件。",
+          "signal_boundary": "not_a_trading_signal"
         },
         {
           "code": "002799.SZ",
           "name": "环球印务",
+          "research_line": "T_PULLBACK",
+          "card_id": "T1125-T_PULLBACK-002799-author-1",
+          "card_sha256": "0d6375fe48f65fceb3b30bb18eb493db8a4929a39d421d9d7560714eda7bb433",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "held_not_released",
           "observation_eligible": false,
-          "reason": "成交额放大、相对主线上涨，全天和尾窗却均为主动净卖。负净额已登记为反证。 同票原假设、条件及退出协议缺失，维持暂扣。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T14:55:00+08:00",
+          "reason": "11月20、23、24日有向成交净额分别为−5,855,770.96、−1,284,454.84、−54,991,079.24元。24日尾窗继续净卖，放量及主线相对收益没有抵消三日反证。 研究建议暂扣。",
+          "signal_boundary": "not_a_trading_signal"
         },
         {
           "code": "300986.SZ",
           "name": "志特新材",
+          "research_line": "T_PULLBACK",
+          "card_id": "T1125-T_PULLBACK-300986-author-1",
+          "card_sha256": "fa2c57ef3b775eb47b99a0024b43cc02bc041ab67e1270c8da371fbed92c4740",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "held_not_released",
           "observation_eligible": false,
-          "reason": "全天净买，尾窗净卖，收盘低于观测成交均价，持续承接解释受到削弱。 同票原假设、条件及退出协议缺失，维持暂扣。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T14:55:00+08:00",
+          "reason": "11月24日全天净买，尾窗净卖741.91万元，9.25元收盘低于观测均价9.6921元。价位和尾段资金方向均削弱延续判断。 研究建议暂扣。",
+          "signal_boundary": "not_a_trading_signal"
         },
         {
           "code": "300221.SZ",
           "name": "银禧科技",
+          "research_line": "T_PULLBACK",
+          "card_id": "T1125-T_PULLBACK-300221-author-1",
+          "card_sha256": "88b55135679091e24940636431d5ad2ad3efd7c1c8036967bf4868e15a40b7a5",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "held_not_released",
           "observation_eligible": false,
-          "reason": "全天和尾窗同为净买、收盘高于观测成交均价，但 T−2 未达到缩量参照，延续承接尚缺可检验的原条件。 同票原假设、条件及退出协议缺失，维持暂扣。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T14:55:00+08:00",
+          "reason": "11月23、24日均净买，24日尾窗净买625.52万元，收盘10.30元高于观测均价10.2272元。11月20日净卖、23日量比1.274，缩量蓄势解释仍弱。 同版内容核验通过；正式研究终态为空，成卡与本次复核是同模型的两个会话，缺跨模型准入原件。",
+          "signal_boundary": "not_a_trading_signal"
         }
       ],
       "qa": {
-        "path": "runtime/qa/20261125-t1125-qa-v4.json",
-        "bytes": 67150,
-        "sha256": "1e9658679a6c9c8e3dc28e57e9f0713733ee032fc44a75e2c4594ca40c047f62",
+        "path": "runtime/qa/20261125-t1125-qa-v5.json",
+        "bytes": 55096,
+        "sha256": "b212e26f7aacf3430a5c1a1e0e5f4036eeef0aebe353b9c9dc3a5b6b8a7ed910",
+        "version": "v5",
         "status": "completed",
-        "verdict": "return_for_research",
-        "decision": "return_for_research",
-        "empty_release_feed_permitted": true
+        "verdict": "release_approved_for_QA_passed",
+        "decision": "return_for_research"
       },
       "t_plus_1_activated_count": 0,
-      "reason": "五个规则候选均缺逐票假设、支持与失效条件、复查点、截止和 T+1 协议。"
+      "reason": "本线逐卡审核5张，放行0张，暂扣5张。海达股份、银禧科技仍有原卡内复查点。两卡通过内容与时效核验，跨模型准入原件待补。",
+      "release_status": "held_not_released",
+      "precheck_status": "passed",
+      "card_count": 5,
+      "released_cards": []
     },
     "T_FIRST_BOARD": {
       "run_id": "20261124-firstboard-v26",
@@ -124,11 +169,13 @@
       "research_status": "return_for_research",
       "precheck_status": "passed",
       "precheck_receipt": {
-        "path": "runtime/runs/20261124-firstboard-v26/factor_integrity_receipt_20261125_research_closeout.json",
+        "path": "runtime/runs/20261124-firstboard-v26/factor_integrity_receipt_20261125_card_completion.json",
+        "bytes": 7770,
+        "sha256": "e0800e0f055a5d1941d2c485c0a595636ae2b244ee1cb7d846485b1cd25c73ec",
         "status": "passed",
-        "sha256": "fc15d5da1fef503cb55a151f028561a24339896cb1c15f8142c4ae3a9952e99a",
-        "bound_candidate": "s3://china-a-share-l2-level2/lake/factor_collections/firstboard_pool_20261124.json",
-        "pool_sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740"
+        "research_line": "T_FIRST_BOARD",
+        "pool_sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740",
+        "bound_candidate": "G:\\我的云端硬盘\\A股量化数据湖\\factor_collections\\firstboard_pool_20261124.json"
       },
       "card_count": 3,
       "held_count": 3,
@@ -138,29 +185,50 @@
         {
           "code": "002387.SZ",
           "name": "维信诺",
+          "research_line": "T_FIRST_BOARD",
+          "card_id": "T1125-T_FIRST_BOARD-002387-author-2",
+          "card_sha256": "fcd82026c0b182e27b1d58894dec93c8485f6386e661543680181887cfc721f0",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "elapsed_unverified",
           "observation_eligible": false,
-          "reason": "14:30 前有向净额为负，尾段净买集中，同业延续性待证。 T 日窗口已于 10:00 截止，T+1 退出协议未激活。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T10:00:00+08:00",
+          "reason": "11月24日尾段净买1,617.84万元，超过连续竞价全段净买766.63万元；尾段之前为净卖，前两个证据日尾段均净卖。持续承接证据不足。 研究建议暂扣。原复查窗10:00已截止。补卡于10:31:47形成，原卡未记录截止前支持。",
+          "signal_boundary": "not_a_trading_signal"
         },
         {
           "code": "002856.SZ",
           "name": "*ST美芝",
+          "research_line": "T_FIRST_BOARD",
+          "card_id": "T1125-T_FIRST_BOARD-002856-author-2",
+          "card_sha256": "dae764ad969bae1db59df29dfac45e270bd8916d640a0f1f50cf583b969509db",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "elapsed_unverified",
           "observation_eligible": false,
-          "reason": "连续竞价净买主要发生在早段，尾段净买较小，同业20只中6只上涨。 T 日窗口已于 10:00 截止，T+1 退出协议未激活。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T10:00:00+08:00",
+          "reason": "11月24日尾段之前净买2,338.99万元，尾段净买62.47万元。20日和23日连续竞价全段均净卖。11月24日的研究偏好有据，但截至原窗口没有同业相对强弱、价格和两根分钟资金共同支持的记录。 原复查窗10:00已截止。补卡于10:31:47形成，原卡未记录截止前支持。",
+          "signal_boundary": "not_a_trading_signal"
         },
         {
           "code": "300903.SZ",
           "name": "科翔股份",
+          "research_line": "T_FIRST_BOARD",
+          "card_id": "T1125-T_FIRST_BOARD-300903-author-2",
+          "card_sha256": "cab2e0f8d77fdff24db3f98a4f8f15f17f7fb3a22c9fa390888872dae2376b09",
+          "target_trade_date": "2026-11-25",
           "status": "held_not_released",
-          "monitoring_eligible": false,
+          "observation_status": "elapsed_unverified",
           "observation_eligible": false,
-          "reason": "来自涨幅榜，连续竞价及尾段净买，收盘低于开盘，买方成交能否消化供给仍待证。 T 日窗口已于 10:00 截止，T+1 退出协议未激活。"
+          "monitoring_eligible": false,
+          "deadline": "2026-11-25T10:00:00+08:00",
+          "reason": "11月24日连续竞价净买1.21亿元，尾段净买2,786.49万元。盘中高70.81元，收64.65元低于67.00元开盘。价格没有维持早段强势。 研究建议暂扣。原复查窗10:00已截止。补卡于10:31:47形成，原卡未记录截止前支持。",
+          "signal_boundary": "not_a_trading_signal"
         }
       ],
-      "reason": "三张原卡的 10:00 复查窗口已截止，11 月 26 日退出协议均标为 held_inactive。",
+      "reason": "本线逐卡审核3张，放行0张，暂扣3张。三卡截止均为10:00，补卡于10:31:47形成，原窗内支持未核实。",
       "gdrive_synced": true,
       "gdrive_readback": {
         "verified_at": "2026-11-25T09:51:45+08:00",
@@ -168,15 +236,16 @@
         "sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740"
       },
       "qa": {
-        "path": "runtime/qa/20261125-t1125-qa-v4.json",
-        "bytes": 67150,
-        "sha256": "1e9658679a6c9c8e3dc28e57e9f0713733ee032fc44a75e2c4594ca40c047f62",
+        "path": "runtime/qa/20261125-t1125-qa-v5.json",
+        "bytes": 55096,
+        "sha256": "b212e26f7aacf3430a5c1a1e0e5f4036eeef0aebe353b9c9dc3a5b6b8a7ed910",
+        "version": "v5",
         "status": "completed",
-        "verdict": "return_for_research",
-        "decision": "return_for_research",
-        "empty_release_feed_permitted": true
+        "verdict": "release_approved_for_QA_passed",
+        "decision": "return_for_research"
       },
-      "t_plus_1_activated_count": 0
+      "t_plus_1_activated_count": 0,
+      "released_cards": []
     }
   },
   "released_count": 0,
