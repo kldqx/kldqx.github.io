@@ -6,8 +6,8 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-25T01:51:56Z",
-  "source_label": "11 月 25 日同版 QA：狙击线暂扣 5 只，首板线未通过云端回读核验，两线放行 0 只。",
+  "generated_at": "2026-11-25T09:52:30+08:00",
+  "source_label": "11 月 25 日 QA v3 核验完成。狙击线暂扣 5 只，首板线暂扣 3 只，两线返研，放行 0 只。",
   "seed_date": "2026-11-24",
   "run_id": "20261124-postmarket-v37-t1125",
   "target_trade_date": "2026-11-25",
@@ -92,14 +92,14 @@
     "T_FIRST_BOARD": {
       "run_id": "20261124-firstboard-v26",
       "status": "held_not_released",
-      "release_status": "return_for_research",
+      "release_status": "held_not_released",
       "research_status": "return_for_research",
-      "precheck_status": "passed_via_dual_binding",
+      "precheck_status": "passed",
       "precheck_receipt": {
         "path": "runtime/runs/20261124-firstboard-v26/factor_integrity_receipt_20261125_research_closeout.json",
         "status": "passed",
         "sha256": "fc15d5da1fef503cb55a151f028561a24339896cb1c15f8142c4ae3a9952e99a",
-        "bound_candidate": "s3://china-a-share-l2-level2/lake/factor_collections/firstboard_pool_20261124.json + G: lake (synced)",
+        "bound_candidate": "s3://china-a-share-l2-level2/lake/factor_collections/firstboard_pool_20261124.json",
         "pool_sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740"
       },
       "card_count": 3,
@@ -113,7 +113,7 @@
           "status": "held_not_released",
           "monitoring_eligible": false,
           "observation_eligible": false,
-          "reason": ""
+          "reason": "14:30 前有向净额为负，尾段净买集中，同业延续性待证。 原定案时点前的研究卡及随卡获批退出协议缺失。"
         },
         {
           "code": "002856.SZ",
@@ -121,7 +121,7 @@
           "status": "held_not_released",
           "monitoring_eligible": false,
           "observation_eligible": false,
-          "reason": ""
+          "reason": "连续竞价净买主要发生在早段，尾段净买较小，同业20只中6只上涨。 原定案时点前的研究卡及随卡获批退出协议缺失。"
         },
         {
           "code": "300903.SZ",
@@ -129,10 +129,11 @@
           "status": "held_not_released",
           "monitoring_eligible": false,
           "observation_eligible": false,
-          "reason": ""
+          "reason": "来自涨幅榜，连续竞价及尾段净买，收盘低于开盘，买方成交能否消化供给仍待证。 原定案时点前的研究卡及随卡获批退出协议缺失。"
         }
       ],
-      "reason": "前检 passed（G:+HF S3 双绑定，均命中冻结 sha）；3 张卡均为盘后形成，缺盘前原卡与同版独立 QA，终态 return_for_research，0 放行。"
+      "reason": "86 只已比较。3 张事后研究卡于 09:41 形成，缺竞价前冻结的原判断及随卡获批的退出协议。",
+      "gdrive_synced": true
     }
   },
   "released_count": 0,
