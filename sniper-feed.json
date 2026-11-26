@@ -6,273 +6,562 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-25T03:34:00Z",
-  "source_label": "11月25日批：8 张原卡逐票核验（QA v5 + Mistral 跨模型验资 acdb2218…)，放行 3 张观察卡（海达股份/银禧科技/*ST美芝，T+1 观察 11-26)，暂扣 5 张（证据性反证）；往日 11-24 批 9 只保留在案。signal_boundary=not_a_trading_signal",
-  "seed_date": "2026-11-24",
-  "run_id": "20261124-postmarket-v37-t1125",
-  "target_trade_date": "2026-11-25",
+  "generated_at": "2026-11-27T00:38:59+08:00",
+  "source_label": "2026-11-26盘后双线全链（合同 v3.1 + V38.1，Mistral 4 前脑 + NVIDIA 3.5 逐卡独审）：放行 6 张观察卡（农业银行/金百泽/九阳股份/东方海洋/善水科技/三佳科技，目标观察日 2026-11-27）。signal_boundary=not_a_trading_signal",
+  "seed_date": "2026-11-26",
+  "run_id": "20261126-dual-v31-t1127",
+  "target_trade_date": "2026-11-27",
+  "manual_watch_revision": 0,
   "handoff": {
-    "batch_id": "20261124-postmarket-v37-t1125",
-    "research_date": "2026-11-24",
-    "target_trade_date": "2026-11-25",
+    "batch_id": "20261126-dual-v31-t1127",
+    "research_date": "2026-11-26",
+    "target_trade_date": "2026-11-27",
     "research_line": "T_PULLBACK+T_FIRST_BOARD",
     "status": "released_observation",
-    "monitoring_handoff": false,
-    "precheck_receipt": {
-      "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
-      "bytes": 15201,
-      "sha256": "cbee86b067f0b6dc36481038c1e11dc74a8f313ca44eafefc671ec27e1cd0241",
-      "status": "passed",
-      "research_line": "T_PULLBACK"
-    },
-    "qa": {
-      "path": "runtime/qa/20261125-t1125-qa-v5.json",
-      "sha256": "b212e26f7aacf3430a5c1a1e0e5f4036eeef0aebe353b9c9dc3a5b6b8a7ed910",
-      "status": "completed",
-      "verdict": "8 cards verified, held on process grounds"
-    },
-    "precheck_receipts": {
-      "T_PULLBACK": {
-        "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
-        "bytes": 15201,
-        "sha256": "cbee86b067f0b6dc36481038c1e11dc74a8f313ca44eafefc671ec27e1cd0241",
-        "status": "passed",
-        "research_line": "T_PULLBACK"
-      },
-      "T_FIRST_BOARD": {
-        "path": "runtime/runs/20261124-firstboard-v26/factor_integrity_receipt_20261125_card_completion.json",
-        "bytes": 7770,
-        "sha256": "e0800e0f055a5d1941d2c485c0a595636ae2b244ee1cb7d846485b1cd25c73ec",
-        "status": "passed",
-        "research_line": "T_FIRST_BOARD",
-        "pool_sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740",
-        "bound_candidate": "G:\\我的云端硬盘\\A股量化数据湖\\factor_collections\\firstboard_pool_20261124.json"
-      }
-    },
-    "qa_completed_at": "2026-11-25T10:47:07+08:00"
+    "monitoring_handoff": true,
+    "qa_completed_at": "2026-11-27T00:38:59+08:00"
   },
   "lines": {
     "T_PULLBACK": {
-      "run_id": "20261124-postmarket-v37-t1125",
-      "status": "released_observation_partial",
-      "research_status": "return_for_research",
-      "precheck_receipt": {
-        "path": "runtime/runs/20261124-postmarket-v37-t1125/revisions/20261125-name-binding/factor_integrity_receipt_20261125_card_completion.json",
-        "bytes": 15201,
-        "sha256": "cbee86b067f0b6dc36481038c1e11dc74a8f313ca44eafefc671ec27e1cd0241",
-        "status": "passed",
-        "research_line": "T_PULLBACK"
-      },
-      "held_count": 5,
-      "released_count": 2,
+      "run_id": "20261126-postmarket-v37",
+      "status": "released_observation",
+      "release_status": "released_observation",
+      "research_status": "completed",
+      "precheck_status": "passed",
+      "card_count": 4,
+      "released_count": 3,
+      "held_count": 1,
       "withdrawn_count": 0,
       "held_candidates": [
         {
-          "code": "301219.SZ",
-          "name": "腾远钴业",
+          "code": "600938.SH",
+          "name": "中国海油",
           "research_line": "T_PULLBACK",
-          "card_id": "T1125-T_PULLBACK-301219-author-1",
-          "card_sha256": "007fee2614adaca6946f1a4f069f2bfe1a9719c5e6ffd680a8a33110e327df88",
-          "target_trade_date": "2026-11-25",
+          "target_trade_date": "2026-11-27",
           "status": "held_not_released",
           "observation_status": "held_not_released",
           "observation_eligible": false,
           "monitoring_eligible": false,
-          "deadline": "2026-11-25T14:55:00+08:00",
-          "reason": "11月23日回踩20.25%，量比1.219。次日全天净买，但尾窗净卖421.77万元，买方需求在最后窗口转弱。 研究建议暂扣。",
-          "signal_boundary": "not_a_trading_signal"
-        },
-        {
-          "code": "300320.SZ",
-          "name": "海达股份",
-          "research_line": "T_PULLBACK",
-          "card_id": "T1125-T_PULLBACK-300320-author-1",
-          "card_sha256": "83110ece66e310654dcff5745f8641d1bed66f7119c8eded675b16d7b51f025f",
-          "target_trade_date": "2026-11-25",
-          "status": "held_not_released",
-          "observation_status": "held_not_released",
-          "observation_eligible": false,
-          "monitoring_eligible": false,
-          "deadline": "2026-11-25T14:55:00+08:00",
-          "reason": "11月23日和24日均净买，24日尾窗净买108.46万元，同主线超额8.46个百分点。收盘7.39元低于观测均价7.4521元，支持有条件观察能否收复均价。 同版内容核验通过；正式研究终态为空，成卡与本次复核是同模型的两个会话，缺跨模型准入原件。",
-          "signal_boundary": "not_a_trading_signal"
-        },
-        {
-          "code": "002799.SZ",
-          "name": "环球印务",
-          "research_line": "T_PULLBACK",
-          "card_id": "T1125-T_PULLBACK-002799-author-1",
-          "card_sha256": "0d6375fe48f65fceb3b30bb18eb493db8a4929a39d421d9d7560714eda7bb433",
-          "target_trade_date": "2026-11-25",
-          "status": "held_not_released",
-          "observation_status": "held_not_released",
-          "observation_eligible": false,
-          "monitoring_eligible": false,
-          "deadline": "2026-11-25T14:55:00+08:00",
-          "reason": "11月20、23、24日有向成交净额分别为−5,855,770.96、−1,284,454.84、−54,991,079.24元。24日尾窗继续净卖，放量及主线相对收益没有抵消三日反证。 研究建议暂扣。",
-          "signal_boundary": "not_a_trading_signal"
-        },
-        {
-          "code": "300986.SZ",
-          "name": "志特新材",
-          "research_line": "T_PULLBACK",
-          "card_id": "T1125-T_PULLBACK-300986-author-1",
-          "card_sha256": "fa2c57ef3b775eb47b99a0024b43cc02bc041ab67e1270c8da371fbed92c4740",
-          "target_trade_date": "2026-11-25",
-          "status": "held_not_released",
-          "observation_status": "held_not_released",
-          "observation_eligible": false,
-          "monitoring_eligible": false,
-          "deadline": "2026-11-25T14:55:00+08:00",
-          "reason": "11月24日全天净买，尾窗净卖741.91万元，9.25元收盘低于观测均价9.6921元。价位和尾段资金方向均削弱延续判断。 研究建议暂扣。",
-          "signal_boundary": "not_a_trading_signal"
-        },
-        {
-          "code": "300221.SZ",
-          "name": "银禧科技",
-          "research_line": "T_PULLBACK",
-          "card_id": "T1125-T_PULLBACK-300221-author-1",
-          "card_sha256": "88b55135679091e24940636431d5ad2ad3efd7c1c8036967bf4868e15a40b7a5",
-          "target_trade_date": "2026-11-25",
-          "status": "held_not_released",
-          "observation_status": "held_not_released",
-          "observation_eligible": false,
-          "monitoring_eligible": false,
-          "deadline": "2026-11-25T14:55:00+08:00",
-          "reason": "11月23、24日均净买，24日尾窗净买625.52万元，收盘10.30元高于观测均价10.2272元。11月20日净卖、23日量比1.274，缩量蓄势解释仍弱。 同版内容核验通过；正式研究终态为空，成卡与本次复核是同模型的两个会话，缺跨模型准入原件。",
+          "deadline": "2026-11-27T09:30:00+08:00",
+          "reason": "TRACK_B内amt_r/er_t1弱于301041/002913/603395，T-3曾净流出-2122.54万，资金连续性不完美，属凑数弱卡。",
           "signal_boundary": "not_a_trading_signal"
         }
       ],
+      "released_cards": [
+        {
+          "code": "601288.SH",
+          "name": "农业银行",
+          "line": "T_PULLBACK",
+          "status": "released_observation",
+          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_003859.json",
+          "card_sha256": "4e7a4697be89028d287d4cb09e661c4a8f7face93b7602824cfc0e4554308efe"
+        },
+        {
+          "code": "301041.SZ",
+          "name": "金百泽",
+          "line": "T_PULLBACK",
+          "status": "released_observation",
+          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_003859.json",
+          "card_sha256": "4e7a4697be89028d287d4cb09e661c4a8f7face93b7602824cfc0e4554308efe"
+        },
+        {
+          "code": "002242.SZ",
+          "name": "九阳股份",
+          "line": "T_PULLBACK",
+          "status": "released_observation",
+          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_003859.json",
+          "card_sha256": "4e7a4697be89028d287d4cb09e661c4a8f7face93b7602824cfc0e4554308efe"
+        }
+      ],
       "qa": {
-        "path": "runtime/qa/20261125-t1125-qa-v5.json",
-        "bytes": 55096,
-        "sha256": "b212e26f7aacf3430a5c1a1e0e5f4036eeef0aebe353b9c9dc3a5b6b8a7ed910",
-        "version": "v5",
+        "path": "runtime/qa/postclose-qa-20261126-t_pullback-003850.json",
+        "bytes": 69678,
+        "sha256": "7d5ee2c6ff615d6304234ce3d1acefd9a3d1fcece6d9b67c12ad318ce098d8a5",
         "status": "completed",
-        "verdict": "release_approved_for_QA_passed",
-        "decision": "return_for_research"
+        "model": "nvidia/nemotron-3.5-super-vl-120b-a12b"
       },
-      "t_plus_1_activated_count": 0,
-      "reason": "本线逐卡审核5张，放行0张，暂扣5张。海达股份、银禧科技仍有原卡内复查点。两卡通过内容与时效核验，跨模型准入原件待补。",
-      "release_status": "held_not_released",
-      "precheck_status": "passed",
-      "card_count": 5,
-      "released_cards": []
+      "reason": "本线放行 3 张观察卡，暂扣/剔除 1 张。"
     },
     "T_FIRST_BOARD": {
-      "run_id": "20261124-firstboard-v26",
-      "status": "released_observation_partial",
-      "release_status": "held_not_released",
-      "research_status": "return_for_research",
+      "run_id": "20261126-firstboard-v26",
+      "status": "released_observation",
+      "release_status": "released_observation",
+      "research_status": "completed",
       "precheck_status": "passed",
-      "precheck_receipt": {
-        "path": "runtime/runs/20261124-firstboard-v26/factor_integrity_receipt_20261125_card_completion.json",
-        "bytes": 7770,
-        "sha256": "e0800e0f055a5d1941d2c485c0a595636ae2b244ee1cb7d846485b1cd25c73ec",
-        "status": "passed",
-        "research_line": "T_FIRST_BOARD",
-        "pool_sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740",
-        "bound_candidate": "G:\\我的云端硬盘\\A股量化数据湖\\factor_collections\\firstboard_pool_20261124.json"
-      },
       "card_count": 3,
-      "held_count": 3,
-      "released_count": 1,
+      "released_count": 3,
+      "held_count": 0,
       "withdrawn_count": 0,
-      "held_candidates": [
+      "held_candidates": [],
+      "released_cards": [
         {
-          "code": "002387.SZ",
-          "name": "维信诺",
-          "research_line": "T_FIRST_BOARD",
-          "card_id": "T1125-T_FIRST_BOARD-002387-author-2",
-          "card_sha256": "fcd82026c0b182e27b1d58894dec93c8485f6386e661543680181887cfc721f0",
-          "target_trade_date": "2026-11-25",
-          "status": "held_not_released",
-          "observation_status": "elapsed_unverified",
-          "observation_eligible": false,
-          "monitoring_eligible": false,
-          "deadline": "2026-11-25T10:00:00+08:00",
-          "reason": "11月24日尾段净买1,617.84万元，超过连续竞价全段净买766.63万元；尾段之前为净卖，前两个证据日尾段均净卖。持续承接证据不足。 研究建议暂扣。原复查窗10:00已截止。补卡于10:31:47形成，原卡未记录截止前支持。",
-          "signal_boundary": "not_a_trading_signal"
+          "code": "002086.SZ",
+          "name": "东方海洋",
+          "line": "T_FIRST_BOARD",
+          "status": "released_observation",
+          "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_003552.json",
+          "card_sha256": "fa1f4da89d4ef0696c081890ff8da8b6245cba3de8f48718678585e53c894b9c"
         },
         {
-          "code": "002856.SZ",
-          "name": "*ST美芝",
-          "research_line": "T_FIRST_BOARD",
-          "card_id": "T1125-T_FIRST_BOARD-002856-author-2",
-          "card_sha256": "dae764ad969bae1db59df29dfac45e270bd8916d640a0f1f50cf583b969509db",
-          "target_trade_date": "2026-11-25",
-          "status": "held_not_released",
-          "observation_status": "elapsed_unverified",
-          "observation_eligible": false,
-          "monitoring_eligible": false,
-          "deadline": "2026-11-25T10:00:00+08:00",
-          "reason": "11月24日尾段之前净买2,338.99万元，尾段净买62.47万元。20日和23日连续竞价全段均净卖。11月24日的研究偏好有据，但截至原窗口没有同业相对强弱、价格和两根分钟资金共同支持的记录。 原复查窗10:00已截止。补卡于10:31:47形成，原卡未记录截止前支持。",
-          "signal_boundary": "not_a_trading_signal"
+          "code": "301190.SZ",
+          "name": "善水科技",
+          "line": "T_FIRST_BOARD",
+          "status": "released_observation",
+          "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_003552.json",
+          "card_sha256": "fa1f4da89d4ef0696c081890ff8da8b6245cba3de8f48718678585e53c894b9c"
         },
         {
-          "code": "300903.SZ",
-          "name": "科翔股份",
-          "research_line": "T_FIRST_BOARD",
-          "card_id": "T1125-T_FIRST_BOARD-300903-author-2",
-          "card_sha256": "cab2e0f8d77fdff24db3f98a4f8f15f17f7fb3a22c9fa390888872dae2376b09",
-          "target_trade_date": "2026-11-25",
-          "status": "held_not_released",
-          "observation_status": "elapsed_unverified",
-          "observation_eligible": false,
-          "monitoring_eligible": false,
-          "deadline": "2026-11-25T10:00:00+08:00",
-          "reason": "11月24日连续竞价净买1.21亿元，尾段净买2,786.49万元。盘中高70.81元，收64.65元低于67.00元开盘。价格没有维持早段强势。 研究建议暂扣。原复查窗10:00已截止。补卡于10:31:47形成，原卡未记录截止前支持。",
-          "signal_boundary": "not_a_trading_signal"
+          "code": "600520.SH",
+          "name": "三佳科技",
+          "line": "T_FIRST_BOARD",
+          "status": "released_observation",
+          "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_003552.json",
+          "card_sha256": "fa1f4da89d4ef0696c081890ff8da8b6245cba3de8f48718678585e53c894b9c"
         }
       ],
-      "reason": "本线逐卡审核3张，放行0张，暂扣3张。三卡截止均为10:00，补卡于10:31:47形成，原窗内支持未核实。",
-      "gdrive_synced": true,
-      "gdrive_readback": {
-        "verified_at": "2026-11-25T09:51:45+08:00",
-        "bytes": 135955,
-        "sha256": "0d11611adac0707f164140e11aba159669bbc477364cb219ab1dc4bdc1244740"
-      },
       "qa": {
-        "path": "runtime/qa/20261125-t1125-qa-v5.json",
-        "bytes": 55096,
-        "sha256": "b212e26f7aacf3430a5c1a1e0e5f4036eeef0aebe353b9c9dc3a5b6b8a7ed910",
-        "version": "v5",
+        "path": "runtime/qa/postclose-qa-20261126-t_first_board-003543.json",
+        "bytes": 26342,
+        "sha256": "ef4d371503b13387398bd66de090c8b50f04eced405f401193311280f50b6eb3",
         "status": "completed",
-        "verdict": "release_approved_for_QA_passed",
-        "decision": "return_for_research"
+        "model": "nvidia/nemotron-3.5-super-vl-120b-a12b"
       },
-      "t_plus_1_activated_count": 0,
-      "released_cards": []
+      "reason": "本线放行 3 张观察卡，暂扣/剔除 0 张。"
     }
   },
-  "released_count": 3,
+  "released_count": 6,
   "released_cards": [
     {
-      "code": "300320.SZ",
-      "name": "海达股份",
+      "code": "601288.SH",
+      "name": "农业银行",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261124-postmarket-v37-t1125/research_cards_20261125.json",
-      "card_sha256": "de62cd8563760082ebf6772305c45317f576ca2f517d3c58a528dfb4a921cc23"
+      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_003859.json",
+      "card_sha256": "4e7a4697be89028d287d4cb09e661c4a8f7face93b7602824cfc0e4554308efe"
     },
     {
-      "code": "300221.SZ",
-      "name": "银禧科技",
+      "code": "301041.SZ",
+      "name": "金百泽",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261124-postmarket-v37-t1125/research_cards_20261125.json",
-      "card_sha256": "de62cd8563760082ebf6772305c45317f576ca2f517d3c58a528dfb4a921cc23"
+      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_003859.json",
+      "card_sha256": "4e7a4697be89028d287d4cb09e661c4a8f7face93b7602824cfc0e4554308efe"
     },
     {
-      "code": "002856.SZ",
-      "name": "*ST美芝",
+      "code": "002242.SZ",
+      "name": "九阳股份",
+      "line": "T_PULLBACK",
+      "status": "released_observation",
+      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_003859.json",
+      "card_sha256": "4e7a4697be89028d287d4cb09e661c4a8f7face93b7602824cfc0e4554308efe"
+    },
+    {
+      "code": "002086.SZ",
+      "name": "东方海洋",
       "line": "T_FIRST_BOARD",
       "status": "released_observation",
-      "card": "runtime/runs/20261124-firstboard-v26/research_cards_20261125.json",
-      "card_sha256": "d7721214745f4dabd0b407cbeed2eb7b8e0b062d46a9fed36812c17cec1dcf6f"
+      "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_003552.json",
+      "card_sha256": "fa1f4da89d4ef0696c081890ff8da8b6245cba3de8f48718678585e53c894b9c"
+    },
+    {
+      "code": "301190.SZ",
+      "name": "善水科技",
+      "line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_003552.json",
+      "card_sha256": "fa1f4da89d4ef0696c081890ff8da8b6245cba3de8f48718678585e53c894b9c"
+    },
+    {
+      "code": "600520.SH",
+      "name": "三佳科技",
+      "line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_003552.json",
+      "card_sha256": "fa1f4da89d4ef0696c081890ff8da8b6245cba3de8f48718678585e53c894b9c"
     }
   ],
   "stocks": [
+    {
+      "code": "601288.SH",
+      "name": "农业银行",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "research_line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 8.02,
+      "change_pct": 0.75,
+      "turnover_yi": 23.5216,
+      "turnover_rate": 0.09,
+      "vwap": 7.95,
+      "vwap_deviation_pct": 0.88,
+      "source_data_at": "2026-11-26T15:00:00+08:00",
+      "observed_at": "2026-11-27T00:38:59+08:00",
+      "target_trade_date": "2026-11-27",
+      "seed_trade_date": "2026-11-26",
+      "benchmark": {
+        "desc": "[TRACK_A_PULLBACK] V38.1实测因子：amt_r=0.76、er_t1=0.02、vol_r=0.74、pos_share=1.0、spoon=0.375。横向对比同板块BK1611的601658.SH（邮储银行，amt_r=0.76相同但er_t1=-0.06且T-1资金仅1273.05万<4090.6万），对比TRACK_A内600000.SH（amt_r=0.67<0.76）；三日资金T-3=35575.77万、T-2=16264.97万、T-1=4",
+        "target_open_pct": [
+          0.0,
+          2.0
+        ]
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-27",
+        "deadline_at": "2026-11-27T09:30:00+08:00",
+        "support_conditions": [
+          "2026-11-27 09:25集合竞价涨幅落在0%~2%区间且竞价成交额>500万元",
+          "盘中分时站稳VWAP=7.95元且量能较昨日温和放大（vol_r维持>0.7）"
+        ],
+        "invalidation_conditions": [
+          "2026-11-27 09:25集合竞价跌幅>1%或竞价成交额<100万元触发失效",
+          "盘中放量跌破VWAP=7.95元或前日低点且净流转负"
+        ],
+        "on_reliable_invalidation": "T+1日（2026-11-30）若实际成交价严格低于当日开盘价*0.97触发退出风险观察，或14:55分时跌破当日开盘价-3%无动能退出观察"
+      },
+      "hypothesis": "[TRACK_A_PULLBACK] V38.1实测因子：amt_r=0.76、er_t1=0.02、vol_r=0.74、pos_share=1.0、spoon=0.375。横向对比同板块BK1611的601658.SH（邮储银行，amt_r=0.76相同但er_t1=-0.06且T-1资金仅1273.05万<4090.6万），对比TRACK_A内600000.SH（amt_r=0.67<0.76）；三日资金T-3=35575.77万、T-2=16264.97万、T-1=4090.6万呈持续净流入，close=8.02>vwap=7.95未触发出货陷阱。 | 银行板块经历三日大资金持续流入（累计超5.6亿）后缩量回踩，形成蓄势结构，次日有望在资金承接下延续反弹。",
+      "risk_reason": "er_t1=0.02接近零显示短期收益弹性不足；T-1资金4090.6万较T-3的35575.77万萎缩88%，资金动能衰减；未查范围：逐笔大单流向缺失（tick_d=0），盘口委托队列深度未验证，无法确认4090.6万净流是否含对倒。",
+      "qa_verdict": "accepted",
+      "qa_reason": "实测值与pack一致，close>vwap未出货；TRACK_A amt_r领先同板块；09:25/VWAP/开盘价*0.97/14:55锚点齐全，核准。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_PULLBACK",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "2026-11-27 09:25集合竞价涨幅落在0%~2%区间且竞价成交额>500万元; 盘中分时站稳VWAP=7.95元且量能较昨日温和放大（vol_r维持>0.7）",
+      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日（2026-11-30）若实际成交价严格低于当日开盘价*0.97触发退出风险观察，或14:55分时跌破当日开盘价-3%无动能退出观察",
+      "origin_batch_id": "20261126-dual-v31-t1127",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "301041.SZ",
+      "name": "金百泽",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "research_line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 27.63,
+      "change_pct": 16.88,
+      "turnover_yi": 5.6019,
+      "turnover_rate": 26.2,
+      "vwap": 27.07,
+      "vwap_deviation_pct": 2.07,
+      "source_data_at": "2026-11-26T15:00:00+08:00",
+      "observed_at": "2026-11-27T00:38:59+08:00",
+      "target_trade_date": "2026-11-27",
+      "seed_trade_date": "2026-11-26",
+      "benchmark": {
+        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测因子：er_t1=12.16为24候选池内最高，amt_r=2.2、vol_r=2.07、pos_share=0.657、spoon=0.375。横向对比同板块BK1340的002913.SZ（er_t1=5.19、amt_r=1.65）与301251.SZ（er_t1=3.96、amt_r=1.4），金百泽收益弹性显著占优；T-1资金20832.12万虽低于002913的48098.18万但远高于3012",
+        "target_open_pct": [
+          3.0,
+          6.0
+        ]
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-27",
+        "deadline_at": "2026-11-27T09:30:00+08:00",
+        "support_conditions": [
+          "2026-11-27 09:25集合竞价涨幅落在3%~6%区间且竞价成交量>3000手",
+          "盘中回踩分时均价线不破VWAP=27.07元且量能维持vol_r>2.0"
+        ],
+        "invalidation_conditions": [
+          "2026-11-27 09:25集合竞价跌幅>2%或高开>8%且无量一字触发失效",
+          "盘中放量跌破VWAP=27.07元且单笔大单净卖出>5000手"
+        ],
+        "on_reliable_invalidation": "T+1日收盘价严格低于当日开盘价*0.97，或盘中跌破27.07元关键支撑触发退出观察"
+      },
+      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测因子：er_t1=12.16为24候选池内最高，amt_r=2.2、vol_r=2.07、pos_share=0.657、spoon=0.375。横向对比同板块BK1340的002913.SZ（er_t1=5.19、amt_r=1.65）与301251.SZ（er_t1=3.96、amt_r=1.4），金百泽收益弹性显著占优；T-1资金20832.12万虽低于002913的48098.18万但远高于301251的4413.57万，close=27.63>vwap=27.07。 | 电子板块高位分歧放量后资金承接力强，量价背离吸收筹码，次日惯性冲高概率较大。",
+      "risk_reason": "pos_share=0.657<1.0显示筹码集中度不足，主力控盘程度弱于002913（pos_share=0.657相同但资金规模更大）；T-2资金仅768.81万，资金持续性弱于002242.SZ；逐笔净流数据缺失（tick_d=0），无法验证20832.12万净流的真实微观结构。",
+      "qa_verdict": "accepted",
+      "qa_reason": "因子真实，TRACK_B er_t1池内最高；09:25/VWAP/开盘价*0.97锚点齐全，t+1缺14:55明确表述但盘中支撑可量化，核准。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_PULLBACK",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "2026-11-27 09:25集合竞价涨幅落在3%~6%区间且竞价成交量>3000手; 盘中回踩分时均价线不破VWAP=27.07元且量能维持vol_r>2.0",
+      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日收盘价严格低于当日开盘价*0.97，或盘中跌破27.07元关键支撑触发退出观察",
+      "origin_batch_id": "20261126-dual-v31-t1127",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "002242.SZ",
+      "name": "九阳股份",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "research_line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 41.9,
+      "change_pct": 8.66,
+      "turnover_yi": 51.7513,
+      "turnover_rate": 16.68,
+      "vwap": 40.73,
+      "vwap_deviation_pct": 2.87,
+      "source_data_at": "2026-11-26T15:00:00+08:00",
+      "observed_at": "2026-11-27T00:38:59+08:00",
+      "target_trade_date": "2026-11-27",
+      "seed_trade_date": "2026-11-26",
+      "benchmark": {
+        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测因子：er_t1=8.94、amt_r=1.51、vol_r=1.16、pos_share=1.0、spoon=0.375。核心优势为连续两日大资金净流入：T-1=51799.67万、T-2=57841.87万，资金持续性为池内最强；横向对比同板块BK1244的603215.SH（比依股份，pct=-2.84%、amt_r=0.42、er_t1=-2.56）形成断层式领先，close=41.9>vwap=4",
+        "target_open_pct": [
+          2.0,
+          5.0
+        ]
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-27",
+        "deadline_at": "2026-11-27T09:30:00+08:00",
+        "support_conditions": [
+          "2026-11-27 09:25集合竞价涨幅落在2%~5%区间且竞价成交额>1500万元",
+          "盘中回踩不破VWAP=40.73元且量能维持vol_r>1.0"
+        ],
+        "invalidation_conditions": [
+          "2026-11-27 09:25集合竞价跌幅>1.5%或高开>7%无量触发失效",
+          "盘中放量跌破VWAP=40.73元或前日收盘价41.9元*0.98"
+        ],
+        "on_reliable_invalidation": "T+1日收盘价严格低于当日开盘价*0.97，或盘中跌破40.73元关键均价支撑触发退出观察"
+      },
+      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测因子：er_t1=8.94、amt_r=1.51、vol_r=1.16、pos_share=1.0、spoon=0.375。核心优势为连续两日大资金净流入：T-1=51799.67万、T-2=57841.87万，资金持续性为池内最强；横向对比同板块BK1244的603215.SH（比依股份，pct=-2.84%、amt_r=0.42、er_t1=-2.56）形成断层式领先，close=41.9>vwap=40.73。 | 家电板块资金持续流入驱动（连续两日超5亿），分歧后承接有力，次日延续强势上攻。",
+      "risk_reason": "vol_r=1.16相对较低，量能弹性不足，可能面临高位缩量风险；T-3资金数据缺失（gap）；逐笔tick_d=0无法验证盘中微观资金结构，51799.67万净流真实性待核验。",
+      "qa_verdict": "accepted",
+      "qa_reason": "数据真实，T-1/T-2连续超5亿资金，er_t1=8.94池内前列；09:25/VWAP/开盘价*0.97锚点齐全，t+1缺14:55明确表述，核准。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_PULLBACK",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "2026-11-27 09:25集合竞价涨幅落在2%~5%区间且竞价成交额>1500万元; 盘中回踩不破VWAP=40.73元且量能维持vol_r>1.0",
+      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日收盘价严格低于当日开盘价*0.97，或盘中跌破40.73元关键均价支撑触发退出观察",
+      "origin_batch_id": "20261126-dual-v31-t1127",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "002086.SZ",
+      "name": "东方海洋",
+      "phase": "T_FIRST_BOARD",
+      "line": "T_FIRST_BOARD",
+      "research_line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 4.77,
+      "change_pct": 9.91,
+      "turnover_yi": 30.973,
+      "turnover_rate": 41.69,
+      "vwap": 4.7,
+      "vwap_deviation_pct": 1.49,
+      "source_data_at": "2026-11-26T15:00:00+08:00",
+      "observed_at": "2026-11-27T00:38:59+08:00",
+      "target_trade_date": "2026-11-27",
+      "seed_trade_date": "2026-11-26",
+      "benchmark": {
+        "desc": "[A_FIRST_BOARD] V38.1实测：pre_rank_score 67.01（池内最高），active_net_wan 124500.51（池内最大，较次高顺灏股份21165.82万高出4.9倍），lhb_bonus 8.0（池内最高），close 4.77 > vwap 4.7（vwap_support 19.01）。横向对比：较中水渔业（active_net 8538.53万）资金承接强14.6倍，较善水科技（lhb_bonus 5.25）龙虎榜加分高2.75",
+        "target_open_pct": [
+          3.0,
+          9.5
+        ],
+        "min_turnover_yi": 0.32
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-27",
+        "deadline_at": "2026-11-27T09:30:00+08:00",
+        "support_conditions": [
+          "09:25竞价高开≥3%（即≥4.91元）且竞价金额≥昨日首封order_yi 0.647亿的50%（≥0.32亿），显示隔夜资金承接",
+          "盘中回踩不破VWAP 4.70元且站稳昨收4.77元支撑，active_net维持正流入"
+        ],
+        "invalidation_conditions": [
+          "09:25竞价低开超-2%（即<4.67元）或平开以下，视为承接失效",
+          "盘中跌破VWAP 4.70元且30分钟内无法收复，或跌破4.60元（-3.6%）关键支撑"
+        ],
+        "on_reliable_invalidation": "T+1日（2026-11-30）开盘价低于2026-11-27开盘价*0.97触发观察，或14:55涨幅<3%无动能退出观察"
+      },
+      "hypothesis": "[A_FIRST_BOARD] V38.1实测：pre_rank_score 67.01（池内最高），active_net_wan 124500.51（池内最大，较次高顺灏股份21165.82万高出4.9倍），lhb_bonus 8.0（池内最高），close 4.77 > vwap 4.7（vwap_support 19.01）。横向对比：较中水渔业（active_net 8538.53万）资金承接强14.6倍，较善水科技（lhb_bonus 5.25）龙虎榜加分高2.75点；虽seal_quality 24.0低于首板满分28.0（因open_num 9多次开板），但5天4板连板高度提供板块身位优势，sector_ladder 16.0高于善水科技10.0。 | 水产养殖板块龙头，5天4板连板高度领先池内所有首板标的（中水渔业、三佳科技、善水科技均为首板），sector_ladder 16.0处于池内中上游，仅次于顺灏股份22.0。",
+      "risk_reason": "open_num 9显示当日多次开板，封单稳定性不如首板秒封标的（如顺灏股份open_num null）；seal_turn_pct 2.1%相对较低，筹码锁定较好但跟风盘可能不足；lhb_net_wan为null（缺失），无法核验龙虎榜具体席位资金；未查范围：未核验董事会换届具体议案内容及大健康业务营收占比。",
+      "qa_verdict": "accepted",
+      "qa_reason": "实测无误，active_net池内最大12.45亿，close>vwap；横向对比实质；具备09:25竞价/VWAP/T+1*0.97/14:55锚点。决策基础倍数轻微偏差，通过。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_FIRST_BOARD",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "09:25竞价高开≥3%（即≥4.91元）且竞价金额≥昨日首封order_yi 0.647亿的50%（≥0.32亿），显示隔夜资金承接; 盘中回踩不破VWAP 4.70元且站稳昨收4.77元支撑，active_net维持正流入",
+      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日（2026-11-30）开盘价低于2026-11-27开盘价*0.97触发观察，或14:55涨幅<3%无动能退出观察",
+      "origin_batch_id": "20261126-dual-v31-t1127",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "301190.SZ",
+      "name": "善水科技",
+      "phase": "T_FIRST_BOARD",
+      "line": "T_FIRST_BOARD",
+      "research_line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 28.56,
+      "change_pct": 20.0,
+      "turnover_yi": 3.1965,
+      "turnover_rate": 6.53,
+      "vwap": 26.92,
+      "vwap_deviation_pct": 6.09,
+      "source_data_at": "2026-11-26T15:00:00+08:00",
+      "observed_at": "2026-11-27T00:38:59+08:00",
+      "target_trade_date": "2026-11-27",
+      "seed_trade_date": "2026-11-26",
+      "benchmark": {
+        "desc": "[A_FIRST_BOARD] V38.1实测：vwap_support 23.0（池内最高，较东方海洋19.01高3.99点），seal_quality 26.34（首板中仅次于中水渔业28.0和顺灏股份28.0），lhb_bonus 5.25，pre_rank_score 64.59（池内第5）。20cm涨停（pct 20.0%）较10cm标的有溢价弹性。横向对比：较同为20cm的金三江（open_num 1曾开板，last_seal 14:10:09尾盘回封），善水科技",
+        "target_open_pct": [
+          5.0,
+          9.5
+        ],
+        "min_turnover_yi": 1.0
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-27",
+        "deadline_at": "2026-11-27T09:30:00+08:00",
+        "support_conditions": [
+          "09:25竞价高开≥5%（即≥29.99元）且竞价金额≥1亿元，显示20cm溢价承接",
+          "盘中站稳VWAP 26.92元且不破昨收28.56元，回踩26.92-27.50区间有承接"
+        ],
+        "invalidation_conditions": [
+          "09:25竞价低开超-3%（即<27.70元）或高开后快速回落翻绿",
+          "跌破VWAP 26.92元且30分钟内无法收复，或触及跌停价22.85元（-20%）"
+        ],
+        "on_reliable_invalidation": "T+1日开盘价低于2026-11-27开盘价*0.97，或14:55涨幅<10%（20cm标的动能不足）退出观察"
+      },
+      "hypothesis": "[A_FIRST_BOARD] V38.1实测：vwap_support 23.0（池内最高，较东方海洋19.01高3.99点），seal_quality 26.34（首板中仅次于中水渔业28.0和顺灏股份28.0），lhb_bonus 5.25，pre_rank_score 64.59（池内第5）。20cm涨停（pct 20.0%）较10cm标的有溢价弹性。横向对比：较同为20cm的金三江（open_num 1曾开板，last_seal 14:10:09尾盘回封），善水科技首封09:43:18且open_num null未开板，封单质量更优；active_net 13627.43万高于金三江11688.3万16.6%。 | 化工中间体板块，sector_ladder 10.0（池内最低档），但20cm涨停提供价格弹性补偿；较同为创业板20cm的金三江（sector_ladder同为10.0），善水科技封单未开板更优。",
+      "risk_reason": "sector_ladder 10.0为池内最低，板块跟风性可能不足；lhb_net_wan为null；首封时间09:43:18较东方海洋09:33:42晚10分钟，早盘封单强度略逊；未查范围：未核验农药医药中间体具体订单数据及染料业务毛利率变动。",
+      "qa_verdict": "accepted",
+      "qa_reason": "实测无误，vwap_support池内最高23.0，20cm首板未开板；横向对比金三江实质；具备09:25竞价/VWAP/T+1*0.97/14:55锚点。通过。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_FIRST_BOARD",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "09:25竞价高开≥5%（即≥29.99元）且竞价金额≥1亿元，显示20cm溢价承接; 盘中站稳VWAP 26.92元且不破昨收28.56元，回踩26.92-27.50区间有承接",
+      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日开盘价低于2026-11-27开盘价*0.97，或14:55涨幅<10%（20cm标的动能不足）退出观察",
+      "origin_batch_id": "20261126-dual-v31-t1127",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "600520.SH",
+      "name": "三佳科技",
+      "phase": "T_FIRST_BOARD",
+      "line": "T_FIRST_BOARD",
+      "research_line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 20.06,
+      "change_pct": 9.98,
+      "turnover_yi": 2.528,
+      "turnover_rate": 8.31,
+      "vwap": 19.19,
+      "vwap_deviation_pct": 4.53,
+      "source_data_at": "2026-11-26T15:00:00+08:00",
+      "observed_at": "2026-11-27T00:38:59+08:00",
+      "target_trade_date": "2026-11-27",
+      "seed_trade_date": "2026-11-26",
+      "benchmark": {
+        "desc": "[A_FIRST_BOARD] V38.1实测：vwap_support 21.01（池内第3，仅次于善水科技23.0和金三江21.3），seal_quality 25.32，sector_ladder 19.0（与中水渔业并列首板最高），pre_rank_score 65.33（池内第3）。active_net 15942.36万（首板中最高，较中水渔业8538.53万高86.7%）。横向对比：较骏亚科技（同为PCB/AI题材，pre_rank_score 62.74，vw",
+        "target_open_pct": [
+          4.0,
+          9.5
+        ],
+        "min_turnover_yi": 0.14
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-27",
+        "deadline_at": "2026-11-27T09:30:00+08:00",
+        "support_conditions": [
+          "09:25竞价高开≥4%（即≥20.86元）且竞价金额≥昨日order_yi 0.238亿的60%（≥0.14亿）",
+          "盘中回踩VWAP 19.19元不破，且站稳昨收20.06元心理关口"
+        ],
+        "invalidation_conditions": [
+          "09:25竞价低开超-2%（即<19.66元）或平开以下",
+          "跌破VWAP 19.19元且反弹无力，或跌破19.00元整数关口"
+        ],
+        "on_reliable_invalidation": "T+1日开盘价低于2026-11-27开盘价*0.97，或14:55涨幅<5%退出观察"
+      },
+      "hypothesis": "[A_FIRST_BOARD] V38.1实测：vwap_support 21.01（池内第3，仅次于善水科技23.0和金三江21.3），seal_quality 25.32，sector_ladder 19.0（与中水渔业并列首板最高），pre_rank_score 65.33（池内第3）。active_net 15942.36万（首板中最高，较中水渔业8538.53万高86.7%）。横向对比：较骏亚科技（同为PCB/AI题材，pre_rank_score 62.74，vwap_support 18.74），三佳科技pre_rank_score高2.59点，vwap_support高2.27点，资金流入多8.2%；较中水渔业，换手仅8.31% vs 65.9%，封单更稳固。 | 半导体封测板块，sector_ladder 19.0处于首板池内高位，仅次于顺灏股份22.0；合肥国资背景提供地方产业政策支撑，较同板块骏亚科技（sector_ladder 16.0）高3点。",
+      "risk_reason": "首封时间09:48:25较东方海洋09:33:42晚15分钟，早盘封单强度略弱；lhb_bonus 0.0（无龙虎榜加分）；lhb_net_wan为null；未查范围：未核验合肥国资具体持股比例及机器人业务订单落地进度；封装设备行业竞争格局未查。",
+      "qa_verdict": "accepted",
+      "qa_reason": "实测无误，首板active_net最高1594万，close>vwap；横向对比骏亚/中水渔业实质；具备09:25竞价/VWAP/T+1*0.97/14:55锚点。通过。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_FIRST_BOARD",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "09:25竞价高开≥4%（即≥20.86元）且竞价金额≥昨日order_yi 0.238亿的60%（≥0.14亿）; 盘中回踩VWAP 19.19元不破，且站稳昨收20.06元心理关口",
+      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日开盘价低于2026-11-27开盘价*0.97，或14:55涨幅<5%退出观察",
+      "origin_batch_id": "20261126-dual-v31-t1127",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
     {
       "path": "v37_feed_20261125_name_binding.json",
       "bytes": 7342230,
@@ -282,7 +571,7 @@
       "name": "海达股份",
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 7.39,
       "change_pct": 8.2,
@@ -302,7 +591,7 @@
       "name": "银禧科技",
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 10.3,
       "change_pct": 13.31,
@@ -318,7 +607,7 @@
       "name": "*ST美芝",
       "phase": "T_FIRST_BOARD",
       "line": "T_FIRST_BOARD",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 15.64,
       "change_pct": 9.99,
@@ -934,14 +1223,5 @@
       "batch": "20261123-postmarket-v37-t1124-r2 (11-24 批)",
       "status": "prior_batch_observation"
     }
-  ],
-  "held_count": 8,
-  "t_plus_1_activated_count": 0,
-  "cross_model_validation": {
-    "path": "runtime/qa/20261125-t1125-xval-mistral.json",
-    "sha256": "acdb22183242a5526c8ab067df817afd3994896ee2222067f9e38d6a08a56e54",
-    "validator": "mistral-large-4-0",
-    "decision": "3 released_observation / 5 held"
-  },
-  "prior_released_count": 9
+  ]
 }
