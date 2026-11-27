@@ -6,188 +6,517 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-27T15:35:05.632419+08:00",
-  "source_label": "2026-11-26盘后双线全链（合同 v3.1 + V38.1，Mistral 4 前脑 + NVIDIA 3.5 逐卡独审）：放行 6 张观察卡（润泽科技/清研环境/川金诺/奥士康/中水渔业/善水科技，目标观察日 2026-11-27）。signal_boundary=not_a_trading_signal",
-  "seed_date": "2026-11-26",
-  "run_id": "20261126-dual-v31-t1127",
-  "target_trade_date": "2026-11-27",
+  "generated_at": "2026-11-27T18:44:49+08:00",
+  "source_label": "2026-11-27盘后双线全链（合同 v3.1 + V38.1，Mistral 4 前脑 + NVIDIA 3.5 逐卡独审）：放行 5 张观察卡（平治信息/迈为股份/飞凯材料/新易盛/银之杰，目标观察日 2026-11-30）。signal_boundary=not_a_trading_signal",
+  "seed_date": "2026-11-27",
+  "run_id": "20261127-dual-v31-t1130",
+  "target_trade_date": "2026-11-30",
   "manual_watch_revision": 0,
   "handoff": {
-    "batch_id": "20261126-dual-v31-t1127",
-    "research_date": "2026-11-26",
-    "target_trade_date": "2026-11-27",
+    "batch_id": "20261127-dual-v31-t1130",
+    "research_date": "2026-11-27",
+    "target_trade_date": "2026-11-30",
     "research_line": "T_PULLBACK+T_FIRST_BOARD",
     "status": "released_observation",
     "monitoring_handoff": true,
-    "qa_completed_at": "2026-11-27T08:27:58+08:00"
+    "qa_completed_at": "2026-11-27T18:44:49+08:00"
   },
   "lines": {
     "T_PULLBACK": {
-      "run_id": "20261126-postmarket-v37",
+      "run_id": "20261127-postmarket-v37",
       "status": "released_observation",
       "release_status": "released_observation",
       "research_status": "completed",
       "precheck_status": "passed",
       "card_count": 4,
-      "released_count": 4,
-      "held_count": 0,
-      "withdrawn_count": 0,
-      "held_candidates": [],
-      "released_cards": [
-        {
-          "code": "300442.SZ",
-          "name": "润泽科技",
-          "line": "T_PULLBACK",
-          "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
-        },
-        {
-          "code": "301288.SZ",
-          "name": "清研环境",
-          "line": "T_PULLBACK",
-          "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
-        },
-        {
-          "code": "300505.SZ",
-          "name": "川金诺",
-          "line": "T_PULLBACK",
-          "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
-        },
-        {
-          "code": "002913.SZ",
-          "name": "奥士康",
-          "line": "T_PULLBACK",
-          "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
-        }
-      ],
-      "qa": {
-        "path": "runtime/qa/postclose-qa-20261126-t_pullback.json",
-        "bytes": 72053,
-        "sha256": "12848230fb6f4e450139ffb3365fc0d77e6ceb9db8008ba7f918345a9ba2d526",
-        "status": "completed",
-        "model": "nvidia/nemotron-3.5-super-vl-120b-a12b"
-      },
-      "reason": "本线放行 4 张观察卡，暂扣/剔除 0 张。"
-    },
-    "T_FIRST_BOARD": {
-      "run_id": "20261126-firstboard-v26",
-      "status": "released_observation",
-      "release_status": "released_observation",
-      "research_status": "completed",
-      "precheck_status": "passed",
-      "card_count": 3,
-      "released_count": 2,
+      "released_count": 3,
       "held_count": 1,
       "withdrawn_count": 0,
       "held_candidates": [
         {
-          "code": "600520.SH",
-          "name": "三佳科技",
-          "research_line": "T_FIRST_BOARD",
-          "target_trade_date": "2026-11-27",
+          "code": "300657.SZ",
+          "name": "弘信电子",
+          "research_line": "T_PULLBACK",
+          "target_trade_date": "2026-11-30",
           "status": "held_not_released",
           "observation_status": "held_not_released",
           "observation_eligible": false,
           "monitoring_eligible": false,
-          "deadline": "2026-11-27T09:30:00+08:00",
-          "reason": "active_net非全池最大（青山纸业90288万更高）、vwap_support非最高（善水23.0更高）、seal_turn 9.4%弱于同池高分卡，事实口径与跨股比较双不合格",
+          "deadline": "2026-11-30T09:30:00+08:00",
+          "reason": "决策依据谎称amt_r/vol_r为Track B最高，实则寒锐钴业 amt_r=2.06、vol_r=1.95 更高，篡改横向比较事实，违反事实口径真实性。",
           "signal_boundary": "not_a_trading_signal"
         }
       ],
       "released_cards": [
         {
-          "code": "000798.SZ",
-          "name": "中水渔业",
-          "line": "T_FIRST_BOARD",
+          "code": "300571.SZ",
+          "name": "平治信息",
+          "line": "T_PULLBACK",
           "status": "released_observation",
-          "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_021810.json",
-          "card_sha256": "835505f8fca402eac831248385889cf83f01910489046d19b056fe3200d4b98a"
+          "card": "runtime/runs/20261127-postmarket-v37/research_cards_20261130.json",
+          "card_sha256": "d408f7214e7e4f430d52d4d1517b833fdc53c84b1b8c5a1bd5c8e9483cc93aee"
         },
         {
-          "code": "301190.SZ",
-          "name": "善水科技",
-          "line": "T_FIRST_BOARD",
+          "code": "300751.SZ",
+          "name": "迈为股份",
+          "line": "T_PULLBACK",
           "status": "released_observation",
-          "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_021810.json",
-          "card_sha256": "835505f8fca402eac831248385889cf83f01910489046d19b056fe3200d4b98a"
+          "card": "runtime/runs/20261127-postmarket-v37/research_cards_20261130.json",
+          "card_sha256": "d408f7214e7e4f430d52d4d1517b833fdc53c84b1b8c5a1bd5c8e9483cc93aee"
+        },
+        {
+          "code": "300398.SZ",
+          "name": "飞凯材料",
+          "line": "T_PULLBACK",
+          "status": "released_observation",
+          "card": "runtime/runs/20261127-postmarket-v37/research_cards_20261130.json",
+          "card_sha256": "d408f7214e7e4f430d52d4d1517b833fdc53c84b1b8c5a1bd5c8e9483cc93aee"
         }
       ],
       "qa": {
-        "path": "runtime/qa/postclose-qa-20261126-t_first_board-021809.json",
-        "bytes": 22354,
-        "sha256": "66daaf1cac76df5db60673a7637e38a42da400b78ae0627a09cbd64a51ffb1fa",
+        "path": "runtime/qa/postclose-qa-20261127-t_pullback.json",
+        "bytes": 44587,
+        "sha256": "9d0f18a0fd639659e28d1fb78547d7466d127a96e95239ba710d2ac402129a67",
         "status": "completed",
         "model": "nvidia/nemotron-3.5-super-vl-120b-a12b"
       },
-      "reason": "本线放行 2 张观察卡，暂扣/剔除 1 张。"
+      "reason": "本线放行 3 张观察卡，暂扣/剔除 1 张。"
+    },
+    "T_FIRST_BOARD": {
+      "run_id": "20261127-firstboard-v26",
+      "status": "released_observation",
+      "release_status": "released_observation",
+      "research_status": "completed",
+      "precheck_status": "passed",
+      "card_count": 4,
+      "released_count": 2,
+      "held_count": 2,
+      "withdrawn_count": 0,
+      "held_candidates": [
+        {
+          "code": "301396.SZ",
+          "name": "宏景科技",
+          "research_line": "T_FIRST_BOARD",
+          "target_trade_date": "2026-11-30",
+          "status": "held_not_released",
+          "observation_status": "held_not_released",
+          "observation_eligible": false,
+          "monitoring_eligible": false,
+          "deadline": "2026-11-30T09:30:00+08:00",
+          "reason": "谎报active_net池内第二（实为第三，被银之杰13.13亿超越），order_yi仅0.393亿明显劣于同池高分标的，属凑数弱卡",
+          "signal_boundary": "not_a_trading_signal"
+        },
+        {
+          "code": "688313.SH",
+          "name": "仕佳光子",
+          "research_line": "T_FIRST_BOARD",
+          "target_trade_date": "2026-11-30",
+          "status": "held_not_released",
+          "observation_status": "held_not_released",
+          "observation_eligible": false,
+          "monitoring_eligible": false,
+          "deadline": "2026-11-30T09:30:00+08:00",
+          "reason": "谎报active_net池内第三（实为第四），order_yi仅0.017亿封单极弱，active_net=5.26亿明显劣于同池高分标的，属凑数弱卡",
+          "signal_boundary": "not_a_trading_signal"
+        }
+      ],
+      "released_cards": [
+        {
+          "code": "300502.SZ",
+          "name": "新易盛",
+          "line": "T_FIRST_BOARD",
+          "status": "released_observation",
+          "card": "runtime/runs/20261127-firstboard-v26/research_cards_20261130.json",
+          "card_sha256": "1aa6d68c1764b6fd1b33ec8f7d3576fd2b12d6fa9f8b2f18dbf3ecad0057b842"
+        },
+        {
+          "code": "300085.SZ",
+          "name": "银之杰",
+          "line": "T_FIRST_BOARD",
+          "status": "released_observation",
+          "card": "runtime/runs/20261127-firstboard-v26/research_cards_20261130.json",
+          "card_sha256": "1aa6d68c1764b6fd1b33ec8f7d3576fd2b12d6fa9f8b2f18dbf3ecad0057b842"
+        }
+      ],
+      "qa": {
+        "path": "runtime/qa/postclose-qa-20261127-t_first_board.json",
+        "bytes": 20918,
+        "sha256": "720ea4b5a41a11a5c59b167e9f48ee706e8112a7267aa7f0d473e38d825bc654",
+        "status": "completed",
+        "model": "nvidia/nemotron-3.5-super-vl-120b-a12b"
+      },
+      "reason": "本线放行 2 张观察卡，暂扣/剔除 2 张。"
     }
   },
-  "released_count": 6,
+  "released_count": 5,
   "released_cards": [
     {
-      "code": "300442.SZ",
-      "name": "润泽科技",
+      "code": "300571.SZ",
+      "name": "平治信息",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
+      "card": "runtime/runs/20261127-postmarket-v37/research_cards_20261130.json",
+      "card_sha256": "d408f7214e7e4f430d52d4d1517b833fdc53c84b1b8c5a1bd5c8e9483cc93aee"
     },
     {
-      "code": "301288.SZ",
-      "name": "清研环境",
+      "code": "300751.SZ",
+      "name": "迈为股份",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
+      "card": "runtime/runs/20261127-postmarket-v37/research_cards_20261130.json",
+      "card_sha256": "d408f7214e7e4f430d52d4d1517b833fdc53c84b1b8c5a1bd5c8e9483cc93aee"
     },
     {
-      "code": "300505.SZ",
-      "name": "川金诺",
+      "code": "300398.SZ",
+      "name": "飞凯材料",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
+      "card": "runtime/runs/20261127-postmarket-v37/research_cards_20261130.json",
+      "card_sha256": "d408f7214e7e4f430d52d4d1517b833fdc53c84b1b8c5a1bd5c8e9483cc93aee"
     },
     {
-      "code": "002913.SZ",
-      "name": "奥士康",
-      "line": "T_PULLBACK",
-      "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
-      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
-    },
-    {
-      "code": "000798.SZ",
-      "name": "中水渔业",
+      "code": "300502.SZ",
+      "name": "新易盛",
       "line": "T_FIRST_BOARD",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_021810.json",
-      "card_sha256": "835505f8fca402eac831248385889cf83f01910489046d19b056fe3200d4b98a"
+      "card": "runtime/runs/20261127-firstboard-v26/research_cards_20261130.json",
+      "card_sha256": "1aa6d68c1764b6fd1b33ec8f7d3576fd2b12d6fa9f8b2f18dbf3ecad0057b842"
     },
     {
-      "code": "301190.SZ",
-      "name": "善水科技",
+      "code": "300085.SZ",
+      "name": "银之杰",
       "line": "T_FIRST_BOARD",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-firstboard-v26/research_cards_20261127_021810.json",
-      "card_sha256": "835505f8fca402eac831248385889cf83f01910489046d19b056fe3200d4b98a"
+      "card": "runtime/runs/20261127-firstboard-v26/research_cards_20261130.json",
+      "card_sha256": "1aa6d68c1764b6fd1b33ec8f7d3576fd2b12d6fa9f8b2f18dbf3ecad0057b842"
     }
   ],
   "stocks": [
+    {
+      "code": "300571.SZ",
+      "name": "平治信息",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "research_line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 24.42,
+      "change_pct": 17.91,
+      "turnover_yi": 3.2361,
+      "turnover_rate": 12.28,
+      "vwap": 22.79,
+      "vwap_deviation_pct": 7.15,
+      "source_data_at": "2026-11-27T15:00:00+08:00",
+      "observed_at": "2026-11-27T18:44:49+08:00",
+      "target_trade_date": "2026-11-30",
+      "seed_trade_date": "2026-11-27",
+      "benchmark": {
+        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测ccfs=1.0（满分）、er_t1=9.53（Track B 12只中最高）、amt_r=1.38、vol_r=1.37、pos_share=0.857、spoon=0.972；横向对比同通道迈为股份（er_t1=7.93）、弘信电子（er_t1=7.55），本股T-1日收益效率显著领先2.0-2.6个点；net_wan=9485.11万虽非最大但tail_wan=365.55万为正且close=24.4",
+        "target_open_pct": [
+          2.0,
+          6.0
+        ]
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-30",
+        "deadline_at": "2026-11-30T09:30:00+08:00",
+        "support_conditions": [
+          "2026-11-30 09:25集合竞价涨幅需在+2.0%至+6.0%区间（对应价格24.91-25.89元）且竞价成交额>500万元",
+          "盘中分时需站稳VWAP=22.79元或关键支撑24.18元（前日收盘24.42*0.99），且回踩不破23.69元（开盘价*0.97锚点）"
+        ],
+        "invalidation_conditions": [
+          "2026-11-30 09:25集合竞价跌幅<-3.0%（跌破23.69元）触发失效",
+          "盘中放量跌破分时均价线VWAP=22.79元或跌破前日低点（以开盘价*0.97=23.69元为量化失效阈值）"
+        ],
+        "on_reliable_invalidation": "T+1日（2026-12-01）若实际成交价严格低于2026-11-30开盘价*0.97（即23.69元）则触发退出风险观察，或14:55分无量能拉升（量比<0.8）时启动退出观察"
+      },
+      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测ccfs=1.0（满分）、er_t1=9.53（Track B 12只中最高）、amt_r=1.38、vol_r=1.37、pos_share=0.857、spoon=0.972；横向对比同通道迈为股份（er_t1=7.93）、弘信电子（er_t1=7.55），本股T-1日收益效率显著领先2.0-2.6个点；net_wan=9485.11万虽非最大但tail_wan=365.55万为正且close=24.42>vwap=22.79，收盘站稳均价线，未触发排雷。 | T-1日经历分歧承接（TRACK_B_DIVERGENCE_ABSORB）后以高效率拉升（er_t1=9.53），vol_r=1.37显示温和放量配合，尾盘小幅净流入365.55万维持强势，多日量价结构呈现资金主动吸筹后的延续性。",
+      "risk_reason": "net_wan绝对值9485.11万在Track B中偏小（对比迈为37507.76万、香农64602.28万）；T-2日净流仅1006.44万、T-3日数据缺失（null）；未覆盖逐笔盘口细节，无法确认是否存在早盘秒板后的隐蔽出货，l2_days=2显示近2日资金持续性待验证。",
+      "qa_verdict": "accepted",
+      "qa_reason": "实测值核对无误，er_t1=9.53 Track B最高，close>vwap，尾盘正流入；09:25及T+1退出锚点可量化，通过。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_PULLBACK",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-30 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "2026-11-30 09:25集合竞价涨幅需在+2.0%至+6.0%区间（对应价格24.91-25.89元）且竞价成交额>500万元; 盘中分时需站稳VWAP=22.79元或关键支撑24.18元（前日收盘24.42*0.99），且回踩不破23.69元（开盘价*0.97锚点）",
+      "cycle_position": "T-1(2026-11-27盘后定案) -> T=2026-11-30 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日（2026-12-01）若实际成交价严格低于2026-11-30开盘价*0.97（即23.69元）则触发退出风险观察，或14:55分无量能拉升（量比<0.8）时启动退出观察",
+      "origin_batch_id": "20261127-dual-v31-t1130",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "300751.SZ",
+      "name": "迈为股份",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "research_line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 124.2,
+      "change_pct": 18.91,
+      "turnover_yi": 13.5853,
+      "turnover_rate": 6.14,
+      "vwap": 114.72,
+      "vwap_deviation_pct": 8.26,
+      "source_data_at": "2026-11-27T15:00:00+08:00",
+      "observed_at": "2026-11-27T18:44:49+08:00",
+      "target_trade_date": "2026-11-30",
+      "seed_trade_date": "2026-11-27",
+      "benchmark": {
+        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测ccfs=1.0、er_t1=7.93（Track B第二高）、net_wan=37507.76万（仅次于香农芯创）、tail_wan=2853.26万（正且绝对值大）、amt_r=1.33、vol_r=1.28、pos_share=0.833；横向对比同通道弘信电子（er_t1=7.55、net_wan=33085.01万），本股资金绝对量与尾盘承接均更优；close=124.2>vwap=114.72，",
+        "target_open_pct": [
+          1.5,
+          5.0
+        ]
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-30",
+        "deadline_at": "2026-11-30T09:30:00+08:00",
+        "support_conditions": [
+          "2026-11-30 09:25集合竞价涨幅需在+1.5%至+5.0%区间（对应价格126.06-130.41元）且竞价成交额>2000万元",
+          "盘中分时需站稳VWAP=114.72元或关键支撑120.52元（前日收盘124.2*0.97），回踩不破114.72元"
+        ],
+        "invalidation_conditions": [
+          "2026-11-30 09:25集合竞价跌幅<-3.0%（跌破120.52元）触发失效",
+          "盘中放量跌破分时均价线VWAP=114.72元或跌破前日低点（以开盘价*0.97=120.52元为量化失效阈值）"
+        ],
+        "on_reliable_invalidation": "T+1日（2026-12-01）若实际成交价严格低于2026-11-30开盘价*0.97（即120.52元）则触发退出风险观察，或14:55分无量能拉升（量比<0.8）时启动退出观察"
+      },
+      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测ccfs=1.0、er_t1=7.93（Track B第二高）、net_wan=37507.76万（仅次于香农芯创）、tail_wan=2853.26万（正且绝对值大）、amt_r=1.33、vol_r=1.28、pos_share=0.833；横向对比同通道弘信电子（er_t1=7.55、net_wan=33085.01万），本股资金绝对量与尾盘承接均更优；close=124.2>vwap=114.72，站稳均价线。 | 高价股分歧承接模式，T-1日大额净流入37507.76万配合er_t1=7.93高效率，尾盘2853.26万持续净买入显示机构级资金承接，T-2日虽有-7215.91万净流出但T-3日+4151.69万回流，多日结构呈现洗盘后吸筹。",
+      "risk_reason": "T-2日净流-7215.91万为负值，显示前一日存在资金流出；股价124.2元绝对值高，波动1元即影响大；未覆盖逐笔大单细节，无法确认37507.76万净流是否来自单一大户集中买入；l2_days=3显示近3日资金持续性。",
+      "qa_verdict": "accepted",
+      "qa_reason": "实测值核对无误，er_t1次高、net_wan次大、尾盘正流入；09:25竞价与VWAP/开盘*0.97失效阈值可量化，通过。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_PULLBACK",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-30 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "2026-11-30 09:25集合竞价涨幅需在+1.5%至+5.0%区间（对应价格126.06-130.41元）且竞价成交额>2000万元; 盘中分时需站稳VWAP=114.72元或关键支撑120.52元（前日收盘124.2*0.97），回踩不破114.72元",
+      "cycle_position": "T-1(2026-11-27盘后定案) -> T=2026-11-30 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日（2026-12-01）若实际成交价严格低于2026-11-30开盘价*0.97（即120.52元）则触发退出风险观察，或14:55分无量能拉升（量比<0.8）时启动退出观察",
+      "origin_batch_id": "20261127-dual-v31-t1130",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "300398.SZ",
+      "name": "飞凯材料",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "research_line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 29.41,
+      "change_pct": 19.12,
+      "turnover_yi": 11.774,
+      "turnover_rate": 7.59,
+      "vwap": 27.28,
+      "vwap_deviation_pct": 7.81,
+      "source_data_at": "2026-11-27T15:00:00+08:00",
+      "observed_at": "2026-11-27T18:44:49+08:00",
+      "target_trade_date": "2026-11-30",
+      "seed_trade_date": "2026-11-27",
+      "benchmark": {
+        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测ccfs=1.0、er_t1=6.97（第四高）、net_wan=34547.98万、tail_wan=1425.44万、amt_r=1.54、vol_r=1.51、pos_share=0.686（偏低但可接受）；同板块BK1136横向对比精研科技（300709.SZ，er_t1=4.71、net_wan=12278.35万、ccfs=0.991），本股效率与资金量全面领先2.3个点以上；close=29.",
+        "target_open_pct": [
+          2.0,
+          6.0
+        ]
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-30",
+        "deadline_at": "2026-11-30T09:30:00+08:00",
+        "support_conditions": [
+          "2026-11-30 09:25集合竞价涨幅需在+2.0%至+6.0%区间（对应价格30.00-31.18元）且竞价成交额>600万元",
+          "盘中分时需站稳VWAP=27.28元或关键支撑28.57元（前日收盘29.41*0.97），回踩不破27.28元"
+        ],
+        "invalidation_conditions": [
+          "2026-11-30 09:25集合竞价跌幅<-3.0%（跌破28.57元）触发失效",
+          "盘中放量跌破分时均价线VWAP=27.28元或跌破前日低点（以开盘价*0.97=28.57元为量化失效阈值）"
+        ],
+        "on_reliable_invalidation": "T+1日（2026-12-01）若实际成交价严格低于2026-11-30开盘价*0.97（即28.57元）则触发退出风险观察，或14:55分无量能拉升（量比<0.8）时启动退出观察"
+      },
+      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测ccfs=1.0、er_t1=6.97（第四高）、net_wan=34547.98万、tail_wan=1425.44万、amt_r=1.54、vol_r=1.51、pos_share=0.686（偏低但可接受）；同板块BK1136横向对比精研科技（300709.SZ，er_t1=4.71、net_wan=12278.35万、ccfs=0.991），本股效率与资金量全面领先2.3个点以上；close=29.41>vwap=27.28，站稳均价线。 | 板块内龙头分歧承接，T-1日34547.98万净流入配合er_t1=6.97，尾盘1425.44万净买入维持强势；T-2日+2469.01万、T-3日-7178.42万波动后T-1日回流，呈现板块轮动中的资金集中。",
+      "risk_reason": "pos_share=0.686在Track B中偏低（对比平治0.857、弘信0.84），显示筹码集中度不足；同板块精研科技虽弱但仍有12278.35万净流入，板块内存在资金分流；未覆盖逐笔细节，无法确认尾盘1425.44万是否为诱多；l2_days=3。",
+      "qa_verdict": "accepted",
+      "qa_reason": "实测值核对无误，er_t1第四、net_wan大、同板块领先精研；09:25及T+1退出锚点可量化，通过。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_PULLBACK",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-30 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "2026-11-30 09:25集合竞价涨幅需在+2.0%至+6.0%区间（对应价格30.00-31.18元）且竞价成交额>600万元; 盘中分时需站稳VWAP=27.28元或关键支撑28.57元（前日收盘29.41*0.97），回踩不破27.28元",
+      "cycle_position": "T-1(2026-11-27盘后定案) -> T=2026-11-30 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日（2026-12-01）若实际成交价严格低于2026-11-30开盘价*0.97（即28.57元）则触发退出风险观察，或14:55分无量能拉升（量比<0.8）时启动退出观察",
+      "origin_batch_id": "20261127-dual-v31-t1130",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "300502.SZ",
+      "name": "新易盛",
+      "phase": "T_FIRST_BOARD",
+      "line": "T_FIRST_BOARD",
+      "research_line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 226.84,
+      "change_pct": 20.0,
+      "turnover_yi": 269.2448,
+      "turnover_rate": 10.39,
+      "vwap": 206.45,
+      "vwap_deviation_pct": 9.88,
+      "source_data_at": "2026-11-27T15:00:00+08:00",
+      "observed_at": "2026-11-27T18:44:49+08:00",
+      "target_trade_date": "2026-11-30",
+      "seed_trade_date": "2026-11-27",
+      "benchmark": {
+        "desc": "[B_STRONG_TREND] V38.1实测lhb_bonus=8.0（池内最高梯队）、vwap_support=18.0、active_net_wan=363026.84（池内最大，较次名宏景科技75181.51高382%）、order_yi=2.029亿封单额居首，pre_rank_score=61.0与宏景科技并列第一但资金规模碾压；横向对比同桶落选标的银之杰(active_net=131321.32)仍高176%，对比C桶金禄电子(active_net=9820.",
+        "target_open_pct": [
+          3.0,
+          9.5
+        ],
+        "min_turnover_yi": 3.6
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-30",
+        "deadline_at": "2026-11-30T09:30:00+08:00",
+        "support_conditions": [
+          "09:25竞价涨幅≥+3%（即≥233.65元）且竞价净买额≥3.6亿元（当日active_net的10%阈值）",
+          "盘中回踩不破当日vwap=206.45的1.5%即≥203.36元，且站稳昨收226.84上方"
+        ],
+        "invalidation_conditions": [
+          "09:25竞价涨幅≤-2%（即≤222.30元）或竞价净卖超1亿元",
+          "盘中跌破203.36元或跌破vwap=206.45伴随放量>5%"
+        ],
+        "on_reliable_invalidation": "T+1日（2026-12-01）若股价严格低于当日开盘价*0.97触发观察，或14:55成交量<当日10%无动能退出观察"
+      },
+      "hypothesis": "[B_STRONG_TREND] V38.1实测lhb_bonus=8.0（池内最高梯队）、vwap_support=18.0、active_net_wan=363026.84（池内最大，较次名宏景科技75181.51高382%）、order_yi=2.029亿封单额居首，pre_rank_score=61.0与宏景科技并列第一但资金规模碾压；横向对比同桶落选标的银之杰(active_net=131321.32)仍高176%，对比C桶金禄电子(active_net=9820.18)高3596%。 | B_STRONG_TREND桶rank 1，板块梯队第一档，pre_rank_score=61.0为池内最高分位，sector_ladder因子=0.0未获额外板块加分但资金主导。",
+      "risk_reason": "seal_quality=0.0（首封质量因子未触发，first_seal/last_seal均为null属gap，可能非一字板）；tick_age_d=0虽为当日但需警惕次日逐笔陈旧风险；换手10.39%次日存在获利盘抛压可能。",
+      "qa_verdict": "accepted",
+      "qa_reason": "事实属实：active_net 36.3亿池内最大，lhb_bonus 8.0，vwap_support 18.0；具备09:25竞价/盘中/VWAP及T+1开盘价*0.97/14:55可观测锚点，批准。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_FIRST_BOARD",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-30 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "09:25竞价涨幅≥+3%（即≥233.65元）且竞价净买额≥3.6亿元（当日active_net的10%阈值）; 盘中回踩不破当日vwap=206.45的1.5%即≥203.36元，且站稳昨收226.84上方",
+      "cycle_position": "T-1(2026-11-27盘后定案) -> T=2026-11-30 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日（2026-12-01）若股价严格低于当日开盘价*0.97触发观察，或14:55成交量<当日10%无动能退出观察",
+      "origin_batch_id": "20261127-dual-v31-t1130",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "300085.SZ",
+      "name": "银之杰",
+      "phase": "T_FIRST_BOARD",
+      "line": "T_FIRST_BOARD",
+      "research_line": "T_FIRST_BOARD",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 29.34,
+      "change_pct": 20.0,
+      "turnover_yi": 21.9544,
+      "turnover_rate": 13.35,
+      "vwap": 27.55,
+      "vwap_deviation_pct": 6.5,
+      "source_data_at": "2026-11-27T15:00:00+08:00",
+      "observed_at": "2026-11-27T18:44:49+08:00",
+      "target_trade_date": "2026-11-30",
+      "seed_trade_date": "2026-11-27",
+      "benchmark": {
+        "desc": "[B_STRONG_TREND] V38.1实测vwap_support=18.0、active_net_wan=131321.32（池内第二大，仅次于新易盛363026.84）、order_yi=1.473亿封单额第二，pre_rank_score=53.0虽低于前三但资金规模碾压多数落选标的（如科德教育20915.06高528%）；lhb_bonus=0.0为短板但active_net主导资金面。 | B_STRONG_TREND桶rank 6，第二档梯队（pre_ran",
+        "target_open_pct": [
+          2.0,
+          9.5
+        ],
+        "min_turnover_yi": 1.3,
+        "max_vwap_pullback_pct": 10.0
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-30",
+        "deadline_at": "2026-11-30T09:30:00+08:00",
+        "support_conditions": [
+          "09:25竞价涨幅≥+2%（即≥29.93元）且竞价净买≥1.3亿元（当日active_net的10%）",
+          "盘中不破vwap=27.55的2%即≥27.00元，且站稳昨收29.34"
+        ],
+        "invalidation_conditions": [
+          "09:25竞价涨幅≤-2%（即≤28.75元）或竞价净卖超5000万元",
+          "跌破27.00元或跌破vwap伴随放量>10%"
+        ],
+        "on_reliable_invalidation": "T+1日低于开盘价*0.97触发观察，或14:55成交量<当日12%无动能退出"
+      },
+      "hypothesis": "[B_STRONG_TREND] V38.1实测vwap_support=18.0、active_net_wan=131321.32（池内第二大，仅次于新易盛363026.84）、order_yi=1.473亿封单额第二，pre_rank_score=53.0虽低于前三但资金规模碾压多数落选标的（如科德教育20915.06高528%）；lhb_bonus=0.0为短板但active_net主导资金面。 | B_STRONG_TREND桶rank 6，第二档梯队（pre_rank_score 53.0分位），资金规模第一档。",
+      "risk_reason": "lhb_bonus=0.0无龙虎榜加分，游资席位可能未上榜（seat_tag=unmapped）；pre_rank_score=53.0低于61.0的前三名，题材热度可能稍逊；seal_quality=0.0。",
+      "qa_verdict": "accepted",
+      "qa_reason": "事实属实：active_net 13.13亿池内第二，order_yi 1.473亿封单第二，lhb_bonus 0.0短板但资金面强；具备完整可观测锚点，批准。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_FIRST_BOARD",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-30 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "09:25竞价涨幅≥+2%（即≥29.93元）且竞价净买≥1.3亿元（当日active_net的10%）; 盘中不破vwap=27.55的2%即≥27.00元，且站稳昨收29.34",
+      "cycle_position": "T-1(2026-11-27盘后定案) -> T=2026-11-30 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日低于开盘价*0.97触发观察，或14:55成交量<当日12%无动能退出",
+      "origin_batch_id": "20261127-dual-v31-t1130",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
     {
       "code": "300442.SZ",
       "name": "润泽科技",
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
       "research_line": "T_PULLBACK",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 50.41,
       "change_pct": 13.48,
@@ -294,7 +623,7 @@
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
       "research_line": "T_PULLBACK",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 19.75,
       "change_pct": 2.17,
@@ -401,7 +730,7 @@
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
       "research_line": "T_PULLBACK",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 15.72,
       "change_pct": 5.15,
@@ -508,7 +837,7 @@
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
       "research_line": "T_PULLBACK",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 69.27,
       "change_pct": 10.0,
@@ -615,7 +944,7 @@
       "phase": "T_FIRST_BOARD",
       "line": "T_FIRST_BOARD",
       "research_line": "T_FIRST_BOARD",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 8.46,
       "change_pct": -2.2,
@@ -722,7 +1051,7 @@
       "phase": "T_FIRST_BOARD",
       "line": "T_FIRST_BOARD",
       "research_line": "T_FIRST_BOARD",
-      "status": "released_observation",
+      "status": "prior_batch_observation",
       "signal_boundary": "not_a_trading_signal",
       "price": 30.35,
       "change_pct": 6.27,
