@@ -6,8 +6,8 @@
   "status": "ready",
   "phase": "T-1_POSTMARKET",
   "page": "T",
-  "generated_at": "2026-11-27T02:23:15+08:00",
-  "source_label": "2026-11-26盘后双线全链（合同 v3.1 + V38.1，Mistral 4 前脑 + NVIDIA 3.5 逐卡独审）：放行 6 张观察卡（金百泽/川金诺/红四方/九阳股份/中水渔业/善水科技，目标观察日 2026-11-27）。signal_boundary=not_a_trading_signal",
+  "generated_at": "2026-11-27T08:27:58+08:00",
+  "source_label": "2026-11-26盘后双线全链（合同 v3.1 + V38.1，Mistral 4 前脑 + NVIDIA 3.5 逐卡独审）：放行 6 张观察卡（润泽科技/清研环境/川金诺/奥士康/中水渔业/善水科技，目标观察日 2026-11-27）。signal_boundary=not_a_trading_signal",
   "seed_date": "2026-11-26",
   "run_id": "20261126-dual-v31-t1127",
   "target_trade_date": "2026-11-27",
@@ -19,7 +19,7 @@
     "research_line": "T_PULLBACK+T_FIRST_BOARD",
     "status": "released_observation",
     "monitoring_handoff": true,
-    "qa_completed_at": "2026-11-27T02:23:15+08:00"
+    "qa_completed_at": "2026-11-27T08:27:58+08:00"
   },
   "lines": {
     "T_PULLBACK": {
@@ -35,42 +35,42 @@
       "held_candidates": [],
       "released_cards": [
         {
-          "code": "301041.SZ",
-          "name": "金百泽",
+          "code": "300442.SZ",
+          "name": "润泽科技",
           "line": "T_PULLBACK",
           "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-          "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
+          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
+        },
+        {
+          "code": "301288.SZ",
+          "name": "清研环境",
+          "line": "T_PULLBACK",
+          "status": "released_observation",
+          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
         },
         {
           "code": "300505.SZ",
           "name": "川金诺",
           "line": "T_PULLBACK",
           "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-          "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
+          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
         },
         {
-          "code": "603395.SH",
-          "name": "红四方",
+          "code": "002913.SZ",
+          "name": "奥士康",
           "line": "T_PULLBACK",
           "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-          "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
-        },
-        {
-          "code": "002242.SZ",
-          "name": "九阳股份",
-          "line": "T_PULLBACK",
-          "status": "released_observation",
-          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-          "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
+          "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+          "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
         }
       ],
       "qa": {
-        "path": "runtime/qa/postclose-qa-20261126-t_pullback-022310.json",
-        "bytes": 71236,
-        "sha256": "e65b6294924f6bb543999fd4533c65b0ec0d7f098f71c36a8ad7fca72f344591",
+        "path": "runtime/qa/postclose-qa-20261126-t_pullback.json",
+        "bytes": 72053,
+        "sha256": "12848230fb6f4e450139ffb3365fc0d77e6ceb9db8008ba7f918345a9ba2d526",
         "status": "completed",
         "model": "nvidia/nemotron-3.5-super-vl-120b-a12b"
       },
@@ -132,36 +132,36 @@
   "released_count": 6,
   "released_cards": [
     {
-      "code": "301041.SZ",
-      "name": "金百泽",
+      "code": "300442.SZ",
+      "name": "润泽科技",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-      "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
+      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
+    },
+    {
+      "code": "301288.SZ",
+      "name": "清研环境",
+      "line": "T_PULLBACK",
+      "status": "released_observation",
+      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
     },
     {
       "code": "300505.SZ",
       "name": "川金诺",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-      "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
+      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
     },
     {
-      "code": "603395.SH",
-      "name": "红四方",
+      "code": "002913.SZ",
+      "name": "奥士康",
       "line": "T_PULLBACK",
       "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-      "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
-    },
-    {
-      "code": "002242.SZ",
-      "name": "九阳股份",
-      "line": "T_PULLBACK",
-      "status": "released_observation",
-      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127_022315.json",
-      "card_sha256": "99447cfd2fc3c9c5bf9a0674cecd3927346260364530448447ae488a4a0311b6"
+      "card": "runtime/runs/20261126-postmarket-v37/research_cards_20261127.json",
+      "card_sha256": "f68f612c0000106a82bc1ebc5fe48d6ba8376da32ee4a422e94b8b2740ff154b"
     },
     {
       "code": "000798.SZ",
@@ -182,49 +182,48 @@
   ],
   "stocks": [
     {
-      "code": "301041.SZ",
-      "name": "金百泽",
+      "code": "300442.SZ",
+      "name": "润泽科技",
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
       "research_line": "T_PULLBACK",
       "status": "released_observation",
       "signal_boundary": "not_a_trading_signal",
-      "price": 27.63,
-      "change_pct": 16.88,
-      "turnover_yi": 5.6019,
-      "turnover_rate": 26.2,
-      "vwap": 27.07,
-      "vwap_deviation_pct": 2.07,
+      "price": 44.42,
+      "change_pct": 1.18,
+      "turnover_yi": 7.9518,
+      "turnover_rate": 1.1,
+      "vwap": 44.24,
+      "vwap_deviation_pct": 0.41,
       "source_data_at": "2026-11-26T15:00:00+08:00",
-      "observed_at": "2026-11-27T02:23:15+08:00",
+      "observed_at": "2026-11-27T08:27:58+08:00",
       "target_trade_date": "2026-11-27",
       "seed_trade_date": "2026-11-26",
       "benchmark": {
-        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 2.2、er_t1 12.16（池内最高）、vol_r 2.07、pos_share 0.657、spoon 0.375。横向对比同板块BK1340的002913.SZ奥士康（er_t1 5.19、amt_r 1.65）与301251.SZ威尔高（er_t1 3.96、amt_r 1.4），金百泽资金效率与量能强度均显著领先；对比Track A全池amt_r普遍<0.75，优势扩大。T-1净流",
+        "desc": "[TRACK_A_PULLBACK] V38.1实测：vol_r=0.73（符合≤0.75缩量回踩）、ccfs=0.599为Track A 12只候选中最高（vs 603215.SH的0.598、000595.SZ的0.592）、net_wan=9964.71万且tail_wan=2642.28万为正（尾盘仍有承接）、close=44.42>vwap=44.24站上均价线、er_t1=0.69>0、pos_share=1.0筹码高度集中、amt_r=0.67。横向对比Trac",
         "target_open_pct": [
-          3.0,
-          7.0
+          0.5,
+          2.5
         ],
-        "min_turnover_yi": 0.5,
-        "max_vwap_pullback_pct": 50.0
+        "min_turnover_yi": 0.08
       },
       "original_conditions": {
         "trade_date": "2026-11-27",
         "deadline_at": "2026-11-27T09:30:00+08:00",
         "support_conditions": [
-          "2026-11-27 09:25集合竞价涨幅处于+3.0%至+7.0%区间，且竞价成交额≥5000万元（基于T-1净流入20832.12万的24%比例估算）",
-          "盘中分时站稳VWAP 27.07元，且回踩不破26.50元（约T-1收盘-4.2%）支撑位，量能维持vol_r≥2.0"
+          "2026-11-27 09:25集合竞价涨幅落在+0.5%至+2.5%区间（对应价格44.64-45.53元）且竞价成交额≥800万元",
+          "盘中分时价格站稳VWAP=44.24元且回踩不破，量能维持温和放大（分时量比≥1.0）"
         ],
         "invalidation_conditions": [
-          "2026-11-27 09:25集合竞价跌幅超过-2.0%或高开超过+10.0%且无量（竞价成交额<1000万元）",
-          "盘中放量跌破VWAP 27.07元，或跌破T-1日最低价（数据缺口，以VWAP为锚）且成交量放大超50%"
+          "2026-11-27 09:25集合竞价跌幅超过-1.0%（价格低于43.98元）或竞价成交额<300万元",
+          "盘中放量跌破VWAP=44.24元且跌幅扩大至-2.0%（低于43.53元），或尾盘30分钟净流出转负"
         ],
-        "on_reliable_invalidation": "T+1日（2026-11-30）实际成交价严格低于当日开盘价*0.97触发退出风险观察，或14:55分时量能衰减至早盘50%以下且价格低于VWAP时观察退出。"
+        "on_reliable_invalidation": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时无动能（量比<0.8且价格低于VWAP）触发退出观察"
       },
-      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 2.2、er_t1 12.16（池内最高）、vol_r 2.07、pos_share 0.657、spoon 0.375。横向对比同板块BK1340的002913.SZ奥士康（er_t1 5.19、amt_r 1.65）与301251.SZ威尔高（er_t1 3.96、amt_r 1.4），金百泽资金效率与量能强度均显著领先；对比Track A全池amt_r普遍<0.75，优势扩大。T-1净流入20832.12万、涨幅16.88%显示强势分歧承接。 | T-2日仅768.81万小幅流入后，T-1日放量16.88%伴随20832.12万净流入，形成洗盘后加速突破的多日量价结构，资金在分歧中完成承接并推升价格。",
-      "risk_reason": "pos_share 0.657低于润泽科技等标的的1.0，筹码集中度非最优；tdx_fc_amo_wan为0.0、tdx_fc_ratio为0.0显示逐笔大单数据缺口（gap），无法验证盘口微观结构；T-2/T-3部分资金数据缺失（null）。",
+      "hypothesis": "[TRACK_A_PULLBACK] V38.1实测：vol_r=0.73（符合≤0.75缩量回踩）、ccfs=0.599为Track A 12只候选中最高（vs 603215.SH的0.598、000595.SZ的0.592）、net_wan=9964.71万且tail_wan=2642.28万为正（尾盘仍有承接）、close=44.42>vwap=44.24站上均价线、er_t1=0.69>0、pos_share=1.0筹码高度集中、amt_r=0.67。横向对比Track A内600690.SH（net_wan=3737.5万，close<vwap）与600066.SH（er_t1=-1.38），润泽科技在资金净流入规模、均价承接与催化强度上全面领先。 | 经历3日缩量回踩（l2_days=3，vol_r=0.73）后，主力资金在T-1日净流入9964.71万且尾盘追加2642.28万，呈现'缩量洗盘+尾盘抢筹'结构，次日存在惯性上攻或补涨假说。",
+      "risk_reason": "最大反证：T-2日net_wan=312.71万、T-3日net_wan=-1675.09万，近3日资金流呈'负-正-大正'波动，持续性存疑；l2_days=3处于2交易日红线边界，逐笔数据时效性风险上升。未查范围：缺乏当日逐笔大单明细（>500万）与盘口委托队列数据，无法验证尾盘2642.28万是否为单一大单或分散承接。",
       "qa_verdict": "accepted",
-      "qa_reason": "数值与dehydrated一致，Track B er_t1/amt_r领先同板块，具备09:25竞价、VWAP及14:55退出可量化锚点，通过。",
+      "qa_reason": "pack数据一致，ccfs Track A最高，L2净买/尾盘为正，close>vwap，具备09:25/VWAP/14:55锚点，未编造，通过。",
       "adversarial_verdict": "NVIDIA 3.5 独审通过",
       "buy_permission": false,
       "recommendation": "observe_candidate",
@@ -238,9 +237,73 @@
       "auction_rejected": false,
       "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
       "auction_evaluation": null,
-      "auction_reason": "2026-11-27 09:25集合竞价涨幅处于+3.0%至+7.0%区间，且竞价成交额≥5000万元（基于T-1净流入20832.12万的24%比例估算）; 盘中分时站稳VWAP 27.07元，且回踩不破26.50元（约T-1收盘-4.2%）支撑位，量能维持vol_r≥2.0",
+      "auction_reason": "2026-11-27 09:25集合竞价涨幅落在+0.5%至+2.5%区间（对应价格44.64-45.53元）且竞价成交额≥800万元; 盘中分时价格站稳VWAP=44.24元且回踩不破，量能维持温和放大（分时量比≥1.0）",
       "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
-      "exit_rule_T1": "T+1日（2026-11-30）实际成交价严格低于当日开盘价*0.97触发退出风险观察，或14:55分时量能衰减至早盘50%以下且价格低于VWAP时观察退出。",
+      "exit_rule_T1": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时无动能（量比<0.8且价格低于VWAP）触发退出观察",
+      "origin_batch_id": "20261126-dual-v31-t1127",
+      "events": [],
+      "points": [],
+      "gaps": []
+    },
+    {
+      "code": "301288.SZ",
+      "name": "清研环境",
+      "phase": "T-1_POSTMARKET",
+      "line": "T_PULLBACK",
+      "research_line": "T_PULLBACK",
+      "status": "released_observation",
+      "signal_boundary": "not_a_trading_signal",
+      "price": 19.33,
+      "change_pct": 5.46,
+      "turnover_yi": 1.575,
+      "turnover_rate": 10.94,
+      "vwap": null,
+      "vwap_deviation_pct": null,
+      "source_data_at": "2026-11-26T15:00:00+08:00",
+      "observed_at": "2026-11-27T08:27:58+08:00",
+      "target_trade_date": "2026-11-27",
+      "seed_trade_date": "2026-11-26",
+      "benchmark": {
+        "desc": "[TRACK_A_PULLBACK] V38.1实测：er_t1=5.48为Track A 12只候选中最高（vs 300786.SZ的4.46、001258.SZ的2.68）、pct=5.46%涨幅强劲、vol_r=0.69符合缩量回踩（<0.75）、ccfs=0.577、pos_share=1.0、amt_r=0.63。同板块BK1234横向对比300786.SZ（国林科技）：清研环境er_t1高1.02个单位，ccfs高0.026，vol_r低0.03（缩量更充分），p",
+        "target_open_pct": [
+          1.0,
+          4.0
+        ],
+        "min_turnover_yi": 0.05
+      },
+      "original_conditions": {
+        "trade_date": "2026-11-27",
+        "deadline_at": "2026-11-27T09:30:00+08:00",
+        "support_conditions": [
+          "2026-11-27 09:25集合竞价涨幅落在+1.0%至+4.0%区间（对应价格19.52-20.10元）且竞价成交额≥500万元",
+          "盘中分时价格站稳收盘价19.33元（作为心理支撑位）且不破，量比≥1.2维持攻击性"
+        ],
+        "invalidation_conditions": [
+          "2026-11-27 09:25集合竞价跌幅超过-2.0%（价格低于18.94元）或平开以下",
+          "盘中跌破18.95元（收盘价*0.98）且放量（分时量比>1.5伴随价格下行），或触及跌停"
+        ],
+        "on_reliable_invalidation": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时价格低于当日VWAP（若有）且无反弹动能触发退出观察"
+      },
+      "hypothesis": "[TRACK_A_PULLBACK] V38.1实测：er_t1=5.48为Track A 12只候选中最高（vs 300786.SZ的4.46、001258.SZ的2.68）、pct=5.46%涨幅强劲、vol_r=0.69符合缩量回踩（<0.75）、ccfs=0.577、pos_share=1.0、amt_r=0.63。同板块BK1234横向对比300786.SZ（国林科技）：清研环境er_t1高1.02个单位，ccfs高0.026，vol_r低0.03（缩量更充分），pct高1.02%，在爆发力与缩量质量上双重胜出。 | 当日放量上涨5.46%伴随高er_t1=5.48，呈现'缩量蓄势后单日爆发'结构，次日若资金承接延续，存在连板或高开惯性假说；但vol_r=0.69接近0.75上限，需警惕放量后的分歧。",
+      "risk_reason": "最大反证：net_wan与tail_wan数据缺失（gap），无法验证当日资金净流入规模与尾盘承接力度，仅凭pct和er_t1推断存在'无量上涨'或'对倒拉升'风险。未查范围：缺乏分时逐笔成交明细，无法确认5.46%涨幅是否由少数大单拉升；缺乏盘口五档委托数据验证封单强度。",
+      "qa_verdict": "accepted",
+      "qa_reason": "er_t1 Track A最高，但L2 net/tail/vwap缺失，未编造且承认缺口，09:25及14:55锚点可量化，通过。",
+      "adversarial_verdict": "NVIDIA 3.5 独审通过",
+      "buy_permission": false,
+      "recommendation": "observe_candidate",
+      "monitoring_eligible": true,
+      "monitoring_status": "ready",
+      "observation_eligible": true,
+      "observation_status": "waiting",
+      "original_condition_status": "t_minus1_postmarket",
+      "auction_badge": "T-1_T_PULLBACK",
+      "auction_confirmed": false,
+      "auction_rejected": false,
+      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
+      "auction_evaluation": null,
+      "auction_reason": "2026-11-27 09:25集合竞价涨幅落在+1.0%至+4.0%区间（对应价格19.52-20.10元）且竞价成交额≥500万元; 盘中分时价格站稳收盘价19.33元（作为心理支撑位）且不破，量比≥1.2维持攻击性",
+      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
+      "exit_rule_T1": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时价格低于当日VWAP（若有）且无反弹动能触发退出观察",
       "origin_batch_id": "20261126-dual-v31-t1127",
       "events": [],
       "points": [],
@@ -261,34 +324,34 @@
       "vwap": 14.8,
       "vwap_deviation_pct": 1.01,
       "source_data_at": "2026-11-26T15:00:00+08:00",
-      "observed_at": "2026-11-27T02:23:15+08:00",
+      "observed_at": "2026-11-27T08:27:58+08:00",
       "target_trade_date": "2026-11-27",
       "seed_trade_date": "2026-11-26",
       "benchmark": {
-        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 2.78、er_t1 7.14、vol_r 2.72、pos_share 0.8、spoon 0.375。横向对比同板块BK0731的603395.SH红四方（amt_r 3.22、er_t1 6.53），川金诺amt_r略低但er_t1更高（7.14>6.53），且T-2日资金-1353.68万显示主动洗盘特征，T-1日6761.32万净流入承接良好；对比Track A全池amt_r<0.7",
+        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：ccfs=0.97为Track B 12只候选中最高（vs 301041.SZ/002913.SZ的0.9、600938.SH的0.879）、er_t1=7.14、net_wan=6761.32万、tail_wan=582.19万为正（尾盘承接）、close=14.95>vwap=14.8站上均价、pct=8.1%、amt_r=2.78、vol_r=2.72、pos_share=0.8。同板块BK0731",
         "target_open_pct": [
-          2.0,
-          6.0
+          1.0,
+          3.0
         ],
-        "min_turnover_yi": 0.3
+        "min_turnover_yi": 0.06
       },
       "original_conditions": {
         "trade_date": "2026-11-27",
         "deadline_at": "2026-11-27T09:30:00+08:00",
         "support_conditions": [
-          "2026-11-27 09:25集合竞价涨幅处于+2.0%至+6.0%区间，且竞价成交额≥3000万元（基于T-1净流入6761.32万的44%比例估算）",
-          "盘中分时站稳VWAP 14.80元，且量能维持vol_r≥2.5，回踩不破14.50元支撑"
+          "2026-11-27 09:25集合竞价涨幅落在+1.0%至+3.0%区间（对应价格15.10-15.40元）且竞价成交额≥600万元",
+          "盘中分时价格站稳VWAP=14.80元且回踩不破，量能维持放大（分时量比≥1.5）"
         ],
         "invalidation_conditions": [
-          "2026-11-27 09:25集合竞价平开（涨幅<0.5%）或低开跌破-1.0%，或高开超过+8.0%无量",
-          "盘中放量跌破VWAP 14.80元，或跌破T-1日最低价（数据缺口，以14.50元心理支撑为锚）且量比>1.5"
+          "2026-11-27 09:25集合竞价跌幅超过-1.5%（价格低于14.73元）或高开后快速回落翻绿",
+          "盘中放量跌破VWAP=14.80元且跌幅扩大至-3.0%（低于14.50元），或尾盘30分钟净流出>500万"
         ],
-        "on_reliable_invalidation": "T+1日（2026-11-30）收盘价低于当日开盘价*0.97触发退出观察，或14:55无动能（量能<早盘30%）且价格低于VWAP时观察退出。"
+        "on_reliable_invalidation": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时价格低于VWAP=14.80元且量比<0.8触发退出观察"
       },
-      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 2.78、er_t1 7.14、vol_r 2.72、pos_share 0.8、spoon 0.375。横向对比同板块BK0731的603395.SH红四方（amt_r 3.22、er_t1 6.53），川金诺amt_r略低但er_t1更高（7.14>6.53），且T-2日资金-1353.68万显示主动洗盘特征，T-1日6761.32万净流入承接良好；对比Track A全池amt_r<0.75，优势显著。 | T-2日小幅资金流出（-1353.68万）清洗浮筹后，T-1日放量8.1%伴随6761.32万净流入，形成典型的分歧吸收后拉升结构，多日量价呈现回踩蓄势后的启动形态。",
-      "risk_reason": "close 14.95与vwap 14.80差距仅0.15元（1.0%），收盘价贴近均价线显示尾盘承接偏弱；pos_share 0.8非满值；tdx_fc_amo_wan为0.0显示逐笔数据缺口（gap），无法确认大单流向；T-3资金数据缺失（null）。",
+      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：ccfs=0.97为Track B 12只候选中最高（vs 301041.SZ/002913.SZ的0.9、600938.SH的0.879）、er_t1=7.14、net_wan=6761.32万、tail_wan=582.19万为正（尾盘承接）、close=14.95>vwap=14.8站上均价、pct=8.1%、amt_r=2.78、vol_r=2.72、pos_share=0.8。同板块BK0731横向对比603395.SH（红四方）：ccfs高0.258，er_t1高0.61，net_wan高4990万，tail_wan高350万，在分歧承接质量（ccfs）与资金规模上全面碾压。 | 经历2日分歧放量（l2_days=2，vol_r=2.72）后，T-1日净流入6761.32万且尾盘追加582.19万，ccfs=0.97显示筹码高度锁定，呈现'高位分歧后资金强势承接'结构，次日存在惯性冲高假说。",
+      "risk_reason": "最大反证：T-2日net_wan=-1353.68万为负，前一日资金流出，今日放量上涨存在'诱多出货'嫌疑；pos_share=0.8<1.0，20%筹码松动。未查范围：缺乏当日逐笔大单（>1000万）明细，无法验证6761.32万净流入是否为机构席位；缺乏龙虎榜数据确认游资或机构参与。",
       "qa_verdict": "accepted",
-      "qa_reason": "数值与dehydrated一致，er_t1优于同板块红四方，具备竞价区间、VWAP支撑及T+1退出锚点，通过。",
+      "qa_reason": "ccfs/er_t1 Track B最高，net/tail为正，close>vwap，横向对比数据准确，具备完整退出锚点，通过。",
       "adversarial_verdict": "NVIDIA 3.5 独审通过",
       "buy_permission": false,
       "recommendation": "observe_candidate",
@@ -302,37 +365,37 @@
       "auction_rejected": false,
       "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
       "auction_evaluation": null,
-      "auction_reason": "2026-11-27 09:25集合竞价涨幅处于+2.0%至+6.0%区间，且竞价成交额≥3000万元（基于T-1净流入6761.32万的44%比例估算）; 盘中分时站稳VWAP 14.80元，且量能维持vol_r≥2.5，回踩不破14.50元支撑",
+      "auction_reason": "2026-11-27 09:25集合竞价涨幅落在+1.0%至+3.0%区间（对应价格15.10-15.40元）且竞价成交额≥600万元; 盘中分时价格站稳VWAP=14.80元且回踩不破，量能维持放大（分时量比≥1.5）",
       "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
-      "exit_rule_T1": "T+1日（2026-11-30）收盘价低于当日开盘价*0.97触发退出观察，或14:55无动能（量能<早盘30%）且价格低于VWAP时观察退出。",
+      "exit_rule_T1": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时价格低于VWAP=14.80元且量比<0.8触发退出观察",
       "origin_batch_id": "20261126-dual-v31-t1127",
       "events": [],
       "points": [],
       "gaps": []
     },
     {
-      "code": "603395.SH",
-      "name": "红四方",
+      "code": "002913.SZ",
+      "name": "奥士康",
       "phase": "T-1_POSTMARKET",
       "line": "T_PULLBACK",
       "research_line": "T_PULLBACK",
       "status": "released_observation",
       "signal_boundary": "not_a_trading_signal",
-      "price": 20.39,
-      "change_pct": 7.49,
-      "turnover_yi": 3.0231,
-      "turnover_rate": 23.79,
-      "vwap": 19.55,
-      "vwap_deviation_pct": 4.3,
+      "price": 62.97,
+      "change_pct": 9.91,
+      "turnover_yi": 11.0401,
+      "turnover_rate": 5.87,
+      "vwap": 61.58,
+      "vwap_deviation_pct": 2.26,
       "source_data_at": "2026-11-26T15:00:00+08:00",
-      "observed_at": "2026-11-27T02:23:15+08:00",
+      "observed_at": "2026-11-27T08:27:58+08:00",
       "target_trade_date": "2026-11-27",
       "seed_trade_date": "2026-11-26",
       "benchmark": {
-        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 3.22（全池最高）、vol_r 3.02（全池最高）、er_t1 6.53、pos_share 0.8、spoon 0.375。横向对比同板块BK0731的300505.SZ川金诺，红四方amt_r 3.22>2.78、vol_r 3.02>2.72，量能爆发力更强；T-2日5471.03万与T-1日1771.33万连续净流入显示资金持续性优于单日爆发型标的。 | 连续两日资金净流入（T-2",
+        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：net_wan=48098.18万为Track B内最高梯队（仅次于002242.SZ的51799.67万）、tail_wan=387.27万为正（尾盘承接健康）、ccfs=0.9与301041.SZ持平但高于301251.SZ的0.783、er_t1=5.19、close=62.97>vwap=61.58站上均价、pct=9.91%、vol_r=1.55、amt_r=1.65、pos_share=0.6",
         "target_open_pct": [
-          1.0,
-          5.0
+          0.5,
+          2.5
         ],
         "min_turnover_yi": 0.2
       },
@@ -340,19 +403,19 @@
         "trade_date": "2026-11-27",
         "deadline_at": "2026-11-27T09:30:00+08:00",
         "support_conditions": [
-          "2026-11-27 09:25集合竞价涨幅处于+1.0%至+5.0%区间，且竞价成交额≥2000万元（基于T-1净流入1771.33万的113%比例估算，因量能大需更高流动性）",
-          "盘中分时站稳VWAP 19.55元，且量能维持vol_r≥2.5，不破19.00元支撑"
+          "2026-11-27 09:25集合竞价涨幅落在+0.5%至+2.5%区间（对应价格63.28-64.54元）且竞价成交额≥2000万元",
+          "盘中分时价格站稳VWAP=61.58元且回踩不破，量比≥1.3维持攻击性"
         ],
         "invalidation_conditions": [
-          "2026-11-27 09:25集合竞价高开超过+8.0%且无量（竞价额<500万元），或低开跌破-2.0%",
-          "盘中放量跌破VWAP 19.55元，或跌破T-1日最低价（数据缺口，以19.00元为锚）且换手率异常放大"
+          "2026-11-27 09:25集合竞价跌幅超过-1.0%（价格低于62.34元）或竞价成交额<800万元",
+          "盘中放量跌破VWAP=61.58元且跌幅扩大至-2.5%（低于61.39元），或尾盘30分钟净流出>2000万"
         ],
-        "on_reliable_invalidation": "T+1日（2026-11-30）收盘价低于当日开盘价*0.97触发退出风险观察，或14:55价格低于VWAP且量能萎缩超60%时观察退出。"
+        "on_reliable_invalidation": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时价格低于VWAP=61.58元且无反弹动能触发退出观察"
       },
-      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 3.22（全池最高）、vol_r 3.02（全池最高）、er_t1 6.53、pos_share 0.8、spoon 0.375。横向对比同板块BK0731的300505.SZ川金诺，红四方amt_r 3.22>2.78、vol_r 3.02>2.72，量能爆发力更强；T-2日5471.03万与T-1日1771.33万连续净流入显示资金持续性优于单日爆发型标的。 | 连续两日资金净流入（T-2: 5471.03万，T-1: 1771.33万）伴随T-1日7.49%涨幅，vol_r 3.02显示量能剧烈放大，形成趋势性资金持续吸筹后的加速上涨结构。",
-      "risk_reason": "T-1日净流入1771.33万绝对值在Track B中偏低（对比奥士康48098.18万、九阳51799.67万），显示大资金跟风意愿弱；close 20.39与vwap 19.55差距0.84元（4.3%），日内拉升幅度大可能积累尾盘获利盘；tdx_fc_amo_wan为0.0逐笔数据缺口（gap）。",
+      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：net_wan=48098.18万为Track B内最高梯队（仅次于002242.SZ的51799.67万）、tail_wan=387.27万为正（尾盘承接健康）、ccfs=0.9与301041.SZ持平但高于301251.SZ的0.783、er_t1=5.19、close=62.97>vwap=61.58站上均价、pct=9.91%、vol_r=1.55、amt_r=1.65、pos_share=0.657。同板块BK1340横向对比301041.SZ（金百泽）：net_wan高27266万，tail_wan由负转正（+387.27 vs -997.85），资金承接质量显著更优；对比301251.SZ（威尔高）：net_wan高43684万，er_t1高1.23，ccfs高0.117，全面领先。 | 经历3日分歧放量（l2_days=3）后，T-1日巨量净流入48098.18万且尾盘仍有387.27万承接，ccfs=0.9显示筹码锁定良好，呈现'巨量分歧后机构级资金承接'结构，次日存在高开高走惯性假说。",
+      "risk_reason": "最大反证：T-2日net_wan=1292.85万、T-3日net_wan=4061.64万虽为正但规模远小于T-1日，资金流入呈'爆发式'而非持续性，存在一日游风险；pos_share=0.657与同板块一致，筹码集中度中等。未查范围：缺乏逐笔大单席位信息，无法确认48098.18万是否为单一机构；缺乏融资融券数据验证杠杆资金参与度。",
       "qa_verdict": "accepted",
-      "qa_reason": "amt_r/vol_r全池最高，连续净流入属实，具备09:25/VWAP/14:55可量化观测与退出锚点，通过。",
+      "qa_reason": "net_wan Track B次高，tail_wan为正，close>vwap，同板块对比数据准确，具备09:25/VWAP/14:55锚点，通过。",
       "adversarial_verdict": "NVIDIA 3.5 独审通过",
       "buy_permission": false,
       "recommendation": "observe_candidate",
@@ -366,73 +429,9 @@
       "auction_rejected": false,
       "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
       "auction_evaluation": null,
-      "auction_reason": "2026-11-27 09:25集合竞价涨幅处于+1.0%至+5.0%区间，且竞价成交额≥2000万元（基于T-1净流入1771.33万的113%比例估算，因量能大需更高流动性）; 盘中分时站稳VWAP 19.55元，且量能维持vol_r≥2.5，不破19.00元支撑",
+      "auction_reason": "2026-11-27 09:25集合竞价涨幅落在+0.5%至+2.5%区间（对应价格63.28-64.54元）且竞价成交额≥2000万元; 盘中分时价格站稳VWAP=61.58元且回踩不破，量比≥1.3维持攻击性",
       "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
-      "exit_rule_T1": "T+1日（2026-11-30）收盘价低于当日开盘价*0.97触发退出风险观察，或14:55价格低于VWAP且量能萎缩超60%时观察退出。",
-      "origin_batch_id": "20261126-dual-v31-t1127",
-      "events": [],
-      "points": [],
-      "gaps": []
-    },
-    {
-      "code": "002242.SZ",
-      "name": "九阳股份",
-      "phase": "T-1_POSTMARKET",
-      "line": "T_PULLBACK",
-      "research_line": "T_PULLBACK",
-      "status": "released_observation",
-      "signal_boundary": "not_a_trading_signal",
-      "price": 41.9,
-      "change_pct": 8.66,
-      "turnover_yi": 51.7513,
-      "turnover_rate": 16.68,
-      "vwap": 40.73,
-      "vwap_deviation_pct": 2.87,
-      "source_data_at": "2026-11-26T15:00:00+08:00",
-      "observed_at": "2026-11-27T02:23:15+08:00",
-      "target_trade_date": "2026-11-27",
-      "seed_trade_date": "2026-11-26",
-      "benchmark": {
-        "desc": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 1.51、er_t1 8.94、pos_share 1.0（全池最高）、vol_r 1.16、spoon 0.375。横向对比同板块BK1244的603215.SH比依股份（Track A, er_t1 -2.56、跌幅-2.84%），九阳股份er_t1 8.94大幅领先；资金流入51799.67万为全池最大，T-2日57841.87万持续流入显示大资金建仓连续性；pos_share 1.0显",
-        "target_open_pct": [
-          2.0,
-          6.0
-        ],
-        "min_turnover_yi": 0.8
-      },
-      "original_conditions": {
-        "trade_date": "2026-11-27",
-        "deadline_at": "2026-11-27T09:30:00+08:00",
-        "support_conditions": [
-          "2026-11-27 09:25集合竞价涨幅处于+2.0%至+6.0%区间，且竞价成交额≥8000万元（基于T-1净流入51799.67万的15%比例估算，因资金基数大需高流动性）",
-          "盘中分时站稳VWAP 40.73元，且价格维持在42.00元以上，量能维持vol_r≥1.0"
-        ],
-        "invalidation_conditions": [
-          "2026-11-27 09:25集合竞价低开（跌幅>-1.0%）或高开超过+9.0%且无量（竞价额<2000万元）",
-          "盘中放量跌破VWAP 40.73元，或跌破T-1日最低价（数据缺口，以41.00元为锚）且主力资金净流出超5000万"
-        ],
-        "on_reliable_invalidation": "T+1日（2026-11-30）收盘价低于当日开盘价*0.97触发退出观察，或14:55价格低于VWAP 40.73元且量能衰减时观察退出。"
-      },
-      "hypothesis": "[TRACK_B_DIVERGENCE_ABSORB] V38.1实测：amt_r 1.51、er_t1 8.94、pos_share 1.0（全池最高）、vol_r 1.16、spoon 0.375。横向对比同板块BK1244的603215.SH比依股份（Track A, er_t1 -2.56、跌幅-2.84%），九阳股份er_t1 8.94大幅领先；资金流入51799.67万为全池最大，T-2日57841.87万持续流入显示大资金建仓连续性；pos_share 1.0显示筹码高度集中。 | T-1日8.66%涨幅伴随51799.67万巨额净流入，叠加T-2日57841.87万持续流入，形成大资金连续两日吸筹后的加速上涨，多日量价结构呈现机构建仓末期的爆发形态。",
-      "risk_reason": "vol_r 1.16在Track B中偏低（对比红四方3.02、川金诺2.72），显示量能相对温和，可能为缩量上涨；amt_r 1.51非最高，资金效率中等；tdx_fc_amo_wan为0.0、tdx_fc_ratio为0.0显示逐笔大单数据缺口（gap），无法验证微观承接；T-3资金数据缺失（null）。",
-      "qa_verdict": "accepted",
-      "qa_reason": "net_wan全池最大，er_t1 8.94领先，pos_share 1.0，具备竞价、VWAP及14:55退出锚点，通过。",
-      "adversarial_verdict": "NVIDIA 3.5 独审通过",
-      "buy_permission": false,
-      "recommendation": "observe_candidate",
-      "monitoring_eligible": true,
-      "monitoring_status": "ready",
-      "observation_eligible": true,
-      "observation_status": "waiting",
-      "original_condition_status": "t_minus1_postmarket",
-      "auction_badge": "T-1_T_PULLBACK",
-      "auction_confirmed": false,
-      "auction_rejected": false,
-      "auction_verdict": "PENDING(2026-11-27 09:25 竞价核验)",
-      "auction_evaluation": null,
-      "auction_reason": "2026-11-27 09:25集合竞价涨幅处于+2.0%至+6.0%区间，且竞价成交额≥8000万元（基于T-1净流入51799.67万的15%比例估算，因资金基数大需高流动性）; 盘中分时站稳VWAP 40.73元，且价格维持在42.00元以上，量能维持vol_r≥1.0",
-      "cycle_position": "T-1(2026-11-26盘后定案) -> T=2026-11-27 09:25竞价核验 -> T+1破开盘3%或14:55退出观察",
-      "exit_rule_T1": "T+1日（2026-11-30）收盘价低于当日开盘价*0.97触发退出观察，或14:55价格低于VWAP 40.73元且量能衰减时观察退出。",
+      "exit_rule_T1": "T+1日（2026-11-30）若实际成交价严格低于当日（2026-11-27）开盘价*0.97触发退出风险观察，或14:55分时价格低于VWAP=61.58元且无反弹动能触发退出观察",
       "origin_batch_id": "20261126-dual-v31-t1127",
       "events": [],
       "points": [],
@@ -453,7 +452,7 @@
       "vwap": 8.42,
       "vwap_deviation_pct": 2.73,
       "source_data_at": "2026-11-26T15:00:00+08:00",
-      "observed_at": "2026-11-27T02:23:15+08:00",
+      "observed_at": "2026-11-27T08:27:58+08:00",
       "target_trade_date": "2026-11-27",
       "seed_trade_date": "2026-11-26",
       "benchmark": {
@@ -517,7 +516,7 @@
       "vwap": 26.92,
       "vwap_deviation_pct": 6.09,
       "source_data_at": "2026-11-26T15:00:00+08:00",
-      "observed_at": "2026-11-27T02:23:15+08:00",
+      "observed_at": "2026-11-27T08:27:58+08:00",
       "target_trade_date": "2026-11-27",
       "seed_trade_date": "2026-11-26",
       "benchmark": {
